@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recap I</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Recap I
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### January 2018
+
+---
+
+
+
+
+
+
+
+
+# Essentials of the R language
+
+.pull-left5[
+&gt;"To understand computations in R, two slogans are helpful:
+&lt;br&gt;&lt;br&gt;
+&gt;###(1) Everything that exists is an object and 
+&gt;###(2) everything that happens is a function call."
+]
+
+.pull-right5[
+&lt;p align="center"&gt;&lt;img src="https://statweb.stanford.edu/~jmc4/CopyPhoto.jpg" width="350" align="center"&gt;&lt;/p&gt;
+&lt;p align="center"&gt;John Chambers&lt;br&gt; &lt;font size=2&gt; Author of S and developer of R&lt;/font&gt;&lt;br&gt;
+&lt;font size=2&gt;&lt;a href="https://statweb.stanford.edu/~jmc4/"&gt;statweb.stanford.edu&lt;/a&gt;
+&lt;/p&gt;
+]
+
+---
+
+.pull-left45[
+# Objects
+&gt;###"Everything in R is an object"&lt;br&gt; 
+&gt;&lt;p align="right"&gt;*John Chambers*&lt;p&gt;
+
+&lt;br&gt;&lt;br&gt;
++ R's objects are have **content and attributes**.
+&lt;br2&gt;
++ The **content can be anything** from numbers or strings to functions or complex data structures. 
+&lt;br2&gt;
++ Attributes often encompass **names**, **dimensions**, and the **class or type** of the object, but other attributes are possible. 
+&lt;br2&gt;
++ Practically all data objects are equipped with those **three essential attributes**.
+
+]
+
+.pull-right5[
+&lt;br&gt;&lt;br&gt;
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/objects.png" align="center" width="579" height="560"&gt;
+]
+
+
+---
+
+
+# Accessing &amp; changing data frames (and lists)
+
+Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
+
+.pull-left45[
+
+```r
+# retrieve elements using brackets
+my_df &lt;- data.frame('v_1'=c('A', 'B', 'C'), 
+                    'v_2'=c(1, 2, 3))
+my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+```
+
+```
+##   v_1
+## 1   A
+## 2   B
+## 3   C
+```
+
+```
+## [1] A B C
+## Levels: A B C
+```
+
+```
+## [1] A B C
+## Levels: A B C
+```
+]
+
+.pull-right45[
+
+```r
+# retrieve elements using the $-operator
+my_df$v_1
+```
+
+```
+## [1] A B C
+## Levels: A B C
+```
+
+```r
+my_df$v_1 &lt;- c('X', 'Y', 'Z')
+my_df
+```
+
+```
+##   v_1 v_2
+## 1   X   1
+## 2   Y   2
+## 3   Z   3
+```
+]
+
+
+---
+
+# Functions
+
+Any operation of your data is done by functions. Functions have 3 elements:
++ **Name**: Used to call (execute) a function.
++ **Argument(s)**: Objects that the function needs to do its job.
++ **Expression**: R code that is the options job.
+    
+.pull-left55[
+
+```r
+# Defining a function that computes the mean
+my_mean &lt;- function(x) return(sum(x) / length(x))
+
+# Defining a function that computes 
+# the mean or median
+my_stat &lt;- function(x, method = 'mean'){
+  
+  # detect and run method
+  if(method == "mean") return(my_mean(x))
+  if(method == "median") return(median(x))
+  
+  # return error if not method detected
+  stop('Method must be mean or median')
+}
+```
+]
+
+.pull-right4[
+
+```r
+# Runnning our functions
+my_vec &lt;- c(1, 4, 6, 3, 7, 5, 12, 9)
+my_mean(x = my_vec)
+```
+
+```
+## [1] 5.875
+```
+
+```r
+my_stat(x = my_vec, method = 'mean')
+```
+
+```
+## [1] 5.875
+```
+
+```r
+my_stat(x = my_vec, method = 'median')
+```
+
+```
+## [1] 5.5
+```
+]
+
+
+---
+
+# Help
+
+.pull-left5[
+
+R provides extremely helpful **help files** and **vignettes**. 
+&gt;**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).&lt;br&gt;
+&gt;**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+
+
+```r
+# To access help files
+help("name_of_function")
+?name_of_function
+
+# find help files
+??name_of_function
+
+# To list and access vignettes
+vignette(package = "name_of_package")
+vignette(package = "name_of_vignette")
+```
+
+]
+
+.pull-right45[
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"&gt;&lt;/p&gt;
+
+&lt;!---
+&lt;br&gt;&lt;br&gt;&lt;iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"&gt;&lt;/iframe&gt;
+---&gt;
+]
+
+---
+
+# Importing and Exporting Data
+
+In this session you will learn...
+
+.pull-left45[
+1. How to import data data from **delimeter separated files** (e.g., .csv)?
+&lt;br2&gt;
+2. How to import data data from **proprietory file formats** (e.g., .sav)?
+&lt;br2&gt;
+3. How to save/export data to various formats, including **R's own files types**?
+&lt;br2&gt;
+4. How to use **file connections** to read data in its rawest possible way? 
+&lt;br2&gt;
+5. About a new data format called **tibble**.
+]
+
+.pull-right45[
+&lt;img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" width="150"&gt;
+&lt;img src="http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png" width="150"&gt;
+&lt;br&gt;
+&lt;img src="http://haven.tidyverse.org/logo.png" width="150"&gt;
+&lt;img src="https://www.rstudio.com/wp-content/uploads/2017/05/readxl-259x300.png" width="150"&gt;
+
+]
+
+---
+
+# An example
+
+Assume we have a *flat* data set with variables `id`, `var_1`, and `var_2` and cases as rows. Such data can be conveniently read in using `read_csv()`. Moreover, `read_csv()` will **automatically identify** (a) columns and rows, (b) column names, (c) the type of the columns and finally return a `tibble` (more on that later).
+
+.pull-left45[
+
+```r
+# define simple data set
+data &lt;- 
+   "id, var_1, var_2\n
+  DCDL,  .287,  .048\n
+  FEFK,  .894,  .383\n
+  ZEWE, 1.374,  .623\n
+  OJEE,  .631,  .826"
+```
+]
+
+.pull-right45[
+
+```r
+# read in data
+require(readr)
+read_csv(data)
+```
+
+
+```
+## Loading required package: readr
+```
+
+```
+## # A tibble: 4 x 3
+##      id var_1 var_2
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  DCDL 0.287 0.048
+## 2  FEFK 0.894 0.383
+## 3  ZEWE 1.374 0.623
+## 4  OJEE 0.631 0.826
+```
+]
+
+---
+
+
+# `tibble`s
+
+The **output** from most `tidyverse` read functions such as `read_csv` and the preferred data format for many (but not all) analyses is a `tibble`. `tibble`s are a **modern, leaner version of data.frames**. 
+
+.pull-left45[
+### tibbles ...
++ never change the input's type.
+&lt;br2&gt;
++ never add row names.
+&lt;br2&gt;
++ never change column names.
+&lt;br2&gt;
++ look better in `print`. 
+&lt;br2&gt;
++ are accessed more consistently.
+]
+
+.pull-right45[
+### Functions
+
+```r
+# create tibble
+my_data &lt;- tibble(id, var_1, var_2)
+
+# convert to and from data.frame
+as_tibble(my_data_frame)
+as.data.frame(my_tibble)
+```
+
+
+```
+## # A tibble: 4 x 3
+##      id var_1 var_2
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  DCDL 0.287 0.048
+## 2  FEFK 0.894 0.383
+## 3  ZEWE 1.374 0.623
+## 4  OJEE 0.631 0.826
+```
+]
+
+
+---
+
+# The almighty **tidyverse**
+
+Among its many packages, R contains a collection of high-performance, easy-to-use packages (libraries) designed specifically for handling data know as the [tidyverse](https://www.tidyverse.org/). The tidyverse includes:
+1. `ggplot2` -- creating graphics.
+2. `dplyr` -- data manipulation.
+3. `tidyr` -- tidying data.
+4. `readr` -- read wild data.
+5. `purrr` -- functional programming.
+6. `tibble` -- modern data frame.
+&lt;br&gt;&lt;br&gt;
+
+&lt;img src="http://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/071952491ec4a6a532a3f70ecfa2507af4d341f9/c167c/images/hex-dplyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/5f8c22ec53a1ac61684f3e8d59c623d09227d6b9/b15de/images/hex-tidyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/9221ddead578362bd17bafae5b85935334984429/37a68/images/hex-purrr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png" height="200px" /&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

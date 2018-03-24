@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Plotting Part I</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Plotting Part I
+## ggplot2
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### September 2017
+
+---
+
+
+
+
+
+
+
+# Plotting
+.pull-left3[
+
+
+
+]
+
+
+.pull-right3[
+
+### Questions you can answer with dplyr
+
+&gt; *Can you calculate the mean survival times for each treatment separated by gender and time?*
+
+&gt; *I need to know the mean birth rate only for countries in Africa from 1980 to 1980.*
+
+&gt; *What percent of female patients had adverse events to drug X during weeks 5 through 10?*
+
+]
+---
+
+# Cheat Sheet!
+https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+
+&lt;img src="images/ggplot_cheatsheet_ss.png" width="600" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+## Grammar of Graphics
+
+.pull-left3[
+
+
+&lt;br&gt;
+&lt;br&gt;
+
+&gt;###1. A plot is built of simple building blocks
+
+&gt;###2. By comining different building blocks, plots of any complexity can be created.
+
+
+
+]
+
+
+.pull-right3[
+
+&lt;img src="images/wilkonson_book.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+## Grammar of Graphics
+
+.pull-left3[
+
+
+]
+
+
+.pull-right3[
+
+&lt;img src="images/gg_diagram.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+## How??
+
+
+How do you make
+
+
+
+
+
+---
+## ggplot2
+
+
+.pull-left3[
+&lt;br&gt;
+&lt;br&gt;
+
+- ### ggplot2 is an R package written by Hadley Wickham.
+
+- ### Makes it *easy* to create plots according to the grammar of graphics
+
+- ### By far one of the most popular R packages, used to generate most R plots.
+
+
+]
+
+
+.pull-right3[
+
+
+&lt;img src="images/wickham_portrait.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+## ggplot2
+
+
+.pull-left3[
+
+&lt;img src="images/ggplot_hex.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right3[
+
+### Load the ggplot2 package
+
+
+```r
+# Load the tidyverse (includes ggplot2)
+library(tidyverse)
+```
+
+
+### Or
+
+
+```r
+# Load ggplot2 directly
+library(ggplot2)
+```
+
+]
+
+
+---
+## `mpg` data
+
+.pull-left3[
+
+The `mpg` data is a tibble of car data contained in the `ggplot2` package
+
+
+|manufacturer |model              | cty| hwy|class      |
+|:------------|:------------------|---:|---:|:----------|
+|land rover   |range rover        |  11|  15|suv        |
+|hyundai      |sonata             |  19|  28|midsize    |
+|toyota       |camry              |  21|  31|midsize    |
+|jeep         |grand cherokee 4wd |  15|  20|suv        |
+|chevrolet    |c1500 suburban 2wd |  14|  20|suv        |
+|ford         |mustang            |  15|  23|subcompact |
+|volkswagen   |new beetle         |  29|  41|subcompact |
+|ford         |expedition 2wd     |  11|  17|suv        |
+
+]
+
+.pull-right3[
+
+&lt;br&gt;
+&lt;br&gt;
+
+&lt;img src="images/carlot.jpg" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+
+---
+## Creating this plot
+
+.pull-left3[
+
+
+**Data**
+
+- Use the `mpg` tibble
+
+**Aesthetics**
+
+- Show engine displacement (`disp`) on the x axis
+- Show highway miles per gallon (`hwy`) on the y-axis
+- Color plotting elements by the class of car (`class`)
+
+**Geometric objects**
+
+- Show data as points.
+- Add a regression line
+
+**Labels and themes**
+
+- Add plotting labels
+- Use a black and white plotting theme
+
+]
+
+
+.pull-right3[
+
+Our goal is to build the following plot step by step:
+
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-11-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+## `data`
+
+
+.pull-left3[
+
+- To create a ggplot2 object, use the `ggplot()` function.
+
+- Start with the `data` argument.
+
+   - `data` should be a dataframe (or Tibble)
+
+- Including only a `data` argument returns a blank plotting space, because we haven't specified any plotting *aesthetics* or *geometric objects*
+
+]
+
+
+.pull-right3[
+
+
+
+```r
+ggplot(data = mpg)
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+## Aesthetics
+
+
+.pull-left3[
+
+- An **aesthetic** is a visual property of the objects in your plot. 
+
+### Common aesthetics
+
+| aesthetics| Description|
+|:------|:----|
+|     `x`|    Data mapped to x-coordinate|
+|     `y`|    Data mapped to y-coordinate|
+|     `color`, `fill`|    Color and filling|
+|     `alpha`|    Transparency|
+|     `shape`| Overall shape|
+|    `size`|  Size|
+
+- Add plotting aesthetics with the `aes()` function
+
+
+]
+
+
+.pull-right3[
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy))
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+
+---
+## Geometric objects (geoms)
+
+
+.pull-left3[
+
+- A **geom** is a geometric object in a plot that represents data
+
+
+### Common geoms
+
+| geom| plot type|
+|:------|:----|
+|     `geom_point()`|    Scatterplot|
+|     `geom_bar()`|    barplot|
+|     `geom_smooth()`|    Regression line|
+
+
+- To add a geom to a plot, just include ` + geom_X()` where X is the type of geom.
+- `ggplot()` will automatically apply that geom to the aesthetics.
+
+]
+
+
+.pull-right3[
+
+&gt; Add a point geom with `geom_point()`
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy)) + 
+  geom_point()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+
+---
+## Geometric objects (geoms)
+
+.pull-left3[
+
+&lt;br&gt;
+&lt;br&gt;
+
+*How do we get points to be shown in different colors like the plot below?*
+
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+.pull-right3[
+
+
+
+&gt; What plotting aesthetic is missing from ths code below to make our plot on the left?
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy)) + 
+  geom_point()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+
+
+
+---
+## Color aesthetic
+
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy, col = class)) +  # Map mpg$class to color aes
+  geom_point()   # Add points that respect the aesthetics
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
+
+
+---
+## Geometric objects (geoms)
+
+.pull-left3[
+
+
+*Code WITHOUT color aesthetic*
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, 
+                     y = hwy)) + 
+  geom_point()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+.pull-right3[
+
+
+*Code WITH color aesthetic*
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, 
+                     y = hwy, 
+                     col = class)) + 
+  geom_point()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-19-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+---
+
+### What's next?
+
+.pull-left3[
+
+&gt; Where are are at
+
+
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, 
+                     y = hwy, 
+                     col = class)) + 
+  geom_point()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right3[
+&lt;br&gt;
+
+&gt; Our goal.
+
+&lt;br&gt;
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-21-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+### What are we missing?
+
+
+---
+### Smoothed lines with `geom_smooth()`
+
+.pull-left3[
+
+To add a smoothed line to a plot, use `geom_smooth()`
+
+### `geom_smooth()` arguments
+
+| Arguments| Description|
+|:------|:----|
+|     `method`| How should the line be generated?|
+|     `level`|    Confidence|
+| `col, size`, ...| Other plotting aesthetics|
+
+
+- If you add additional plotting aesthetics, they will *override* the general plotting aesthetics
+
+
+]
+
+.pull-right3[
+
+&gt; Add a blue smoothed line
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() + 
+  geom_smooth(col = "blue")
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+---
+
+## Why are these two different?
+
+.pull-leftEven[
+
+### Plot A
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, 
+                     col = class)) +
+  geom_point() + 
+  geom_smooth(col = "blue")
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-23-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+.pull-rightEven[
+
+### Plot B
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, 
+                     col = class)) +
+  geom_point() + 
+  geom_smooth()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-24-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+---
+## Overrriding aesthetics
+
+
+- You can include additional aesthetics, like color, shape, and size, in *any* geom.
+
+- This will override the *global* aesthetics
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() + 
+  geom_smooth(col = "blue") # geom_smooth IGNORES global col aesthetic
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-25-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Example A: No overriding
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() + # geom_point RESPECTS global col aesthetic (class)
+  geom_smooth()  # geom_smooth RESPECTS global col aesthetic (class)
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Example B: Override col aesthetic in geom_smooth()
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() +            # geom_point RESPECTS global col aesthetic (class)
+  geom_smooth(col = "blue") # geom_smooth IGNORES global col aesthetic (class)
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-27-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Example C: Override col aesthetic in geom_smooth() &amp; geom_point()
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point(col = "pink") + # geom_point IGNORES global col aesthetic (class)
+  geom_smooth(col = "blue")  # geom_smooth IGNORES global col aesthetic (class)
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-28-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Example D: Override col aesthetic in geom_point()
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point(col = "pink") + # geom_point IGNORES global col aesthetic (class)
+  geom_smooth()              # geom_smooth RESPECTS global col aesthetic (class)
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-29-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## What we want
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() +
+  geom_smooth(col = "blue",  # geom_smooth RESPECTS global col aesthetic (class)
+              method = "lm") # Use lm (linear model) smoothing line
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-30-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+### What's next?
+
+.pull-left2[
+
+&gt; Where are are at
+
+
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() +
+  geom_smooth(col = "blue",  method = "lm")
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-31-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right2[
+&lt;br&gt;
+
+&gt; Our goal.
+
+&lt;br&gt;
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-32-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+### What are we missing?
+
+
+---
+## Add labels with `labs()`
+
+.pull-left3[
+
+You can add labels to a plot with the `labs()` function
+
+### `labs()` arguments
+
+| Arguments| Description|
+|:------|:----|
+|     `title`| How should the line be generated?|
+|     `subtitle`|    Confidence|
+|     `caption`| Caption|
+| `col, size`, ...| Other plotting aesthetics|
+
+]
+
+
+.pull-right3[
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() + 
+  geom_smooth(col = "blue", method = "lm") +
+  labs(x = "Engine Displ...",
+       y = "Highway miles...",
+       title = "MPG data",
+       subtitle = "Cars with ...",
+       caption = "Source...")
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-33-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+
+---
+### What's next?
+
+.pull-left2[
+
+&gt; Where are are at
+
+
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point(size = 3, alpha = .9) + 
+  geom_smooth(col = "blue", method = "lm")+
+  labs(x = "Engine...",
+       y = "Highway ...",
+       title = "MPG data",
+       subtitle = "Cars with...",
+       caption = "Source:...")
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-34-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right2[
+&lt;br&gt;
+
+&gt; Our goal.
+
+&lt;br&gt;
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-35-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+### What are we missing?
+
+
+---
+## Themes with `theme_XX()`
+
+.pull-left3[
+
+A plotting *theme* controls many aspects of its overall look, from the background, to the grid lines, to the label font to the spacing between plot labels and the plotting space.
+
+
+### Common themes
+
+| Themes| 
+|:------|
+|     `theme_bw()`| 
+|     `theme_minimal()`| 
+|     `theme_classic()`|
+| `theme_light()`|
+| `theme_dark()`|
+
+
+- You can easily add a theme to a plot by including `+ theme_XX()`
+
+
+]
+
+.pull-right3[
+
+&gt; No theme specified
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-36-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+## Themes with `theme_XX()`
+
+.pull-left3[
+
+A plotting *theme* controls many aspects of its overall look, from the background, to the grid lines, to the label font to the spacing between plot labels and the plotting space.
+
+
+### Common themes
+
+| Themes| 
+|:------|
+|     `theme_bw()`| 
+|     `theme_minimal()`| 
+|     `theme_classic()`|
+| `theme_light()`|
+| `theme_dark()`|
+
+
+- You can easily add a theme to a plot by including `+ theme_XX()`
+
+
+]
+
+.pull-right3[
+
+&gt; bw theme with `+ theme_bw()`
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point() + 
+  theme_bw()   # Use the black and white theme
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-37-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+
+---
+## Themes with `theme_XX()`
+
+.pull-left3[
+
+A plotting *theme* controls many aspects of its overall look, from the background, to the grid lines, to the label font to the spacing between plot labels and the plotting space.
+
+
+### Common themes
+
+| Themes| 
+|:------|
+|     `theme_bw()`| 
+|     `theme_minimal()`| 
+|     `theme_classic()`|
+| `theme_light()`|
+| `theme_dark()`|
+
+
+- You can easily add a theme to a plot by including `+ theme_XX()`
+
+
+]
+
+.pull-right3[
+
+&gt; dark theme with `+ theme_dark()`
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point() + 
+  theme_dark()   # Use the dark theme
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-38-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+## Themes with `theme_XX()`
+
+.pull-left3[
+
+A plotting *theme* controls many aspects of its overall look, from the background, to the grid lines, to the label font to the spacing between plot labels and the plotting space.
+
+
+### Common themes
+
+| Themes| 
+|:------|
+|     `theme_bw()`| 
+|     `theme_minimal()`| 
+|     `theme_classic()`|
+| `theme_light()`|
+| `theme_dark()`|
+
+
+- You can easily add a theme to a plot by including `+ theme_XX()`
+
+
+]
+
+.pull-right3[
+
+&gt; light theme with `+ theme_light()`
+
+
+```r
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point() + 
+  theme_light()   # Use the light theme
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-39-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+## Final result!
+
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() + 
+  geom_smooth(col = "blue", method = "lm")+
+  labs(x = "Engine Displacement in Liters",
+       y = "Highway miles per gallon",
+       title = "MPG data",
+       subtitle = "Cars with higher engine displacement tend to have lower highway mpg",
+       caption = "Source: mpg data in ggplot2") + 
+  theme_bw()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-40-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Facetting with `facet_wrap()`
+
+
+- *Facetting* = Create different plots for different groups
+- To facet plots, use `facet_wrap()`
+
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, color = class)) + 
+  geom_point()  +
+  facet_wrap(~ class)
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-41-1.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Additional geoms
+
+.pull-left3[
+
+### geom_boxplot()
+
+
+```r
+ggplot(data = mpg,
+  mapping = aes(x = class, y = hwy, fill = class)) + 
+  geom_boxplot()  + 
+  theme_bw()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-42-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right3[
+
+### geom_density()
+
+
+```r
+ggplot(data = mpg,
+  mapping = aes(x = hwy, fill = class)) + 
+  geom_density()  + 
+  theme_bw()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-43-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+
+---
+
+.pull-left3[
+
+### geom_bar()
+
+
+```r
+ggplot(data = mpg,
+  mapping = aes(x = class, fill = class)) + 
+  geom_bar()  + 
+  theme_bw()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-44-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right3[
+
+### geom_count()
+
+
+```r
+ggplot(data = mpg,
+  mapping = aes(x = displ, y = hwy)) + 
+  geom_count()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-45-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+---
+
+.pull-left3[
+
+### geom_joy()
+
+&gt; From the `ggjoy` package
+
+
+```r
+library(ggjoy) # Load the ggjoy package
+
+ggplot(data = midwest,
+       mapping = aes(percollege, 
+                     y = state, 
+                     fill = state)) + 
+  geom_joy(col = "white")
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-46-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right3[
+
+### geom_tile()
+
+
+```r
+ggplot(nba_long, 
+       mapping = aes(x = Name, 
+                     y = measure, 
+                     fill = value)) + 
+  geom_tile(col = "white") + 
+  scale_fill_gradientn(colors = c("red", 
+                                  "white", 
+                                  "blue")) + 
+  coord_flip()
+```
+
+&lt;img src="plottingI_files/figure-html/unnamed-chunk-48-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+## So much more
+
+- We have only touched the surface of what you can do with `ggplot`
+
+&lt;img src="images/plotting_books.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+##
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

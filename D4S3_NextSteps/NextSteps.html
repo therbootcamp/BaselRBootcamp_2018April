@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Next steps</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Next steps
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### Janurary 2018
+
+---
+
+
+
+
+
+
+# Next steps
+
+
+.pull-left4[
+&lt;font size = 4&gt;&lt;i&gt;What we would have liked to cover&lt;/i&gt;&lt;br&gt;
+&lt;font size = 6&gt;
+1. Networks&lt;br&gt;
+2. Bayesian stats&lt;br&gt;
+3. Text analysis&lt;br&gt;
+4. Rcpp&lt;br&gt;
+5. Forms&lt;br&gt;
+6. Github&lt;br&gt;
+7. R on servers&lt;br&gt;
+&lt;/font&gt;
+&lt;br&gt;
+
+&lt;font size = 4&gt;&lt;i&gt;How to continue&lt;/i&gt;&lt;br&gt;
+&lt;font size = 6&gt;
+7. Books&lt;br&gt;
+8. Websites R&lt;br&gt;
+9. Groups&lt;br&gt;
+&lt;/font&gt;
+]
+
+.pull-right5[
+&lt;p align="center"&gt;&lt;img src="https://i0.wp.com/www.pieceofk.fr/wp-content/uploads/2017/09/Rplot.png?zoom=2&amp;w=450" width=400 align="center"&gt;&lt;br&gt;&lt;br&gt;
+&lt;font size=2&gt;source &lt;a href="https://www.r-bloggers.com/exploring-the-cran-social-network/"&gt;R-bloggers.com&lt;/a&gt;
+&lt;/p&gt;
+]
+
+---
+
+# Network analysis
+
+A social graph of package Co-authors using `tidyverse` plus `ggraph`, an extension for `ggplot2` for graphs (aka networks) and `igraph`, an extremely powerful network analysis library. Find the code and additional explanation [**here**](https://www.r-bloggers.com/exploring-the-cran-social-network/).
+
+.pull-left[
+  &lt;p align="center"&gt;&lt;img src="https://i1.wp.com/www.pieceofk.fr/wp-content/uploads/2017/09/Rplot04.png?zoom=2&amp;w=450" width=450&gt;&lt;br&gt;
+  &lt;font size=2&gt;source &lt;a href="https://www.r-bloggers.com/exploring-the-cran-social-network/"&gt;R-bloggers.com&lt;/a&gt;&lt;/p&gt;
+  ]
+
+.pull-right[
+&lt;p align="center"&gt;
+&lt;br&gt;&lt;br&gt;
+  &lt;img src="https://i1.wp.com/www.pieceofk.fr/wp-content/uploads/2017/09/Rplot02.png?zoom=2&amp;w=450" width=450&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+  &lt;font size=2&gt;source &lt;a href="https://www.r-bloggers.com/exploring-the-cran-social-network/"&gt;R-bloggers.com&lt;/a&gt;&lt;/p&gt;
+  ]
+
+---
+
+# Semantic networks - [**www.swow.me**](www.swow.me)
+
+&lt;p align="center"&gt;&lt;a href="http://www.swow.me"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/semantic_space.png" width=720&gt;&lt;/a&gt;&lt;/p&gt;
+
+
+---
+
+# Text analysis
+
+Another area were R has seen much development is **text analysis**. New packages provide access to lightning fast **C++ string libraries**, 'new' data formats such as **html**, **xml**, and **json**, and also to the API of social platforms, such as [**facebook.com**](www.facebook.com) and [**twitter.com**](www.twitter.com).
+&lt;br&gt;&lt;br&gt;
+
+| Package| Description| 
+|:------|:------------|
+| `stringr`, `stringi`  | String operations and regular expressions. |
+| `rvest`, `XML`  | Scraping content of the internet|
+| `lsa`, `fast.svd` | Singular value decomposition and latent semantic analysis. |
+| `SentimentAnalysis`| Sentiment analysis.|
+| `twitteR`, `streamR`, `jsonlite`| Streaming and parsing tweets. |
+| `Rfacebook`| Accessing the Facebook API. |
+
+---
+
+# Text analysis: Applications
+
+.pull-left4[
+&lt;p align="center"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/emojis.png" width=450&gt;&lt;br&gt;
+  &lt;font size=1&gt;source &lt;a href="http://www.lrec-conf.org/proceedings/lrec2016/pdf/735_Paper.pdf/"&gt;Barbieri, F., Ronzano, F., &amp; Saggion, H. (2016, May). What does this Emoji&lt;br&gt;Mean?A Vector Space Skip-Gram Model for Twitter Emojis. In LREC.&lt;/a&gt;&lt;br&gt;See also my &lt;a href="https://dwulff.github.io/Naturallanguage/"&gt;natural language course page&lt;/a&gt;.&lt;/p&gt;
+]
+
+
+.pull-right5[
+&lt;br&gt;&lt;br2&gt;
+&lt;p align="center"&gt;
+  &lt;img src="https://spectator.imgix.net/content/uploads/2016/12/GettyImages-607814904.jpg?auto=compress,enhance,format&amp;crop=faces,entropy,edges&amp;fit=crop&amp;w=620&amp;h=413" width=500&gt;&lt;br&gt;
+  &lt;font size=2&gt;&lt;br&gt;Alexander Nix, Cambridge Analytica&lt;br&gt;&lt;font size=1&gt;&lt;br&gt;source &lt;a href="https://spectator.imgix.net/content/uploads/2016/12/GettyImages-607814904.jpg?auto=compress,enhance,format&amp;crop=faces,entropy,edges&amp;fit=crop&amp;w=620&amp;h=413"&gt;spectator.imgix.net&lt;/a&gt;&lt;/p&gt;
+
+]
+
+---
+
+# Text analysis: Applications - [**hedonometer.org**](http://hedonometer.org/books/v1/)
+&lt;br2&gt;
+&lt;p align="center"&gt;&lt;a href="http://hedonometer.org/books/v1/"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/harry_potter.png" width=900&gt;&lt;/a&gt;&lt;br&gt;
+  &lt;font size=3&gt;Link to &lt;a href="https://arxiv.org/pdf/1606.07772.pdf"&gt;Paper&lt;/a&gt;&lt;/font&gt;&lt;/p&gt;
+
+---
+
+# Stats packages
+
+&gt;"If there is a new statistical method, it is first implemented in R" &lt;br&gt;
+&gt; -- duw
+
+&lt;br&gt;
+
+| Package| Description| 
+|:------|:------------|
+| `stats`  | Many individual tests plus all the distributions in the world.|
+| `lme`, `glm`  | (Generalized) linear models.|
+| `lme4`, `afex`  | Mixed-mode, hierarchical regression.|
+| `caret`, `mlr`, `e1071`, `rpart`, etc.| Machine learning.|
+| `BayesFactor`, `rstanarm`| Bayesian linear models.|
+| `rjags`, `rstan`| Bayesian graphical models.|
+| `forecast`, `mgm`, `timeSeries`, etc.| Time series models.|
+| `cluster`, `fastcluster`, `cstab`, etc.| Cluster analysis.|
+
+---
+
+# Bayesian statistics
+
+.pull-left5[
+Recent years several convenient and efficient packages for **Bayesian statistics** have been developed, facilitating a shift to a more informative and consistent statistical framework. &lt;br&gt;&lt;br2&gt;
+Using these packages is oftentimes **as easy as using their Frequentist counterparts**. See in particular the [**BayesFactor**](http://bayesfactorpcl.r-forge.r-project.org/) package.  
+
+&lt;br&gt;
+&lt;p align="center"&gt;
+  &lt;img src="http://www.labtimes.org/labtimes/method/methods/img/2011_04b.jpg" width=350&gt;&lt;br&gt;
+  &lt;font size=2&gt;source &lt;a href="http://www.labtimes.org/labtimes/method/methods/img/2011_04b.jpg/"&gt;labtimes.org&lt;/a&gt;&lt;/p&gt;
+  ]
+
+.pull-right45[
+
+```r
+# load package
+library(BayesFactor)
+
+# define data
+x &lt;- rnorm(100, 0, 1)
+y &lt;- rnorm(100, 1, 1)
+
+# run Frequentist analysis
+t.test(x, y)
+
+# run Bayesian analysis
+ttestBF(x, y)
+```
+
+
+```
+## Bayes factor analysis
+## --------------
+## [1] Alt., r=0.707 : 6257370 ±0%
+## 
+## Against denominator:
+##   Null, mu1-mu2 = 0 
+## ---
+## Bayes factor type: BFindepSample, JZS
+```
+]
+
+
+---
+
+# Rcpp
+
+By now one of the most referenced R packages is Rcpp - **R's interface to C++**. With often relatively little effort due to **Rcpp sugar**, Rcpp can provide vast speed improvements, which many packages today rely on Rcpp in the background for **swift code execution**. Rcpp becomes particularly powerful, when supplemented with `BH`, which makes avaialble a collection **free, peer-reviewed C++ libraries**, and [RcppArmdillo](http://arma.sourceforge.net/), which available the high-performance *Armadillo* library for linear algebra methods. 
+
+
+.pull-left4[
+&lt;p align="center"&gt;
+  &lt;img src="https://classic105.s3.amazonaws.com/wp-content/uploads/2017/05/180207142-sugar.jpg" width=350&gt;&lt;br&gt;
+  &lt;font size=2&gt;source &lt;a href="https://classic105.s3.amazonaws.com/wp-content/uploads/2017/05/180207142-sugar.jpg/"&gt;classic105.com&lt;/a&gt;&lt;/p&gt;
+]
+
+.pull-right6[
+
+&lt;p align="center"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/Rcpp.png" width=480&gt;&lt;br&gt;&lt;br2&gt;
+  &lt;font size=2&gt;&lt;a href="http://dirk.eddelbuettel.com/code/rcpp/Rcpp-quickref.pdf"&gt;Quick Reference Guide&lt;/a&gt;&lt;/p&gt;
+]
+
+
+
+---
+
+.pull-left5[
+# Google Forms &amp; Maps
+
+New packages also allow you to interact with [Google Maps](https://www.google.com/maps) and [Google Forms](https://docs.google.com/forms). Use `ggmap` to access Google Maps and `googlesheets` to access Google Forms.
+
+
+```r
+library(ggmap)
+ggmap(get_map(c(7.588576, 47.559601),zoom=16))
+```
+&lt;p align="center"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/basel.png" width=350&gt;&lt;/p&gt;
+]
+
+.pull-right45[
+
+&lt;p align="center"&gt;&lt;br&gt;&lt;br&gt;&lt;iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfAGQRft3YGz-urIVyFQ1s2o5B_63C2J92V7bowa-RJsNfinQ/viewform?embedded=true" width="430" height="550"&gt;Wird geladen...&lt;/iframe&gt;&lt;/p&gt;
+
+]
+
+
+
+---
+
+# Github &amp; Dropbox
+
+An important part of programming is to **keep track of the progress** to potential be able to go back to an earlier version of the code. To achieve this, many programmers rely on version-control software such as [**GitHub**](www.github.com). R and, in particular, RStudio work have inbuilt software that allow you to **sync your project** with an **GitHub repository**. Via the package called `rdrop2`, R also interfaces with the popular cloud service [**Dropbox**](www.dropbox.com), which also allows for rudimentary version control.   
+
+.pull-left3[
+
+&lt;p align="left"&gt;
+  &lt;img src="http://forum.copernic.com/wp-content/uploads/2015/04/dropbox-logos_dropbox-vertical-blue.png" width=200&gt;&lt;/p&gt;
+
+]
+
+.pull-right7[
+
+&lt;p align="center"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/github.png" width=265&gt;
+
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudiogit.png" width=380&gt;&lt;/p&gt;
+
+]
+
+
+---
+
+
+# R on servers
+
+With the need for more computing power for, e.g., machine learning, R is also moving more and more to the **server and cluster sphere**. Rstudio offers a convenient (and free) solution to access [**RStudio**](https://www.rstudio.com/products/rstudio/) sessions on a **remote linux server** via a browser. RStdudio also offers the `sparklyr` package integrating the [**Spark**](https://spark.apache.org/) architecture for efficient cluster computing with `dplyr`. Other packages exist to interface with [**Hadoop**](http://hadoop.apache.org/) (`RHadoop`) and [**SQL**](https://de.wikipedia.org/wiki/SQL) (`RSQLite`). 
+
+.pull-left6[
+
+&lt;p align="left"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudiologin.png" width=435&gt;&lt;/p&gt;
+
+]
+
+.pull-right4[
+
+&lt;p align="left"&gt;
+  &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rserver_square.png" width=330&gt;
+
+]
+
+
+---
+
+# How to continue
+
+.pull-left5[
+&lt;font size = 4&gt;&lt;i&gt;
+&lt;font size = 6&gt;
+1. Practice&lt;br&gt;
+2. Read books&lt;br&gt;
+3. Consult websites&lt;br&gt;
+4. Attend R group&lt;br&gt;
+5. Get consulting&lt;br&gt;
+]
+
+&lt;/font&gt;
+&lt;br&gt;
+
+.pull-right5[
+&lt;p align="center"&gt;&lt;img border="0" alt="W3Schools" src="http://www.theunmanageableemployee.com/wp-content/uploads/2011/07/5cs-stones-cropped-11052730.jpg?w=112"&gt;&lt;/p&gt;
+]
+
+---
+
+# Books
+
+Here is a very incomplete series of good books. They are ordered by complexity, beginning with user-friendly books on **learning statistics** in R and ending with books focusing on the more **advanced topics of the R language**.
+
+
+&lt;table width="100%" style="cellspacing:0; cellpadding:0; border:none"&gt;
+  &lt;tr&gt;    
+  &lt;td&gt;
+  &lt;a href="https://bookdown.org/ndphillips/YaRrr/"&gt;&lt;img border="0" alt="W3Schools" src="https://bookdown.org/ndphillips/YaRrr/images/YaRrr_Cover.jpg" height="180"&gt;&lt;/a&gt;
+  &lt;/td&gt;
+ 
+  &lt;td&gt;
+  &lt;a href="http://static.lulu.com/browse/product_thumbnail.php?productId=22049492&amp;resolution=320"&gt;&lt;img border="0" alt="W3Schools" src="http://static.lulu.com/browse/product_thumbnail.php?productId=22049492&amp;resolution=320" height="180"&gt;&lt;/a&gt;
+  &lt;/td&gt;  
+  
+  &lt;td&gt; 
+  &lt;a href="http://r4ds.had.co.nz/"&gt;&lt;img border="0" alt="W3Schools" src="http://r4ds.had.co.nz/cover.png" height="180"&gt;&lt;/a&gt;
+  &lt;/td&gt;
+  
+  &lt;td&gt;
+  &lt;a href="https://covers.oreillystatic.com/images/0636920028574/cat.gif"&gt;&lt;img border="0" alt="W3Schools" src="https://covers.oreillystatic.com/images/0636920028574/cat.gif" height="180"&gt;&lt;/a&gt;
+  &lt;/td&gt;
+
+  &lt;td&gt;
+  &lt;a href="https://images-na.ssl-images-amazon.com/images/I/51l7gOx3Z-L._SX376_BO1,204,203,200_.jpg"&gt;&lt;img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/51l7gOx3Z-L._SX376_BO1,204,203,200_.jpg" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+  
+  &lt;td&gt;
+  &lt;a href="http://static.lulu.com/browse/product_thumbnail.php?productId=18809753&amp;resolution=320"&gt;&lt;img border="0" alt="W3Schools" src="http://static.lulu.com/browse/product_thumbnail.php?productId=18809753&amp;resolution=320" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+  
+  &lt;td&gt;&lt;a href="http://adv-r.had.co.nz/"&gt;&lt;img border="0" alt="W3Schools" src="https://images.tandf.co.uk/common/jackets/amazon/978146658/9781466586963.jpg" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+
+  &lt;td&gt;
+  &lt;a href="https://images-na.ssl-images-amazon.com/images/I/41eCbcQARTL._SX342_BO1,204,203,200_.jpg"&gt;&lt;img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/41eCbcQARTL._SX342_BO1,204,203,200_.jpg" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;br&gt;
+
+
+---
+
+.pull-left4[
+
+# Websites
+
+The web is a great place to learn about R. 
+
+&lt;font size = 4&gt;&lt;i&gt;Best begin your journey with:&lt;/i&gt;&lt;/font&gt;
+
+[**Google**](www.google.com) or [**Rseek**](www.rseek.org), which is a wrapper around google to maximize hits related to R. However, most of the time Google works just fine. Just be sure to add *r* to the the search query. 
+
+&lt;font size = 4&gt;&lt;i&gt;Then you will most likely be redirected to one of two pages&lt;/i&gt;&lt;/font&gt;
+
+[**R-bloggers**](www.r-bloggers.com) is a website on which R users inform each other on the newest developments. See, e.g., Nathaniel's [entry](https://www.r-bloggers.com/the-new-and-improved-pirateplot-now-with-themes/).
+
+[**Stackoverflow**](www.r-bloggers.com) is a website on which R users exchange problems and solutions to problems. Try post something yourself. You will be amazed by the turnaround. 
+
+
+]
+
+.pull-right5[
+&lt;p align="left" style="padding: 0 0px"&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+    &lt;a href="https://www.google.com/"&gt;&lt;img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/google.png" height="100"&gt;&lt;/a&gt;&lt;img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/comma.png" height="50"&gt;&lt;a href="http://rseek.org/"&gt;&lt;img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rseek.png" height="100" style="margin-left:10px; margin-buttom:10px"&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+    &lt;a href="https://www.r-bloggers.com/"&gt;&lt;img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rbloggers.png" height="105" style="margin-bottom:10px"&gt;&lt;/a&gt;&lt;br&gt;
+  &lt;a href="https://stackoverflow.com/"&gt;&lt;img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stackoverflow.png" height="105"&gt;&lt;/a&gt;
+&lt;/p&gt;
+]
+
+
+
+---
+
+# R meetup groups
+
+Great place to meet other **R enthusiast** in and outside of industry and see interesting presentions on **R's latest developments**. 
+
+.pull-left5[
+&lt;p align="left"&gt;
+    &lt;a href="https://www.meetup.com/de-DE/BaselR/"&gt;&lt;img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/baselr.png" height="400"&gt;&lt;/a&gt;
+]
+
+.pull-right5[
+
+&lt;p align="left"&gt;
+    &lt;a href="https://www.meetup.com/de-DE/Zurich-R-User-Group/?chapter_analytics_code=UA-94107719-1"&gt;&lt;img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/zurichr.png" height="400"&gt;&lt;/a&gt;
+
+]
+
+---
+
+# Consulting
+
+**Feel free to contact us**. Being in the R community means helping each other out. And if it's about actually working on a job for you, we can figure something out. 
+
+
+.pull-left5[
+&lt;p align="center"&gt;&lt;br&gt;
+    &lt;a href="www.dirkwulff.org"&gt;&lt;img border="0" alt="W3Schools" src="https://www.mpib-berlin.mpg.de/sites/default/files/imagecache/marginal/dirk_wulff2smallnarrow.jpg" height="240"&gt;&lt;/a&gt;&lt;br&gt;
+
+&lt;p align="center"&gt;
+&lt;a href="www.dirkwulff.org"&gt;&lt;b&gt;website&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;a href="https://github.com/dwulff"&gt;&lt;b&gt;GitHub&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;font size=4&gt;&lt;i&gt;packages: &lt;/i&gt;&lt;/font&gt; 
+&lt;a href="https://cran.r-project.org/web/packages/cstab/index.html"&gt;&lt;b&gt;cstab&lt;/b&gt;&lt;/a&gt;, &lt;br&gt;
+&lt;a href="https://cran.r-project.org/web/packages/mousetrap/index.html"&gt;&lt;b&gt;mousetrap&lt;/b&gt;&lt;/a&gt;, &lt;a href="https://github.com/dwulff/choicepp"&gt;&lt;b&gt;choicepp&lt;/b&gt;
+&lt;/p&gt;
+]
+
+.pull-right5[
+&lt;p align="center"&gt;&lt;br&gt;
+    &lt;a href="www.nathanieldphillips.com/"&gt;&lt;img border="0" alt="W3Schools" src="https://avatars3.githubusercontent.com/u/8480980?v=4&amp;s=460" height="240"&gt;&lt;/a&gt;&lt;br&gt;
+
+&lt;p align="center"&gt;
+&lt;a href="www.nathanieldphillips.com/"&gt;&lt;b&gt;website&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;a href="https://github.com/dwulff"&gt;&lt;b&gt;GitHub&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;font size=4&gt;&lt;i&gt;packages: &lt;/i&gt;&lt;/font&gt; 
+&lt;a href="https://github.com/ndphillips/yarrr"&gt;&lt;b&gt;yarrr&lt;/b&gt;&lt;/a&gt;, &lt;br&gt;
+&lt;a href="https://github.com/ndphillips/FFTrees"&gt;&lt;b&gt;FFTrees&lt;/b&gt;&lt;/a&gt;, &lt;a href="https://github.com/ndphillips/ShinyPsych"&gt;&lt;b&gt;ShinyPsych&lt;/b&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+.pull-left3[
+# Thank you
+]
+.pull-right5[
+
+&lt;p align="center"&gt;&lt;br&gt;
+    &lt;a href="http://i.imgur.com/PgtvQar.png"&gt;&lt;img border="0" alt="W3Schools" src="http://i.imgur.com/PgtvQar.png" height="560"&gt;&lt;/a&gt;&lt;br&gt;
+    
+    &lt;font size = 4&gt; source &lt;a href="http://i.imgur.com/PgtvQar.png"&gt; reddit.com&lt;/a&gt;
+    &lt;/p&gt;
+
+
+
+
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

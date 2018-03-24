@@ -1,0 +1,462 @@
+---
+title: "Data I/O"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+# Importing and Exporting Data
+
+In this session you will learn...
+
+.pull-left45[
+1. How to import data data from **delimeted separated files** (e.g., .csv)?
+<br2>
+2. How to import data data from **proprietory file formats** (e.g., .sav)?
+<br2>
+3. How to save/export data to various formats, including **R's own files types**?
+<br2>
+4. How to use **file connections** to read data in its rawest possible way? 
+<br2>
+5. About a new data format called **tibble**.
+]
+
+.pull-right45[
+<img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" width="150">
+<img src="http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png" width="150">
+<br>
+<img src="http://haven.tidyverse.org/logo.png" width="150">
+<img src="https://www.rstudio.com/wp-content/uploads/2017/05/readxl-259x300.png" width="150">
+
+]
+
+---
+
+# readr
+
+`readr` is a `tidyverse` package that provides convenient functions to **read in** *flat* (non-nested) data files into data frames (`tibble`s to be precise):
+
+
+.pull-left45[
+```{r, eval=F}
+# Functions for import
+read_csv()  # for comma-delimited files
+read_csv2() # for semicolon-delimeted file
+read_delim()  # for any delimited files
+
+# Functions for parsing
+parse_logical() # parse logical vectors
+parse_integer() # parse integers
+parse_double(), parse_number()  # parse numerics
+parse_character() # parse character aka string
+parse_date()    # parse date -> lubridate package
+```
+]
+
+.pull-right45[
+```{r, out.height = "200px", echo = F}
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png")
+```
+]
+
+
+---
+
+# An example
+
+Assume we have a *flat* data set with variables `id`, `var_1`, and `var_2` and cases as rows. Such data can be conveniently read in using `read_csv()`. Moreover, `read_csv()` will **automatically identify** (a) columns and rows, (b) column names, (c) the type of the columns and finally return a `tibble` (more on that later).
+
+.pull-left45[
+```{r, eval = F}
+# define simple data set
+data <- 
+   "id, var_1, var_2\n
+  DCDL,  .287,  .048\n
+  FEFK,  .894,  .383\n
+  ZEWE, 1.374,  .623\n
+  OJEE,  .631,  .826"
+```
+]
+
+.pull-right45[
+```{r, eval = F}
+# read in data
+require(readr)
+read_csv(data)
+```
+
+```{r, echo = F}
+# define simple data set
+data <- 
+   "id, var_1, var_2\n
+  DCDL,  .287,  .048\n
+  FEFK,  .894,  .383\n
+  ZEWE, 1.374,  .623\n
+  OJEE,  .631,  .826"
+
+# read in data
+require(readr)
+read_csv(data)
+```
+]
+
+
+---
+
+# Data source
+
+Most of R's read functions allow to load data from a **variety of sources**, including most importantly the computer's hard drive and the internet. When loading from the hard drive, use auto-complete (using *tab*) to find the right **file path**.
+ 
+.pull-left45[
+```{r, eval = T}
+# Loading data from url
+read_csv("https://tinyurl.com/ydgrcyt5")
+```
+]
+
+.pull-right45[
+```{r, eval = T}
+# Loading data from url
+read_csv("https://tinyurl.com/ydgrcyt5")
+```
+]
+
+
+---
+
+# Parsing 
+
+Behind the magic of `readr` functions such as `read_csv` are a set of really flexible parsing functions `parse_*()` that **coerce** the input into the **appropriate format and type**. 
+
+###Examples
+
+.pull-left45[
+```{r, warning=F}
+# parsing a logical
+parse_logical(c("TRUE","FALSE","NA"))
+
+# parsing an integer + errors
+parse_integer(c("123", "345", "abc", "123.45"))
+```
+]
+
+.pull-right45[
+```{r}
+# parse
+parse_character("hellow","world")
+
+# parsing a numeric
+parse_number(c("1.23","$123.209"))
+```
+]
+
+---
+
+# Locale
+
+If parsing is not controlled using  **arguments**, it's parsing behavior will be controlled by **settings** in `locale()`. To change, e.g., the `decimal_mark` use `locale("en", decimal_mark = ",")`.
+
+.pull-left45[
+```{r, tidy = T, tidy.opts=list(width.cutoff=60)}
+str(locale())
+```
+]
+
+---
+
+# Error handling
+
+When reading a file using, e.g., `read_csv`, with no specific arguments provided, `readr` **infers the type** of each column using a heuristic process based on the **first 1,000 rows** (see `guess_parser`). However, that may not always work. In that case consider...  
+
+
+```{r, eval = F}
+# to inspect the problems
+problems()
+
+# to set types explicitly
+read_csv(..., col_types = cols(...))
+
+# read in as character and convert later
+read_csv(..., col_types = cols(.default = col_character()))
+type_convert()
+
+# use more basic read-in functions (see later)
+
+```
+
+---
+
+# Other read in options
+
+The `tidyverse` together with other package offers a **variety of built-in, automated read functions** for almost any data format. For an overview **see** [**rio**](https://cran.r-project.org/web/packages/rio/vignettes/rio.html).
+
+.pull-left45[
+### `readr` <img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" width="50", align="right"> 
+```{r, eval = F}
+# read fixed width files (can be fast)
+read_fwf()
+
+# read Apache style log files
+read_log()
+
+```
+
+### `haven` <img src="http://haven.tidyverse.org/logo.png" width="50" align="right">
+```{r, eval = F}
+# read SAS's .sas7bat and sas7bcat files
+read_sas()
+
+# read SPSS's .sav files
+read_sav()
+
+# etc
+```
+]
+
+.pull-right45[
+### `readxl` <img src="https://www.rstudio.com/wp-content/uploads/2017/05/readxl-259x300.png" width="50" align="right">
+```{r, eval = F}
+# read Excel's .xls and xlsx files
+read_excel()
+```
+<br>
+### Other packages
+```{r, eval = F}
+# from package R.matlab: read .mat
+readMat()
+
+# from package XML: read and wrangle .xml and .html
+xmlParseParse()
+
+# from package jsonlite: read .json files
+read_json()
+```
+]
+
+---
+
+# Writing data
+
+Most read-in functions have **matching write**-functions to save the data to disk. As **arguments** these functions usually expect a **data frame** and a **file path** on the disk.
+
+.pull-left45[
+### `readr` <img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" width="50", align="right"> 
+```{r, eval = F}
+# read fixed width files (can be fast)
+write_csv(my_data_frame, "my_data.csv")
+write_delim(...)
+
+```
+### `haven` <img src="http://haven.tidyverse.org/logo.png" width="50" align="right">
+```{r, eval = F}
+# read SAS's .sas7bat and sas7bcat files
+write_sas(...)
+
+# read SPSS's .sav files
+write_sav(...)
+
+# etc
+```
+]
+
+.pull-right45[
+### Other packages
+```{r, eval = F}
+# from package R.matlab: read .mat
+writeMat()
+
+# from package XML: read and wrangle .xml and .html
+saveXML()
+
+# from package jsonlite: read .json files
+write_json()
+```
+]
+
+---
+
+# R's data formats
+
+R also has data formats of its own to store and retrieve data. They provide the possibility to store **data as R objects**, as well as substantial **compression** (depending on data regularity up to about 1% of the original size). 
+
+.pull-left45[
+### `.RData`  
++ Bundles several R objects.
++ Loads objects directly to workspace.
++ Slow.
+```{r, eval = F}
+# save data as .RData
+save(object_1, object_2,..., file = "my_data.RData")
+
+# load data from .RData
+load("my_data.RData")
+```
+]
+
+.pull-right45[
+### `.RDS`  
++ Stores individual R objects.
++ Import is newly assigned.
++ Fast.
+```{r, eval = F}
+# save data as .RDS
+saveRDS(my_data, file = "my_data.rds")
+
+# load data from .RDS
+my_data <- readRDS("my_data.rds")
+```
+]
+---
+
+# File connections
+
+Under the hood, practically all of R's reading and writing functions relies on a **file connection** architecture, just as most other programming languages do. To the experienced programmer file connections represent a flexible option to access and manipulate files on **any accessible location** (harddrive, server, www). 
+
+.pull-left45[
+### Benefits of file connections
++ Define access mode (read, write, append).
+<br2>
++ Read/write as binary or raw.
+<br2>
++ Handle encodings directly.
+<br2>
++ Read and write compressed files.
+<br2>
++ Access to www and servers.  
+]
+
+.pull-right45[
+### Functions
+```{r, eval = F}
+# access a file
+file("my_data.csv",'r')
+
+# access url
+url(...)
+
+# access compressed files
+gzfile(...)
+
+# to handle connections
+readLines() # to read contect
+close() # close connection 
+```
+]
+
+---
+
+# `tibble`s
+
+The **output** from most `tidyverse` read functions such as `read_csv` and the preferred data format for many (but not all) analyses is a `tibble`. `tibble`s are a **modern, leaner version of data.frames**. 
+
+.pull-left45[
+### tibbles ...
++ never change the input's type.
+<br2>
++ never add row names.
+<br2>
++ never change column names.
+<br2>
++ look better in `print`. 
+<br2>
++ are accessed more consistently.
+]
+
+.pull-right45[
+### Functions
+```{r, eval = F}
+# create tibble
+my_data <- tibble(id, var_1, var_2)
+
+# convert to and from data.frame
+as_tibble(my_data_frame)
+as.data.frame(my_tibble)
+```
+
+```{r, echo = F}
+# define simple data set
+data <- 
+   "id, var_1, var_2\n
+  DCDL,  .287,  .048\n
+  FEFK,  .894,  .383\n
+  ZEWE, 1.374,  .623\n
+  OJEE,  .631,  .826"
+
+# read in data
+require(readr)
+read_csv(data)
+```
+]
+
+---
+
+# Practical
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S3_DataIO/Data_IO_practical.html">Link to practical</a>
+
+
+
+
+<!--- Tibble notes
+
+updated data.frame
+
+# creating tibbles
+as_tibble(data.frame)
+tibble() # recycles just as data frame
+
+# special about tibble
+never changes format -> no factors
+never changes names
+never creates row names
+non-valid R variables names (e.g., not starting with a letter)
+better printing behavior (only 10 rows + type + dim)
+no partial name matches
+[ always returns a tibble (more consistent)
+
+# common  
+subsetting
+
+
+# tribble for data entry in code
+tribble(
+tribble(
+  ~x, ~y, ~z,
+  #--|--|----
+  "a", 2, 3.6,
+  "b", 1, 8.5
+)
+#> # A tibble: 2 × 3
+#>       x     y     z
+#>   <chr> <dbl> <dbl>
+#> 1     a     2   3.6
+#> 2     b     1   8.5
+)
+
+# subsetting with pipe
+df %>% .$x
+
+# turn back to df
+as.data.frame() --->

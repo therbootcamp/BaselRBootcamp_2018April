@@ -1,0 +1,264 @@
+---
+title: "Welcome!"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default","my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+
+# Welcome!
+
+.pull-left5[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/homepage_jan18_ss.png" width="500" height="400"></p>
+]
+
+
+.pull-right5[
+<p align="center"><img src="https://therbootcamp.github.io/assets/img/basel_winter.jpg" width="500"  height="400"></p>
+]
+
+---
+
+# Main Bootcamp Link
+
+<br><br>
+<font size="7" color="#F62D73"><b><a href="https://therbootcamp.github.io/schedule_18Jan.html">therbootcamp.github.io/schedule_18Jan.html</b>
+
+---
+
+# Who are we?
+
+.pull-left5[
+<p align="center"><br>
+    <a href="www.dirkwulff.org"><img border="0" alt="W3Schools" src="https://www.mpib-berlin.mpg.de/sites/default/files/imagecache/marginal/dirk_wulff2smallnarrow.jpg" height="240"></a><br>
+
+<p align="center">
+<font size = 5>Dr. Dirk Wulff</font><br><br>
+<a href="www.dirkwulff.org"><b>dirkwulff.org</b></a><br>
+<a href="https://github.com/dwulff"><b>github.com/dwulff</b></a><br>
+<font size=4><i>packages: </i></font> 
+<a href="https://cran.r-project.org/web/packages/cstab/index.html"><b>cstab</b></a>, <br>
+<a href="https://cran.r-project.org/web/packages/mousetrap/index.html"><b>mousetrap</b></a>, <a href="https://github.com/dwulff/choicepp"><b>choicepp</b>
+</p>
+]
+
+.pull-right5[
+<p align="center"><br>
+    <a href="www.nathanieldphillips.com/"><img border="0" alt="W3Schools" src="https://avatars3.githubusercontent.com/u/8480980?v=4&s=460" height="240"></a><br>
+
+<p align="center">
+<font size = 5>Dr. Nathaniel Phillips</font><br><br>
+<a href="www.nathanieldphillips.com/"><b>nathanieldphillips.com</b></a><br>
+<a href="https://github.com/ndphillips"><b>github.com/ndphillips</b></a><br>
+<font size=4><i>packages: </i></font> 
+<a href="https://github.com/ndphillips/yarrr"><b>yarrr</b></a>, <br>
+<a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a>, <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b>
+</p>
+
+]
+
+---
+
+# Aim
+
+.pull-left6[
+
+>##<i>The aim of this workshop is enable you to thoughtfully and actively use R. We will communicate both the basics of the R language, as well as cutting-edge packages for wrangling, analyzing, and communicating statistical data.  
+
+]
+
+
+.pull-right4[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/target.png" height="350"></p>
+
+]
+
+---
+
+# Schedule <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/schedule_jan2018.png" height="600" align="right">
+
+
+---
+
+.pull-left4[
+
+
+<br>
+# Sessions
+<font size = 5>Each session is 2 hours</font><br>
+<font size = 5>20 - 40 min introduction</font><br>
+<font size = 5>80 - 100 min hands-on practical</font><br>
+
+]
+
+
+.pull-right55[
+<br><br><br>
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/interactiveprogramming.gif" height="350"></p>
+
+]
+
+---
+
+.pull-left4[
+
+<br>
+# Practicals
+
+
+<font size = 5>Start with a brief review and examples</font><br>
+<font size = 5>Anywhere from 10 ~ 30 tasks</font><br>
+<font size = 5>Starts easy, gets more challenging</font><br>
+<font size = 5>Some elements go beyond the introduction, be bold!</font><br>
+<font size = 5>Try to finish <b>50%</b> of the material during the session.</font><br>
+
+]
+
+
+.pull-right45[
+
+<br><br><br>
+
+<p align="center"><img src="https://i0.wp.com/www.4ubodyfitness.com.au/wp-content/uploads/2013/01/IMG_0465.jpg?fit=2048%2C1365&ssl=1" height="400"></p>
+
+
+]
+
+
+
+---
+# Cheatsheets
+
+
+<table width="100%" style="cellspacing:0; cellpadding:0; border:none">
+  <tr>    
+  <td>
+  <p align = 'center'>RStudio IDE<br><br>
+  <a href="https://github.com/rstudio/cheatsheets/raw/master/rstudio-ide.pdf"><img border="0" alt="W3Schools" src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/rstudio_cheat_ss.png?raw=true" height="180"></a></p>
+  </td>
+ 
+  <td>
+   <p align = 'center'>Base R<br><br>
+  <a href="http://github.com/rstudio/cheatsheets/raw/master/base-r.pdf"><img border="0" alt="W3Schools" src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/baser_cheat_ss.png?raw=true" height="180"></a></p>
+  </td>  
+  
+  <td> 
+   <p align = 'center'>Data Import<br><br>
+  <a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf"><img border="0" alt="W3Schools" src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/dataimport_cheat_ss.png?raw=true" height="180"></a></p>
+  </td>
+  
+  <td>
+  <p align = 'center'>Data Transformation<br><br>
+  <a href="https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf"><img border="0" alt="W3Schools" src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/datatransform_cheat_ss.png?raw=true" height="180"></a></p>
+  </td>
+
+  <td>
+  <p align = 'center'>Data Visualization<br><br>
+  <a href="https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf"><img border="0" alt="W3Schools" src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/datavis_cheat_ss.png?raw=true" height="180" ></a></p>
+  </td>
+  
+
+  </tr>
+</table>
+<br>
+
+
+
+
+
+---
+
+.pull-left4[
+
+<br><br>
+# Breaks & refreshments
+
+<font size = 5>Feel free to take breaks when you need them!</font><br2>
+
+<font size = 5>Help yourself to refreshments</font><br>
+
+<font size = 5>Coffee machine nearby (1 CHF)</font><br>
+
+<font size = 5>Lunch on your own or together at Tibits</font><br>
+
+]
+
+
+.pull-right6[
+
+<p align='center'><br><br><br><font size="6"><b><a href="https://www.tibits.ch/de/restaurants.html#tibits-basel">Tibits</a><br>
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/tibits.jpg" height="400" vspace="10"></p>
+
+]
+
+
+
+
+
+---
+
+.pull-left35[
+# Introductions
+
+<font size = 5>1. What is your name?</font>
+<br><br>
+<font size = 5>2. Where are you from?</font>
+<br><br>
+<font size = 5>3. What is your programming experience?</font>
+<br><br>
+<font size = 5>4. Why do you want to learn R?</font>
+<br><br>
+<font size = 5>5. Coffee or tea?</font>
+<br><br>
+<font size = 5>6. Pizza or pasta?</font>
+<br><br>
+<font size = 5>7. Beer or wine?</font>
+<br><br>
+<font size = 5>8. Berlin or Paris?</font>
+]
+
+.pull-right6[
+<br><br>
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/introductions.jpg" height="400"></p>
+
+]
+
+
+---
+<br>
+<p align="center"><img src="http://www.abetterinterview.com/wp-content/uploads/2012/11/interview-questions.jpg" height="510"></p>
+
+---
+# Session 1: What is R?
+
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S1_WhatIsR/What_is_R.html#1">Link to Session 1: What is R?</a>
+
+
+---
+# Backup slides
+
+
+
+

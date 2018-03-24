@@ -1,0 +1,1384 @@
+---
+title: "Data Wrangling"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+.pull-left5[
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+options(width=110)
+options(digits = 4)
+library(tidyverse)
+```
+# What is Wrangling?
+
+Transform
+- Adding new columns
+- Combining columns
+- Splitting columns
+
+Organise
+- Moving data between columns and rows
+- Merging several dataframes
+- Sorting data by columns
+
+Aggregation
+- Aggregate data according to variables
+- Summarizing data across groups
+
+]
+
+
+.pull-right5[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/organise_transform_aggregate.png")
+```
+
+]
+
+---
+
+.pull-left4[
+# How do we wrangle data in R?
+
+<font size = 5>Answer: dplyr</font>
+
+Anytime you want to transform, organize, or aggregate data, use `dplyr`
+
+```{r, echo = FALSE, out.width = "50%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/dplyr_hex.png")
+```
+
+]
+
+.pull-right5[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/organise_transform_aggregate.png")
+```
+
+]
+
+---
+
+.pull-left35[
+# dplyr
+
+dplyr is a combination of 3 things:
+
+1. **`objects`** like dataframes
+2. **`functions`** that **do** things to objects.
+3. **`pipes`** `%>%` that string together objects and verbs
+
+<br>
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/pipe.jpg")
+```
+
+]
+
+.pull-right6[
+
+## The pipe %>%
+
+<font size = 5> dplyr makes extensive use of the 'pipe' %>%
+
+
+```{r, eval = FALSE}
+# Applying function without pipe
+FUN(OBJECT)
+
+# Applying function with pipe
+OBJECT %>% FUN
+```
+
+<font size = 5> Example
+
+```{r}
+# Calculate mean of a vector without pipe
+mean(ToothGrowth$len)
+
+# Same thing with pipe
+ToothGrowth$len %>% mean()
+```
+
+]
+
+
+---
+## The pipe
+
+```{r, echo = FALSE}
+X <- data.frame(id = 1:8,
+                    sex = c("m", "m", "f", "f", "m", "f", "f", "m"),
+                    arm = c(1, 1, 2, 2, 1, 2, 1, 2),
+                    age = c(54, 37, 65, 48, 64, 57, 36, 56),
+                    outcome = c(3, 6, 8, 4, 9, 6, 8, 10),
+                    stringsAsFactors = FALSE)
+```
+
+.pull-left3[
+<br><br>
+<font size = 5> Here is some trial data called X</font>
+
+```{r}
+# Clinical trial data
+X
+```
+
+<br>
+
+]
+
+
+.pull-right65[
+
+<font size = 5><i>Task 1: Give me the ids of women above the age of 50 with an outcome greater than 5</i></font>
+
+
+```{r}
+# Base R Method without pipe (%>%)
+
+X$id[X$sex == "f" & X$age > 50 & X$outcome > 5]
+```
+
+
+```{r}
+# dplyr method with pipe (%>%)
+
+X %>%
+  filter(sex == "f" & age > 50 & outcome > 5) %>%
+  select(id)
+  
+```
+
+]
+
+
+---
+## The pipe
+
+
+
+.pull-left3[
+<br><br>
+<font size = 5> Here is some trial data called X</font>
+
+```{r}
+# Clinical trial data
+X
+```
+
+<br>
+
+]
+
+
+.pull-right65[
+
+<font size = 5><i>Task 2: Separately for the two arms, calculate mean age and outcome</i></font>
+
+
+```{r}
+# Base R Method without pipe (%>%)
+
+# Get aggregate statistics
+age_agg <- aggregate(age ~ arm, data = X, FUN = mean)
+out_agg <- aggregate(outcome ~ arm, data = X, FUN = mean)
+
+# Combine results
+data.frame(arm = age_agg$arm,
+           age_mean = age_agg$age,
+           outcome_mean = out_agg$outcome)
+
+```
+]
+
+
+
+---
+## The pipe
+
+
+
+.pull-left3[
+<br><br>
+<font size = 5> Here is some trial data called X</font>
+
+```{r}
+# Clinical trial data
+X
+```
+
+<br>
+
+]
+
+
+.pull-right65[
+
+<font size = 5><i>Task 2: Separately for the two arms, calculate mean age and outcome</i></font>
+
+
+```{r}
+# dplyr method with pipe (%>%)
+
+X %>%                             # Start with data X
+  group_by(arm) %>%               # Group data by arm
+  summarise(                      # Calculate summary statistics
+    age_mean = mean(age),         # age_mean is...
+    outcome_mean = mean(outcome)  # outcome_mean is...
+  )
+```
+]
+
+
+---
+
+.pull-left25[
+<br>
+<font size = 5>Load the tidyverse</font>
+
+<br2>
+
+<font size = 5>Load data</font>
+
+<br>
+
+<font size = 5>Start with data</font>
+
+<br>
+
+<font size = 5>Connect multiple functions with pipes %>%</font>
+
+<br>
+
+<font size = 5>Result will always be a tibble</font>
+
+
+]
+
+.pull-right7[
+
+<font size = 5>Here is how dplyr looks in practice </font>
+
+```{r, eval = FALSE}
+library(tidyverse) # Load tidyverse (includes dplyr)
+
+# load .csv file as trial_X
+trial_X <- read_csv("data/mydata.csv")
+
+# Start with original dataframe 
+trial_X %>%   # AND THEN
+  
+  # Change column names with rename()
+  rename(...)  %>%  # AND THEN...
+
+  # Select specific rows with filter()
+  filter(...)  %>%  # AND THEN...
+  
+  # Create new columns witb mutate()
+  mutate(...)  %>%  # ...
+  
+  # Group data with group_by()
+  group_by(...) %>%  #...
+  
+  # Calculate summary statistics with summarise()
+  summarise(...) %>% # ...
+
+   #....
+  
+```
+
+
+]
+
+
+
+---
+
+.pull-left4[
+<br><br>
+## Wrangling Functions in dplyr
+
+- <font size = 5>There are dozens functions in dplyr that allow you to wrangle data.</font><br>
+
+- <font size = 5>For an overview, look at the cheatsheet..</font><br>
+
+
+- <font size = 5>We will now show you how to use ~10 of the most common ones</font><br>
+
+
+]
+
+
+.pull-right55[
+
+<br>
+### Wrangling / dplyr cheatsheet
+
+```{r, echo = FALSE, out.width="600", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/data_wrangling_ss.png")
+```
+
+]
+
+---
+
+
+```{r, echo = FALSE}
+patients_df <- tibble(id = c(13, 22, 5, 67, 34),
+                      b = c(38, 64, 55, 34, 29),
+                      c = c(0, 1, 0, 0, 1))
+
+results_df <- tibble(id = c(67, 5, 34, 13, 22),
+                    time1 = c(2, 3, 3, 4, 7),
+                    time2 = c(4, 3, 5, 6, 5))
+```
+
+
+.pull-left4[
+# Transformation Functions
+
+| Function| Description|
+|:-------------|:----|
+| `rename()` | Change column names |
+| `mutate()`|   Create a new column from existing columns|
+| `case_when()`|  Recode values from a vector to another|
+| `left_join()` | Combine multiple dataframes| 
+
+]
+
+.pull-right55[
+<br><br>
+```{r}
+patients_df   # Demographic data
+```
+
+### Goal:
+
+- Create better column names with `rename()`
+- Add new columns with `mutate()`
+- Recode values with `case_when()`
+- Merge with a new dataframe using `left_join()`
+
+]
+
+
+---
+
+
+.pull-left3[
+# rename() 
+
+
+<font size = 5> Change column names with rename()<br><br></font>
+<font size = 5>New = Old, <br>New = Old, ...<br><br></font>
+
+```{r}
+patients_df  # Original
+```
+]
+
+.pull-right65[
+<font size = 5>1) Create better column names with rename()</font>
+
+```{r}
+
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Change column names with rename()
+  rename(age = b,  # New = Old
+         arm = c)  # New = Old
+```
+
+]
+
+---
+
+.pull-left3[
+# mutate() 
+
+<font size = 5> Add new columns with mutate()<br><br></font>
+<font size = 5>Add as many you'd like<br><br></font>
+<font size = 5>Example:<br><br></font>
+
+```{r, eval = FALSE}
+df %>%
+  mutate(
+   NEW = DEFINITION,
+   Year = Month * 12,
+   BMI = weight / height ^ 2
+  )
+```
+]
+
+.pull-right65[
+<font size = 5>2) Add new columns with mutate()</font>
+
+```{r}
+
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Change column names with rename()
+  rename(age = b,  
+         arm = c) %>%
+  
+# 2) Create new columns with mutate()
+  mutate(age_months = age * 12,
+         age_decades = age / 10)
+```
+
+]
+
+
+---
+
+.pull-left3[
+# case_when() 
+
+<font size = 5>Use case_when() in combination with mutate()<br><br></font>
+<font size = 5>Allows you to define values based on logical conditions<br><br></font>
+<font size = 5>Example:<br><br></font>
+
+```{r, eval = FALSE}
+df %>%
+  mutate(
+    NEW = case_when(
+      COND1 ~ VAL1,
+      COND2 ~ VAL2
+    )
+  )
+```
+]
+
+.pull-right65[
+<font size = 5>3) Recode values with case_when()</font>
+
+```{r}
+
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Change column names with rename()
+  rename(age = b,  
+         arm = c) %>%
+  
+# 2) Create new columns with mutate()
+  mutate(age_months = age * 12,
+         age_decades = age / 10,
+         arm_char = case_when(arm == 0 ~ "placebo",
+                              arm == 1 ~ "drugX")
+         )
+```
+
+]
+
+
+
+---
+# Merging data
+
+
+.pull-left45[
+
+<font size = 5> Patient basics </font>
+
+```{r, eval = FALSE}
+patients_df
+```
+
+```{r, echo = FALSE, results = 'asis'}
+knitr::kable(rename(patients_df, age = b, arm = c), format = 'markdown')
+```
+
+<br>
+
+<font size = 5>Goal: Add study results data to patient data</font>
+<br3>
+
+]
+
+
+.pull-right45[
+
+<font size = 5> Patient results </font>
+
+
+```{r, eval = FALSE, results = 'asis'}
+results_df
+```
+
+```{r, echo = FALSE, results = 'asis'}
+knitr::kable(results_df, format = 'markdown')
+```
+
+<br>
+
+<font size = 5> For each matching id in patients_df and results_df, add results_df data to patients_df.
+
+
+]
+
+
+
+---
+
+.pull-left3[
+# left_join()
+
+<font size = 5>Use left_join() to combine data from 2 dataframes<br><br></font>
+<font size = 5>Must include at least one 'key' column used to match rows<br><br></font>
+<font size = 5>Example:<br><br></font>
+
+```{r, eval = FALSE}
+# Add df2 data to df1
+#   using KEY as the key
+df1 %>%
+  left_join(df2, 
+      by = c("KEY"))
+```
+
+
+
+]
+
+.pull-right65[
+<font size = 5>4) Merge patients_df with results_df</font>
+
+```{r}
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Change column names with rename()
+  rename(age = b,  
+         arm = c) %>%
+  
+# 2) Create new columns with mutate()
+  mutate(age_months = age * 12,
+         age_decades = age / 10,
+         arm_char = case_when(arm == 0 ~ "placebo",
+                              arm == 1 ~ "drugX")
+         ) %>%
+  
+  # 3) Add data from results_df with left_join()
+  left_join(results_df, by = "id")
+```
+
+]
+
+
+---
+
+
+.pull-left3[
+
+# Notes
+
+<font size = 5>1) Continue as long as you want with more pipes %>%</font>
+<br> <br>
+<font size = 5> 2) Order of functions matters </font>
+<br> <br>
+<font size = 5> 3) You can refer to new objects in later code </font>
+<br> <br>
+<font size = 5>4) To update a dataframe, make sure to assign it to itself with <- </font>
+
+]
+
+.pull-right65[
+<br><br>
+<font size = 5>Make sure to assign again using <- to change patients_df</font>
+
+```{r}
+# 0) Start with patients_df data
+patients_df <- patients_df %>%
+  
+# 1) Change column names with rename()
+  rename(age = b,  
+         arm = c) %>%
+  
+# 2) Create new columns with mutate()
+  mutate(age_months = age * 12,
+         age_decades = age / 10,
+         arm_char = case_when(arm == 0 ~ "placebo",
+                              arm == 1 ~ "drugX")
+         ) %>%
+  
+# 3) Add data from results_df with left_join()
+  left_join(results_df, by = "id")
+```
+
+
+]
+
+---
+.pull-left3[
+
+# Organisation Functions
+
+| Function| action|
+|:-------------|:----|
+| `arrange()` |Sort rows |
+| `filter()` | Select specific rows |
+| `select()`|   Select specific columns|
+
+]
+
+
+.pull-right65[
+<br><br>
+```{r}
+patients_df 
+```
+
+### Goal:
+
+- Sort rows by `id` then by `age`
+- Only use drugX over the age of 30
+- Get rid of the columns `age_months` and `age_decades`
+
+]
+
+
+---
+
+.pull-left3[
+# arrange()
+
+<font size = 5>The arrange() function is used to sort (aka, arrange) rows of a dataframe</font>
+<br><br>
+<font size = 5>You can sort by as many conditions as you want</font>
+<br><br>
+<font size = 5>To sort in descending order, use desc()</font>
+
+
+
+
+
+]
+
+.pull-right65[
+
+<br><br>
+
+<font size = 5>1) Sort rows by id then in descending order of age</font>
+
+```{r}
+
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Sort by id then age (descending)
+  arrange(id, desc(age))
+```
+
+]
+
+
+
+---
+
+.pull-left3[
+# filter()
+
+<font size = 5>The filter() function is used to select specific rows</font>
+<br><br>
+<font size = 5>For complex conditions, chain multiple logical comparison operators<br><br>(==, !=, <, >, <=, >=, &, |)</font>
+
+
+
+]
+
+.pull-right65[
+<br><br>
+
+<font size = 5>2) Select drugX over 30</font>
+
+```{r}
+
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Sort by id then age (descending)
+  arrange(id, desc(age)) %>%
+  
+# 2) Only drugX over 30
+  filter(arm_char == "drugX" & age > 30)
+```
+
+]
+
+
+
+---
+
+.pull-left3[
+# select()
+
+
+<font size = 5>Keep columns with <br><br>select(COL1, COL2, ...)<font>
+<br>
+<font size = 5>Remove columns with <br><br> select(-COL1, -COL2, ...)<font>
+<br>
+
+
+
+
+]
+
+.pull-right65[
+
+<br><br>
+
+<font size = 5>3) Remove age_months and age_decades</font>
+
+```{r}
+
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Sort by id then age (descending)
+  arrange(id, desc(age)) %>%
+  
+# 2) Only drugX over 30
+  filter(arm_char == "drugX" & age > 30) %>%
+  
+# 3) Remove age_months and age_decades
+  select(-age_months, -age_decades)
+  
+```
+
+]
+
+
+---
+.pull-left4[
+
+# Aggregation functions
+
+| Function| action|
+|:-------------|:----|
+| `group_by()` |Group data by levels of specific variables |
+| `summarise()` | Calculate summary statistics |
+
+### Statistical functions
+
+| Function| action|
+|:-------------|:----|
+| `min(), max()`| Minimum, maximum |
+| `mean(), median()` |Mean, Median |
+| `sd()` |Standard deviation|
+| `sum()` | Sum|
+| `n()`| Number of cases|
+]
+
+.pull-right55[
+<br><br>
+
+```{r, echo = FALSE}
+patients_df <- patients_df %>%
+  select(id, age, arm_char, time1, time2) %>%
+  rename(arm = arm_char)
+```
+
+```{r}
+patients_df
+```
+
+### Goal:
+
+- Group data by arm
+- Calculate summary statistics from time1 and time1
+
+]
+
+
+---
+.pull-left3[
+# group_by() 
+
+<font size = 5>Used to combine data into groups<font>
+<br><br>
+<font size = 5>You can group by as many variables as you wish<font>
+<br><br>
+<font size = 5>You won't see any changes to the data until you use summarise()<font>
+<br>
+
+]
+
+.pull-right65[
+
+<br><br>
+
+
+<font size = 5>1) Group data by arm</font>
+
+```{r}
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Group data by arm with group_by
+  group_by(arm)
+```
+
+]
+
+
+
+
+---
+.pull-left3[
+# summarise() 
+
+<font size = 5>Used to summarise data from groups<br><br>
+<font size = 5>Works like mutate() to create new variables, but with summary functions<font>
+<br>
+
+```{r, eval = FALSE}
+df %>%
+  group_by(VAR1) %>%
+  summarise(
+    SUMMARY = FUN(x),       # 
+    age_mean = mean(age),   # Ex 1
+    height_min = min(height) # Ex 2 
+  )
+```
+
+
+]
+
+.pull-right65[
+<br><br>
+
+<font size = 5>2) Calculate summary statistics from times</font>
+
+```{r}
+# 0) Start with patients_df data
+patients_df %>%
+  
+# 1) Group data by arm with group_by
+  group_by(arm) %>%
+  
+# 2) Calculate summary columns
+  summarise(
+    time1_mean = mean(time1),
+    time2_mean = mean(time2),
+    diff = time2_mean - time1_mean,
+    N = n()
+  )
+```
+
+]
+
+
+
+---
+
+.pull-left4[
+
+#dplyr summary
+
+dplyr is great for elegantly performing sequential operations on data.
+
+The 'pipe' operator `%>%` helps you string multiple *objects* (like dataframes) and *verbs* (summarise, order, aggregate...) together.
+
+```{r, echo = FALSE, out.width = "50%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/dplyr_hex.png")
+```
+
+]
+
+.pull-right5[
+
+<br>
+<br>
+
+Basic structure of dplyr commands:
+
+```{r, eval = FALSE}
+data %>%    # Start with data, AND THEN...
+  VERB1 %>% # Do VERB1, AND THEN...
+  VERB2 %>% # Do VERB2, AND THEN...
+  VERB3 %>% # Do VERB3, AND THEN...
+  group_by(x, y) %>%  # Group by variables x, y
+    summarise(
+      VAR_A_New = fun(X),
+      VAR_B_New = fun(Y)
+    )
+  )
+```
+
+]
+
+
+
+---
+
+.pull-left3[
+
+## Important!
+
+<br>
+
+<font size = 5>You can call many dplyr functions directly without the pipe %>%</font>
+<br><br><br>
+
+<font size = 5>However, we recommend always using the pipe %>% so you can string many operations together</font>
+
+]
+
+
+.pull-right65[
+
+<br><br>
+<font size = 5> Use the pipes %>%!</font>
+```{r, eval = FALSE}
+## Using dplyr functions without pipes %>%
+##     Avoid this if you can
+
+data <- mutate(data, age_years = age_months * 12)
+data <- filter(data, sex == "m")
+
+## Using dplyr functions with pipes %>%
+##    Much better!!!
+
+data <- data %>% mutate(age_years = age_months * 12)
+data <- data %>% filter(sex == "m")
+
+# Why? Because with pipes you can easily put multiple
+#  functions together if you choose.
+
+data <- data %>% 
+          mutate(age_years = age_months * 12) %>%
+          filter(sex == "m") %>%
+   # ....
+```
+
+
+]
+
+
+---
+
+# Live Demo & Practical
+
+<br><br><br>
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D2S1_Wrangling/Wrangling_practical.html">Link to Wrangling practical</a>
+
+
+---
+
+# Additional Slides
+
+---
+# Vector functions
+
+```{r, echo = FALSE, out.width="900", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/vector_functions.png")
+```
+
+---
+
+.pull-left5[
+# Vector to scaler functions
+
+- Each takes a numeric vector `x`, and returns a numeric scaler
+
+| Function| action|
+|:-------------|:----|
+|     `sum(x)`, `prod(x)`|   Sum or product|
+|     `min(x), max(x)`|    Minimum, maximum|
+|     `mean(x), median(x)`|    Arithmetic mean or median| 
+|     `var(x)`, `sd(x)`|   Variance, standard deviation|
+
+]
+
+.pull-right45[
+<br>
+
+### Examples
+
+```{r}
+# Sum of all weights?
+sum(ChickWeight$weight)
+
+# Mean weight?
+mean(ChickWeight$weight)
+
+# Standard deviation of weights?
+sd(ChickWeight$weight)
+```
+
+]
+
+
+
+---
+
+.pull-left5[
+# Vector to vector / table functions
+
+- Each takes a numeric vector `x`, and returns a vector or table
+
+| Function| action|
+|:-------------|:----|
+|     `unique(x)`|   What are the unique values of x?|
+|     `table(x)`|    How many are there of each unique value in x?|
+|     `rank(x)|    What is the rank order of values in x?|
+
+
+]
+
+.pull-right45[
+<br>
+
+### Examples
+
+```{r}
+# Sum of all weights?
+sum(ChickWeight$weight)
+
+# Mean weight?
+mean(ChickWeight$weight)
+
+# Standard deviation of weights?
+sd(ChickWeight$weight)
+```
+
+]
+
+
+---
+
+.pull-left4[
+# dplyr
+
+dplyr is a combination of 3 things:
+
+1. **`objects`** like dataframes
+2. **`verbs`** that **do** things to objects.
+3. **`pipes`** `%>%` that string together objects and verbs
+
+<br>
+
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/pipe.jpg")
+```
+
+]
+
+.pull-right5[
+
+<br>
+<br>
+<br>
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/sequential.png")
+```
+
+dplyr is meant to be sequential and work like language
+
+> Take data X, 
+>   then do Y, 
+>   then do Z,
+>   ...
+
+]
+
+
+
+---
+
+.pull-left4[
+# dplyr
+
+### Question:
+
+> <font size=5>From the ChickWeight dataframe, calculate the mean weight and time for each diet</font>
+
+]
+
+
+.pull-right55[
+
+### Answer:
+```{r, message = FALSE, warning = FALSE}
+library(dplyr)
+
+x <- ChickWeight %>%  # Start with ChickWeight
+  group_by(Diet) %>%  # Group by Diet
+  summarise(          # Get ready to summarise....
+    weight.mean = mean(weight), # Mean weight
+    time.mean = mean(Time),     # Mean time
+    N = n()                     # Number of cases
+  )
+  
+
+x
+```
+
+]
+
+
+
+
+---
+
+
+# Common dplyr verbs
+
+| verb| action| example |
+|:---|:----|:----------------|
+|     `filter()`|    Select rows based on some criteria| `filter(age > 40 & treatment == "drug")`|
+|     `arrange()`|    Sort rows| `arrange(date, group)`|
+|     `select()`|    Select columns (and ignore all others)| `select(age, treatment)`|
+|     `rename()`|    Rename columns| `rename(DATE_MONTHS_X24, date`)|
+|     `mutate()`|    Add new columns| `mutate(height.m = height.cm / 100)`|
+|     `case_when()`|    Recode values of a column| `treat_char = case_when(treatment == 0 ~ "placebo", treatment == 1 ~ "drug")`|
+|     `group_by(), summarise()`|   Group data and then calculate summary statistics|`group_by(treatment) %>% summarise(...)` |
+
+
+
+
+
+
+---
+
+#### Example 1
+
+*Add a column called `weight_d_time` that is weight divided by time*
+
+```{r, message = FALSE, warning = FALSE}
+library(dplyr)
+
+x <- ChickWeight %>%          # Start with the ChickWeight data
+      mutate(                 # Create new columns...
+            weight_d_time = weight / Time
+            )
+
+head(x)   # Print the result
+```
+
+
+
+---
+
+#### Example 2
+
+*Add a column called `weight_d_time` that is weight divided by time AND `time_d` that is time in days*
+
+```{r, message = FALSE, warning = FALSE}
+x <- ChickWeight %>%          # Start with the ChickWeight data
+      mutate(                 # Create new columns...
+            weight_d_time = weight / Time,  # weight_d_time is weight divided by Time
+            time_d = Time * 7               # time_d is Time times 7
+            )
+
+head(x)   # Print the result
+```
+
+---
+
+
+### Recoding values with case_when()
+
+.pull-left4[
+Recoding values is a common data wrangling task. You can easily do this with `case_when()`:
+
+```{r, eval = FALSE}
+data %>%
+  mutate(
+  var_new = case_when(
+    var_old == OLD_A ~ NEW_A,
+    var_old == OLD_B ~ NEW_B
+  )
+```
+
+For example, in a dataset, the column `sex` might be coded with 1s and 0s.
+
+You might want to create a new column `sex_new` where 1 = "female" and 0 = "male":
+
+| sex| sex_new|
+|------:|----:|
+|    1|   "female"|
+|    0|   "male"|
+
+]
+
+.pull-right5[
+
+To change the value of 1 to `"female"`, and 0 to `"male"`, you can use `case_when()`:
+
+```{r, eval = FALSE}
+# Add a column sex_new to data 
+
+data <- data %>% 
+  mutate(
+        sex_new = case_when(
+          arm == 1 ~ "drugX",
+          arm == 0 ~ "placebo"
+        )
+  )
+```
+
+
+You can think about the code above as follows:
+
+- Create a new column `sex_new` where
+    - If `sex == 1`, then set the value to `"female"`
+    - If `sex == 0`, then set the value to `"male"`
+
+]
+
+---
+
+.pull-left4[
+
+#### Example 3
+
+*Create a new variable Diet_name which shows Diet in text format. Here is a table of the values*
+
+| Diet| Diet_name|
+|------:|----:|
+|    1|   "fruit"|
+|    2|   "vegetables"|
+|    3|   "meat"|
+|    4|   "grains"|
+
+]
+
+.pull-right5[
+<br>
+<br>
+```{r, message = FALSE, warning = FALSE, eval = TRUE}
+
+ChickWeight <- ChickWeight %>%           # Start with the ChickWeight data
+                 mutate(
+                   Diet_name = case_when(
+                     Diet == 1 ~ "fruit",
+                     Diet == 2 ~ "vegetables",
+                     Diet == 3 ~ "meat",
+                     Diet == 4 ~ "grains"
+                   )
+   
+ )
+
+head(ChickWeight)
+```
+
+]
+
+---
+
+#### Example 4
+
+*For each Diet, calculate the mean weight*
+
+```{r, message = FALSE, warning = FALSE}
+ChickWeight %>%           # Start with the ChickWeight data
+  group_by(Diet) %>%      # Group the data by Diet
+  summarise(              # Now summarise....
+    weight.mean = mean(weight) # Mean weight
+  )
+```
+
+---
+
+#### Example 5
+
+*For each time period less than 10, calculate the mean weight*
+
+```{r, message = FALSE, warning = FALSE}
+ChickWeight %>%                # Start with the ChickWeight data
+  filter(Time < 10) %>%        # Only Time periods less than 10
+  group_by(Time) %>%           # Group the data by Diet
+  summarise(                   # Now summarise....
+    weight.mean = mean(weight) # Mean weight
+  )
+```
+
+---
+#### Example 6
+
+*For each Diet, calculate the mean weight, maximum time, and the number of chicks on each diet*:
+
+```{r, message = FALSE, warning = FALSE}
+ChickWeight %>%           # Start with the ChickWeight data
+  group_by(Diet) %>%      # Group the data by Diet
+  summarise(              # Now summarise....
+    weight.mean = mean(weight), # Mean weight
+    time.max = max(Time),       # Max time
+    N = n()                     # Number of observations
+  )
+```
+
+---
+
+# Other dplyr verbs
+
+| verb| action| example |
+|:---|:----|:----------------|
+|     `sample_n()`|    Select a random sample of n rows| `sample_n(10)`|
+|     `sample_frac()`|    Select a random fraction of rows| `sample_frac(.20)`|
+|     `first(), last()`|    Give the first (or last) observation| `first(), last()`|
+
+---
+
+#### Example 7
+
+*Give me a random sample of 10 rows from the ChickWeight dataframe, but only show me the values for Chick and weight*
+
+```{r}
+# Give me a random sample of 10 rows, but only show me columns Chick and weight
+
+ChickWeight %>% 
+  select(Chick, weight) %>%
+  sample_n(10)
+```
+
+---
+.pull-left4[
+
+#dplyr
+
+dplyr operations (almost) always return a dataframe which you can assign to a new object:
+
+> *Create a dataframe with the average weight for each time period and nothing else!!*
+
+]
+
+.pull-right5[
+<br>
+<br>
+```{r}
+# Create a new object called time_agg
+
+time_agg <- ChickWeight %>%
+  group_by(Time) %>%
+  summarise(
+    weight.mean = mean(weight)
+  )
+
+head(time_agg)
+```
+
+]
+
+
+

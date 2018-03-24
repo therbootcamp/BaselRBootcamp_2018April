@@ -1,0 +1,565 @@
+---
+title: "Recap II"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+library(tidyverse)
+ChickWeight <- as.data.frame(ChickWeight)
+
+
+trial_X <- data.frame(id = 1:5,
+           sex = c("m", "f", "f", "m", "f"),
+           age = c(35, 42, 24, 56, 49),
+           arm = c(1, 2, 1, 2, 1),
+           y_primary = c(50, 78, 46, 97, 74),
+           y_secondary = c(1, 1, 0, 1, 1)
+           )
+
+```
+
+
+
+# Essentials of the R language
+
+.pull-left5[
+>"To understand computations in R, two slogans are helpful:
+<br><br>
+>###(1) Everything that exists is an object and 
+>###(2) everything that happens is a function call."
+]
+
+.pull-right5[
+<p align="center"><img src="https://statweb.stanford.edu/~jmc4/CopyPhoto.jpg" width="350" align="center"></p>
+<p align="center">John Chambers<br> <font size=2> Author of S and developer of R</font><br>
+<font size=2><a href="https://statweb.stanford.edu/~jmc4/">statweb.stanford.edu</a>
+</p>
+]
+
+---
+
+.pull-left45[
+# Objects
+>###"Everything in R is an object"<br> 
+><p align="right">*John Chambers*<p>
+
+<br><br>
++ R's objects are have **content and attributes**.
+<br2>
++ The **content can be anything** from numbers or strings to functions or complex data structures. 
+<br2>
++ Attributes often encompass **names**, **dimensions**, and the **class or type** of the object, but other attributes are possible. 
+<br2>
++ Practically all data objects are equipped with those **three essential attributes**.
+
+]
+
+.pull-right5[
+<br><br>
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/objects.png" align="center" width="579" height="560">
+]
+
+---
+
+# Vectors
+
+R's most **basic (and most simple) data format** - even single values (aka **scalars**) are implemented as vectors. 
+
+.pull-left45[
+```{r, eval = F}
+# creating a vector (incl. names)
+my_vec <- c(t_1 = 1.343, t_2 = 5.232)
+
+# vectors are always flat
+my_vec <- c(1.343, c(5.232, 2.762))
+
+# naming vectors
+my_vec <- c(t_1 = 1.343, t_2 = 5.232)
+names(my_vec) <- c("new_1","new_2")
+
+# evaluting inherent attributes
+names(my_vec)
+length(my_vec)
+typeof(my_vec)
+
+```
+]
+
+.pull-right5[
+<p align="left"><br><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/vector.png" width="628px" height="190px"></p>
+]
+
+
+---
+
+# Types
+
+A vector contains elements of one of four **basic types**: `integer`, `double`, `numeric`, and `character`. You can **test** the type using `typeof()` or the type-specific `is.*()`, e.g., `is.integer()`.
+
+
+.pull-left45[
+```{r}
+# numeric vectors
+my_vec <- c(1.343, 5.232)
+typeof(my_vec) ; is.integer(my_vec)
+
+# integer vectors (overruled by R)
+my_vec <- c(1, 7, 2)
+typeof(my_vec) ; is.integer(my_vec)
+
+```
+]
+
+.pull-right45[
+```{r}
+# logical vectors
+my_vec <- c(TRUE, FALSE)
+typeof(my_vec) ; is.logical(my_vec)
+```
+
+```{r}
+# character vectors
+my_vec <- c('a', 'hello', 'world')
+typeof(my_vec) ; is.character(my_vec)
+```
+]
+
+---
+
+# `data.frame`s
+
+.pull-left45[
+
+* Data frames (and its variants, e.g., **tibble**s) are R's **main data format**. 
+
+* **Data frames are lists** with specific **requirements**:
+
+  + Every element must be a vector.
+
+  + The lengths of the vectors must be equal (or multiples of another).  
+
+* Use `data.frame()` and `as.data.frame` to create or to coerce to data frame.
+]
+
+.pull-right45[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/data.frame.png" width="409px" height="266px"></p>
+]
+
+
+
+
+---
+
+# Accessing & changing data frames (and lists)
+
+Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
+
+.pull-left45[
+```{r}
+# retrieve elements using brackets
+my_df <- data.frame('v_1'=c('A', 'B', 'C'), 
+                    'v_2'=c(1, 2, 3))
+my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+```
+]
+
+.pull-right45[
+```{r}
+# retrieve elements using the $-operator
+my_df$v_1
+my_df$v_1 <- c('X', 'Y', 'Z')
+my_df
+
+```
+]
+
+---
+
+# Calls, assignments, and expressions
+
+In R every action is a function call. Specifically, R programs advance by **passing on arguments to functions**, **calling the function**, and **receiving and storing its output**. And this goes deep, many operations are functions in disguise.
+
+.pull-left45[
+```{r}
+# defining a function - arithm. mean
+my_fun <- function(x, b){ x * b }
+
+# define some data
+my_data <- c(1, 5, 7, 3) 
+
+# pass on arguments and call function
+my_fun(my_data, 5) 
+
+# store output by assignment
+my_out <- my_fun(my_data, 5)
+```
+
+]
+
+.pull-right45[
+```{r}
+# a basic expression
+2 + 2
+
+# is also a function
+'+'(2,2)
+
+```
+]
+
+
+---
+
+# Help
+
+.pull-left5[
+
+R provides extremely helpful **help files** and **vignettes**. 
+>**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).<br>
+>**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+
+```{r, eval = F}
+# To access help files
+help("name_of_function")
+?name_of_function
+
+# find help files
+??name_of_function
+
+# To list and access vignettes
+vignette(package = "name_of_package")
+vignette(package = "name_of_vignette")
+```
+
+]
+
+.pull-right45[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"></p>
+
+<!---
+<br><br><iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"></iframe>
+--->
+]
+
+---
+
+# The almighty **tidyverse**
+
+Among its many packages, R contains a collection of high-performance, easy-to-use packages (libraries) designed specifically for handling data know as the [tidyverse](https://www.tidyverse.org/). The tidyverse includes:
+1. `ggplot2` -- creating graphics.
+2. `dplyr` -- data manipulation.
+3. `tidyr` -- tidying data.
+4. `readr` -- read wild data.
+5. `purrr` -- functional programming.
+6. `tibble` -- modern data frame.
+<br><br>
+
+```{r, out.height = "200px", echo = F}
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/071952491ec4a6a532a3f70ecfa2507af4d341f9/c167c/images/hex-dplyr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/5f8c22ec53a1ac61684f3e8d59c623d09227d6b9/b15de/images/hex-tidyr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/9221ddead578362bd17bafae5b85935334984429/37a68/images/hex-purrr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png")
+```
+
+
+
+
+---
+
+.pull-left4[
+# How do we wrangle data in R?
+
+<font size = 5>Answer: dplyr</font>
+
+Anytime you want to transform, organize, or aggregate data, use `dplyr`
+
+```{r, echo = FALSE, out.width = "50%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/dplyr_hex.png")
+```
+
+]
+
+.pull-right5[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/organise_transform_aggregate.png")
+```
+
+]
+
+
+---
+
+.pull-left35[
+# dplyr
+
+`dplyr` is a combination of 3 things:
+
+1. **`objects`** like dataframes
+2. **`functions`** that **do** things to objects.
+3. **`pipes`** `%>%` that string together objects and verbs
+
+<br>
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/pipe.jpg")
+```
+
+]
+
+.pull-right6[
+<br><br><br><br>
+## The pipe %>%
+<br2>
+
+`dplyr` makes extensive use of the 'pipe' `%>%` which passes objects between functions.
+<br><br>
+
+```{r, eval = FALSE}
+data %>%    # Start with data, AND THEN...
+  VERB1 %>% # Do VERB1, AND THEN...
+  VERB2 %>% # Do VERB2, AND THEN...
+  VERB3 %>% # Do VERB3, AND THEN...
+  group_by(x, y) %>%  # Group by variables x, y
+    summarise(
+      VAR_A_New = fun(X),
+      VAR_B_New = fun(Y),
+      VAR_C_New = fun(Z),
+    )
+  )
+```
+
+]
+
+
+
+
+---
+
+## There are tons of statistical packages in R!
+
+
+.pull-left35[
+<br><br>
+
+| Package| Models|
+|------:|:----|
+|     `afex`|   Anovas|
+|     `rpart`|    Decision Trees|
+|     `lme4`|   Mixed effects regression|
+|     `BayesFactor`| Bayesian statistics|
+|     `igraph`| Cluster analyses|
+|     `neuralnet`| Neural networks|
+
+]
+
+.pull-right6[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/statistical_procedures.png")
+```
+
+]
+
+
+---
+
+# Statistics
+
+.pull-left5[
+
+
+| Test| R Function|
+|:------|:----|
+|     `formula`|The dependent variable and one or more independent variables|
+|     `data`|  The dataframe containing variables|
+|   `subset`  | Optional subset of data to test |
+
+
+```{r}
+trial_X
+```
+
+
+]
+
+.pull-right45[
+
+```{r, eval = FALSE}
+TEST(formula = Y ~ X1 + X2 + ...
+     data = DATA,
+     subset = SUBSET,
+     ...)
+```
+
+
+### Examples
+
+```{r, eval = FALSE}
+# T-test
+# DV = y_primary, IV = arm
+t.test(formula = y_primary ~ arm
+       data = trial_X)
+
+# Regression
+# DV = y_secondary, IV = arm, sex, age
+# Subset = only id > 50
+glm(formula = y_secondary ~ arm + sex + age
+    data = trial_X,
+    subset = id > 50)
+```
+
+]
+
+
+
+---
+
+.pull-left35[
+
+
+<br><br>
+
+## Exploring statistical objects
+
+Assign the results of a statistical function to a new object, then use *generic* functions such as `print()`, `summary()`, `predict()` and `plot()` to explore it.
+
+
+```{r, eval = FALSE}
+# Create statistical object
+my_obj <- FUN(formula = ...,
+              data = ...)
+
+names(my_obj)       # Elements
+print(my_obj)       # Print
+summary(my_obj)     # Summary
+plot(my_obj)        # Plotting
+predict(my_obj, ..) # Predict
+
+```
+
+]
+
+.pull-right6[
+<br><br>
+
+
+```{r, eval = TRUE}
+# Create a glm object
+chick_glm <- glm(formula = weight ~ Time,
+                 data = ChickWeight)
+
+# Print the object
+names(chick_glm)
+
+## Access elements
+chick_glm$coefficients
+```
+
+]
+
+
+---
+
+# What is machine learning?
+
+.pull-left6[
+
+
+### Algorithms autonomously learning from data.
+
+Given data, an algorithm tunes its *parameters* to match the data, understand how it works, and make predictions for what will occur in the future.
+
+```{r, echo = FALSE, out.width = "80%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mldiagram_A.png")
+```
+
+]
+
+.pull-right4[
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearningcartoon.png")
+```
+
+
+]
+
+
+---
+# How do I do machine learning in R?
+
+.pull-left6[
+
+In principle, it's a lot like evaluating statistical functions.
+
+Install the necessary package, evaluate the model function, explore the results.
+
+```{r, eval = FALSE}
+# Create training and test data
+data_train <- ...
+data_test <- ...
+
+# Train models on training data
+model_A <- A_fun(formula = y ~ ., 
+                 data = data_train)
+
+# Model A predictions
+pred_A <- predict(model_A, 
+                  newdata = data_test)
+
+# Calculate Model A error
+pred_err_A <- mean(abs(pred_A - data_test$y))
+
+# Compare to Models B, C, D...
+```
+
+]
+
+.pull-right35[
+
+
+If you're really into machine learning, packages such as `mlr` and `caret` can automate much of the the machine learning process.
+
+```{r, echo = FALSE, eval = TRUE, out.width = "95%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlrcaret.png")
+```
+
+]
+
+---
+# Today
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/schedule_18Jan">Schedule</a>

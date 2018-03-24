@@ -1,0 +1,50 @@
+---
+title: "September 2017 BaselRBootcamp"
+author: "http://therbootcamp.github.io"
+output: html_document
+---
+
+### Sessions
+
+
+|  | Day 1<br>Essentials | Day 2<br>Statistics | Day 3<br>Plotting | Day 4<br> Productivity |
+|:--|:-------------|:-------------|:-------------|:--------------|
+|0| Welcome!<br>[slides](D1S0_Intro/Intro.html) | *none* | RecapII<br>[slides](D3S0_Recap/Recap_II.html) | Recap III<br>[slides](D4S0_Recap/Recap_III.html) |
+|1| What is R?<br>[slides](D1S1_WhatIsR/what_is_R.html), [practical](practical_what_is_R.html), [solutions](practical_what_is_R_sol.html) | Data Wrangling<br> [slides](D2S1_Wrangling/wrangling_lecture.html), [practical](wrangling_practical.html), [solutions](wrangling_practical_answers.html)|Tidying Code<br>[slides](D3S1_Tidying/Tidying.html), [practical](D3S1_Tidying/practical_tidying.html) | Efficient code<br>[slides](D4S1_EfficientCode/EfficientCode.html), [practical](D4S1_EfficientCode/practical_EfficientCode.html)  |
+|2|  Objects in R<br>[slides](D1S2_Objects/Working_with_objects.html), [practical](practical_objects.html), [solutions](practical_objects_sol.html) | Statistics<br> [slides](D2S2_Statistics/statistics_lecture.html), [practical](statistics_practical.html), [solutions](statistics_practical_answers.html)| Plotting 1.0<br> [slides](D3S2_PlottingI/plottingI.html), [practical](plotting1_practical.html) |  Dynamic Reports<br>[slides](D4S2_DynamicReports/dynamicreports.html), [practical](dynamicreports_practical.html) |
+|3|   Data I/O<br>[slides](D1S3_dataio/Data_IO.html), [practical](practical_readin.html), [solutions](practical_readin_sol.html)|Machine Learning<br> [slides](D2S3_MachineLearning/machinelearning_lecture.html), [practical](machinelearning_practical.html), [solutions](machinelearning_practical_answers.html) | Plotting 2.0<br> [slides](D3S3_PlottingII/plottingII.html), [practical](plotting2_practical.html) | Next Steps<br>[slides](D4S3_NextSteps/NextSteps.html), [survey](https://docs.google.com/forms/d/e/1FAIpQLSfAGQRft3YGz-urIVyFQ1s2o5B_63C2J92V7bowa-RJsNfinQ/viewform?usp=sf_link)|
+
+<!---
+### Datasets
+
+*To save data, right-click and "save link as..."*
+
+- [ACTG175 AIDS clinical trial](https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/data/ACTG175.csv)
+--->
+
+### September, 2017 Schedule
+
+```{r, out.width = "50%", echo = FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/assets/img/schedule_Sep2017.png")
+```
+
+
+### Recommended readings
+
+
+<table width="100%" border="0">
+  <tr>    
+  <td> <a href="http://r4ds.had.co.nz/"><img border="0" alt="W3Schools" src="http://r4ds.had.co.nz/cover.png" width="100" height="100"></a></td>
+  <td><a href="https://bookdown.org/ndphillips/YaRrr/"><img border="0" alt="W3Schools" src="https://bookdown.org/ndphillips/YaRrr/images/YaRrr_Cover.jpg" width="100" height="100"></a></td>
+  <td><a href="http://adv-r.had.co.nz/"><img border="0" alt="W3Schools" src="https://images.tandf.co.uk/common/jackets/amazon/978146658/9781466586963.jpg" width="100" height="100"></a>
+</td>
+  </tr>
+</table>
+<br>
+
+R for Data Science by Grolemund and Wickham: [http://r4ds.had.co.nz/](http://r4ds.had.co.nz/)
+<br>
+YaRrr! The Pirate's Guide to R! [https://bookdown.org/ndphillips/YaRrr/](https://bookdown.org/ndphillips/YaRrr/)
+<br>
+Advanced R by Wickham: [http://adv-r.had.co.nz/](http://adv-r.had.co.nz/) 
+

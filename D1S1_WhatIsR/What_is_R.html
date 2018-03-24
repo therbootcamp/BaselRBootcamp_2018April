@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>What is R?</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# What is R?
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### January 2018
+
+---
+
+
+
+
+
+
+# R
+
+From [Wikipedia](https://en.wikipedia.org/wiki/Statistical_model) (emphasis added):
+
+&gt; R is an **open source programming language** and software environment for **statistical computing and graphics** that is supported by the R Foundation for Statistical Computing. The R language is **widely used among statisticians and data miners** for developing statistical software and data analysis. Polls, surveys of data miners, and studies of scholarly literature databases show that **R's popularity has increased substantially in recent years**.
+
+&gt; R is a GNU package. The source code for the R software environment is written primarily in **C, Fortran, and R**. R is freely available under the GNU General Public License, and pre-compiled binary versions are provided for various operating systems. While R has a command line interface, there are several **graphical front-ends available**.
+
+---
+
+# Programming language
+
+From [Wikipedia](https://en.wikipedia.org/wiki/Statistical_model) (emphasis added):
+
+&gt; A programming language is a **formal language** that specifies a set of instructions that can be used to produce various kinds of output. Programming languages generally consist of **instructions for a computer**. Programming languages can be used to create programs that **implement specific algorithms**.
+
+.pull-left4[
+### Algorithm
+1. Load data
+2. Extract variables
+3. Run analysis
+4. Print result
+]
+
+.pull-right6[
+### Implementation in R
+
+
+
+```r
+data &lt;- read.table(link)
+variables &lt;- data[,c('group','variable')]
+analysis &lt;- lm(variable ~ group, data = variables)
+summary(analysis)
+```
+]
+
+&lt;!--  ---
+
+# A short history on R
+
+From [Wikipedia](https://en.wikipedia.org/wiki/R_(programming_language) (emphasis added):
+
+.pull-left6[
+&gt; R is an implementation of the **S programming language** combined with **lexical scoping** semantics [environments] inspired by Scheme. [...] There are some important differences, but much of the code written for S runs unaltered.
+
+&gt;R was created by **Ross Ihaka and Robert Gentleman** [...] and is currently developed by the **R Development Core Team** [...]. R is named partly after the first names of the first two R authors and partly as a play on the name of S. The project was conceived in 1992, with an initial version released in 1995 and a **stable beta version in 2000**.
+]
+
+.pull-right6[
+&lt;img src="http://www.estatisticacomr.uff.br/wp-content/uploads/2014/11/Criadores.jpg" height="350px" style="display: block; margin: auto;" /&gt;
+&lt;p style="font-size:20px" align="center"&gt;
+Robert Gentleman and Ross Ihaka&lt;br&gt;
+&lt;font size="2" color="#F52D70"&gt;source: https://i0.wp.com/r4stats.com/&lt;/font&gt;
+&lt;/p&gt;
+]
+--&gt;
+---
+
+# R is purpose specific
+
+R has been build for **statistical computing and graphics** and that is basically it:
+
+.pull-left5[
+### Use R (today) for...
+1. Importing and exporting data
+2. Handle and process data
+3. Run cutting-edge analyses
+4. Analyze big data
+5. Create publication-ready figures
+6. Prepare reproducible reports
+]
+
+.pull-right5[
+### Don't use R for...
+1. OS programs
+2. GUIs
+3. Complex websites
+]
+
+---
+
+# R is widely used
+
+.pull-left3[
+R steadily **grows in popularity**. 
+
+Today, R is one of the **most popular languages for data science** and overall. 
+
+In terms of the number of data science jobs, **R beats SAS and Matlab**, and is on par with Python:
+]
+
+.pull-left65[
+&lt;p align="center"&gt;&lt;img src="https://i0.wp.com/r4stats.com/wp-content/uploads/2017/02/Fig-1a-IndeedJobs-2017.png" height="370"&gt;&lt;/p&gt;
+
+&lt;p style="font-size:10px" align="center"&gt;source: https://i0.wp.com/r4stats.com/&lt;p&gt;
+]
+
+---
+
+# R is so popular because
+
+There are many good reasons to prefer R over superficially more user friendly software such as **Excel** or **SPSS** or more complex programming languages like **C++** or **Python**. 
+
+.pull-left45[
+### Pro
+1. **It's free**
+2. Relatively **easy**
+3. **Extensibility** ([CRAN](https://cran.r-project.org/), packages)
+4. **User base** (e.g., [stackoverflow](https://stackoverflow.com/))
+5. [**Tidyverse**](https://www.tidyverse.org/) (`dplyr`, `ggplot`, etc.)
+6. [**RStudio**](https://www.rstudio.com/)
+7. **Productivity** options: [Latex](https://www.latex-project.org/), [Markdown](https://daringfireball.net/projects/markdown/), [GitHub](https://github.com/)
+]
+
+.pull-right45[
+### Con
+1. Sometimes slow and wordy, but... 
+
+[Rcpp](http://www.rcpp.org/), [BH](https://cran.r-project.org/web/packages/BH/index.html): Links R to C++ and high-performance C++ libraries&lt;br&gt;
+[rPython](http://rpython.r-forge.r-project.org/): Links R to Python&lt;br&gt;
+[RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki): Links R to Hadoop for big data applications.&lt;br&gt;
+]
+
+---
+
+# RStudio: R's favorite environment
+
+Next to many useful packages, R users greatly benefit from R's integrated development environment [**RStudio**](https://www.rstudio.com/). Rstudio is a **graphical user interface** that allows you to (a) edit code, (b) run code, (c) access files and history, and (d) create plots. RStudio also helps you with **project management**, **version control** via [Github](https://github.com/), writing **reports** using [markdown](http://rmarkdown.rstudio.com/authoring_basics.html) and [knitr](https://yihui.name/knitr/), and many other aspects of working with R.  
+
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_plus.png" height="360"&gt;&lt;/p&gt;
+
+&lt;!---
+
+Move to Efficient projects
+
+# Project management
+
+RStudio facilitate project management via the use of *projects*. Projects support:
+
+.pull-left5[
+1. **File management** by automatically setting the working directory (see `setwd()`)
+&lt;br&gt;&lt;br&gt;
+2. **Project transitioning** by saving re-opening scripts, history, and workspace.
+&lt;br&gt;&lt;br&gt;
+3. **Customization** by enabling project specific settings.
+&lt;br&gt;&lt;br&gt;
+4. **Version control** by linking projects to repositories (e.g., using [GitHub](https://github.com/))
+]
+.pull-right5[
+
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/Projects.png" height="360"&gt;&lt;/p&gt;
+
+]
+
+---&gt;
+---
+
+# The almighty **tidyverse**
+
+Among its many packages, R newly contains a collection of high-performance, user-friendly packages (libraries)  known as the [tidyverse](https://www.tidyverse.org/). The tidyverse includes:
+1. `ggplot2` -- creating graphics.
+2. `dplyr` -- data manipulation.
+3. `tidyr` -- tidying data.
+4. `readr` -- read wild data.
+5. `purrr` -- functional programming.
+6. `tibble` -- modern data frame.
+&lt;br&gt;&lt;br&gt;
+
+&lt;img src="http://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/071952491ec4a6a532a3f70ecfa2507af4d341f9/c167c/images/hex-dplyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/5f8c22ec53a1ac61684f3e8d59c623d09227d6b9/b15de/images/hex-tidyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/9221ddead578362bd17bafae5b85935334984429/37a68/images/hex-purrr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png" height="200px" /&gt;
+
+---
+
+# Essentials of the R language
+
+.pull-left5[
+&gt;"To understand computations in R, two slogans are helpful:
+&lt;br&gt;&lt;br&gt;
+&gt;###(1) Everything that exists is an object and 
+&gt;###(2) everything that happens is a function call."
+]
+
+.pull-right5[
+&lt;p align="center"&gt;&lt;img src="https://statweb.stanford.edu/~jmc4/CopyPhoto.jpg" width="350" align="center"&gt;&lt;/p&gt;
+&lt;p align="center"&gt;John Chambers&lt;br&gt; &lt;font size=2&gt; Author of S and developer of R&lt;/font&gt;&lt;br&gt;
+&lt;font size=2&gt;&lt;a href="https://statweb.stanford.edu/~jmc4/"&gt;statweb.stanford.edu&lt;/a&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+# Calls, assignments, and expressions
+
+R programs evolve through functions: Every action entails **passing on arguments (aka objects) to a function**, **calling (aka executing) the function**, and **printing or storing its output**. And this goes deep, many operations are functions in disguise.
+
+.pull-left45[
+
+```r
+# defining a function - arithm. mean
+my_fun &lt;- function(x, b){ x * b }
+
+# define some data
+my_data &lt;- c(1, 5, 7, 3) 
+
+# pass on arguments and call function
+my_fun(my_data, 5) 
+```
+
+```
+## [1]  5 25 35 15
+```
+
+```r
+# store output by assignment
+my_out &lt;- my_fun(my_data, 5)
+```
+
+]
+
+.pull-right45[
+
+```r
+# a basic expression
+2 + 2
+```
+
+```
+## [1] 4
+```
+
+```r
+# is also a function
+'+'(2,2)
+```
+
+```
+## [1] 4
+```
+]
+
+---
+
+# Object-orientation
+
+R is an object-oriented language. For us this entails:&lt;br&gt; 
+&gt;(a) **Everything is an object** (including functions).&lt;br&gt;
+&gt;(b) **Generic functions** that respond to the **object's class**.&lt;br&gt;
+&gt;(c) R **always copies deep**, implying that we always need to assign the output of a result.&lt;br&gt;
+
+.pull-left45[
+
+```r
+# creating a vector and testing its class
+my_vector &lt;- c(1, 5, 2)
+class(my_vector)
+```
+
+```
+## [1] "numeric"
+```
+
+```r
+# testing the class of an object
+print(my_vector)
+```
+
+```
+## [1] 1 5 2
+```
+]
+
+.pull-right45[
+
+```r
+# Sorting a vector
+sort(my_vector)  
+```
+
+```
+## [1] 1 2 5
+```
+
+```r
+print(my_vector) # still unsorted
+```
+
+```
+## [1] 1 5 2
+```
+]
+
+
+---
+
+# Syntax style
+
+Programming languages have different expressive styles. R uses...
+
+.pull-left35[
++ **Comment** symbol `#`
+&lt;br2&gt;
++ **Quotations** with either `" "` or ' '
+&lt;br2&gt;
++ Curly brackets `{}` **enclose expressions** explicitly
+&lt;br2&gt;
++ Parentheses `()` **call functions**
+&lt;br2&gt;
++ Semicolon `;` **separates expressions**
+&lt;br2&gt;
++ `&lt;`,`&gt;`,`|`,`&amp;`,`==`, `!=` define **logical statements**
+]
+
+
+.pull-right55[
+
+```r
+# This is a comment
+
+# Quotes are used to define strings
+"a" == 'a'
+
+# Expression and calls
+my_fun(x,y){ x  + y }
+
+# two expression in one line
+2 + 2 ; 3 + 3
+
+# are these equal/different
+2 == 2 ; 2 != 2
+```
+
+]
+
+---
+
+# Help
+
+.pull-left5[
+
+R provides extremely helpful **help files** and **vignettes**. 
+&gt;**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).&lt;br&gt;
+&gt;**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+
+
+```r
+# To access help files
+help("name_of_function")
+?name_of_function
+
+# find help files
+??name_of_function
+
+# To list and access vignettes
+vignette(package="name_of_package")
+vignette(package="name_of_vignette")
+```
+
+]
+.pull-right45[
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"&gt;&lt;/p&gt;
+
+&lt;!---
+&lt;br&gt;&lt;br&gt;&lt;iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"&gt;&lt;/iframe&gt;
+---&gt;
+]
+
+---
+
+# Packages
+
+One of R's best features is its vast and cutting-edge collection of **packages** provided by R's large and highly active user base and the work of [**CRAN**](https://cran.r-project.org/), who apply a rigorous quality control and eventually host the packages on various mirrors throughout the world.         
+
+
+```r
+# To install a package
+install.packages('package_name')
+
+# load a package
+library(package_name)
+require(package_name)
+
+
+#Note: Never forget that packages must also be loaded.
+```
+
+
+---
+
+# The workflow of R
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_workings.png" height="500" align="center"&gt;&lt;/p&gt;
+
+---
+
+# Interactive session
+
+&lt;p&gt;&lt;font size=6&gt;Open up **Rstudio**...&lt;/font&gt;
+
+&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/_sessions/D1S1_WhatIsR/What_is_R_practical.html"&gt;Link to practical&lt;/a&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

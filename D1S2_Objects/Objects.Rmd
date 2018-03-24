@@ -1,0 +1,515 @@
+---
+title: "Data objects and functions"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+
+.pull-left45[
+# Objects
+>###"Everything in R is an object"<br> 
+><p align="right">*John Chambers*<p>
+
+<br><br>
++ R's objects are have **content** and **attributes**.
+<br2>
++ The content can be anything from **numbers** or **strings** to **functions** or **complex data structures**. 
+<br2>
++ Attributes can be **names**, **dimensions**, and the **class** or type of the object, but other attributes are possible. 
+<br2>
++ Practically all data objects are equipped with those three essential attributes.
+
+]
+.pull-right5[
+<br><br>
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/objects.png" align="center" width="579" height="560">
+]
+
+---
+
+# Vectors
+
+R's most **basic (and most simple) data format** - even single values (aka **scalars**) are implemented as vectors. 
+
+.pull-left45[
+```{r, eval = F}
+# creating a vector (incl. names)
+my_vec <- c(t_1 = 1.343, t_2 = 5.232)
+
+# vectors are always flat
+my_vec <- c(1.343, c(5.232, 2.762))
+
+# naming vectors
+my_vec <- c(t_1 = 1.343, t_2 = 5.232)
+names(my_vec) <- c("new_1","new_2")
+
+# evaluting inherent attributes
+names(my_vec)
+length(my_vec)
+typeof(my_vec)
+
+```
+]
+
+.pull-right5[
+<p align="left"><br><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/vector.png" width="628px" height="190px"></p>
+]
+
+
+---
+
+# Types
+
+A vector contains elements of one of four **basic types**: `integer`, `double`, `numeric`, and `character`. You can **test** the type using `typeof()` or the type-specific `is.*()`, e.g., `is.integer()`.
+
+
+.pull-left45[
+```{r}
+# numeric vectors
+my_vec <- c(1.343, 5.232)
+typeof(my_vec) ; is.integer(my_vec)
+
+# integer vectors (overruled by R)
+my_vec <- c(1, 7, 2)
+typeof(my_vec) ; is.integer(my_vec)
+
+```
+]
+
+.pull-right45[
+```{r}
+# logical vectors
+my_vec <- c(TRUE, FALSE)
+typeof(my_vec) ; is.logical(my_vec)
+```
+
+```{r}
+# character vectors
+my_vec <- c('a', 'hello', 'world')
+typeof(my_vec) ; is.character(my_vec)
+```
+]
+
+---
+
+# Coercion
+
+R allows you to **flexibly change types** into another using `as.*()` and often R does this for you. For instance, mathematical operations & functions will coerce logical to double or integer and logical operations (&, |, any, etc) will coerce to a logical. Importantly, coercion may introduce **information loss!**
+
+.pull-left45[
+```{r}
+# double to integer
+my_vec <- as.logical(c(1.21, 7.24, 0))
+is.numeric(my_vec)
+```
+
+```{r}
+# double to logical (and back - > info loss)
+as.logical(my_vec)
+as.numeric(as.logical(my_vec))
+```
+]
+
+
+.pull-right45[
+```{r}
+# logical operation -> logical type
+c(1, 7, 2) > 3
+```
+
+```{r}
+# mathematical operation -> numeric type 
+c(TRUE, FALSE, TRUE) + 3 
+```
+
+```{r}
+# anything can be coerced to character 
+as.character(c(TRUE, FALSE, 0)) 
+```
+]
+
+
+---
+
+# Factors
+
+Factors are a special case of vector that can contain only **predifined values** so-called `levels`. Factors are rarely useful and sometimes **dangerous**, yet R will often coerce `character` to `factor`.  
+
+.pull-left45[
+
+```{r}
+# create a factor
+my_fact <- factor(c('A','B','C'))
+levels(my_fact)
+
+# test type
+typeof(my_fact)
+  
+# add value at 4th position
+my_fact[4] <- 'A'
+# my_fact[4] <- 'D' # leads to error
+```
+
+]
+
+.pull-right45[
+```{r}
+# dangerous behavior of factors pt. 1
+my_fact <- factor(c('A','B','C'))
+mean(as.integer(my_fact))
+
+# dangerous behavior of factors pt. 2
+my_fact <- factor(c(1.32,4.52,.23))
+as.double(my_fact) # ranks
+```
+]
+
+<!---
+
+# Matrices & Arrays
+
+Matrices and arrays are **straightforward extensions** of vectors with 2 (matrix) or *n* dimensions. Both are **atomic** (carry only one type), have names (col-, row-, and dimnames) and dimension attributes Compared to vectors, lists, and data frames, **they usually play a lesser role in most applications**.
+
+
+<p align="center"><br><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/matrix and array.png" width="682px" height="381px"></p>
+
+--->
+
+---
+
+# `data.frame`s
+
+.pull-left45[
+
+* Data frames (and its variants, e.g., **tibble**s) are R's **main data format**. 
+
+* **Data frames are lists** with specific **requirements**:
+
+  + Every element must be a vector.
+
+  + The lengths of the vectors must be equal (or multiples of another).  
+
+* Use `data.frame()` and `as.data.frame` to create or to coerce to data frame.
+]
+
+.pull-right45[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/data.frame.png" width="409px" height="266px"></p>
+]
+
+
+
+---
+
+# `list`s
+
+.pull-left45[
+
++ Lists are R's **swiss army knife**. They often are used for outputs of statistical functions e.g., `lm()`.
+
++ Lists have **non-flat** structures that take **any object type**, including lists, rendering lists **recursive**.
+
++ Lists can be understood as a **meta-vector** that includes an **organizational layer**. 
+
++ To create a list use `list()` or `as.list()`
+]
+
+.pull-right45[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/list.png" width="581px" height="307px"></p>
+]
+
+
+<!---
+
+.pull-left35[
+# Data objects
+<br>
++ Objects either contain elements of the **same type** (homogeneous) or **different types** (heterogeneous). 
+<br2>
++ Homogeneous objects are always **flat**, i.e., contain no nested structure.
+<br2>
++ Lists can contain anything, even lists (**recursive**), whereas data frames underly certain restrictions in terms of type and dimensions.  
+
+]
+
+.pull-right55[
+<br><br><br><br><br>
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/objects_types.png" align="left" width="629" height="374">
+]
+
+--->
+
+---
+
+# Accessing & changing vectors
+
+To access (aka **subset**) and change atomic data objects use **brackets** `[]` and provide either **integers**, **logicals**, or  **names** to indicate the relevant vector content. To change content, assign new content of matching size to subset using ´<-´. 
+
+.pull-left45[
+```{r}
+# retrieve second element from vector
+my_vec <- c('A', 'B', 'C')
+my_vec[2] 
+
+# change the second element 
+my_vec[2] <- 'D' ; my_vec
+  
+# change beyond length(my_vec) 
+my_vec[7] <- 1 ; my_vec
+
+```
+
+]
+
+.pull-right45[
+```{r}
+# Use logical comparison to access vector
+my_vec <- c(1, 2, 3, 4, 5)
+my_vec ; my_vec[my_vec < 4]
+
+# Change vector using logical comparison
+my_vec[my_vec < 4] <- my_vec[my_vec < 4] - 5
+my_vec
+
+```
+]
+
+---
+
+# Accessing & changing data frames (and lists)
+
+Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
+
+.pull-left45[
+```{r}
+# retrieve elements using brackets
+my_df <- data.frame('v_1'=c('A', 'B', 'C'), 
+                    'v_2'=c(1, 2, 3))
+my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+```
+]
+
+.pull-right45[
+```{r}
+# retrieve elements using the $-operator
+my_df$v_1
+my_df$v_1 <- c('X', 'Y', 'Z')
+my_df
+
+```
+]
+
+
+<!---
+
+.pull-left45[
+```{r}
+# retrieve element 'a' from vector
+my_vec <- c(a = 1, b = 4, c = 5)
+my_vec['a'] 
+
+# change the element 
+my_vec['c'] <- 'D' 
+  
+# change beyond length(my_vec) 
+my_vec['d'] <- 1 ; my_vec
+
+```
+
+]
+
+.pull-right45[
+```{r}
+# create matrix
+my_mat <- matrix(c(1:6), nrow=2)
+colnames(my_mat) <- c('v_1','v_2','v_3')
+rownames(my_mat) <- c('c_1','c_2')
+
+# retrieve second row from matrix
+my_mat['c_1', ] ; my_mat['c_1', 'v_2']
+
+```
+]
+
+
+
+# Accessing & changing **complex** objects pt. 1
+
+In accessing and changing complex objects the additional `list`-layer needs to be taken into account. Single brackets `[` will select elements within the list, not the object behind those elements. To select the object behind the element use **double brackets** '[['. Additionaly, complex objects can be conveniently accessed using the **dollor operator `$`**. In order to further descend into the `list`'s structur append **multiple select operators**, e.g., `my_list[[1]][[2]]`. 
+
+.pull-left45[
+```{r}
+# retrieve elements from list
+my_list <- list('A'=c('A','B'), 
+                'B'=list(c(1,2,3),
+                         c(TRUE,FALSE,TRUE)))
+my_list[1] ; my_list[[1]] ; my_list[['A']]
+```
+
+]
+
+.pull-right45[
+```{r}
+# retrieve deep elements in list
+my_list <- list('A'=c('A','B'), 
+                'B'=list(c(1,2,3),
+                         c(TRUE,FALSE,TRUE)))
+my_list[[2]][1] ; my_list[[2]][[1]] # etc
+```
+]
+
+
+# Accessing & changing **complex** objects pt. 2
+
+Data frames can be accessed **exactly like lists**. In addition, data frames allow for a matrix-like access using **single bracket** `[`. Note however that selecting rows using single bracket returns a data frame, whereas for selecting columns returns a vector.
+
+.pull-left45[
+```{r}
+# retrieve elements from list
+my_df <- data.frame('v_1'=c('A','B','C'), 
+                    'v_2'=c(1,2,3))
+my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+```
+]
+
+.pull-right45[
+```{r}
+# retrieve elements from list
+my_df <- data.frame('v_1'=c('A','B','C'), 
+                    'v_2'=c(1,2,3))
+my_df[1,] ; my_df[,1] ; my_df[1,2]
+```
+]
+
+--->
+
+---
+
+# Object algebra
+
+R has implementations of most operations of **vector and matrix algebra** and it is often desirable to make use of them to improve speed.    
+-
+.pull-left45[
+```{r}
+# create objects
+my_mat <- matrix(1:9, ncol=3)
+my_vec <- c(1:3)
+
+# object times scale (also a vector)
+my_mat * 5 ; my_vec * 5
+```
+]
+
+.pull-right45[
+```{r}
+# create objects
+my_mat <- matrix(1:9, ncol=3)
+my_vec <- c(1:3)
+
+# matrix multiplication
+my_vec %*% my_mat
+```
+]
+
+
+---
+
+# Functions
+
+Any operation of your data is done by functions. Functions have 3 elements:
++ **Name**: Used to call (execute) a function.
++ **Argument(s)**: Objects that the function needs to do its job.
++ **Expression**: R code that is the options job.
+    
+.pull-left55[
+```{r}
+# Defining a function that computes the mean
+my_mean <- function(x) return(sum(x) / length(x))
+
+# Defining a function that computes 
+# the mean or median
+my_stat <- function(x, method = 'mean'){
+  
+  # detect and run method
+  if(method == "mean") return(my_mean(x))
+  if(method == "median") return(median(x))
+  
+  # return error if not method detected
+  stop('Method must be mean or median')
+}
+```
+]
+
+.pull-right4[
+```{r}
+# Runnning our functions
+my_vec <- c(1, 4, 6, 3, 7, 5, 12, 9)
+my_mean(x = my_vec)
+my_stat(x = my_vec, method = 'mean')
+my_stat(x = my_vec, method = 'median')
+```
+]
+
+---
+
+# Help
+
+.pull-left5[
+
+R provides extremely helpful **help files** and **vignettes**. 
+>**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).<br>
+>**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+
+```{r, eval = F}
+# To access help files
+help("name_of_function")
+?name_of_function
+
+# find help files
+??name_of_function
+
+# To list and access vignettes
+vignette(package = "name_of_package")
+vignette(package = "name_of_vignette")
+```
+
+]
+
+.pull-right45[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"></p>
+
+<!---
+<br><br><iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"></iframe>
+--->
+]
+---
+
+
+
+# Practical
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S2_Objects/Objects_practical.html">Link to practical</a>
+
+

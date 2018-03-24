@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Plotting Part 2.0</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Plotting Part 2.0
+## Shiny
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### September 2017
+
+---
+
+
+
+
+
+
+
+## Shiny
+
+
+&lt;img src="images/whatisshiny.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## This is Shiny
+
+&lt;iframe src="https://shiny.rstudio.com/gallery/movie-explorer.html" width="1200" height="800"&gt;&lt;/iframe&gt;
+
+
+
+---
+## What is Shiny?
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/shiny_definition.png" alt="Source: http://shiny.rstudio.com/images/shiny-cheatsheet.pdf" width="95%" /&gt;
+&lt;p class="caption"&gt;Source: http://shiny.rstudio.com/images/shiny-cheatsheet.pdf&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+---
+## What does that mean?
+
+
+.pull-left3[
+
+- Shiny allows you to easy create interactive websites to explore, analyse, and visualise data
+
+- No need to learn HTML, CSS, Javascript
+
+
+&lt;img src="images/nohtml.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+.pull-right3[
+
+### I can easily do this all in Shiny!
+
+&lt;img src="images/shiny_ss.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+---
+## Histogram Example
+
+&lt;iframe src="https://econpsychbasel.shinyapps.io/geyser_app/" width="1200" height="800"&gt;&lt;/iframe&gt;
+
+---
+## Balloon Analogue Risk Task
+
+&lt;iframe src="https://econpsychbasel.shinyapps.io/shinypsych_bart/" width="1200" height="800"&gt;&lt;/iframe&gt;
+
+Source: https://econpsychbasel.shinyapps.io/shinypsych_bart/
+
+---
+## FFTrees Example
+
+&lt;iframe src="https://econpsychbasel.shinyapps.io/shinyfftrees/" width="1200" height="800"&gt;&lt;/iframe&gt;
+
+Source: https://econpsychbasel.shinyapps.io/shinyfftrees/
+---
+## GlioVis
+
+&lt;iframe src="http://gliovis.bioinfo.cnio.es/" width="1200" height="800"&gt;&lt;/iframe&gt;
+
+Source: http://gliovis.bioinfo.cnio.es/
+
+
+---
+## Shiny
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/whatyoucando.png" alt="http://shiny.rstudio.com" width="65%" /&gt;
+&lt;p class="caption"&gt;http://shiny.rstudio.com&lt;/p&gt;
+&lt;/div&gt;
+
+---
+## Shiny Tutorials
+
+.pull-left3[
+
+### R Studio has great tutorials for creating Shiny Apps
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/learnshiny_B.png" alt="http://shiny.rstudio.com" width="100%" /&gt;
+&lt;p class="caption"&gt;http://shiny.rstudio.com&lt;/p&gt;
+&lt;/div&gt;
+
+
+]
+
+
+.pull-right3[
+
+
+
+### Learn by example. Tons of shiny apps online. Most code is available.
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/shinygallery.png" alt="http://shiny.rstudio.com" width="90%" /&gt;
+&lt;p class="caption"&gt;http://shiny.rstudio.com&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+]
+
+---
+# How programming a Shiny App looks
+
+&lt;img src="images/shinyprogramming_ss.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Structure of a Shiny App
+
+&lt;img src="images/uiandserver.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+ &lt;br&gt;
+ &lt;br&gt;
+ &lt;br&gt;
+ 
+ # Let's explore the user interface of an app!
+ 
+ 
+ ### P.S. You'll create this app in the practical!
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_A.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_B.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_C.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_D.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_E.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_F.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_G.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_H.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## User Interface
+
+&lt;img src="images/exampleapp_B.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+### The final app!
+
+&lt;iframe src="https://econpsychbasel.shinyapps.io/histogram_app/" width="1200" height="800"&gt;&lt;/iframe&gt;
+
+
+
+---
+## User Interface
+
+The user interface typically contains two main components: Widgets and
+
+&lt;img src="images/userinterface_description.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## User Interface, Widgets
+
+- Widgets are simple fields added to the user interface for users to add inputs.
+
+&lt;img src="images/widgetcode_output.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## User Interface, Layout
+
+- You can control the layouts of apps with layout functions
+
+&lt;img src="images/shinylayouts.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Server
+
+- All R code that creates plots, does machine learning, accesses databases, searches twitter data (really anything!) goes in the `server()` function.
+
+
+
+&lt;img src="images/serverdescription.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+## Server
+
+.pull-left3[
+
+&gt; ###How does the server communicate with the user interface?
+
+&lt;br&gt;
+&lt;br&gt;
+
+- To present output (e.g.; a plot), it must be *rendered* in the server using a special rendering function `renderXX()`, 
+
+
+- Once it is rendered, it is sent to the `output` and displayed in the user interface using an `xxOutput()` function.
+
+]
+
+
+.pull-right3[
+
+### To send output to the user interface, you must use a render function
+
+&lt;img src="images/render_example.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+
+---
+## Server
+
+
+.pull-left3[
+
+&lt;iframe src="https://econpsychbasel.shinyapps.io/barebones_hist/" width="800" height="800"&gt;&lt;/iframe&gt;
+
+]
+
+.pull-right3[
+
+
+```r
+library(shiny)
+
+# User Interface:
+ui &lt;- fluidPage(
+  mainPanel(
+    textInput("Title", "Title"),
+    plotOutput("myplot")  # Create the plot output$displot
+  )
+)
+
+server &lt;- function(input, output) {
+
+  # Define x
+  x &lt;- ChickWeight$weight
+
+  # Send rendered plot to output
+  output$myplot &lt;- renderPlot({
+    hist(x, main = input$Title)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+]
+
+
+
+---
+## Rendering output
+
+The Shiny cheatsheet explains the most common functions for rendering and presenting output.
+
+&lt;img src="images/rendering_output.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Publishing (hosting) an app
+
+.pull-left3[
+&lt;br&gt;
+&lt;br&gt;
+- You can always run a Shiny app locally on your machine.
+- To get it online, you need to put it on a Shiny Server.
+- Publish an app (with some restrictions) at http://shinyapps.io from RStudio with one click!
+- Install a local server at your business (RStudio: $10,000 / year)
+- Other providers exist (e.g.; Amazon Web Services)
+
+]
+
+
+.pull-right3[
+
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/shinypublish.png" alt="http://shiny.rstudio.com" width="100%" /&gt;
+&lt;p class="caption"&gt;http://shiny.rstudio.com&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+
+
+---
+## Practical
+
+- In the practical, we will create the following app from scratch, and publish it online!
+
+&lt;img src="images/exampleapp_A.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+## Questions?
+
+.pull-left3[
+
+
+&lt;img src="images/exampleapp_A.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.pull-right3[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/shinygallery.png" alt="http://shiny.rstudio.com" width="90%" /&gt;
+&lt;p class="caption"&gt;http://shiny.rstudio.com&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+
+---
+
+
+## Additional Slides
+
+
+---
+## Server
+
+.pull-left3[
+
+&lt;iframe src="https://econpsychbasel.shinyapps.io/barebones_hist/" width="800" height="800"&gt;&lt;/iframe&gt;
+
+
+]
+
+.pull-right3[
+
+### What you *want* to write... (but it won't work)
+
+```r
+library(shiny)
+
+# User Interface: 
+ui &lt;- fluidPage(
+    mainPanel(
+      # Create a histogram of x in main panel
+      hist(x)
+    )
+  )
+
+server &lt;- function(input, output) {
+  
+  # Define x
+  x &lt;- ChickWeight$weight
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+
+
+]
+
+
+
+---
+## Server
+
+
+.pull-left3[
+
+&lt;iframe src="https://econpsychbasel.shinyapps.io/barebones_hist/" width="800" height="800"&gt;&lt;/iframe&gt;
+
+
+
+]
+
+.pull-right3[
+
+### What you *must* write...this will work!
+
+```r
+library(shiny)
+
+# User Interface:
+ui &lt;- fluidPage(
+  mainPanel(
+    textInput("Title", "Title"),
+    plotOutput("myplot")  # Create the plot output$displot
+  )
+)
+
+server &lt;- function(input, output) {
+
+  # Define x
+  x &lt;- ChickWeight$weight
+
+  # Send rendered plot to output
+  output$myplot &lt;- renderPlot({
+    hist(x, main = input$Title)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,282 @@
+---
+title: "Practical: What is R"
+author: "BaselRBootcamp January 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE)
+```
+
+
+### Slides
+
+Here is a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/_sessions/D1S1_WhatIsR/What_is_R.html"><b>LINK</b></a>
+
+### Overview
+
+In this practical you'll get started with R. By the end of this practical you will:
+
+1. Know your way around R Studio.
+2. Know how to run code.
+3. Have an impression of R's basic functionality.
+
+## Tasks
+
+For this practical you will go through an existing analysis script chunk by chunk to experience how programming and analyzing in R works. The idea is that you go through the code, copy the code chunks to the script editor, send the code to the console, and evaluate what happens.
+
+While at it try to practice two very useful shortcuts: (1) `cmd + enter (MAC)` or `cntrl + enter (Windows)` for running the current line in the console. (2) `cmd + shift + p (MAC)` or `cntrl + shift + p (Windows)` for running the same block of code again in the console. The latter is really helpful because you can rerun the a chunk of code after you have made changes to it.  
+
+All of the code used in this tutorial is based on **base-R functions**. While they are already powerful, we will later in the course introduce you to more modern, better options for most of the steps. 
+
+
+### Install and load the yarrr package
+
+1. First we’ll install and load the yarrr package. The yarrr package contains many data sets and functions (created by Nathaniel Phillips).
+
+```{r, eval=T}
+# Install and load the yarrr package
+# install.packages('yarrr')
+library(yarrr)
+```
+
+### Explore the pirates dataset
+
+2. The pirates data set contains data from a survey of 1,000 pirates. Inspect it one-by-one using the following functions.
+
+```{r, eval=T}
+# Get help for pirates data
+?pirates
+
+# Print the first few rows of the dataset
+head(pirates)
+
+# Show the structure of the dataset
+str(pirates)
+
+# Show the entire dataset in a new window
+View(pirates)
+```
+
+3. Descriptive statistics for numeric data and categorical data.
+
+```{r, eval=T}
+# What is the mean age?
+mean(pirates$age)
+
+# What was the height of the tallest pirate?
+max(pirates$height)
+
+# How many pirates are there of each sex?
+table(pirates$sex)
+```
+
+4. Descriptive statistics as a function of another categorical variable.
+
+```{r, eval=T}
+# What was the mean age for each sex?
+aggregate(formula = age ~ sex + headband, 
+          data = pirates,
+          FUN = median)
+
+
+# What is the median age of pirates for each combination of sex and headband?
+aggregate(formula = age ~ sex + headband, 
+          data = pirates,
+          FUN = median)
+```
+
+### Base plotting
+
+5. Creating a histograms of numeric variables.
+
+```{r, eval=T}
+# --- A default histogram of pirate ages
+hist(x = pirates$age)
+
+
+# --- A customized histogram of pirate ages
+hist(x = pirates$age,
+     main = "Distribution of pirate ages",
+     col = "skyblue",
+     border = "white",
+     xlab = "Age",
+     ylim = c(0, 400))
+
+# Add mean label
+text(x = mean(pirates$age), y = 375, 
+     labels = paste("Mean = ", round(mean(pirates$age), 2)))
+
+# Add dashed line at mean
+segments(x0 = mean(pirates$age), y0 = 0, 
+         x1 = mean(pirates$age), y1 = 360, 
+         col = gray(.2, .2), 
+         lty = 2)
+
+# ---- Overlapping histograms of pirate ages for females and males
+
+# Start with the female data
+hist(x = pirates$age[pirates$sex == "female"],
+     main = "Distribution of pirate ages by sex",
+     col = transparent("red", .2),
+     border = "white",
+     xlab = "Age", 
+     breaks = seq(0, 50, 2),
+     probability = T,
+     ylab = "", 
+     yaxt = "n")
+
+# Add male data
+hist(x = pirates$age[pirates$sex == "male"],
+     add = T, 
+     probability = T, 
+     border = "white",
+     breaks = seq(0, 50, 2),
+     col = transparent("skyblue", .5))
+
+# Add the legend
+legend(x = 40, 
+       y = .05,
+       col = c("red", "skyblue"),
+       legend = c("Female", "Male"),
+       pch = 16,
+       bty = "n")
+```
+
+6. Creating scatterplots of two numerical variables.
+
+```{r, eval=T}
+# --- A simple scatterplot of pirate height and weight
+plot(x = pirates$height,
+     y = pirates$weight,
+     xlab = "Height (cm)",
+     ylab = "Weight (kg)")
+
+
+# --- A fancier scatterplot of the same data with some additional arguments
+
+# Create main plot
+plot(x = pirates$height, 
+     y = pirates$weight,
+     main = 'My first scatterplot of pirate data!',
+     xlab = 'Height (in cm)',
+     ylab = 'Weight (in kg)',
+     pch = 16,    # Filled circles
+     col = gray(0, .2)) # Transparent gray
+     
+# Add gridlines
+grid()
+
+# Create a linear regression model
+model <- lm(formula = weight ~ height, 
+            data = pirates)
+
+# Add regression to plot
+abline(model,
+       col = 'skyblue', lwd = 3)
+```
+
+7. Changing colors
+
+```{r, eval=T}
+# --- Look at all the palettes from piratepal()
+piratepal()
+
+# Look at the basel palette in detail
+piratepal(palette = "basel", plot.result = TRUE)
+
+
+# --- Scatterplot of pirate height and weight using the pony palette
+my.cols <- piratepal(palette = "pony", 
+                     trans = .2, 
+                     length.out = nrow(pirates))
+
+# Create the plot
+plot(x = pirates$height, y = pirates$weight,
+     main = "Random scatterplot with My Little Pony Colors",
+     xlab = "Pony height",
+     ylab = "Pony weight",
+     pch = 21,  # Round symbols with borders
+     col = "white",  # White border
+     bg = my.cols,  # Random colors
+     bty = "n"  # No plot border
+     )
+
+# Add gridlines
+grid()
+```
+
+8. Create a barplot for stratified data
+
+```{r, eval=T}
+# --- Barpot of mean height by favorite.pirate
+
+# Calculate mean height for each favorite.pirate
+pirate_heights <- aggregate(height ~ favorite.pirate,
+                     data = pirates,
+                     FUN = mean)
+
+# Do barplot
+barplot(pirate_heights$height, 
+        main = "Barplot of mean height by favorite pirate",
+        names.arg = pirate_heights$favorite.pirate)
+
+# --- Same, but with customizations
+barplot(pirate_heights$height, 
+        ylim = c(0, 200),
+        ylab = "Pirate Height (in cm)",
+        main = "Barplot of mean height by favorite pirate",
+        names.arg = pirate_heights$favorite.pirate, 
+        col = piratepal("basel", trans = .2))
+
+abline(h = seq(0, 200, 25), lty = 3, lwd = c(1, .5))
+```
+
+### Hypothesis testing
+
+9. Run a group comparisons.
+
+```{r, eval=T}
+# Do pirates with eyepatches have longer beards than those without eyepatches?
+t.test(formula = beard.length ~ eyepatch, 
+       data = pirates,
+       alternative = 'two.sided')
+
+
+# ANOVA on beard.length as a function of sex and college
+
+# Run the ANOVA
+beard_aov <- aov(formula = beard.length ~ sex + college, 
+                   data = pirates)
+
+# Print summary results
+summary(beard_aov)
+```
+
+10. Run a regression analysis.
+
+```{r, eval=T}
+# regression analysis showing if age, weight, and tattoos predict how many treasure chests a pirate has found
+
+# Run the regression
+chests_lm <- lm(formula = tchests ~ age + weight + tattoos, 
+                data = pirates)
+
+# Print summary results
+summary(chests_lm)
+
+# Plot regression (continue with <Return>)
+plot(chests_lm)
+
+```
+
+
+# Additional reading
+
+- For more details on all steps of data analysis check out Hadley Wickham's [R for Data Science](http://r4ds.had.co.nz/).
+
+- For more on pirates and data analysis check out the respective chapters in YaRrr! The Pirate's Guide to R [YaRrr! Chapter Link](https://bookdown.org/ndphillips/YaRrr/htests.html)
+
+
+
+

@@ -1,0 +1,704 @@
+---
+title: "Practical: Efficient Code"
+author: "BaselRBootcamp January 2018"
+output: html_document
+---
+
+  ```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE)
+```
+
+### Slides
+
+Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/_sessions/D4S1_EfficientCode/EfficientCode.html"><b>LINK</b></a><br>
+
+### Overview
+
+In this practical you'll learn how to program efficiently in R. By the end of this practical you will know how to:
+
+1. Profile your code to identify critical parts.
+2. Make code more efficient.
+3. How to do parallel computing.
+
+### Benchmarking and profiling functions
+
+Functions to profile your code are: 
+
+| Function| Package| Description| 
+|:------|:------|:------------------------------------------|
+| `proc.time()`  |`base`|Returns the time.|
+| `system.time()`| `base`|Runs one expression once and returns elapsed CPU time|
+| `microbenchmark()`|`microbenchmark`| Runs one or many expressions multiple times and returns statistics on elapsed time.|
+| `profvis`| Evaluates large expressions or entire scripts. From `profvis` package|
+
+### Microbenchmark: Example
+
+Minimal chunks of code can conveniently be tested using `microbenchmark()`. 
+
+```{r, eval = F}
+# load packages
+library(microbenchmark)
+library(tibble)
+
+# get data
+df <- data.frame('var_1' = rnorm(10000,1),
+                 'var_2' = rnorm(10000,1))
+tbl <- as.tibble(df)
+
+# microbenchmark pt. 1
+microbenchmark(df[['var_1']], df$var_1, tbl$var_1)
+
+```
+
+### Profiling: Example
+
+Larger code chunks or even scripts can be conveniently tested using `system.time()` and `profvis()` from the `profvis` package. The example below is based on the `happiness` data set from the `wooldridge` package.   
+
+```{r, eval = F}
+# ---- install and load packages
+install.packages('profvis')
+library(profvis)
+library(readr)
+library(dplyr)
+
+# ---- code to profile
+
+# load data
+data <- read_csv('https://tinyurl.com/yat6z2nv')
+
+# remove rownames
+data <- data[-1]
+
+# mutate
+data$attend_num = data$attend
+data$attend_num[data$attend == 'never'] <- 0
+data$attend_num[data$attend == 'lt once a year'] <- 1
+data$attend_num[data$attend == 'once a year'] <- 2
+data$attend_num[data$attend == 'sevrl times a yr'] <- 3
+data$attend_num[data$attend == 'once a month'] <- 4
+data$attend_num[data$attend == '2-3x a month'] <- 5
+data$attend_num[data$attend == 'nrly every week'] <- 6
+data$attend_num[data$attend == 'every week'] <- 7
+data$attend_num[data$attend == 'more thn once wk'] <- 8
+data$attend_num = as.numeric(data$attend_num)
+
+# select
+north <- data %>% filter(region %in% c('new england', 'e. nor. central','w. nor. central'))
+south <- data %>% filter(region %in% c('w. sou. central', 'e. sou. central', 'south atlantic'))
+pacific <- data %>% filter(region == 'pacific')
+
+# multiple regression 
+# happiness predicted by hours watching tv, 
+# attendance at religious services, ow
+north_atlantic_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                            data = north, 
+                            family = 'binomial')
+south_central_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                           data = south, 
+                           family = 'binomial')
+pacific_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                     data = pacific, 
+                     family = 'binomial')
+
+# evaluate model
+summary(north_atlantic_model)
+summary(south_central_model)
+summary(pacific_model)
+
+  
+# ---- profiling
+
+# profile using profvis
+profvis({
+  
+  # load data
+  data <- read_csv('https://tinyurl.com/yat6z2nv')
+  
+  # remove rownames
+  data <- data[-1]
+  
+  # mutate
+  data$attend_num = data$attend
+  data$attend_num[data$attend == 'never'] <- 0
+  data$attend_num[data$attend == 'lt once a year'] <- 1
+  data$attend_num[data$attend == 'once a year'] <- 2
+  data$attend_num[data$attend == 'sevrl times a yr'] <- 3
+  data$attend_num[data$attend == 'once a month'] <- 4
+  data$attend_num[data$attend == '2-3x a month'] <- 5
+  data$attend_num[data$attend == 'nrly every week'] <- 6
+  data$attend_num[data$attend == 'every week'] <- 7
+  data$attend_num[data$attend == 'more thn once wk'] <- 8
+  data$attend_num = as.numeric(data$attend_num)
+  
+  # select
+  north <- data %>% filter(region %in% c('new england', 'e. nor. central','w. nor. central'))
+  south <- data %>% filter(region %in% c('w. sou. central', 'e. sou. central', 'south atlantic'))
+  pacific <- data %>% filter(region == 'pacific')
+  
+  # multiple regression 
+  # happiness predicted by hours watching tv, 
+  # attendance at religious services, ow
+  north_atlantic_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                              data = north, 
+                              family = 'binomial')
+  south_central_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                             data = south, 
+                             family = 'binomial')
+  pacific_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                       data = pacific, 
+                       family = 'binomial')
+  
+  # evaluate model
+  summary(north_atlantic_model)
+  summary(south_central_model)
+  summary(pacific_model)
+  
+  })
+
+```
+
+## Tasks
+
+### Microbenchmark
+
+1. Run the microbenchmark example from above. What do you observe? Is retrieving a variable from a `tibble` fast or slow? Pay attention to the unit. You'll find that there are dramatic differences, but also that in absolute terms in may not matter much? How often would you have to select a variable from either object in order to take up more than 1 second?
+
+```{r, eval = F, echo = F}
+# load packages
+library(microbenchmark)
+library(tibble)
+
+# get data
+df <- data.frame('var_1' = rnorm(10000, 1),
+                 'var_2' = rnorm(10000, 1))
+tbl <- as.tibble(df)
+
+# microbenchmark
+microbenchmark(df[['var_1']], df$var_1, tbl$var_1)
+```
+
+2. Although the absolute duration of selecting a variable may not be long, it will still be illuminating to try another option. Rerun the previous exercise and now also include `.subset2()` as another way to select a variable. Specifically, include `.subset2(df, 'var1')` and `.subset2(tbl, 'var1')` as additional arguments in microbenchmark. What do you find now? Is the unit still the same? 
+
+```{r, eval = F, echo = F}
+# load packages
+library(microbenchmark)
+library(tibble)
+
+# get data
+df <- data.frame('var_1' = rnorm(1000,1),
+                 'var_2' = rnorm(1000,1))
+tbl <- as.tibble(df)
+
+# microbenchmark
+microbenchmark(df[['var_1']], df$var_1, tbl$var_1,
+               .subset2(df,'var_1'), .subset2(tbl,'var_1'))
+```
+
+3. There is a particular reason for why some functions are faster than others. But before we go to that, let's look at another striking example. Compare the function `mean()` to a function that uses its basic ingredients `sum()` and `length()`, i.e., `my_mean_fun <- function(my_vec) sum(my_vec) / length(my_vec)`. To do this, first create a vector consisting of random numbers using `runif()` (see `?runif`). Make sure to use a long enough vector, e.g., `my_vec <- runif(1000000)`. Then test the original and your own mean function using `microbenchmark()`. What do you find? Which function is faster, yours or R's?
+
+```{r, eval = F, echo = F}
+# define vector
+my_vec <- runif(1000000)
+
+# define my mean fun
+my_mean_fun <- function(my_vec) sum(my_vec) / length(my_vec)
+
+# microbenchmark
+microbenchmark(mean(my_vec), my_mean_fun(my_vec))
+
+# microbenchmark
+microbenchmark(mean(my_vec), my_mean_fun(my_vec), .Internal(mean(my_vec)))
+```
+
+4. So, why are some functions faster than others? Test the type of each of `mean()`, `sum()`, `length()` using `typeof()`. Noticed a difference between `mean()` and the rest? Now, test each of these functions again using `is.primitive()`. What do you find?
+
+```{r, eval = F, echo = F}
+# test type
+typeof(mean); typeof(sum); typeof(length)
+
+```
+
+**Explanation**: Many functions in R are so-called `primitives`. This means that the function has not been implemented in R, but in a lower-level language such as C. Using such functions is almost always preferable, at least, if speed is of the essence. 
+
+
+### Profiling
+
+Now, we turn to a more complex code example. In the following exercises, we want to profile a larger code chunk and then figure out ways to make it more efficient. To do this, you first need to install and load the `profvis` package. Note: As an alternative, you may also try the `linprof` package by Hadley Wickham (install via `devtools::install_github("hadley/lineprof")`).  
+
+5. Copy the profiling example into a new script file, save it into your project, and run the `profvis()` function on the code. What parts of the code are most computationally expensive?
+
+```{r, eval = F, echo=F}
+profvis({
+  
+  # load data
+  data <- read_csv('https://tinyurl.com/yat6z2nv')
+  
+  # remove rownames
+  data <- data[-1]
+  
+  # mutate
+  data$attend_num = data$attend
+  data$attend_num[data$attend == 'never'] <- 0
+  data$attend_num[data$attend == 'lt once a year'] <- 1
+  data$attend_num[data$attend == 'once a year'] <- 2
+  data$attend_num[data$attend == 'sevrl times a yr'] <- 3
+  data$attend_num[data$attend == 'once a month'] <- 4
+  data$attend_num[data$attend == '2-3x a month'] <- 5
+  data$attend_num[data$attend == 'nrly every week'] <- 6
+  data$attend_num[data$attend == 'every week'] <- 7
+  data$attend_num[data$attend == 'more thn once wk'] <- 8
+  data$attend_num = as.numeric(data$attend_num)
+  
+  # select
+  north <- data %>% filter(region %in% c('new england', 'e. nor. central','w. nor. central'))
+  south <- data %>% filter(region %in% c('w. sou. central', 'e. sou. central', 'south atlantic'))
+  pacific <- data %>% filter(region == 'pacific')
+  
+  # multiple regression 
+  # happiness predicted by hours watching tv, 
+  # attendance at religious services, ow
+  north_atlantic_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                              data = north, 
+                              family = 'binomial')
+  south_central_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                             data = south, 
+                             family = 'binomial')
+  pacific_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                       data = pacific, 
+                       family = 'binomial')
+  
+  # evaluate model
+  summary(north_atlantic_model)
+  summary(south_central_model)
+  summary(pacific_model)
+  
+  }, interval = .005)
+```
+
+### Making code efficient
+
+When attempting to make code efficient, the first question should always be, is it really necessary. In this case, this is actually not the case. But, let's pretend we weren't dealing in seconds, but rather in minutes or even hours. Clearly, there is some part of the code that takes much more time then all of the rest together. Let's try to make it faster. First think about why it is slow? Is it R or is there some other reason?   
+
+6. To speed up the reading of data, save it onto the hard drive (inside your project) using `write_csv()`. Now, change the code so that the file is not read from the URL, but from your hard drive? Has the code become faster? By how much?
+
+```{r, eval=F, echo=F}
+# ---- loading the data and saving it to disk
+data <- read_csv('https://tinyurl.com/yat6z2nv')
+write_csv(data, 'data/happiness.csv')
+
+# ---- profile code
+
+profvis({
+
+  # load data
+  data <- read_csv('data/happiness.csv')
+  
+  # remove rownames
+  data <- data[-1]
+  
+  # mutate
+  data$attend_num = data$attend
+  data$attend_num[data$attend == 'never'] <- 0
+  data$attend_num[data$attend == 'lt once a year'] <- 1
+  data$attend_num[data$attend == 'once a year'] <- 2
+  data$attend_num[data$attend == 'sevrl times a yr'] <- 3
+  data$attend_num[data$attend == 'once a month'] <- 4
+  data$attend_num[data$attend == '2-3x a month'] <- 5
+  data$attend_num[data$attend == 'nrly every week'] <- 6
+  data$attend_num[data$attend == 'every week'] <- 7
+  data$attend_num[data$attend == 'more thn once wk'] <- 8
+  data$attend_num = as.numeric(data$attend_num)
+  
+  # select
+  north <- data %>% filter(region %in% c('new england', 'e. nor. central','w. nor. central'))
+  south <- data %>% filter(region %in% c('w. sou. central', 'e. sou. central', 'south atlantic'))
+  pacific <- data %>% filter(region == 'pacific')
+  
+  # multiple regression 
+  # happiness predicted by hours watching tv, 
+  # attendance at religious services, ow
+  north_atlantic_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                              data = north, 
+                              family = 'binomial')
+  south_central_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                             data = south, 
+                             family = 'binomial')
+  pacific_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                       data = pacific, 
+                       family = 'binomial')
+  
+  # evaluate model
+  summary(north_atlantic_model)
+  summary(south_central_model)
+  summary(pacific_model)
+  
+  }, interval = .005)
+
+
+
+```
+
+7. Still that one part in the code takes most time. Let's then try to actually change the code. That is, let's try to use a different function that has been build for reading data fast. The `data.table` package happens to have such a function. It's called `fread()` and it works the same way as `read_csv()`. Try it and see what happens to the code execution time. Any changes to the profile? Note: You want to run this twice to let the compiler kick in. 
+
+```{r, eval=F, echo=F}
+
+# load data.table
+require(data.table)
+
+# ---- profile code
+
+profvis({
+
+  # load data
+  data <- fread('data/happiness.csv')
+  
+  # remove rownames
+  data <- data[-1]
+  
+  # mutate
+  data$attend_num = data$attend
+  data$attend_num[data$attend == 'never'] <- 0
+  data$attend_num[data$attend == 'lt once a year'] <- 1
+  data$attend_num[data$attend == 'once a year'] <- 2
+  data$attend_num[data$attend == 'sevrl times a yr'] <- 3
+  data$attend_num[data$attend == 'once a month'] <- 4
+  data$attend_num[data$attend == '2-3x a month'] <- 5
+  data$attend_num[data$attend == 'nrly every week'] <- 6
+  data$attend_num[data$attend == 'every week'] <- 7
+  data$attend_num[data$attend == 'more thn once wk'] <- 8
+  data$attend_num = as.numeric(data$attend_num)
+  
+  # select
+  north <- data %>% filter(region %in% c('new england', 'e. nor. central','w. nor. central'))
+  south <- data %>% filter(region %in% c('w. sou. central', 'e. sou. central', 'south atlantic'))
+  pacific <- data %>% filter(region == 'pacific')
+  
+  # multiple regression 
+  # happiness predicted by hours watching tv, 
+  # attendance at religious services, ow
+  north_atlantic_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                              data = north, 
+                              family = 'binomial')
+  south_central_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                             data = south, 
+                             family = 'binomial')
+  pacific_model <- glm(vhappy ~ tvhours + attend_num + owngun, 
+                       data = pacific, 
+                       family = 'binomial')
+  
+  # evaluate model
+  summary(north_atlantic_model)
+  summary(south_central_model)
+  summary(pacific_model)
+  
+  }, interval = .005)
+
+
+```
+
+8. Finally, consider that efficient programs are not only fast but also readable and maintainable. Try to apply what you have learned about data wrangling to improve this piece of code. Make it as readable and maintainable as you can. And, who knows, maybe the code also gets a little faster.
+
+```{r, eval=F, echo=F}
+# ---- profile code
+
+profvis({
+
+  # load data
+  data <- fread('data/happiness.csv')
+  
+  # process data
+  data_list = as.tibble(data %>% 
+    filter(region %in% c('new england', 'e. nor. central','w. nor. central',
+                         'w. sou. central', 'e. sou. central', 'south atlantic',
+                         'pacific')) %>%
+    mutate(
+      attend_num = case_when(
+        attend == 'never' ~ 0,
+        attend == 'lt once a year' ~ 1,
+        attend == 'once a year' ~ 2,
+        attend == 'sevrl times a yr' ~ 3,
+        attend == 'once a month' ~ 4,
+        attend == '2-3x a month' ~ 5,
+        attend == 'nrly every week' ~ 6,
+        attend == 'every week' ~ 7,
+        attend == 'more thn once wk' ~ 8
+        ),
+      region_groups = case_when(
+        region %in% c('new england', 'e. nor. central','w. nor. central') ~ 'north',
+        region %in% c('w. sou. central', 'e. sou. central', 'south atlantic') ~ 'south',
+        region == 'pacific' ~ 'pacific'
+        ))) %>% 
+    split(., .$region_groups)
+  
+  # define test fun
+  my_test <- function(data){
+    mod = glm(vhappy ~ tvhours + attend_num + owngun, 
+              data = data, family = 'binomial')
+    return(summary(mod))
+    }
+  
+  # run test fun
+  results = lapply(data_list, my_test)
+
+  # print results
+  results
+  
+  }, interval = .005)
+
+```
+
+### Speeding up code: Advanced section
+
+In most cases it is possible to produce efficient code using existing R functions. Sometimes, however, data sets are so big or computations so complex that additional measures must be taken. Generally, there are two fundamental ways to make code really fast: (a) implement code in a lower-level language that inherently runs faster and (b) running code in parallel. In this section you will be getting a taste of both of these approaches.    
+
+#### Parallel R
+
+Running code in parallel requires using a slightly different programming style. But, it really isn't much different. To make use of parallel execution, we must split the data into parcels, often called jobs, and specify a function to handle these parcels, often called a worker. Once both of them are specified, we can use the functions in R's `parallel` package to assign jobs to workers and collect the results. But let's deal with the ingredients first. In this section, we will be looking at a very simple task, to compute the means of every column in a matrix. 
+
+9. Let's define our jobs. Assume we have the following data.frame `my_df = as.data.frame(matrix(as.double(1:100000000), ncol = 100))`, which has 100 columns and 100,000 rows, and that we want to split the data frame into 100 equally large jobs of 1,000 rows each (`as.double` to avoid integer overflow). One easy way of doing this is to use the `split()` function. The `split()` function is build to slice data.frames row-wise as a function of the levels of another variable. Thus, if we had a vector that had one value for the first 1,000 entries, another for the next 1,000 entries and so on, we could use it to split our data frame. One easy way to create such a vector is to use `rep()`. `rep()` creates vectors by repeating its arguments values. For instance, `rep(10, 5)` will create `10 10 10 10 10`. To create a vector with the said properties, we need to make use of the fact that `rep()` is vectorized. That is, we can provide vectors for both arguments of the function. To cut things short, we can create our split vector using `split_vec <- rep(1:100, rep(1000, 100))`. Now apply `split()` to slice `my_df` using `split_vec` into 100 separate jobs. What type of object does `split()` return?
+
+```{r, eval=F, echo=F}
+# my_mat
+my_df = as.data.frame(matrix(as.double(1:100000000), ncol = 100))
+
+# split_vec
+split_vec <- rep(1:100, rep(1000, 100))
+
+# jobs
+jobs <- split(my_df, split_vec)
+
+```
+
+10. Now, let's define our worker. We want to compute the mean of the columns of a data frame However, since we sliced the data frame in 100 pieces of 1,000 rows each, every worker will only have access to pieces of each variable. Thus, we need to find a way to also split the computation of the mean. One way to do this is to have the workers compute merely the sum of all the values they have access to and then later, when the results of all of the workers have been collected, to divide the sum of results by the total number of observations. In pseudo-code: `sum(c(sum(worker_1), sum(worker_2), ..., sum(worker_100)) / 100000`. Thus, what we need is a function that computes the sums of columns of each slice of the data frame. It so happens that R has a convenient (but not exactly fast) tool to do this, called `apply()`. `apply()` is a function that allows you to apply functions to data frames (or matrices) row or column wise. `apply(my_df, 2, sd)`, for instance, iterates through the columns (1 = rows, 2 = columns) and calculates the standard deviation using `sd()`. To calculate the sum instead, we need to merely replace `sd` by `sum`, i.e., `apply(my_df, 2, sum)`. Now, we have our worker. The last thing we want to do is to store the worker in its own function. That is, we want to run `worker <- function(df) apply(df, 2, sum)`. Let's do this.    
+
+```{r, eval=F, echo=F}
+# define worker
+worker <- function(df) apply(df, 2, sum)
+```
+
+11. Alright, we have a jobs object and we have our worker function. Let's run this in parallel. To do this, we will be working with R's `parallel` package, which for a couple of years now is part of the standard R distribution The first step in running jobs in parallel is to set up a cluster of R instances. To do this, we use the function `makeCluster()`. Specify the number of R instances to be contained in the cluster and assign the cluster to an object, e.g., `cl <- makeCluster(8)`. I have chosen 8 because I have 8 (virtual) processors in my computer. You may have more or less. It makes sense to choose a number that is close to the number of processors in your computer. If you don't know how many processors you have, test it using `detectCores()`. OK, now that we have our cluster `cl` the next step is to actually run the jobs in parallel. To do this, we use `clusterApplyLB()`, which takes three arguments: (1) the cluster object, (2) the jobs, and (3) the worker, each of which we should now be ready to supply. Use `clusterApplyLB(cl, jobs, worker)` and don't forget to assign the output to a new object. The last part of running parallel is to stop the cluster using `stopCluster(cl)`. Try it out and store the result in `my_result`. 
+
+
+```{r, eval=F, echo=F}
+# load parallel
+library(parallel)
+
+# create cluster
+cl <- makeCluster(8)
+
+# fun in parallel
+my_result <- clusterApplyLB(cl, jobs, worker)
+
+# stop cluster
+stopCluster(cl)
+
+```
+
+12. The last step of parallel computing is to collect the results and extract the information of interest. In this case, this means that we need to sum up the values provided by the workers for each variable and divide them by the total number of rows. One convenient way of doing this is to bind the results into a matrix, where the columns represent the original columns and the rows represent the number of jobs. One function that makes this super easy is `do.call()`. Try `my_result_mat <- do.call(rbind, my_result)`. The only thing left to do now, is to compute again the sums of each column - here we can again make use of our worker - and then to divide the results by the total number of rows. Let's do this.           
+
+
+```{r, eval=F, echo=F}
+# bind results to matrix
+my_result_mat <- do.call(rbind, my_result)
+
+# compute sums and divide
+worker(my_result_mat) / nrow(my_df)
+
+```
+
+13. Finally, compare the speed of applying the worker to the entire object versus running it in parallel using `system.time()`. One convenient way to compare the two is store all of the parallel code, beginning with splitting the matrix and ending with calculating the sums of sums and dividing by N, inside a function. What do you observe?   
+
+```{r, eval=F, echo=F}
+# my_df
+my_df = as.data.frame(matrix(as.double(1:100000000), ncol = 100))
+
+# ---- define parallel fun
+
+my_parallel_fun <- function(n_jobs = 100){
+
+  # split_vec
+  split_vec <- rep(1:n_jobs, rep(nrow(my_df) / n_jobs, n_jobs))
+  
+  # jobs
+  jobs <- split(my_df, split_vec)
+  
+  # create cluster
+  cl <- makeCluster(8)
+  
+  # fun in parallel
+  my_result <- clusterApplyLB(cl, jobs[sample(1:length(jobs))], worker)
+  
+  # stop cluster
+  stopCluster(cl)
+  
+  # bind results to matrix
+  my_result_mat <- do.call(rbind, my_result)
+  
+  # compute sums and divide
+  worker(my_result_mat) / nrow(my_df)
+  
+  }
+
+# ---- compare speed
+
+system.time(my_parallel_fun(100))
+system.time(apply(my_df, 2, mean))
+
+```
+
+Was the parallel version really faster than the non-parallel version? I would not be surprised, if not. Parallelization needs to be carefully set up and may in some cases even hurt. In this case, the reason why the parallel code may have been slower is that it takes R quite some time to set up the R instances in the background. It's literally the same as you opening R on your computer several times in a row. Thus, (this kind of) parallelization will only be worth it, when the entire job runs in minutes or more rather than in seconds.  
+
+
+#### Rcpp
+
+Another option to speed up code is to implement essential code chunks in C++ using Rcpp. C++ is a compiled language, meaning that any C++ code will be translated into highly efficient machine code, before it is executed. For this reason, implementing R code in C++ and importing it using Rcpp can mean 10-100x faster code execution (if the original code wasn't C code in the first place; remember `primitives`). Using high performance libraries such as, e.g., [RcppArmadillo](http://dirk.eddelbuettel.com/code/rcpp.armadillo.html), and multi-threading, e.g., using [RcppParallel](https://rcppcore.github.io/RcppParallel/), further speed ups are possible. 
+
+Essentially, using C++, C++-libraries, and multi-threading allows you to tap into the full computing power of your computer. Unless you are a highly experienced programmer, who is specialized in optimizing code, you will not be able to ever write code that is faster than code that has been implemented using these tools, irrespective of what programming language you are using. To tap into this potentially, however, it is necessary to know at least a little bit of C++. As this is a course on R, I will provide the the necessary code below. The only thing you will have to do is to save the code in C++ (aka Cpp) scripts, load them into R, and compare the performance to R's own implementations. We begin again with the example of calculating column means of a data frame.        
+
+14. Below you see a piece of C++ code. Your first task is to copy this code into a new C++ file. To do this, first select File/New File/C++ File from the RStudio menu, which will create a new script for C++ code. Next delete everything in that script and replace it by the code below. Finally, save the File on the hard drive inside your project. 
+
+```{r, eval=F, echo=T}
+#include <Rcpp.h>
+using namespace Rcpp;
+
+NumericVector col_means_cpp(DataFrame& df) {
+  int n_rows = df.nrows(), n_cols= df.size() ;
+  NumericVector means(n_cols);
+  for(int j = 0; j < n_cols; ++j) {
+    NumericVector column = df[j];
+    double sum = 0;
+    for(int i = 0; i < n_rows; ++i){
+      sum += column[i];
+      }
+    means[j] = sum / n_rows;  
+    }
+  return means;
+  }
+
+```
+
+
+15. Now, let's try to load our C++ function. To do this, we use `sourceCpp()` from the `Rcpp` package. Provide to `sourceCpp` the file path to our function and execute it. If there is no error, this means that we can now use `col_means_cpp()`, which is the name of the function, just as any other R function. As its only argument, it takes a data frame. Thus, we can easily compare it to our worker function that we defined above. Use `system.time()` to measure the speed of our new function and compare it to our worker. How much faster is the new function? Try also to compare it to `colMeans()`, which is R's own "high-performance" version of this function. Who wins?
+
+Why does the result of this comparison differ from that in the slides?
+
+```{r, eval=F, echo=F}
+
+# ----- Load C++ code
+
+# load Rcpp
+library(Rcpp)
+
+# load C++ function
+sourceCpp('C++_code/col_mean_cpp.cpp')
+
+# compare to alternative implementations
+system.time(worker(my_df))
+system.time(col_means_cpp(my_df))
+system.time(colMeans(my_df))
+
+```
+
+
+16. Finally, I want to show you another example that illustrates that these tools can also be used to make statistical tests faster. Below is a piece of code that provides a faster implementation of the general linear model (aka regression). Follow the same steps as above to load it into R and then compare it to R's own `lm` function. To see how, take a look at the R code below. Note: before you can load this function you must `install.packages(RcppArmadillo)`.
+
+```{r, eval=F, echo=T}
+#include <RcppArmadillo.h>
+using namespace Rcpp;
+
+// [[Rcpp::depends(RcppArmadillo)]]
+
+// [[Rcpp::export]]
+List fast_lm(const arma::mat& X, const arma::colvec& y) {
+  int n = X.n_rows, k = X.n_cols;
+  
+  arma::colvec coef = arma::solve(X, y);    // fit model y ~ X
+  arma::colvec res  = y - X*coef;           // residuals
+  
+  // std.errors of coefficients
+  double s2 = std::inner_product(res.begin(), res.end(), res.begin(), 0.0)/(n - k);
+  
+  arma::colvec std_err = arma::sqrt(s2 * arma::diagvec(arma::pinv(arma::trans(X)*X)));
+  
+  return List::create(Named("coefficients") = coef,
+                      Named("stderr")       = std_err,
+                      Named("df.residual")  = n - k);
+  }
+```
+
+```{r, eval=F, echo=T}
+
+# Create data
+d = data.frame(
+	a = rnorm(10000,0,1),
+	b = rnorm(10000,0,1),
+	c = rnorm(10000,0,1)
+	)
+
+# Load C++ code
+sourceCpp('C++_code/fast_lm.cpp')
+
+# Compare using microbenchmark
+microbenchmark(
+  lm(c ~ a + b, data = d),
+  fast_lm(as.matrix(d[,c('a','b')]), d$c)
+  )
+
+
+```
+
+
+#### Microsoft R Open
+
+Lastly, I want to touch upon yet another option to speed up code, namely to use a different implementations of R. One such implementation is Microsoft Open R. Open R features the high-performance, multi-threaded [BLAS/LAPACK](http://www.netlib.org/lapack/lug/node11.html) linear algebra libraries plus several other features that aim to maximize reproducibility. 
+
+In this exercise, you will be comparing to chunks of code in R and Open R to see where the performance benefits of Open R lie and where not. To do this first install [Open R](https://mran.microsoft.com/open).  This will create a separate R instance called Open R. Start it and run the code examples below, once in Open R and once in your regular R. You can see that one of the examples runs dramatically faster, although it is already very efficiently implemented in regular R. However, the other one doesn't. This implies that Open R provides not yet substantial benefits for regular users of R.
+
+WARNING: If you do install Open R, then it will become your default R version. As it is not yet compatible with the contents of the following sessions you will have to revert back to the original R. The easiest but unfortunately slightly time consuming way is to re-install the original R.   
+
+```{r, eval=F, echo=T}
+# function that times functions
+timer <- function(expr){ 
+  t <- proc.time()[3]
+  expr
+  proc.time()[3] - t
+  }
+  
+# ---- Matrix multiplication
+
+# create matrix
+m <- matrix(1:1000000, ncol = 100)
+
+# function that mutliplies matrix with itself
+m_square <- function(m) a = m %*% t(m)
+
+# time m_square
+timer(m_square(m))
+
+# ---- Regression
+
+# create matrix
+d = data.frame(
+	a = rnorm(1000000,0,1),
+	b = rnorm(1000000,0,1),
+	c = rnorm(1000000,0,1)
+	)
+
+# time m_square
+timer(lm(a ~ b * c, data = d))
+
+
+```
+
+
+
+# Additional reading
+
+- For more details check out check out Hadley Wickham's [Advanced R](http://adv-r.had.co.nz/).
+
+- For more details on parallel computing see [Parallel R](https://www.amazon.com/dp/B005Z29QT4/ref=cm_sw_su_dp) by McCallum and Weston.
+
+- For more details R's C++ interface see [Rccp](http://www.rcpp.org/) by McCallum and Weston.
+
+- For more details on the fundamentals check out [R Internals](https://cran.r-project.org/doc/manuals/r-patched/R-ints.html).
+

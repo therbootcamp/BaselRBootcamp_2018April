@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recap II</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Recap II
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### January 2018
+
+---
+
+
+
+
+
+
+
+
+# Essentials of the R language
+
+.pull-left5[
+&gt;"To understand computations in R, two slogans are helpful:
+&lt;br&gt;&lt;br&gt;
+&gt;###(1) Everything that exists is an object and 
+&gt;###(2) everything that happens is a function call."
+]
+
+.pull-right5[
+&lt;p align="center"&gt;&lt;img src="https://statweb.stanford.edu/~jmc4/CopyPhoto.jpg" width="350" align="center"&gt;&lt;/p&gt;
+&lt;p align="center"&gt;John Chambers&lt;br&gt; &lt;font size=2&gt; Author of S and developer of R&lt;/font&gt;&lt;br&gt;
+&lt;font size=2&gt;&lt;a href="https://statweb.stanford.edu/~jmc4/"&gt;statweb.stanford.edu&lt;/a&gt;
+&lt;/p&gt;
+]
+
+---
+
+.pull-left45[
+# Objects
+&gt;###"Everything in R is an object"&lt;br&gt; 
+&gt;&lt;p align="right"&gt;*John Chambers*&lt;p&gt;
+
+&lt;br&gt;&lt;br&gt;
++ R's objects are have **content and attributes**.
+&lt;br2&gt;
++ The **content can be anything** from numbers or strings to functions or complex data structures. 
+&lt;br2&gt;
++ Attributes often encompass **names**, **dimensions**, and the **class or type** of the object, but other attributes are possible. 
+&lt;br2&gt;
++ Practically all data objects are equipped with those **three essential attributes**.
+
+]
+
+.pull-right5[
+&lt;br&gt;&lt;br&gt;
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/objects.png" align="center" width="579" height="560"&gt;
+]
+
+---
+
+# Vectors
+
+R's most **basic (and most simple) data format** - even single values (aka **scalars**) are implemented as vectors. 
+
+.pull-left45[
+
+```r
+# creating a vector (incl. names)
+my_vec &lt;- c(t_1 = 1.343, t_2 = 5.232)
+
+# vectors are always flat
+my_vec &lt;- c(1.343, c(5.232, 2.762))
+
+# naming vectors
+my_vec &lt;- c(t_1 = 1.343, t_2 = 5.232)
+names(my_vec) &lt;- c("new_1","new_2")
+
+# evaluting inherent attributes
+names(my_vec)
+length(my_vec)
+typeof(my_vec)
+```
+]
+
+.pull-right5[
+&lt;p align="left"&gt;&lt;br&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/vector.png" width="628px" height="190px"&gt;&lt;/p&gt;
+]
+
+
+---
+
+# Types
+
+A vector contains elements of one of four **basic types**: `integer`, `double`, `numeric`, and `character`. You can **test** the type using `typeof()` or the type-specific `is.*()`, e.g., `is.integer()`.
+
+
+.pull-left45[
+
+```r
+# numeric vectors
+my_vec &lt;- c(1.343, 5.232)
+typeof(my_vec) ; is.integer(my_vec)
+```
+
+```
+## [1] "double"
+```
+
+```
+## [1] FALSE
+```
+
+```r
+# integer vectors (overruled by R)
+my_vec &lt;- c(1, 7, 2)
+typeof(my_vec) ; is.integer(my_vec)
+```
+
+```
+## [1] "double"
+```
+
+```
+## [1] FALSE
+```
+]
+
+.pull-right45[
+
+```r
+# logical vectors
+my_vec &lt;- c(TRUE, FALSE)
+typeof(my_vec) ; is.logical(my_vec)
+```
+
+```
+## [1] "logical"
+```
+
+```
+## [1] TRUE
+```
+
+
+```r
+# character vectors
+my_vec &lt;- c('a', 'hello', 'world')
+typeof(my_vec) ; is.character(my_vec)
+```
+
+```
+## [1] "character"
+```
+
+```
+## [1] TRUE
+```
+]
+
+---
+
+# `data.frame`s
+
+.pull-left45[
+
+* Data frames (and its variants, e.g., **tibble**s) are R's **main data format**. 
+
+* **Data frames are lists** with specific **requirements**:
+
+  + Every element must be a vector.
+
+  + The lengths of the vectors must be equal (or multiples of another).  
+
+* Use `data.frame()` and `as.data.frame` to create or to coerce to data frame.
+]
+
+.pull-right45[
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/data.frame.png" width="409px" height="266px"&gt;&lt;/p&gt;
+]
+
+
+
+
+---
+
+# Accessing &amp; changing data frames (and lists)
+
+Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
+
+.pull-left45[
+
+```r
+# retrieve elements using brackets
+my_df &lt;- data.frame('v_1'=c('A', 'B', 'C'), 
+                    'v_2'=c(1, 2, 3))
+my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+```
+
+```
+##   v_1
+## 1   A
+## 2   B
+## 3   C
+```
+
+```
+## [1] A B C
+## Levels: A B C
+```
+
+```
+## [1] A B C
+## Levels: A B C
+```
+]
+
+.pull-right45[
+
+```r
+# retrieve elements using the $-operator
+my_df$v_1
+```
+
+```
+## [1] A B C
+## Levels: A B C
+```
+
+```r
+my_df$v_1 &lt;- c('X', 'Y', 'Z')
+my_df
+```
+
+```
+##   v_1 v_2
+## 1   X   1
+## 2   Y   2
+## 3   Z   3
+```
+]
+
+---
+
+# Calls, assignments, and expressions
+
+In R every action is a function call. Specifically, R programs advance by **passing on arguments to functions**, **calling the function**, and **receiving and storing its output**. And this goes deep, many operations are functions in disguise.
+
+.pull-left45[
+
+```r
+# defining a function - arithm. mean
+my_fun &lt;- function(x, b){ x * b }
+
+# define some data
+my_data &lt;- c(1, 5, 7, 3) 
+
+# pass on arguments and call function
+my_fun(my_data, 5) 
+```
+
+```
+## [1]  5 25 35 15
+```
+
+```r
+# store output by assignment
+my_out &lt;- my_fun(my_data, 5)
+```
+
+]
+
+.pull-right45[
+
+```r
+# a basic expression
+2 + 2
+```
+
+```
+## [1] 4
+```
+
+```r
+# is also a function
+'+'(2,2)
+```
+
+```
+## [1] 4
+```
+]
+
+
+---
+
+# Help
+
+.pull-left5[
+
+R provides extremely helpful **help files** and **vignettes**. 
+&gt;**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).&lt;br&gt;
+&gt;**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+
+
+```r
+# To access help files
+help("name_of_function")
+?name_of_function
+
+# find help files
+??name_of_function
+
+# To list and access vignettes
+vignette(package = "name_of_package")
+vignette(package = "name_of_vignette")
+```
+
+]
+
+.pull-right45[
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"&gt;&lt;/p&gt;
+
+&lt;!---
+&lt;br&gt;&lt;br&gt;&lt;iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"&gt;&lt;/iframe&gt;
+---&gt;
+]
+
+---
+
+# The almighty **tidyverse**
+
+Among its many packages, R contains a collection of high-performance, easy-to-use packages (libraries) designed specifically for handling data know as the [tidyverse](https://www.tidyverse.org/). The tidyverse includes:
+1. `ggplot2` -- creating graphics.
+2. `dplyr` -- data manipulation.
+3. `tidyr` -- tidying data.
+4. `readr` -- read wild data.
+5. `purrr` -- functional programming.
+6. `tibble` -- modern data frame.
+&lt;br&gt;&lt;br&gt;
+
+&lt;img src="http://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/071952491ec4a6a532a3f70ecfa2507af4d341f9/c167c/images/hex-dplyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/5f8c22ec53a1ac61684f3e8d59c623d09227d6b9/b15de/images/hex-tidyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/9221ddead578362bd17bafae5b85935334984429/37a68/images/hex-purrr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png" height="200px" /&gt;
+
+
+
+
+---
+
+.pull-left4[
+# How do we wrangle data in R?
+
+&lt;font size = 5&gt;Answer: dplyr&lt;/font&gt;
+
+Anytime you want to transform, organize, or aggregate data, use `dplyr`
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/dplyr_hex.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right5[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/organise_transform_aggregate.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+.pull-left35[
+# dplyr
+
+`dplyr` is a combination of 3 things:
+
+1. **`objects`** like dataframes
+2. **`functions`** that **do** things to objects.
+3. **`pipes`** `%&gt;%` that string together objects and verbs
+
+&lt;br&gt;
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/pipe.jpg" width="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right6[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+## The pipe %&gt;%
+&lt;br2&gt;
+
+`dplyr` makes extensive use of the 'pipe' `%&gt;%` which passes objects between functions.
+&lt;br&gt;&lt;br&gt;
+
+
+```r
+data %&gt;%    # Start with data, AND THEN...
+  VERB1 %&gt;% # Do VERB1, AND THEN...
+  VERB2 %&gt;% # Do VERB2, AND THEN...
+  VERB3 %&gt;% # Do VERB3, AND THEN...
+  group_by(x, y) %&gt;%  # Group by variables x, y
+    summarise(
+      VAR_A_New = fun(X),
+      VAR_B_New = fun(Y),
+      VAR_C_New = fun(Z),
+    )
+  )
+```
+
+]
+
+
+
+
+---
+
+## There are tons of statistical packages in R!
+
+
+.pull-left35[
+&lt;br&gt;&lt;br&gt;
+
+| Package| Models|
+|------:|:----|
+|     `afex`|   Anovas|
+|     `rpart`|    Decision Trees|
+|     `lme4`|   Mixed effects regression|
+|     `BayesFactor`| Bayesian statistics|
+|     `igraph`| Cluster analyses|
+|     `neuralnet`| Neural networks|
+
+]
+
+.pull-right6[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/statistical_procedures.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+# Statistics
+
+.pull-left5[
+
+
+| Test| R Function|
+|:------|:----|
+|     `formula`|The dependent variable and one or more independent variables|
+|     `data`|  The dataframe containing variables|
+|   `subset`  | Optional subset of data to test |
+
+
+
+```r
+trial_X
+```
+
+```
+##   id sex age arm y_primary y_secondary
+## 1  1   m  35   1        50           1
+## 2  2   f  42   2        78           1
+## 3  3   f  24   1        46           0
+## 4  4   m  56   2        97           1
+## 5  5   f  49   1        74           1
+```
+
+
+]
+
+.pull-right45[
+
+
+```r
+TEST(formula = Y ~ X1 + X2 + ...
+     data = DATA,
+     subset = SUBSET,
+     ...)
+```
+
+
+### Examples
+
+
+```r
+# T-test
+# DV = y_primary, IV = arm
+t.test(formula = y_primary ~ arm
+       data = trial_X)
+
+# Regression
+# DV = y_secondary, IV = arm, sex, age
+# Subset = only id &gt; 50
+glm(formula = y_secondary ~ arm + sex + age
+    data = trial_X,
+    subset = id &gt; 50)
+```
+
+]
+
+
+
+---
+
+.pull-left35[
+
+
+&lt;br&gt;&lt;br&gt;
+
+## Exploring statistical objects
+
+Assign the results of a statistical function to a new object, then use *generic* functions such as `print()`, `summary()`, `predict()` and `plot()` to explore it.
+
+
+
+```r
+# Create statistical object
+my_obj &lt;- FUN(formula = ...,
+              data = ...)
+
+names(my_obj)       # Elements
+print(my_obj)       # Print
+summary(my_obj)     # Summary
+plot(my_obj)        # Plotting
+predict(my_obj, ..) # Predict
+```
+
+]
+
+.pull-right6[
+&lt;br&gt;&lt;br&gt;
+
+
+
+```r
+# Create a glm object
+chick_glm &lt;- glm(formula = weight ~ Time,
+                 data = ChickWeight)
+
+# Print the object
+names(chick_glm)
+```
+
+```
+##  [1] "coefficients"      "residuals"         "fitted.values"     "effects"           "R"                
+##  [6] "rank"              "qr"                "family"            "linear.predictors" "deviance"         
+## [11] "aic"               "null.deviance"     "iter"              "weights"           "prior.weights"    
+## [16] "df.residual"       "df.null"           "y"                 "converged"         "boundary"         
+## [21] "model"             "call"              "formula"           "terms"             "data"             
+## [26] "offset"            "control"           "method"            "contrasts"         "xlevels"
+```
+
+```r
+## Access elements
+chick_glm$coefficients
+```
+
+```
+## (Intercept)        Time 
+##      27.467       8.803
+```
+
+]
+
+
+---
+
+# What is machine learning?
+
+.pull-left6[
+
+
+### Algorithms autonomously learning from data.
+
+Given data, an algorithm tunes its *parameters* to match the data, understand how it works, and make predictions for what will occur in the future.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mldiagram_A.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right4[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearningcartoon.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+# How do I do machine learning in R?
+
+.pull-left6[
+
+In principle, it's a lot like evaluating statistical functions.
+
+Install the necessary package, evaluate the model function, explore the results.
+
+
+```r
+# Create training and test data
+data_train &lt;- ...
+data_test &lt;- ...
+
+# Train models on training data
+model_A &lt;- A_fun(formula = y ~ ., 
+                 data = data_train)
+
+# Model A predictions
+pred_A &lt;- predict(model_A, 
+                  newdata = data_test)
+
+# Calculate Model A error
+pred_err_A &lt;- mean(abs(pred_A - data_test$y))
+
+# Compare to Models B, C, D...
+```
+
+]
+
+.pull-right35[
+
+
+If you're really into machine learning, packages such as `mlr` and `caret` can automate much of the the machine learning process.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlrcaret.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# Today
+
+&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/schedule_18Jan"&gt;Schedule&lt;/a&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

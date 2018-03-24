@@ -1,0 +1,440 @@
+---
+title: "Statistics"
+author: "BaselRBootcamp January 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval = FALSE)
+```
+
+
+```{r, echo = FALSE, fig.align = 'center', eval = TRUE, out.width = "70%", fig.cap= "Source: https://cdn.lynda.com/course/495322/495322-636154038826424503-16x9.jpg"}
+knitr::include_graphics("https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/lynda_com_stats.jpg?raw=true")
+```
+
+
+### Slides
+
+- [Here are the introduction slides for this practical on statistics!](https://therbootcamp.github.io/_sessions/D2S2_Statistics/Statistics.html)
+
+### Overview
+
+In this practical you'll do basic statistics in R. By the end of this practical you will know how to:
+
+1. Calculate basic descriptive statistics using `mean()`, `median()`, `table()`.
+2. Conduct 1 and 2 sample hypothesis tests with `t.test()`, `cor.test()` and `chisq.test()`
+3. Calculate regression analyses with `glm()`
+4. Explore statistical objects with `names()`, `summary()`, `print()`, `predict()`
+5. Use sampling functions such as `rnorm()` to conduct simulations
+
+### Glossary and Packages
+
+Here are the main descriptive statistics functions we will be covering.
+
+| Function| Description|
+|:------|:--------|
+| `table()` | Frequency table |
+|     `mean(), median(), mode()`| Measures of central tendency|
+|     `sd(), range(), var()`|    Measures of variability|
+|     `max(), min()`|    Extreme values|
+| `summary()`| Several summary statistics |
+
+Here are the main statistical functions we will be covering.
+
+| Function| Hypothesis Test| Additional Help |
+|:------|:-------------------|:----|
+|     `t.test()`|    One and two sample t-test| https://bookdown.org/ndphillips/YaRrr/htests.html#t-test-t.test
+|     `cor.test()`|    Correlation test| https://bookdown.org/ndphillips/YaRrr/htests.html#correlation-cor.test
+|     `chisq.test()`|    Chi-Square test| https://bookdown.org/ndphillips/YaRrr/htests.html#chi-square-chsq.test
+|     `glm()`|    Regression| https://bookdown.org/ndphillips/YaRrr/regression.html|
+
+Here are the random sampling functions we will use
+
+| Function| Description| Additional Help |
+|:------|:--------|:----|
+|     `sample()`|    Draw a random sample of values from a vector| `?sample`
+|     `rnorm()`|    Draw random values from a Normal distribution| `?rnorm()`
+|     `runif`|    Draw random values from a Uniform distribution| `?runif()`
+
+
+### Examples
+
+- The following examples will take you through the steps of doing basic hypothesis tests. Follow along and try to see how piece of code works!
+
+```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE}
+# -----------------------------------------------
+# Examples of hypothesis tests on the diamonds
+# ------------------------------------------------
+library(tidyverse)
+
+# First few rows of the diamonds data
+
+diamonds
+
+# -----
+# Descriptive statistics
+# -----
+
+mean(diamonds$carat)   # What is the mean carat?
+median(diamonds$price)   # What is the median price?
+max(diamonds$depth)    # What is the maximum depth?
+table(diamonds$color)    # How many observations for each color?
+
+# -----
+# 1-sample hypothesis test
+# -----
+
+# Q: Is the mean carat of diamonds different from .50?
+
+htest_A <- t.test(x = diamonds$carat,     # The data
+                  alternative = "two.sided",  # Two-sided test
+                  mu = 0.5)                   # The null hyopthesis
+
+htest_A            # Print result
+names(htest_A)     # See all attributes in object
+htest_A$statistic  # Get just the test statistic
+htest_A$p.value    # Get the p-value
+htest_A$conf.int   # Get a confidence interval
+
+# -----
+# 2-sample hypothesis test
+# -----
+
+# Q: Is there a difference in the carats of color = E and color = I diamonds?
+
+htest_B <- t.test(formula = carat ~ color,     # DV ~ IV
+                   alternative = "two.sided",  # Two-sided test
+                   data = diamonds,         # The data
+                   subset = color %in% c("E", "I")) # Compare Diet 1 and Diet 2
+
+htest_B  # Print result
+
+# -----
+# Correlation test
+# ------
+
+# Q: Is there a correlation between carat and price?
+
+htest_C <- cor.test(formula = ~ carat + price,
+                    data = diamonds)
+
+htest_C
+
+# A: Yes. r = 0.92, t(53938) = 551.51, p < .001
+
+# -----
+# Regression
+# ------
+
+# Q: Create regression equation predicting price by carat, depth, table, and x
+
+price_glm <- glm(formula = price ~ carat + depth + table + x,
+                  data = diamonds)
+
+# Print coefficients
+price_glm
+
+# Q: Predict the price of the following 3 diamonds:
+
+diamonds_new <- tibble(carat = c(.2, .6, .5),
+                       depth = c(50, 46, 90),
+                       table = c(40, 65, 70),
+                       x = c(3.7, 4.2, 4.3))
+
+predict(price_glm, 
+        newdata = diamonds_new)
+
+#       1         2         3 
+# 4190.453  6088.398 -4471.817 
+
+
+# -----
+# Simulation
+# ------
+
+# 100 random samples from a normal distribution with mean = 0, sd = 1
+samp_A <- rnorm(n = 100, mean = 0, sd = 1)
+
+# 100 random samples from a Uniform distribution with bounds at 0, 10
+samp_B <- runif(n = 100, min = 0, max = 10)
+
+# Calculate descriptives
+mean(samp_A)
+sd(samp_A)
+
+mean(samp_B)
+sd(samp_B)
+
+```
+
+
+## Tasks
+
+### Getting setup
+
+A. Open a new R script and save it in the `R` folder you just created as a new file called `datawrangling.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
+
+```{r, eval = FALSE, echo = TRUE}
+## NAME
+## DATE
+## Wrangling Practical
+
+library(tidyverse)     # For tidyverse
+library(speff2trial)   # For the ACTG175 data documentation
+```
+
+
+A. For this practical, we'll use the `ACTG175` dataframe from the `speff2trial` package, load the package with the `library()` function. Also load the `tidyverse` as always!
+
+```{r, message = FALSE, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE}
+# Load libraries
+
+library(tidyverse)     # Tidyverse as always!
+library(speff2trial)   # For ACTG175 data
+```
+
+
+B. Convert the data to a tibble called `trial_act` as follows. The reason we're changing the name is so that if we mess up the data, we can always get the original data back from the `ACTG175` object.
+
+```{r, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE}
+# Create trial_act, a tibble copy of ACTG175
+trial_act <- as_tibble(ACTG175)
+```
+
+C. First thing's first, take a look at the data by printing it. It should look like this
+
+```{r, eval = TRUE, echo = TRUE}
+# Print trial_act
+trial_act
+```
+
+D. Before we can analyse the data, we need to make one important change. Specifically. we need to clarify that the `arms` column is a factor, *not* an integer. Run the following code to make this change.
+
+```{r, echo = TRUE}
+# traial_act data cleaning
+
+trial_act <- trial_act %>%
+  mutate(
+    
+    # Convert arms to a factor
+    
+    arms = factor(arms, 
+                  levels = c(0, 1, 2, 3),
+                  labels = c("zid", "zid_did", "zid_zal", "did"))
+  )
+```
+
+E. (Optional): If you'd like to, try converting other columns such as `race` and `gender` to factors with appropriate labels. Look at the help menu for the `ACTG175` by running `?ACTG175` to see how these columns are coded.
+
+
+### Descriptive statistics
+
+1. What was the mean age (`age`) of all patients?
+
+2. What was the median weight (`wtkg`) of all patients?
+
+3. What was the mean CD4 T cell count at baseline (`cd40`) ? What was it at 20 weeks (`cd420`)?
+
+4. How many patients have a history of intravenous drug use (`drug`) and how many do not? (Hint: use `table()`)
+
+### T tests with t.test()
+
+5. Conduct a one-sample t-test comparing the age (`age`) of the patients versus a null hypothesis of 40 years.
+
+6. Now, compare the mean age to a null hypothesis of 35 years. What has changed?
+
+```{r}
+t.test(x = trial_act$age,
+       alternative = "two.sided",
+       mu = 35)
+```
+
+7. A researcher wants to make sure that men and women in the clinical study are similar in terms of age. Conduct a two-sample t-test comparing the age of men versus women to test if they are indeed similar or not.
+
+  - Women are coded as 0 in `gender`, and men are coded as 1. 
+  - Be sure to use the formula notation `formula = age ~ gender`
+
+```{r}
+age_gender_ht <- t.test(formula = age ~ gender,
+                           data = trial_act,
+                           alternative = "two.sided")
+
+age_gender_ht
+```
+
+8. Do people with a history of intravenous drug use have different numbers of `days` than those who do not have a history of intravenous drug use? Answer this with a two-sample t-test.
+
+```{r}
+t.test(formula = days ~ drugs,
+       data = trial_act)
+```
+
+
+### Correlation test with cor.test()
+
+9. Do heavier people tend to have fewer days until a major negative event? Conduct a correlation test between weight (`wtkg`) and age (`days`). What is your conclusion?
+
+
+```{r}
+cor.test(formula = ~ days + wtkg,
+         data = trial_act)
+```
+
+10. We would expect a correlation between CD4 T cell count at baseline (`cd40`) and at 20 weeks (`cd420`). But how strong is the correlation? Answer this question by conducting a correlation test between CD4 T cell count at baseline (`cd40`) and CD4 T cell count at 20 weeks (`cd420`).
+
+```{r}
+cor.test(formula = ~ cd40 + cd420,
+         data = trial_act)
+```
+
+11. Only considering men, is there a correlation between CD4 T cell count at baseline (`cd40`)and CD8 T cell count at baseline (`cd80`)? (Hint: Include the argument `subset = gender == 0` to restrict the analysis to men)
+    
+```{r}
+cor.test(formula = ~ cd40 + cd80,
+         data = trial_act,
+         subset = gender == 0)
+```
+
+12. Now, repeat the previous test, but only for women. Do you get the same or different results?
+
+```{r}
+cor.test(formula = ~ cd40 + cd80,
+         data = trial_act,
+         subset = gender == 1)
+```
+
+### Chi-square test with chisq.test()
+
+13. Do men and women (`gender`) have different distributions of race (`race`)? That is, is the percentage of women who are white differ from the percentage of men who are white? Answer this with a chi-square test.
+
+  - Be sure to create a table of gender and race values with `table(trial_act$gender, trial_act$race)`
+
+```{r}
+chisq.test(table(trial_act$gender, trial_act$race))
+```
+
+14. Is there a relationship between a history of intravenous drug use (`drugs`) and hemophilia (`hemo`)? Answer this by conducting a chi-square test.
+
+```{r}
+chisq.test(table(trial_act$hemo, trial_act$drugs))
+```
+
+### Linear Regression with glm()
+
+15. Which demographic variables predict days until the first occurrence of a major negative event (`days`)? To answer this, conduct a linear regression analysis predicting `days` as a function of age (`age`), weight (`wtkg`), race (`race`) and gender (`gender`). Call the object `days_A_glm`.
+
+```{r}
+days_A_glm <- glm(formula = days ~ age + wtkg + race + gender,
+                     data = trial_act)
+
+summary(arms_cd820_aov)
+
+TukeyHSD(arms_cd820_aov)
+```
+
+16. Print the `days_A_glm` object to see the coefficients.
+
+```{r}
+days_A_glm
+```
+
+17. Using the `summary()` function, explore the `days_A_glm` object to see which coefficients are significant.
+
+18. Using the `names()` function, look at what the named elements in the `days_A_glm` object are.
+
+19. Using the `days_A_glm$` notation, print a vector of the model coefficients (`$coefficients`).
+
+20. Look at the `$data`, `$fitted.values` and `$residuals` elements of the `days_A_glm` object. What do you think these are? (Bonus: can you calculate the mean squared residual?)
+
+21. Now create a new regression object `days_B_glm` where you model `days` as a function of the treatment arm (`arms`). Explore the object. Do you find that there was an effect of the treatment arm on `days`?
+
+```{r}
+days_B_glm <- glm(formula = days ~ arms,
+                  data = trial_act)
+```
+
+22. Does the effect of treatment arm on days hold if you only consider men (`gender == 1`) above the age of 30 (`age > 30`)? To answer this, repeat your previous regression, but include the appropriate arguments to `subset`
+
+23. Now create a regression object `days_C_glm` that predicts `days` based on *all* variables in the dataset. Explore the object. What do you find?
+
+24. Create a fictional dataset of 10 new patients called `trial_new` by randomly selecting 10 patients from the original dataset. You can do this using the following code. After you run it, print the `trial_new` object to see how it looks
+
+```{r, echo = TRUE}
+# Draw 10 patients at random from trial_act
+#  and store as trial_new
+
+trial_new <- trial_act %>%
+  sample_n(10)
+```
+
+25. Now, using `days_C_glm`, predict the number of days until a major negative event for these 10 randomly selected patients using the following template:
+
+```{r, eval = FALSE, echo = TRUE}
+# Predict days until a major negative event from the trial_new data
+#   using the days_C_glm object
+
+predict(object = ___, 
+        newdata = ___)
+```
+
+```{r}
+predict(days_B_glm, 
+        newdata = new_patients)
+```
+
+
+### Logistic regression
+
+26. You can calculate a logistic regression, where the dependent variable is binary (0 or 1) by including the `family = 'binomial'` argument to `glm()`. Using the template below, calculate a logistic regression predicting whether or not someone has taken intravenous drugs based on their age (`age`), gender (`gender`) and (`race`). Then, explore the object to see if any variables reliably predict drug use.
+
+```{r, echo = TRUE, eval = FALSE}
+
+# Logistic regression predicting intraveneous drug use
+#  based on age, gender, and race
+
+drugs_glm <- glm(formula = ___,
+                 data = ___,
+                 family = "___")
+```
+
+27. A scientist wants to know whether there was an effect of treatment arm on the probability that patients had more than 1000 days before the first occurrence of a major negative event. Answer this question using a logistic regression. (Hint: To do this, you should first create a new column called `drugs_1000_bin` that is a binary variable indicating whether or not `days > 1000`. You can do this using `mutate()`)
+
+
+### Generating random samples from distributions
+
+28. You can easily generate random samples from statistical distributions in R. To see all of them, run `?distributions`. For example, to generate samples from the well known Normal distribution, you can use `rnorm()`. Look at the help menu for `rnorm()` to see its arguments. 
+
+29. Using `rnorm()`,create a new object `samp_10` which is 10 samples from a Normal distribution with mean 10 and standard deviation 5. Print the object to see what the elements look like. What should the mean and standard deviation of this sample? be? Test it by evaluating its mean and standard deviation directly using the appropriate functions. Then, do a one-sample t-test on this sample against the null hypothesis that the true mean is 12. What are the results? 
+
+30. Look at the code below. Before you run it, what do you expect the value of the `coefficients` of the regression equation will be?  Test your prediction by running the code and exploring the `my_glm` object.
+
+```{r, echo = TRUE}
+# Generate independent variables
+x1 <- rnorm(n = 100, mean = 10, sd = 1)
+x2 <- rnorm(n = 100, mean = 20, sd = 10)
+x3 <- rnorm(n = 100, mean = -5, sd = 5)
+
+# Generate noise
+noise <- rnorm(n = 100, mean = 0, sd = 1)
+
+# Create dependent variable
+y <- 3 * x1 + 2 * x2 - 5 * x3 + 100 + noise
+
+# Combine all into a tibble
+my_data <- tibble(x1, x2, x3, y)
+
+# Calculate glm
+my_glm <- glm(formula = y ~.,
+              data = my_data)
+```
+
+31. Adjust the code above so that the coefficients for the regression equation will be `(Intercept) = -50`, `x1 = -3`, `x2 = 10`, `x3 = 15`
+
+# Additional reading
+
+- For more details on hypothesis tests in R, check out the chapter on hypothesis tests in YaRrr! The Pirate's Guide to R [YaRrr! Chapter Link](https://bookdown.org/ndphillips/YaRrr/htests.html)
+
+- For more advanced mixed level ANOVAs with random effects, consult the `afex` and `lmer` packages.
+
+- To do Bayesian versions of common hypothesis tests, try using the `BayesFactor` package. [BayesFactor Guide Link](https://cran.r-project.org/web/packages/BayesFactor/vignettes/manual.html)

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recap III</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Recap III
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### January 2018
+
+---
+
+
+
+
+
+
+
+# Tidying
+
+.pull-left4[
+In this introduction you will learn...
+
+&gt;&lt;font size = 5&gt;...more about R projects.
+&gt;&lt;br2&gt;
+&gt;&lt;font size = 5&gt;...how to write clean, documented code.
+&gt;&lt;br2&gt;
+&gt;&lt;font size = 5&gt;...to understand errors (and warnings).
+&gt;&lt;br2&gt;
+&gt;&lt;font size = 5&gt;...how to deal with missing values.
+]
+
+.pull-right5[
+&lt;img src="https://build2be.com/sites/build2be.com/files/shutterstock_232639537.jpg" width="500"&gt;
+&lt;p align="center"&gt;&lt;font size=3&gt;source&lt;a href="https://build2be.com/"&gt; https://build2be.com/&lt;/a&gt;
+]
+
+---
+
+# Style
+
+Check out the [**Google's R style guide**](https://google.github.io/styleguide/Rguide.xml) &amp; [**Tidyverse style guide**](http://style.tidyverse.org/index.html)
+
+
+
+
+### Bad
+
+```r
+mean(subset((data.frame(c('a','b'),runif(1000,0,1))),c..a....b..=='a')[,'runif.1000..0..1.'])
+```
+
+
+
+### Good
+
+```r
+# create my data.frame
+my_data &lt;- data.frame('group' = c('a','b'), 
+                      'value' = runif(1000,0,1))
+
+# subset data
+my_data %&gt;% 
+  filter(group == 'a') %&gt;%
+  summarize(mean(value))
+```
+
+
+---
+
+# Project structure
+
+.pull-left4[
+&lt;font size = 6&gt;Good, clean, documented code begins with a **project** and a **folder structure**.
+]
+.pull-right5[
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/folder_structure.png" width="400"&gt;
+]
+
+
+---
+
+# 7 most frequent errors
+
+According to [stackoverflow.com](http://www.stackoverflow.com)
+
+| Error| Example| Description|
+|:------|:------------|:--------------------------------------------|
+|     `'could not find function'`|lenth(my_vec)| There is a typo in the function name or that a package has not been loaded.|
+|     `'error in if'`|if(NA == 2) 2 + 2| The object in the `if` clause is non-logical or NA.|
+|     `'error in eval'`|lm(fefq~wzfe)| An object is used that does not exist.|
+| `'cannot open()'`|read_csv('hjht.txt')| The file does not exist. Could be a typo or a missing filepath.|
+| `'no applicable method'`|predict('efwe')| A 'generic function' has not been defined for this type/class |
+| `'subsscript out of bounds'`|a &lt;- matrix(c(1,2)); a[2,2]| R tried to access an element (or variable) that does not exist |
+| package errors|| Occur when R is unable to install, compile, or load a package. Often this means that some software background is missing. |
+
+
+---
+
+# You can do amazing plots in R!
+
+- As good as R is for statistics, it's as good if not better for plots.
+
+&lt;img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/ggplotgallery.png?raw=true" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## ggplot2
+
+.pull-left4[
+
+How do we make elegant, easy to program plots according to the grammar of graphics in R?
+
+###Answer: ggplot2
+
+By far one of the most popular R packages, used to generate the vast majority of plots from R.
+
+]
+
+
+.pull-right5[
+
+
+&lt;img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/wickham_portrait.png?raw=true" width="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+## Grammar of Graphics
+
+.pull-left5[
+
+The Grammar of graphics breaks down plots into several key pieces:
+
+| aesthetics| Description|
+|:------|:----|
+|     Data|    What dataframe contains the data?|
+|     Aesthetics| What does the x-axis, y-axis, color (etc) represent?|
+|     Geometries| What kind of geometric object do you want to plot?|
+|     Facets| Should there be groups of plots?|
+|     Statistics|What statistic summaries / transformations should be done?|
+|    Coordinates| What is the scale of the axes?|
+|    Theme| What should the overall plot look like?|
+
+]
+
+
+.pull-right45[
+
+&lt;img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/complexplot1.png?raw=true" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+## Final result!
+
+
+```r
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() + 
+  geom_smooth(col = "blue", method = "lm")+
+  labs(x = "Engine Displacement in Liters",
+       y = "Highway miles per gallon",
+       title = "MPG data",
+       subtitle = "Cars with higher engine displacement tend to have lower highway mpg",
+       caption = "Source: mpg data in ggplot2") + 
+  theme_bw()
+```
+
+&lt;img src="Recap_III_files/figure-html/unnamed-chunk-8-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+## What is Shiny?
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/shiny_definition.png?raw=true" alt="Source: http://shiny.rstudio.com/images/shiny-cheatsheet.pdf" width="95%" /&gt;
+&lt;p class="caption"&gt;Source: http://shiny.rstudio.com/images/shiny-cheatsheet.pdf&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Today
+
+&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/schedule_18Jan"&gt;Schedule&lt;/a&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

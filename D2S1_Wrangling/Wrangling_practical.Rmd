@@ -1,0 +1,504 @@
+---
+title: "Data wrangling with dplyr"
+author: "BaselRBootcamp January 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval = FALSE)
+```
+
+```{r, echo = FALSE, fig.align = 'center', eval = TRUE, out.width = "70%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/organise_transform_aggregate.png")
+```
+
+### Slides
+
+- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/_sessions/D2S1_Wrangling/Wrangling.html)
+
+### Overview
+
+In this practical you'll practice "data wrangling" with the `dplyr` package (part of the `tidyverse collection of packages). Data wrangling refers to modifying and summarizing data. For example, sorting, adding columns, recoding values, and calculating summary statistics. 
+
+By the end of this practical you will know how to:
+
+1. Change column names, select specific columns.
+2. Create new columns based on existing ones
+3. Select specific rows of data based on multiple criteria.
+4. Group data and calculate summary statistics
+5. Combine multiple datasets through key columns
+
+### Cheatsheet
+
+- Data wrangling with dplyr Cheatsheet: [https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf).
+
+### Glossary
+
+Here are the main verbs you will be using in `dplyr`:
+
+| verb| action| example |
+|:---|:----------------------|:--------------------------------------|
+|     `filter()`|    Select rows based on some criteria| data %>% filter(age > 40 & sex == "m")|
+|     `arrange()`|    Sort rows| data %>% arrange(date, group)|
+|     `select()`|    Select columns (and ignore all others)| data %>% select(age, sex)|
+|     `rename()`|    Rename columns| data %>% rename(new = old)|
+|     `mutate()`|    Add new columns| data %>% mutate(height.m = height.cm / 100)|
+|     `case_when()`|    Recode values of a column| data %>% mutate(sex_n = case_when(sex == 0 ~ "m", sex == 1 ~ "f"))|
+|     `group_by(), summarise()`|   Group data and then calculate summary statistics|data %>% group_by(...) %>% summarise(...)|
+|     `left_join()`|   Combine multiple datasets using a key column|data %>% left_join(data2, by = "id")|
+
+### Examples
+
+- The following examples will take you through the steps of doing data wrangling with dplyr. Try to go through each line of code and see how it works!
+
+```{r, eval = FALSE, echo = TRUE}
+# -----------------------------------------------
+# Examples of using dplyr on the ChickWeight data
+# ------------------------------------------------
+
+library(tidyverse)         # Load tidyverse
+
+chick <- as_tibble(ChickWeight)   # Save a copy of the ChickWeight data as chick
+
+# Change some column names with rename()
+
+chick <- chick %>%
+  rename(arm = Diet,         # New = arm, old = Diet
+         weight_g = weight)  # new = weight_g, old = weight
+
+# Select rows with filter()
+
+chick %>% 
+  filter(weight_g > 40 & arm == 1)   # Only rows where weight_g > 40 and arm == 1
+
+# Add columns with mutate()
+
+chick <- chick %>%
+  mutate(
+    weight_g_kg = weight_g / 1000,  # Add new column of weight_g in kilograms
+    time_week = Time / 7        # Add time_week as time in weeks
+  )
+
+# Sort rows with arrange()
+
+chick <- chick %>%
+  arrange(arm, weight_g)   # sort rows by arm and then weight_g
+
+# Recode variables with case_when()
+
+chick <- chick %>%
+  mutate(
+    arm_name = case_when(      # Rename arms with strings
+      arm == 1 ~ "vegetables",
+      arm == 2 ~ "fruit",
+      arm == 3 ~ "candy",
+      arm == 4 ~ "meat"
+      
+    )
+  )
+
+# Grouped statistics with group_by() and summarise()
+
+chick %>%                             # Start with chick data...
+  group_by(arm) %>%                   # Group by arm...
+  summarise(                          # Summarise the following
+    weight_g_mean = mean(weight_g),   # Mean weight
+    weight_g_max = max(weight_g),     # Max weight
+    time_mean = mean(Time),           # Mean time
+    N = n()) %>%                      # Number of cases...
+  arrange(weight_g_mean)              # Sort by mean weight
+
+
+# Many sequential functions
+
+chick %>%
+  rename(weeks = Time) %>%            # Change column name
+  filter(Chick > 10) %>%              # Only chicks with values larger than 10
+  group_by(week, arm) %>%             # Group by Time and arm
+  summarise(                          # Calculate summary statistics
+    weight_g_median = median(weight_g),
+    weight_g_sd = sd(weight_g),
+    N = n()                           # Counts of cases
+  )
+
+```
+
+
+## Tasks
+
+### Getting setup
+
+A. Open a new R script and save it as a new file called `datawrangling.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
+
+```{r, eval = FALSE, echo = TRUE}
+## NAME
+## DATE
+## Wrangling Practical
+
+library(tidyverse)     # For tidyverse
+library(speff2trial)   # For the ACTG175 data documentation
+```
+
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
+library(tidyverse)
+library(speff2trial)
+```
+
+B. For this practical, we'll use the `ACTG175` data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. The data are stored at the following link: [https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv](https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv). Using the following template, load the data into R and store it as a new object called `trial_act`.
+
+```{r, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
+# Load data from weblink as a new tibble in R using read_csv
+# https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv
+
+trial_act <- read_csv(file = "XXX")
+```
+
+```{r, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
+trial_act <- read_csv(file = "https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv")
+```
+
+```{r, message = FALSE, echo = FALSE, eval = TRUE, warning = FALSE}
+library(tidyverse)
+```
+
+C. The `trial_act` data is comes from the `speff2trial` package where it was originally called `ACTG175`. Look at the help menu for the `ACTG175` data by running `?ACTG175`. (Note: If you become really interested in the data, you can also read an article discussing the trial here: [http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article](http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article))
+
+```{r, echo = TRUE}
+# Look at documentation for ACTG175 data (contained in the speff2trial package)
+?ACTG175
+```
+
+D. First thing's first, take a look at the first few rows of the data by printing the `trial_act` object. It should look like this:
+
+```{r, eval = TRUE, echo = TRUE}
+# Print trial_act object
+trial_act
+```
+
+### `rename()`
+
+1. Lets change some of the column names in `trial_act`. Using `rename()`, change `wtkg` to `weightkg` and `age` to `age_years` (to specify that age is in years)
+
+2. Oops, you just learned that your company's data repository doesn't allow underscores in column names. Change `age_years` to `agey`
+
+### `mutate()`
+
+3. Add a new column to `trial_act` called `agem` that shows each patient's age in months instead of years (Hint: do simple arithmetic!).
+
+```{r}
+trial_act <- trial_act %>% mutate(
+  agem = agey * 12
+)
+```
+
+4. The column `karnof` shows each patient's [Karnofsky score](http://emedicine.medscape.com/article/2172510-overview) on a scale from 0 to 100, add a new column to `trial_act` called `karnof_b` that shows the score on a scale from 0 to 1 (hint: just divide the original column by 100)
+
+```{r}
+trial_act <- trial_act %>% 
+  mutate(
+         karnof_b = karnof / 100
+        )
+```
+
+5. Now, do the previous two questions in one chunk of code. That is, using one call to `mutate()` add both `agem` and `karnof_b` columns to `trial_act`
+
+```{r}
+trial_act <- trial_act %>% 
+ mutate(
+    agem = agey * 12,
+    karnof_b = karnof / 100
+    )
+```
+
+6. A physician wants to see a new score called the `sparrow` which is equal to the Karnofsky score divided by a person's age plus the person's weight in kg. Add each participant's sparrow score as a new column to `trial_act` called `sparrow` (Hint: Just take `karnof / agey + weightkg)
+
+```{r}
+trial_act <- trial_act %>% 
+ mutate(
+    sparrow = karnof / agey + weightkg
+    )
+```
+
+### `arrange()`
+
+7. Arrange the `trial_act` data in ascending order of agey (from lowest to highest). After, look the data to make sure it worked!
+
+```{r}
+trial_act <- trial_act %>% 
+ arrange(agey)
+```
+
+8. Now arrange the data in *descending* order of agey (from highest to lowest). After, look the data to make sure it worked.
+
+```{r}
+trial_act <- trial_act %>% 
+ arrange(desc(agey))
+```
+
+   - To arrange data in descending order, just include `desc()` around the variable. E.g.; `data %>% arrrange(desc(height))`
+
+9. You can sort the rows of dataframes with multiple columns by including many arguments to `arrange()`. Now sort the data by `karnof` and then agey (`agey`), and then arms (`arms`)
+
+```{r}
+trial_act <- trial_act %>% 
+ arrange(karnof, agey, arms)
+```
+
+### `case_when()`
+
+10. Create a new column `gender_char` that shows gender as a string.
+
+   - Look at the help file with `?ACTG175` to see how gender is coded.
+    
+```{r}
+trial_act <- trial_act %>%
+  mutate(
+  gender.char = case_when(
+    gender == 0 ~ "female",
+    gender == 1 ~ "male"
+  )
+  )
+```
+
+
+11. Create a new column `over50` that is 1 when patients are older than 50, and 0 when they are younger than or equal to 50
+
+```{r}
+trial_act <- trial_act %>%
+  mutate(
+  over50 = case_when(
+    agey > 50 ~ 1,
+    agey <= 50 ~ 0
+  )
+  )
+```
+
+
+12. Now, repeat the previous two questions, but do them both in the same call to `mutate()`. That is, in one block of code, create `gender_char` and `over50`
+
+```{r}
+trial_act <- trial_act %>%
+  mutate(
+    gender.char = case_when(
+    gender == 0 ~ "female",
+    gender == 1 ~ "male"),
+  over50 = case_when(
+    agey > 50 ~ 1,
+    agey <= 50 ~ 0)
+  )
+```
+
+
+### `filter()`
+
+13. Create a new tibble called `trial_act_B` that only contains data from males (`gender == 1`)
+
+```{r}
+trial_act_B <- trial_act %>%
+  filter(gender == 1)
+```
+
+14.  Create a new tibble called `trial_act_C` that only contains data from people who have not used intravenous drugs (`drugs == 0`) *and* are over 40 years old *and* are female
+
+```{r}
+trial_act_C <- trial_act %>%
+  filter(drugs == 0 & agey > 40 & gender == 0)
+```
+
+### `left_join()`
+
+15. You can use `left_join()` to combine multiple dataframes. At the following link [https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv](https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv) I have some additional (fictional) demographic data about the patients, namely the number of days of exercise they get per week, and their highest level of education. Here's how the first few rows of the data look:
+
+
+```{r, echo = FALSE, eval = FALSE}
+# create trial_act_demo
+
+trial_act_demo <- data.frame(pidnum = ACTG175[,c("pidnum")],
+                             exercise = sample(0:7, 
+                                               size = nrow(ACTG175), 
+                                               replace = TRUE, 
+                                              prob = c(.2, .3, .1, .15, .1, .05, .075, .025)),
+                             education = sample(c("<HS", "HS", "BA", "MS", "PHD"),
+                                                size = nrow(ACTG175), prob = c(.2, .3, .3, .1, .1), replace = TRUE),
+                             stringsAsFactors = FALSE)
+
+trial_act_demo <- trial_act_demo[sample(nrow(trial_act_demo)),]
+
+write_csv(trial_act_demo, path = "_sessions/_data/patient_demo.csv")
+
+```
+
+
+```{r, echo = FALSE, eval = TRUE, message = FALSE}
+trial_act_demo <- read_csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv")
+
+trial_act_demo %>% head()
+```
+
+Using `left_join()` to add the demographic data to the `trial_act` data. To do this, first load the demographic data into R as a new dataframe called `trial_act_demo`. Then, use the following template to combine the data (Hint: Replace XXX with the correct values.)
+
+```{r, eval = FALSE, echo = TRUE}
+
+# Get trial_act_demo data
+
+trial_act_demo <- read_csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv")
+
+# Combine trial_act and trial_act_demo data
+trial_act <- trial_act %>%
+  left_join(XXX)        # The new dataframe to combine with trial_act
+```
+
+
+16. Using your new `trial_act` tibble, which should contain the exercise and education data, calculate the mean number of days of exercise that patients reported.
+
+
+### `group_by()` and `summarise()`
+
+17. Group the data by `arms`. Then, for each arm, calculate the mean participant age.
+
+```{r, eval = FALSE}
+trial_act %>% 
+  group_by(arms) %>%
+  summarise(
+    agey.mean = mean(agey)
+  )
+```
+
+18. Group the data by `arms`.For each arm, calculate the mean participant age *and* the median Karnofsky score.
+
+```{r}
+trial_act %>% 
+  group_by(arms) %>%
+  summarise(
+    agey.mean = mean(agey),
+    karnof.median = median(karnof)
+  )
+```
+
+
+19. Group the data by `gender`. Then, separately for male and female patients, calculate the percent who have a history of intravenous drug use.
+
+   - To calculate a percent of a binary variable with 0s and 1s, just calculate the mean
+
+```{r}
+trial_act %>%
+  group_by(gender) %>%
+  summarise(
+    drug.percent = mean(drugs)
+  )
+```
+
+20. Group the data by `gender`. Then calculate the percent of male and female patients who have a history of intravenous drug use (`drugs`), and the mean number of days until a major negative event `days`
+
+```{r}
+trial_act %>%
+  group_by(gender) %>%
+  summarise(
+    drug.percent = mean(drugs),
+    homo.percent = mean(homo)
+  )
+```
+
+
+21. Separately for all combinations of gender and race, calculate the mean age and mean CD4 T cell count at baseline (`cd40`) (Hint: group by `gender` and `race`)
+
+```{r}
+trial_act %>%
+  group_by(gender, race) %>%
+  summarise(
+    agey.mean = mean(agey),
+    cd40.mean = mean(cd40)
+  )
+```
+
+
+### Challenges
+
+22. Now let's check the major differences between the treatment arms. For each arm, calculate the following:
+
+   - Mean days until a a major negative event (`days`)
+   - Mean CD4 T cell count at baseline.
+   - Mean CD4 T cell count at 20 weeks.
+   - Mean CD4 T cell count at 96 weeks.
+   - Mean *change* in CD4 T cell count between baseline and 96 weeks
+   - Number of patients (Hint: use `N = n()`)
+
+```{r}
+trial_act %>%
+  group_by(arms) %>%
+  summarise(
+    days_mean = mean(days),
+    cd4_bl = mean(cd40),
+    cd4_20 = mean(cd420),
+    cd4_96 = mean(cd496, na.rm = TRUE),
+    cd4_change = mean(cd496 - cd40, na.rm = TRUE),
+    N = n()
+  )
+```
+
+23. Repeat the previous analysis, but before you do the grouping and summary statistics, recode the values of `arms` to text that reflect what the values actually represent. For example, looking at the help file `?ACTG175`, I can see that the treatment arm of 0 is "zidovudine". I might call this arm `"Z"`. Do this in the all in the same chunk of code.
+
+```{r}
+trial_act %>%
+  mutate(
+    arms = case_when(
+      arms == 0 ~ "Z",
+      arms == 1 ~ "ZD",
+      arms == 2 ~ "ZZ",
+      arms == 3 ~ "D"
+    )
+  ) %>%
+  group_by(arms) %>%
+  summarise(
+    days_mean = mean(days),
+    cd4_bl = mean(cd40),
+    cd4_20 = mean(cd420),
+    cd4_96 = mean(cd496, na.rm = TRUE),
+    cd4_change = mean(cd496 - cd40, na.rm = TRUE)
+  )
+```
+
+24. Repeat the previous analysis, but only include patients with a Karnofsky score equal to 100, and who did not use zidovudine in the 30 days prior to the treatment initiation (`z30`)
+
+```{r}
+trial_act %>%
+  filter(karnof == 100 & z30 == 0) %>%
+  mutate(
+    arms = case_when(
+      arms == 0 ~ "Z",
+      arms == 1 ~ "ZD",
+      arms == 2 ~ "ZZ",
+      arms == 3 ~ "D"
+    )
+  ) %>%
+  group_by(arms) %>%
+  summarise(
+    days_mean = mean(days),
+    cd4_bl = mean(cd40),
+    cd4_20 = mean(cd420),
+    cd4_96 = mean(cd496, na.rm = TRUE),
+    cd4_change = mean(cd496 - cd40, na.rm = TRUE)
+  )
+```
+
+
+25. In one block of code, complete the following tasks
+    - Change the name of the column `weightkg` to `weight`
+    - Create a new column called `drugs_char` that uses strings instead of numbers to indicate drug use
+    - Filter the data to only include male patients with id numbers greater than 10100
+    - Group the data by `drugs_char` and `arms`
+    - For each group calculate the mean age, percentage of patients that are male, and mean number of days until a major negative event.
+    - Filter the grouped data to only include cases where mean age is greater than 30.
+
+
+# Additional reading
+
+- For more details on data wrangling with R, check out the chapter in YaRrr! The Pirate's Guide to R [YaRrr! Chapter Link](https://bookdown.org/ndphillips/YaRrr/advanceddataframe.html)
+
+- Hadley Wickham, the author of dplyr, also has great examples in the dplyr vignette here: [dplyr vignette link](https://cran.r-project.org/web/packageys/dplyr/vignettes/dplyr.html)
+
+- The `tidyr` package is a natural extension to `dplyr` that allows you to reshape your data into a format that is easier to manage. Check out the [tidyr vignette](https://cran.r-project.org/web/packageys/tidyr/vignettes/tidy-data.html) for examples.
+
+
+

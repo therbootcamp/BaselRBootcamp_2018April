@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Machine Learning</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Machine Learning
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### January 2018
+
+---
+
+
+
+
+
+
+# What is machine learning?
+
+.pull-left6[
+
+
+### Algorithms autonomously learning from data.
+
+Given data, an algorithm tunes its *parameters* to match the data, understand how it works, and make predictions for what will occur in the future.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mldiagram_A.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right4[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearningcartoon.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+# Everyone uses machine learning
+
+.pull-left6[
+
+### Everyone!
+
+- How does Google know what search results you want?
+
+- How does Amazon know what products to recommend?
+
+- How does Netflix decide what shows you'll want to watch next?
+
+- How do Tesla cars recognize objects and predict accidents?
+
+
+&gt; Machine learning drives our algorithms for demand forecasting, product search ranking, product and deals recommendations, merchandising placements, fraud detection, translations, and much more. ~ Jeff Bezos, Amazon founder
+
+]
+
+
+.pull-right4[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlexamples.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+
+
+]
+
+---
+# What is the basic machine learning process?
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/MLdiagram.png" width="95%" /&gt;
+
+
+
+---
+# Why do we separate training from prediction?
+
+.pull-left4[
+
+Just because an algorithm can fit past (training) data well, does *not* necessarily mean that it will *predict* new data well.
+
+
+&lt;br&gt; 
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stockpen.jpg" alt="Anyone can come up with a model of past stock performance. Predicting future performance is much more difficult." width="70%" /&gt;
+&lt;p class="caption"&gt;Anyone can come up with a model of past stock performance. Predicting future performance is much more difficult.&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+]
+
+.pull-right6[
+
+
+&gt; "Prediction is difficult, especially when it is about the future" ~ Niels Bohr
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/bohr.jpg" alt="Niels Bohr, Nobel Laureate in Physics" width="20%" /&gt;
+&lt;p class="caption"&gt;Niels Bohr, Nobel Laureate in Physics&lt;/p&gt;
+&lt;/div&gt;
+
+&gt; "An economist is an expert who will know tomorrow why the things he predicted yesterday didn't happen today." ~ Evan Esar
+
+&lt;!-- &gt; "A prediction about the direction of the stock market tells you nothing about where stocks are headed, but a whole lot about the person doing the predicting" ~ Warren Buffett --&gt;
+
+]
+
+
+---
+# Training (fitting) vs. Testing (prediction)
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_A.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Training (fitting) vs. Testing (prediction)
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_B.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Training (fitting) vs. Testing (prediction)
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_C.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Training (fitting) vs. Testing (prediction)
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_D.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## What machine learning algorithms are there?
+
+.pull-left6[
+
+- There are hundreds if not thousands of machine learning algorithms from many different fields.
+    - Computer vision, Natural language processing, reinforcement learning...
+
+Wikipedia lists 57 *Categories* of machine learning algorithms, each with dozens of examples
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wikipediaml.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right4[
+&lt;br&gt;&lt;br&gt;
+We will focus on 3 that apply to both classification and regression
+
+| Algorithm|Complexity|
+|:------|:----|
+|     Regression| Low / Medium | 
+|     Decision Trees| Low |
+|     Random Forests| High |
+
+]
+
+
+
+---
+## Two types of prediction tasks
+
+.pull-left45[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/classification_task.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right45[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/regression_task.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+
+
+
+---
+
+.pull-left6[
+
+## How do you fit and evaluate models in R?
+
+&lt;br&gt;
+
+| Step|Description| Note / Example |
+|:------|:---|:------------|
+| 1| Install model packages| `rpart` or `FFTrees` for Decision Trees&lt;br&gt;`randomForest` for Random Forests|
+|     2| Get data |Use your own, or get free online datasets|
+|    3| Train model on data and generate insights|Always look at help menus and online tutorials!|
+|    4| Predict new data, possibly with cross-validation|Packages such as `mlr` and `caret` can really help|
+
+]
+
+.pull-right35[
+&lt;br&gt;
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearning_r_ss.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+
+
+---
+# How do you fit and evaluate models in R?
+
+.pull-left45[
+
+### Fitting a model
+
+
+
+```r
+A_model &lt;- A_fun(formula = y ~.,
+                 data = data_train,
+                 ...)
+```
+
+
+| Argument| Description| Note |
+|------:|:----|:---|
+|     formula|  Formula indicating variables to use|  `y ~ .` is often used as a catch-all |
+|     data|    The dataset for model training| |
+|     ...|  Optional other arguments| See the function help page for details|
+
+
+]
+
+.pull-right5[
+
+
+### Evaluating a model
+
+
+```r
+# Common ways to explore / use a model
+
+A_model           # Print generic information
+
+names(A_model)    # Show attributes
+
+summary(A_model)  # Print summary information
+
+predict(A_model,  # Predict test data
+        newdata = data_test)  
+
+plot(A_model)     # Visualize the model
+```
+
+]
+
+
+
+
+
+---
+## Regression with `glm()`
+
+.pull-left5[
+
+In regression, the criterion is modeled as the weighted sum of predictors times *weights* `\(\beta_{1}\)`, `\(\beta_{2}\)`
+
+### Loan Default:
+
+One could model the risk of defaulting on a loan as:
+
+`$$Risk = Age \times \beta_{age} + Income \times \beta_{income} + ...$$`
+
+Training a model means finding values of `\(\beta_{Age}\)` and `\(\beta_{Income}\)` that 'best' match the training data.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/regression.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right5[
+
+Create regressions using the `glm()` function (part of base-R)
+
+
+```r
+# glm() function for regression
+glm(formula = y ~.,     # Formula
+    data = data_train,  # Training data
+    family, ...)        # Optional arguments
+
+# Train glm model
+loan_glm_model &lt;- glm(formula = risk ~ ., 
+                      data = data_train)
+
+# Predict new data with glm model
+loan_glm_pred &lt;- predict(loan_glm_model,
+                         newdata = data_test)
+```
+
+
+
+]
+
+
+---
+## Decision Trees with `rpart::rpart()`
+
+.pull-left5[
+
+In decision trees, the criterion is modeled as a sequence of logical Yes or No questions.
+
+### Loan Default:
+
+![](https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/defaulttree.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right5[
+
+Create decision trees using the `rpart` package
+
+
+```r
+# Load the rpart package
+library(rpart)
+
+# Calculating a decision tree in R
+rpart(formula = y ~.,       # Formula 
+      data = data_train,    # Training data
+      method, parms, cost)  # Optional arguments
+
+# Train rpart model
+loan_rpart_model &lt;- rpart(formula = risk ~ ., 
+                          data = loan_data,
+                          method = "anova")
+
+# Predict new data with rpart model
+loan_rpart_pred &lt;- predict(loan_rpart_model,
+                          newdata = loan_test)
+```
+
+
+]
+
+
+---
+## Random Forests with `randomForest::randomForest()`
+
+.pull-left5[
+
+A Random Forest is a collection of many (hundreds, thousands) of decision trees
+
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/randomforest_diagram.png" width="90%" /&gt;
+
+
+]
+
+.pull-right5[
+
+Create decision trees using the `randomForest` package
+
+
+```r
+# Load the randomforest package
+library(randomForest)
+
+# Calculating a randomForest in R
+randomForest(formula = y ~.,    # Formula 
+             data = data_train, # Training data
+             ntree, mtry)       # Optional
+
+# Train rpart model
+loan_rf_model &lt;- randomForest(formula = risk ~ ., 
+                              data = loan_data)
+
+# Predict new data with model
+loan_rf_pred &lt;- predict(loan_rf_model,
+                        newdata = loan_test)
+```
+
+
+]
+
+
+---
+# How do I do machine learning in R?
+
+.pull-left6[
+
+
+
+In the practical, we will go through the basic steps "by hand" so you can see the process:
+
+
+```r
+# Create training and test data
+data_train &lt;- ...
+data_test &lt;- ...
+
+# Train models on training data
+model_A &lt;- A_fun(formula = y ~ ., 
+                 data = data_train)
+
+# Model A predictions
+pred_A &lt;- predict(model_A, 
+                  newdata = data_test)
+
+# Calculate Model A error
+pred_err_A &lt;- mean(abs(pred_A - data_test$y))
+
+# Compare to Models B, C, D...
+```
+
+]
+
+.pull-right35[
+
+
+If you're really into machine learning, packages such as `mlr` and `caret` can automate much of the the machine learning process.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlrcaret.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+## Machine Learning Live Demo &amp; Practical
+
+&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning_practical.html"&gt;Link to Machine Learning practical&lt;/a&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- # What is the history of machine learning? --&gt;
+
+&lt;!-- - 1805 - 1809: Legendre and Gauss discover least squares. Soon after Galton defines **Regression** in a biological context, followed by Pearson for purely statistical analyses. --&gt;
+
+&lt;!-- - 1952: Arthur Samuel creates first computer learning program for learning checkers and coins the term **Machine Learning** in 1959.  --&gt;
+
+&lt;!-- - 1957: Frank Rosenblatt creates first **Neural Network** to simulate the thought process of the human brain. --&gt;
+
+&lt;!-- - 1963: First algorithm for **Support Vector Machines** is developed by Vapnik &amp; Chervonenkis. --&gt;
+
+&lt;!-- - 1967: **Nearest neighbor algorithm** is developed for classification --&gt;
+
+&lt;!-- - 1984: Breiman &amp; Olshen publish the CART algorithm for **Decision Trees**, followed by Quinlan who publishes the ID3 algorithm followed by C4.5 --&gt;
+
+&lt;!-- - 1986: Rina Dechter introduces **Deep Learning**, with many subsequent updates in the 2000s. --&gt;
+
+&lt;!-- - 1995: Tin Kam Ho develops first algorithm for **Random Forests** --&gt;
+
+&lt;!-- Sources: Wikipedia, Bernard Marr, "A Short History of Machine Learning", Forbes. --&gt;
+
+
+
+---
+### Old
+
+
+
+
+---
+# Why do we separate training from prediction?
+
+- Data comes from two processes: *Signal* and *Noise* (aka Error).
+&lt;br&gt;
+
+&lt;img src="MachineLearning_files/figure-html/unnamed-chunk-25-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+# Why do we separate training from prediction?
+
+- A good model is one that tries to capture the signal and ignore the noise
+- A bad model is one that captures too much unpredictable noise,
+    
+
+&lt;img src="MachineLearning_files/figure-html/unnamed-chunk-26-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,205 @@
+---
+title: "Recap III"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE, echo = FALSE, message = FALSE, warning = FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+library(tidyverse)
+```
+
+
+# Tidying
+
+.pull-left4[
+In this introduction you will learn...
+
+><font size = 5>...more about R projects.
+><br2>
+><font size = 5>...how to write clean, documented code.
+><br2>
+><font size = 5>...to understand errors (and warnings).
+><br2>
+><font size = 5>...how to deal with missing values.
+]
+
+.pull-right5[
+<img src="https://build2be.com/sites/build2be.com/files/shutterstock_232639537.jpg" width="500">
+<p align="center"><font size=3>source<a href="https://build2be.com/"> https://build2be.com/</a>
+]
+
+---
+
+# Style
+
+Check out the [**Google's R style guide**](https://google.github.io/styleguide/Rguide.xml) & [**Tidyverse style guide**](http://style.tidyverse.org/index.html)
+
+
+```{r, eval = T, echo = F}
+set.seed(1)
+```
+
+### Bad
+```{r, eval = F}
+mean(subset((data.frame(c('a','b'),runif(1000,0,1))),c..a....b..=='a')[,'runif.1000..0..1.'])
+```
+
+```{r, eval = T, echo = F}
+set.seed(1)
+```
+
+### Good
+```{r, eval = F}
+# create my data.frame
+my_data <- data.frame('group' = c('a','b'), 
+                      'value' = runif(1000,0,1))
+
+# subset data
+my_data %>% 
+  filter(group == 'a') %>%
+  summarize(mean(value))
+```
+
+
+---
+
+# Project structure
+
+.pull-left4[
+<font size = 6>Good, clean, documented code begins with a **project** and a **folder structure**.
+]
+.pull-right5[
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/folder_structure.png" width="400">
+]
+
+
+---
+
+# 7 most frequent errors
+
+According to [stackoverflow.com](http://www.stackoverflow.com)
+
+| Error| Example| Description|
+|:------|:------------|:--------------------------------------------|
+|     `'could not find function'`|lenth(my_vec)| There is a typo in the function name or that a package has not been loaded.|
+|     `'error in if'`|if(NA == 2) 2 + 2| The object in the `if` clause is non-logical or NA.|
+|     `'error in eval'`|lm(fefq~wzfe)| An object is used that does not exist.|
+| `'cannot open()'`|read_csv('hjht.txt')| The file does not exist. Could be a typo or a missing filepath.|
+| `'no applicable method'`|predict('efwe')| A 'generic function' has not been defined for this type/class |
+| `'subsscript out of bounds'`|a <- matrix(c(1,2)); a[2,2]| R tried to access an element (or variable) that does not exist |
+| package errors|| Occur when R is unable to install, compile, or load a package. Often this means that some software background is missing. |
+
+
+---
+
+# You can do amazing plots in R!
+
+- As good as R is for statistics, it's as good if not better for plots.
+
+```{r, echo = FALSE, out.width="60%", fig.align = 'center'}
+knitr::include_graphics("https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/ggplotgallery.png?raw=true")
+```
+
+---
+## ggplot2
+
+.pull-left4[
+
+How do we make elegant, easy to program plots according to the grammar of graphics in R?
+
+###Answer: ggplot2
+
+By far one of the most popular R packages, used to generate the vast majority of plots from R.
+
+]
+
+
+.pull-right5[
+
+
+```{r, echo = FALSE, out.width="70%", fig.align = 'center'}
+knitr::include_graphics("https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/wickham_portrait.png?raw=true")
+```
+
+]
+
+
+---
+
+## Grammar of Graphics
+
+.pull-left5[
+
+The Grammar of graphics breaks down plots into several key pieces:
+
+| aesthetics| Description|
+|:------|:----|
+|     Data|    What dataframe contains the data?|
+|     Aesthetics| What does the x-axis, y-axis, color (etc) represent?|
+|     Geometries| What kind of geometric object do you want to plot?|
+|     Facets| Should there be groups of plots?|
+|     Statistics|What statistic summaries / transformations should be done?|
+|    Coordinates| What is the scale of the axes?|
+|    Theme| What should the overall plot look like?|
+
+]
+
+
+.pull-right45[
+
+```{r, echo = FALSE, out.width="100%", fig.align = 'center'}
+knitr::include_graphics("https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/complexplot1.png?raw=true")
+```
+
+]
+
+
+---
+
+## Final result!
+
+```{r, fig.width = 7, fig.height = 4, out.width = "40%", fig.align = 'center'}
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, col = class)) +
+  geom_point() + 
+  geom_smooth(col = "blue", method = "lm")+
+  labs(x = "Engine Displacement in Liters",
+       y = "Highway miles per gallon",
+       title = "MPG data",
+       subtitle = "Cars with higher engine displacement tend to have lower highway mpg",
+       caption = "Source: mpg data in ggplot2") + 
+  theme_bw()
+
+```
+
+---
+## What is Shiny?
+
+```{r, echo = FALSE, fig.align = 'center', fig.cap = 'Source: http://shiny.rstudio.com/images/shiny-cheatsheet.pdf', out.width = "95%"}
+knitr::include_graphics("https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/shiny_definition.png?raw=true")
+```
+
+---
+# Today
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/schedule_18Jan">Schedule</a>

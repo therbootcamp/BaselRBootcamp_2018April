@@ -1,0 +1,931 @@
+---
+title: "Statistics"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+library(tidyverse)
+ChickWeight <- as.data.frame(ChickWeight)
+
+
+trial_X <- data.frame(id = 1:5,
+           sex = c("m", "f", "f", "m", "f"),
+           age = c(35, 42, 24, 56, 49),
+           arm = c(1, 2, 1, 2, 1),
+           y_primary = c(50, 78, 46, 97, 74),
+           y_secondary = c(1, 1, 0, 1, 1)
+           )
+
+```
+
+
+
+## There are tons of statistical packages in R!
+
+
+.pull-left35[
+<br><br>
+
+| Package| Models|
+|------:|:----|
+|     `afex`|   Anovas|
+|     `rpart`|    Decision Trees|
+|     `lme4`|   Mixed effects regression|
+|     `BayesFactor`| Bayesian statistics|
+|     `igraph`| Cluster analyses|
+|     `neuralnet`| Neural networks|
+
+]
+
+.pull-right6[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/statistical_procedures.png")
+```
+
+]
+
+---
+
+.pull-left45[
+
+### We will cover...
+
+-  Basic structure and arguments of most statistical functions
+    - `formula`, `data`, `subset`
+    
+- Simple `htest` objects
+
+- General linear model 
+    - `glm`, `aov`
+
+- Common methods
+    - `print()`, `summary()`, `names()`, `predict()`, `plot()`
+
+- Accessing elements from statistical objects with `$`
+
+- Working with statistical distributions
+
+]
+
+.pull-right5[
+
+### Examples
+
+```{r, eval = FALSE}
+# T-test comparing weights from Diets 1 and 2
+t.test(formula = weight ~ Diet,
+       data = Chickweight,
+       subset = Diet %in% c(1, 2))
+
+# Regression model
+
+weight_glm <- glm(formula = weight ~ .,
+                  data = ChickWeight)
+
+# Summary information
+summary(weight_glm)
+
+weight_glm$coefficients # Acess coefficients
+weight_glm$coefficients # Access residuals
+
+
+### Generate random data
+x1 <- rnorm(n = 100, mean = 10, sd = 5)
+x2 <- rnorm(n = 100, mean = 5, sd = 1)
+noise <- rnorm(n= 100, mean = 2, sd = 10)
+
+# Create y as a function of x1, x2, and noise
+y <- x1 + x2 + noise
+
+```
+
+]
+
+
+---
+# Basic structure of statistical functions
+
+.pull-left5[
+
+
+| Test| R Function|
+|:------|:----|
+|     `formula`|The dependent variable and one or more independent variables|
+|     `data`|  The dataframe containing variables|
+|   `subset`  | Optional subset of data to test |
+
+
+```{r}
+trial_X
+```
+
+
+]
+
+.pull-right45[
+
+```{r, eval = FALSE}
+TEST(formula = Y ~ X1 + X2 + ...
+     data = DATA,
+     subset = SUBSET,
+     ...)
+```
+
+
+### Examples
+
+```{r, eval = FALSE}
+# T-test
+# DV = y_primary, IV = arm
+t.test(formula = y_primary ~ arm
+       data = trial_X)
+
+# Regression
+# DV = y_secondary, IV = arm, sex, age
+# Subset = only id > 50
+glm(formula = y_secondary ~ arm + sex + age
+    data = trial_X,
+    subset = id > 50)
+```
+
+]
+
+
+---
+
+.pull-left45[
+
+<br><br><br>
+## Different tests have different arguments
+
+- Individual tests may have many optional arguments (look at help menus!)
+
+- Each of these have *default* values. If you don't specify them, the function will use the default.
+
+- Customize a test by specifying arguments directly.
+
+]
+
+
+.pull-right5[
+
+### Customised t-test
+
+
+```{rm, eval = FALSE}
+# Additional arguments to t.test
+
+t.test(formula = t_primary ~ arm,
+       data = trial_X,
+       alternative = "greater", # One-sided
+       mu = 10,                 # H0
+       conf.level = .90)        # Conf level
+
+```
+
+### Customised regression
+
+```{r, eval = FALSE}
+# Additional arguments to glm
+
+glm(formula = y_secondary ~ arm + sex + age,
+    data = trial_X,
+    family = "binomial",     # Logistic Reg
+    intercept = FALSE)       # No intercept
+```
+
+
+]
+
+
+
+---
+## 1 or 2 sample hypothesis tests
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/htests.png")
+```
+
+---
+
+.pull-left5[
+<br><br>
+## Common 1 or 2 sample hypothesis tests
+
+| Test| R Function|
+|------:|----:|
+|     T-test|    `t.test()`|
+|     Correlation Test|    `cor.test()`|
+|     Chi-Square Test|   `chisq.test()`|
+
+]
+
+.pull-right5[
+
+#### Always check help menus!
+
+`?t.test`
+
+```{r, echo = FALSE, out.width = "80%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/ttesthelp_ss.png")
+```
+
+]
+
+---
+## t-tests with `t.test()`
+
+.pull-left3[
+
+### ChickWeight data
+```{r, eval = FALSE}
+ChickWeight
+```
+
+```{r, echo = FALSE}
+set.seed(102)
+x <- ChickWeight[sample(nrow(ChickWeight)),]
+rownames(x) <- NULL
+head(x)
+```
+
+]
+
+.pull-right65[
+
+### Two sample t-test
+
+> Is the mean weight of the chicks on Diet 1 different from Diet 2?
+
+```{r, eval = TRUE}
+t.test(formula = weight ~ Diet,    # Formula
+       data = ChickWeight,         # Data in Chickweight
+       subset = Diet %in% c(1, 2)) # Only Diets 1,2
+```
+
+]
+
+---
+## Correlation test with `cor.test()`
+
+.pull-left3[
+
+### ChickWeight data
+```{r, eval = FALSE}
+ChickWeight
+```
+
+
+```{r, echo = FALSE}
+set.seed(102)
+x <- ChickWeight[sample(nrow(ChickWeight)),]
+rownames(x) <- NULL
+head(x)
+```
+
+]
+
+.pull-right65[
+
+### Correlation Test
+
+> Is there a correlation between weight and Time?
+
+- For `cor.test()`, formula looks like `formula = ~ a + b`
+
+```{r, eval = TRUE}
+cor.test(formula = ~ weight + Time, # Formula
+         data = ChickWeight)          # Data in Chickweight
+
+```
+
+]
+
+
+---
+## Chi-Square test with `chisq.test()`
+
+.pull-left3[
+
+### ChickWeight data
+```{r, eval = FALSE}
+ChickWeight
+```
+
+
+```{r, echo = FALSE}
+set.seed(102)
+x <- ChickWeight[sample(nrow(ChickWeight)),]
+rownames(x) <- NULL
+head(x)
+```
+
+
+]
+
+.pull-right65[
+
+### Chi-Square test
+
+> Are there more observations from one Diet than another?
+
+- For `chisq.test()`, main argument should be a table of values created from the `table()` function:
+
+```{r, eval = TRUE}
+table(ChickWeight$Diet)   # Look at a table of frequencies
+
+chisq.test(x = table(ChickWeight$Diet)) # Run test on table
+```
+
+]
+
+
+---
+.pull-left45[
+
+## Assigning hypothesis test objects
+
+- Hypothesis tests return an object of class `"htest"`
+- Can assign a hypothesis test to an object, and then extract info with `$`:
+
+#### Examples of what's in htest objects
+
+| Element| Result|
+|------:|----:|
+|    `x$statistic`|    A test statistic|
+|     `x$parameter`|    Degrees of freedom|
+|     `x$p.value`|   The p-value|
+|     `x$conf.int`|  Confidence interval|
+]
+
+.pull-right5[
+### What's in an htest object?
+
+```{r}
+# One-sample t-test
+
+weight_tt <- t.test(x = ChickWeight$weight,
+                    mu = 120,
+                    alternative = "two.sided")
+
+# What's in the weight.tt object?
+names(weight_tt)
+
+# Get the p.value
+weight_tt$p.value
+
+# Get the confidence interval
+weight_tt$conf.int
+
+```
+
+
+]
+
+---
+
+.pull-left4[
+
+## Regression example with `glm()`
+
+```{r}
+head(ChickWeight)
+```
+
+**Goal**: Create a regression model predicting `weight` as a function of Time
+
+<br>
+$$\Large weight = \beta_{0} + \beta_{1} \times Time + \epsilon$$
+]
+
+.pull-right55[
+
+- Function: `glm()`
+- Formula: `formula = weight ~ Time`
+- Data: `data = ChickWeight`
+
+```{r}
+# Create a glm object 
+
+# formula: weight ~ Time
+# data: ChickWeight
+
+chick_glm <- glm(formula = weight ~ Time,
+                 data = ChickWeight)
+
+
+# Print the object
+chick_glm
+```
+]
+
+
+---
+
+.pull-left7[
+## Using formulas
+
+You can keep adding terms with `+` 
+
+```{r}
+# Include multiple terms with +
+chick_glm_A <- glm(formula = weight ~ Time + Diet + Chick,
+                   data = ChickWeight)
+```
+
+To include *all* variables, use the generic notation <font color = "blue"> `formula = y ~ .`</font>
+
+```{r}
+# Use  y ~ . to include ALL variables
+chick_glm_B <- glm(formula = weight ~ .,
+                   data = ChickWeight)
+```
+
+To include *interaction terms* use `*`
+
+```{r}
+# Include an interaction term between Time and Diet
+chick_glm_C <- glm(formula = weight ~ Time * Diet + Chick,
+                   data = ChickWeight)
+```
+
+]
+
+
+---
+
+.pull-left35[
+
+<br><br>
+
+## Exploring statistical objects
+
+You can apply many *generic* functions to statistical objects such as `print()`, `summary()`, `predict()` and `plot()`.
+
+
+```{r, eval = FALSE}
+# Create statistical object
+my_obj <- FUN(formula = ...,
+              data = ...)
+
+names(my_obj)       # Elements
+print(my_obj)       # Print
+summary(my_obj)     # Summary
+plot(my_obj)        # Plotting
+predict(my_obj, ..) # Predict
+
+```
+
+]
+
+.pull-right6[
+<br><br>
+**Apply the print() function to a statistical object**
+
+```{r, eval = TRUE}
+# Create a glm object
+chick_glm <- glm(formula = weight ~ Time,
+                 data = ChickWeight)
+
+# Print the object
+print(chick_glm)
+```
+
+]
+
+
+---
+
+.pull-left35[
+
+
+<br><br>
+
+## Exploring statistical objects
+
+You can apply many *generic* functions to statistical objects such as `print()`, `summary()`, `predict()` and `plot()`.
+
+
+```{r, eval = FALSE}
+# Create statistical object
+my_obj <- FUN(formula = ...,
+              data = ...)
+
+names(my_obj)       # Elements
+print(my_obj)       # Print
+summary(my_obj)     # Summary
+plot(my_obj)        # Plotting
+predict(my_obj, ..) # Predict
+
+```
+
+]
+
+.pull-right6[
+<br><br>
+**Apply the names() function to a statistical object**
+
+```{r, eval = TRUE}
+# Create a glm object
+chick_glm <- glm(formula = weight ~ Time,
+                 data = ChickWeight)
+
+# Print the object
+names(chick_glm)
+```
+
+]
+
+
+
+
+
+
+
+---
+
+.pull-left35[
+
+
+<br><br>
+
+## Exploring statistical objects
+
+You can apply many *generic* functions to statistical objects such as `print()`, `summary()`, `predict()` and `plot()`.
+
+
+```{r, eval = FALSE}
+# Create statistical object
+my_obj <- FUN(formula = ...,
+              data = ...)
+
+names(my_obj)       # Elements
+print(my_obj)       # Print
+summary(my_obj)     # Summary
+plot(my_obj)        # Plotting
+predict(my_obj, ..) # Predict
+
+```
+
+]
+
+.pull-right6[
+<br><br>
+**Apply the predict() function to a statistical object**
+
+```{r, eval = TRUE}
+# Create a glm object
+chick_glm <- glm(formula = weight ~ Time,
+                 data = ChickWeight)
+
+# Create a dataframe of new data
+NewData <- tibble(Time = c(10, 15, 20, 45, 5))
+
+# Predict weights of NewData using chick_glm
+predict(chick_glm, 
+        newdata = NewData)
+```
+
+]
+
+---
+
+.pull-left45[
+## Using Statistical Distributions
+
+- R gives you a host of tools for sampling data from common statistical distributions
+
+
+| Distribution| R Function|
+|------:|----:|
+|    Normal| `rnorm()`|    
+|      Uniform|`runif()`|
+|      Beta|`rbeta()`|  
+|      Binomial|`rbinom()`|  
+
+- Use these to create simulations and play around with models
+
+- You can use `sample()` to draw random samples from a vector of values
+
+]
+
+.pull-right5[
+
+<font size = 5>?distributions</font>
+
+```{r, echo = FALSE, out.width = "90%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/distributions_help.png")
+```
+
+]
+
+---
+
+.pull-left45[
+## Using Statistical Distributions
+
+- R gives you a host of tools for sampling data from common statistical distributions
+
+| Distribution| R Function|
+|------:|----:|
+|    Normal| `rnorm()`|    
+|      Uniform|`runif()`|
+|      Beta|`rbeta()`|  
+|      Binomial|`rbinom()`|  
+
+- Use these to create simulations and play around with models
+
+- You can use `sample()` to draw random samples from a vector of values
+
+]
+
+
+
+.pull-right5[
+
+```{r}
+# Simulate 10 flips of a fair coin
+sample(x = c("H", "T"), 
+       size = 10, 
+       replace = TRUE)
+
+# 5 values from a normal distribution
+rand_samp <- rnorm(n = 5, mean = 0, sd = 1)
+rand_samp # Print the sample
+
+t.test(x = rand_samp) # Perform 1 sample t-test
+
+
+
+```
+
+]
+---
+
+.pull-left45[
+
+## Summary
+
+
+- There are tons of statistical packages in R
+
+- Most require a formula, data, and other optional arguments
+
+- Use help menus to understand arguments and syntax!
+
+- Once you've created a statistical object, use generic methods (`print()`, `names()`, `summary()`), to explore it
+
+- Use random sampling functions to run simulations
+
+]
+
+.pull-right5[
+
+`?t.test`
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/ttesthelp_ss.png")
+```
+
+]
+
+
+
+
+---
+
+## Live Demo & Pratical
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D2S2_Statistics/Statistics_practical.html">Link to Statistics practical</a>
+
+
+---
+
+
+
+
+---
+
+.pull-left45[
+
+### General linear model
+
+
+
+
+]
+
+
+
+.pull-right5[
+
+
+
+]
+
+
+
+
+
+---
+# Examples with ChickWeight Data
+
+.pull-left4[
+
+```{r, eval = FALSE}
+ChickWeight
+```
+
+```{r, echo = FALSE}
+set.seed(102)
+x <- ChickWeight[sample(nrow(ChickWeight)),]
+rownames(x) <- NULL
+head(x)
+```
+
+
+
+]
+
+
+.pull-right55[
+
+```{r, fig.cap = "Source: http://awallpapersimages.com/wp-content/uploads/2016/07/Chicken-cute-baby-image.jpg", echo = FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/cutechicken.jpg")
+```
+
+]
+
+
+
+---
+# Final notes
+
+.pull-left7[
+
+- When using a hypothesis test, always ask:
+
+> What are the arguments?
+
+> What format or class should the arguments be?
+
+- When in doubt, always look at the help files and examples at the end.
+
+- Save hypothesis tests as new objects, then apply `names()` to see what elements it contains, then extract what you want with `$`
+
+```{r, eval = FALSE}
+# Run test and save as test_A
+test_A <- t.test(formula = weight ~ Diet,
+                 data = ChickWeight,
+                 subset = Diet %in% c(1, 2))
+
+names(test_A)  # What is in the object?
+
+test_A$statistic # Ah ok! Show me the test statistic
+```
+
+
+
+]
+
+.pull-right25[
+
+`?t.test`
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/ttesthelp_ss.png")
+```
+
+#### Questions?
+
+]
+
+
+
+
+
+---
+# Two types of statistics: Descriptive and Inferential
+
+.pull-left4[
+
+### Inferential
+
+- Used to make inferences about a larger population. Typically done in tandem with a *hypothesis test*
+
+#### Examples
+
+| Hypothesis Test| R Function|
+|------:|----:|
+|     T-test|    `t.test()`|
+|     Correlation Test|    `cor.test()`|
+|     Chi-Square Test|   `chisq.test()`|
+|     ANOVA, Post-hoc|    `aov(), TukeyHSD()`|
+
+- Hypothesis tests typically return lists of outputs (e.g.; p-value, test statistic)
+
+
+]
+
+.pull-right55[
+#### R implimentation
+
+```{r}
+t.test(x = c(4, 3, 6, 5, 3, 2),
+       mu = 0,
+       alternative = "two.sided")
+```
+
+
+]
+
+
+
+
+---
+# ANOVA with `aov()`
+
+.pull-left3[
+
+### ChickWeight data
+```{r, eval = FALSE}
+ChickWeight
+```
+
+```{r, echo = FALSE}
+set.seed(102)
+x <- ChickWeight[sample(nrow(ChickWeight)),]
+rownames(x) <- NULL
+head(x)
+```
+
+]
+
+.pull-right6[
+
+### ANOVA
+
+> Is there difference in weights based on Diet?
+
+- Applying `summary()` to an `aov` object prints a nice table.
+
+```{r, eval = TRUE}
+E <- aov(formula = weight ~ Diet, # Formula
+         data = ChickWeight)      # Data in Chickweight
+
+summary(E)  # Sow a summary of the results
+```
+
+]
+
+---
+# Post-hoc tests with `TukeyHSD()`
+
+.pull-left4[
+
+> Which specific pairs of Diets differed?
+
+### Step 1: Create aov object
+
+- Apply `TukeyHSD()` to an `aov` object to get post-hoc tests.
+
+```{r, eval = TRUE}
+# Create an aov object called D
+
+D <- aov(formula = weight ~ Diet,
+         data = ChickWeight)
+```
+
+]
+
+.pull-right55[
+
+### Step 2: Apply `TukeyHSD()` to object
+```{r}
+TukeyHSD(D)  # Conduct post-hoc tests
+```
+
+]
+
+

@@ -1,0 +1,447 @@
+---
+title: "Efficient programming"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+# What is efficient code?
+
+.pull-left4[
+><font size = 5>"Programmers waste enormous amounts of time thinking about, or worrying about, the speed of noncritical parts of their programs, and these attempts at efficiency actually have a strong negative impact when debugging and maintenance are considered."<br>
+><font size = 5>-- Donald Knuth
+]
+
+.pull-right5[
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/donald_knuth.jpeg" width="500">
+<p align="center"><font size=3>Donald E. Knuth<br>Author of <a href:"https://de.wikipedia.org/wiki/The_Art_of_Computer_Programming">The Art of Programming</a><br>source<a href="http://www-cs-faculty.stanford.edu/"> http://www-cs-faculty.stanford.edu/</a>
+]
+
+---
+
+# Why is R slow? And, is it?
+
+.pull-left45[
+><font size = 5>R is not a fast language. This is not an accident. R was purposely designed to make data analysis and statistics easier for you to do. It was not designed to make life easier for your computer. While R is slow compared to other programming languages, for most purposes, it’s fast enough.
+><font size = 5>-- Hadley Wickham
+]
+
+.pull-right45[
+<font size = 5>*Reasons for R being slow*<br><br>
+**Extreme dynamism** - allows you to code flexibly.
+- weak dynamic typing
+- copy-on-modify semantics
+- Pass-by-value
+
+<br2>
+**Name lookup** (in environments/namespaces) - allows you to import packages and name your objects flexibly.
+]
+
+---
+
+# Profiling
+
+The first step to making your code efficient is to **identify critical parts** of your code. Do this using one of the following: 
+
+| Function| Package| Description| 
+|:------|:------|:------------|
+| `proc.time()`  |`base`|Returns the time.|
+| `system.time()`| `base`|Runs one expression once and returns elapsed CPU time|
+| `microbenchmark()`|`microbenchmark`| Runs one or many expressions multiple times and returns statistics on elapsed time.|
+| `profvis()`|`profvis`| Evaluates larger code chunks and entire scripts.|
+| `lineprof(), shine()`|`lineprof`| Similar to `profvis` but deprecated (From Hadley's Github)|
+
+---
+
+# Profiling: Example
+
+Often some small part of your code takes orders of magnitudes longer than everything else. Profiling is about figuring out which parts of your code take so long.
+
+.pull-left45[
+```{r, eval = F}
+
+  profvis({
+  # load data
+  data <- read_csv('data/happiness.csv')
+
+  # mutate
+  data <- data %>% 
+    mutate(happy_num = case_when(
+      happy == 'not too happy' ~ 0,
+      happy == 'pretty happy' ~ 1,
+      happy == 'very happy' ~ 2))
+
+  # multiple regression 
+  model <- lm(happy_num ~ tvhours + owngun, 
+              data = data)
+  
+  # evaluate model
+  summary(model)
+  }, interval = .005)
+  
+```
+]
+
+.pull-right5[
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/profvis.png" width="500">
+]
+
+---
+
+# Improving performance
+
+<font size = 4><i>beginner</i><br>
+<font size = 6>
+1. Look for existing solutions<br>
+2. Do less work<br>
+3. Vectorise<br>
+4. Parallelise<br>
+5. Avoid copies<br>
+6. Byte-code compile<br>
+</font>
+<br>
+
+<font size = 4><i>advanced</i><br>
+<font size = 6>
+7. Rcpp<br>
+8. Using a different R<br>
+</font>
+---
+
+# Look for an existing solution
+
+.pull-left3[
+Almost always your problem has been solved by someone else.
+
+<font size = 4><i>Look for solutions in:</i></font>
+
+**Base R** which can be amazingly fast.
+
+**Other packages** which often provide faster versions of one and the same function.
+
+<a href="http://google.com" align="center">**google**</a>, <a href="http://stackoverflow.com" align="center">**stackoverflow**</a>, <a href="http://rseek.org/" align="center">**rseek**</a>  
+
+]
+
+
+.pull-right6[
+<div style="margin:0px auto; width:100%; float:right">
+  <div style="float:left"; margin:0; width:48%">
+    <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stacksite.png" height="360" width="310" align="center"><br>
+    <p align = "center"><a href="stackoverflow.com" align="center"><font size = 3>https://stackoverflow.com</font></a></p>
+  </div>
+  <div style="float:right"; margin:0; width:48%">
+  <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rseeksite.png" height="360" width="310" align="center"><br>
+    <p align = "center"><a href="http://rseek.org" align="center"><font size = 3>http://rseek.org</font></a></p>
+  </div>
+</div>
+
+]
+
+---
+
+# Do as little as possible
+
+.pull-left3[
+
+**Do everything only once** (or exactly as often as needed). Don't repeated yourself. 
+
+Use **tailor-made** functions, e.g., `data.table::fread()`.
+
+Use **primitive** functions, e.g., `sum(x)/length(x)` rather than `mean(x)`.
+
+**Be specific**, e.g., `unlist(x, use.names = F)` vs. `unlist()`.
+]
+
+.pull-right65[
+```{r, echo=F,warning=F,message=F}
+require(readr)
+require(microbenchmark)
+require(data.table)
+options(digits=3)
+```
+
+```{r, warning=F, message=F, eval = T}
+# load package
+library(microbenchmark, quietly = T)
+
+# define link to data
+link <- 'http://tinyurl.com/y99aj5ed'
+
+# microbenchmark
+microbenchmark(
+  web   = read_csv(link),
+  local = read_csv('data/titanic.csv'),
+  fread = fread('data/titanic.csv'),
+  times = 10)
+
+```
+]
+
+
+---
+
+# Vectorise
+
+.pull-left35[
+Whenever possible **use vector operations** or functions that do vectorized operations. 
+
+In other words, **don't use loops**, stay away from all **apply idoms**, such as `apply()`, `sapply()`, `tapply()`, etc.
+
+Yet in other words, **use functions** that have been **implemented in C/C++**. 
+]
+
+.pull-right6[
+
+```{r, warning=F, message=F, eval = T}
+# create data
+my_data <- matrix(rnorm(1000000), ncol = 10)
+
+# microbenchmark
+microbenchmark(
+  colMeans = colMeans(my_data), 
+  apply = apply(my_data, 2, mean),
+  times = 10)
+```
+]
+
+---
+
+.pull-left3[
+
+# Avoid copies
+
+**R always copies.** 
+
+whenever using c(), cbind(), rbind(), paste() R creates a copy large enough to contain its inputs.
+
+]
+
+
+.pull-right65[
+
+```{r, message=F, warning=F, eval = T}
+# define vectors
+short_vec  <- runif(10)
+long_vec   <- runif(100)
+
+# define collapse function
+combine <- function(x) {
+  my_vec = c()
+  for(i in 1:length(x)) my_vec = c(my_vec, x[i])
+  }
+
+# microbenchmark
+microbenchmark(
+  loop10  = combine(short_vec),
+  loop100 = combine(long_vec),
+  vec10   = c(short_vec),
+  vec100  = c(long_vec)
+)
+```
+
+]
+---
+.pull-left2[
+# Byte-code<br>compilation
+
+R can be compiled to byte-code, to create a faster, **lower-level version of the code**.
+
+R does this automatically with the first execution of a function. Thus, the second time a function is executed it will be faster.  
+
+]
+.pull-right7[
+```{r, message=F, warning=F, eval = T}
+# define unneccessarily complex function and compile
+my_fun <- function(x, f) sapply(x, f)
+my_fun_c <- compiler::cmpfun(my_fun)
+
+# define some awfully complex data
+x <- list(1:10, letters, c(F, T), NULL)
+
+# microbenchmark
+microbenchmark(my_fun(x, is.null), my_fun_c(x, is.null), unit='us')
+
+# microbenchmark again
+microbenchmark(my_fun(x, is.null), my_fun_c(x, is.null), unit='us')
+```
+]
+---
+
+.pull-left2[
+# Parallel<br>computing
+
+When working with large data one of the **best ways to speed up** execution is parallel execution. 
+
+Parallel execution means splitting the data in many **jobs** and having many **workers** (separate R instances equipped with a worker function) complete the jobs in parallel. 
+]
+
+.pull-right7[
+```{r, message=F, warning=F, eval = T}
+# define data and splitted data (jobs)
+data       <- matrix(rnorm(10000000), ncol = 10)
+split_data <- lapply(1:10, function(i) data[(1:1000)+(i-1)*1000, ])
+
+# open cluster 
+require(parallel)
+clu <- makeCluster(5)
+
+# my cluster fun
+my_cluster_fun <- function(split_data){
+
+  # apply cluster function
+  out <- clusterApplyLB(clu, split_data, colMeans)
+  
+  # combine results
+  colMeans(do.call(rbind, out))
+  }
+
+# microbenchmark
+microbenchmark(vectorz = colMeans(data),
+               cluster = my_cluster_fun(split_data))
+```
+
+```{r, message=F, echo=F, eval = T}
+stopCluster(clu)
+```
+
+]
+---
+
+.pull-left2[
+# Rcpp
+
+Another very effective, but quite advanced option is to write essential code chunks in C++ using Rcpp - **R's C++ interface**.
+
+Many functions are already implemented in C++ or Fortran. Thus, large benefits will only be seen for **for custom functions**. 
+
+<a href="http://dirk.eddelbuettel.com/code/rcpp/Rcpp-quickref.pdf">**Quick-Guide**</a>
+
+]
+
+.pull-right7[
+```{r, message=F, warning=F, eval = T}
+# define data
+my_data <- matrix(rnorm(10000000),ncol = 10)
+
+# define function
+my_Rcpp_fun = "NumericVector colMeans_c(NumericMatrix& mat) {
+  int n_rows = mat.nrow(), n_cols= mat.ncol() ;
+  NumericVector means(n_cols);
+  for(int j = 0; j < n_cols; ++j) {
+    double sum = 0;
+    for(int i = 0; i < n_rows; ++i) sum += mat(i, j);
+    means[j] = sum / n_rows;  
+    }
+  return means;
+  }"
+
+# compile function
+require(Rcpp) ; cppFunction(my_Rcpp_fun)
+
+# microbenchmark
+microbenchmark(vector_implementation = colMeans(my_data),
+               rcpp_implementation = colMeans_c(my_data))
+```
+]
+---
+
+# Alternative R implementations
+
+from <a href="http://adv-r.had.co.nz/Performance.html"> **Advanced R**</a>
+
+| R implementation| Author | Description| 
+|:------|:------|:------------|
+| [`pqR`](http://www.pqr-project.org/)  |Radford Neal|This *p*retty *q*uick version of *R* builds on R 2.15.0; it fixes several performance issues, provides better memory management and some support for automatic multithreading.|
+| [`Renjin`](http://www.renjin.org/)  |BeDataDriven| Renjin uses the Java virtual machine.|
+| [`FastR`](http://www.oracle.com/technetwork/java/jvmls2013vitek-2013524.pdf)  |Purdue University| FastR is similar to Renjin. Optimisation is more ambitious, but at this point less mature.|
+| [`Riposte`](https://research.tableau.com/sites/default/files/pact2012-talbot-riposte.pdf)  |Justin Talbot and Zachary DeVito| Riposte is experimental and ambitious. It's work in progress, but the existing implementations are extremely fast. Riposte is described in more detail in Riposte: A Trace-Driven Compiler and Parallel VM for Vector Code in R.|
+
+---
+
+# Microsoft R Open
+
+.pull-left4[
+Microsoft [R Open](https://mran.microsoft.com/) is the enhanced distribution of R from Microsoft Corporation.
+
+Open R interfaces with the high-performance, multi-threaded [**BLAS/LAPACK**](http://www.netlib.org/lapack/lug/node11.html) linear algebra libraries for superior performance. 
+
+**Maximize reproducibility** by freezing the set of base packages with every version of Open R. 
+Sort of R's Matlab.
+]
+
+.pull-right45[
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/openr.png" width="350">
+]
+
+---
+
+# Efficient code is readable and maintainable 
+
+A lot of time in programming is consumed by reading, understanding, debugging your own code and that of others, and this time often far outweighs the benefits of making code faster. 
+
+.pull-left45[
+```{r, message=F, warning=F, eval = F}
+
+library(readr   )
+library(      magrittr)
+library(  dplyr)
+  syc =   read_csv('https://tinyurl.com/y8gqcht3')
+  syc = syc%>%mutate(fcm=father/2.54,mcm=mother/2.54)
+    a   = syc$father
+      b = syc[['mother']]
+        t.test(a,b) 
+
+```
+]
+
+.pull-right45[
+```{r, message=F, warning=F, eval = F}
+# load packages
+library(readr)
+library(magrittr)
+library(dplyr)
+
+# read galton data
+galton_data <- read_csv(
+  'https://tinyurl.com/y8gqcht3'
+  )
+
+# transform to metric system
+galton_data = galton_data %>% 
+  mutate(father_cm = father / 2.54, mother_cm = mother / 2.54)
+
+#conduct t-test
+father <- galton_data$father
+mother <- galton_data$mother
+t.test(father, mother) 
+```
+]
+
+---
+
+# Practical
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D4S1_EfficientCode/EfficientCode_practical.html">Link to practical</a>

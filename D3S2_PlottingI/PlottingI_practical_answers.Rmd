@@ -1,0 +1,672 @@
+---
+title: "Plotting: ggplot2"
+author: "TheRBootcamp, http://therbootcamp.github.io"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, fig.align = 'center')
+```
+
+```{r, echo = FALSE, fig.align = 'center', eval = TRUE, fig.cap= "Source: https://www.rstudio.com/", out.width = "30%"}
+knitr::include_graphics("https://d21ii91i3y6o6h.cloudfront.net/gallery_images/from_proof/9296/small/1447173871/rstudio-hex-ggplot2-dot-psd.png")
+```
+
+### Slides
+
+[Here are the introduction slides for this practical on Plotting 1.0: ggplot!](https://therbootcamp.github.io/_sessions/D3S2_PlottingI/PlottingI.html)
+
+### Overview
+
+In this practical you'll practice plotting data with the `ggplot2` package. 
+
+###Cheatsheet
+
+```{r, echo = FALSE, fig.align = 'center', eval = TRUE, fig.cap= "https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf", out.width = "60%"}
+knitr::include_graphics("../_image/ggplot_cheatsheet_ss.png")
+```
+
+If you don't have it already, you can access the `ggplot2` cheatsheet here [https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf). This has a nice overview of all the major functions in ggplot2.
+
+### Examples
+
+- The following examples will take you through the steps of creating both simple and complex plots with `ggplot2`. Try to go through each line of code and see how it works!
+
+```{r, eval = FALSE, echo = TRUE}
+# -----------------------------------------------
+# Examples of using ggplot2 on the mpg data
+# ------------------------------------------------
+
+library(tidyverse)         # Load tidyverse (which contains ggplot2!)
+
+mpg # Look at the mpg data
+
+
+# Just a blank space without any aesthetic mappings
+ggplot(data = mpg)
+
+# Now add a mapping where engine displacement (displ) and highway miles per gallon (hwy) are mapped to the x and y aesthetics
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy))   # Map displ to x-axis and hwy to y-axis
+
+#  Add points with geom_point()
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+       geom_point()                         
+
+# Again, but with some additional arguments
+
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+       geom_point(col = "white",                # White borders
+                  fill = "red",                 # Red filling
+                  size = 3,                     # Larger size
+                  shape = 21,                   # Point with border shape
+                  alpha = .5,                   # Transparent points
+                  position = "jitter") +        # Jitter the points         
+         scale_x_continuous(limits = c(1, 10)) +  # Axis limits
+         scale_y_continuous(limits = c(0, 50))
+
+
+# Assign class to the fill aesthetic and add labels with labs()
+
+ggplot(data = mpg, 
+  mapping = aes(x = displ, y = hwy, fill = class)) +  # Change color based on class column
+  geom_point(size = 3, 
+                  position = 'jitter',
+                  shape = 21, 
+                  col = "white") +
+  labs(x = "Engine Displacement in Liters",
+       y = "Highway miles per gallon",
+       title = "MPG data",
+       subtitle = "Cars with higher engine displacement tend to have lower highway mpg",
+       caption = "Source: mpg data in ggplot2")
+  
+
+# Add a regression line and use the black and white theme with theme_bw()
+
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point(size = 3, alpha = .9, mapping = aes(color = class)) + 
+  geom_smooth(col = "blue", method = "lm") + 
+  labs(x = "Engine Displacement in Liters",
+       y = "Highway miles per gallon",
+       title = "MPG data",
+       subtitle = "Cars with higher engine displacement tend to have lower highway mpg",
+       caption = "Source: mpg data in ggplot2") + 
+  theme_bw()    # Use black and white theme
+
+
+# Facet by class
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, 
+                           y = hwy, 
+                           fill = factor(cyl)),
+                           shape = 21,
+                           col = "white", 
+                           size = 2) +
+  facet_wrap(~ class, nrow = 2, labeller = "label_both") + 
+  scale_fill_brewer(palette = "Set1") + 
+  labs(x = "Engine Displacement in Liters",
+       y = "Highway miles per gallon",
+       title = "MPG data",
+       subtitle = "Cars with higher engine displacement tend to have lower highway mpg",
+       caption = "Source: mpg data in ggplot2") + 
+  theme_bw()        # Use the minimal theme
+
+
+# Another fancier example
+
+ggplot(data = mpg, 
+       mapping = aes(x = cty, y = hwy)) + 
+       geom_count(aes(color = manufacturer)) +     # Add count geom (see ?geom_count)
+       geom_smooth(se = FALSE) +                   # smoothed line without confidence interval
+       geom_text(data = filter(mpg, cty > 25), 
+                 aes(x = cty,y = hwy, 
+                     label = rownames(filter(mpg, cty > 25))),
+                     position = position_nudge(y = -1), 
+                                check_overlap = TRUE, 
+                     size = 5) + 
+       labs(x = "City miles per gallon", 
+            y = "Highway miles per gallon",
+            title = "City and Highway miles per gallon", 
+            subtitle = "Numbers indicate cars with highway mpg > 25",
+            caption = "Source: mpg data in ggplot2",
+            color = "Manufacturer", 
+            size = "Counts") +
+        theme_bw()
+```
+
+## Tasks
+
+### Getting the data and project setup
+
+1. For this practical we'll play around with a few different datasets that are contained in different packages. The datasets, and the packages that contain them, are listed below. If you don't have any of these packages already, make sure to install them!
+
+| Dataset| Package|
+|:------|:----|
+|     `ACTG175`|    `speff2trial`  |
+|     `diamonds`|   `ggplot2` |
+|     `Davis`|   `car` |
+| `heartdisease` | `FFTrees` | 
+
+2. Load the `tidyverse`, `speff2trial`, `car`, and `FFTrees` packages
+
+```{r, eval = TRUE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(speff2trial)
+library(car)
+library(FFTrees)
+```
+
+### Building a plot step-by-step
+
+3. The `diamonds` dataset in the `ggplot2` package shows information about 50,000 round cut diamonds. Print the `diamonds` dataset, it should look like this:
+
+```{r, echo = TRUE, eval = TRUE}
+diamonds
+```
+
+Create the following blank plot
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 4}
+ggplot(data = diamonds, 
+       mapping = aes(x = carat, y = price))
+```
+
+3. Now add points showing the relationship between the number of carats in the diamonds (`carat`) and its price (`price`)
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 4}
+ggplot(data = diamonds, 
+       mapping = aes(x = carat, y = price)) + 
+  geom_point()
+```
+
+3. Make the points transparent using the `alpha` argument to `geom_point()`
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 4}
+ggplot(data = diamonds, 
+       mapping = aes(x = carat, y = price)) + 
+  geom_point(alpha = .05)
+```
+
+4. Color the points by their cut
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 4}
+ggplot(data = diamonds, 
+  mapping = aes(x = carat, y = price, color = cut)) + 
+  geom_point(alpha = .05)
+```
+
+5. Create different plots for each value of `cut` using the `facet_wrap` function:
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 8, fig.height = 2}
+ggplot(data = diamonds, 
+       mapping = aes(x = carat, y = price, color = cut)) + 
+  geom_point(alpha = .05) + 
+  facet_wrap(~ cut, nrow = 1)
+```
+
+4. Add a black, smoothed mean line to each plot using `geom_smooth()` (You can also try turning the line into a regression line using the `method` argument)
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 8, fig.height = 2}
+ggplot(data = diamonds, 
+       mapping = aes(x = carat, y = price, color = cut)) + 
+  geom_point(alpha = .05) + 
+  facet_wrap(~ cut, nrow = 1) + 
+  geom_smooth(color = "black")
+```
+
+### Density geom with `geom_density()`
+
+Create the following density plot of prices from the `diamonds` data using the following template:
+
+   - Set the `data` argument to `diamonds`
+   - Map `carat` to the x aesthetic
+   - Add a density geom with `geom_density()` and set the fill to `"tomato1"`
+   - Add labels
+   - Use the minimal theme with `theme_minimal()`
+
+```{r, eval = FALSE, echo = TRUE}
+ggplot(data = XX, 
+       mapping = aes(x = XX)) + 
+       geom_density(fill = "XX") + 
+       labs(x = "XX", 
+            y = "XX", 
+            title = "XX",
+            subtitle = "XX",
+            caption = "XX") +
+       theme_minimal() 
+```
+
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 4, fig.height = 4}
+ggplot(data = diamonds, 
+       mapping = aes(x = carat)) + 
+  geom_density(fill = "tomato1") + 
+  labs(x = "Carats", 
+       y = "Count", 
+       title = "Diamond Prices",
+       subtitle = "Created with ggplot!",
+       caption = "Source: diamonds dataset") +
+       theme_minimal()
+```
+
+Create the following densities of different facets by the diamond `cut`, and use different colors for each plot. 
+
+   - Map `log(price)` (the logarithm of price) to the x aesthetic and `cut` to the fill aesthetic
+   - Create the density geom with `geom_density()` and add a black border color with the `color` argument
+   - Facet the plot by `cut`
+   - Add labels with `labs(x, y, title, subtitle, caption)`
+   - Using `scale_fill_brewer()`, change the color palette for the geom fillings to `"YlOrRd"`
+   - Use the black and white theme with `theme_bw()`
+   - Turn off the legend with `theme(legend.position = "none")`
+   
+```{r, echo = TRUE, eval = FALSE}
+ggplot(data = XX, 
+       mapping = aes(x = log(XX), fill = XX)) + 
+       geom_density(color = "XX") + 
+       facet_wrap(~ XX, nrow = 1) + 
+       labs(x = "XX", 
+            y = "XX", 
+            title = "XX",
+            subtitle = "XX",
+            caption = "XX") +
+       scale_fill_brewer(palette = "XX") + 
+       theme_bw() +
+       theme(legend.position = "none")
+```
+
+   
+```{r, echo = TRUE, eval = TRUE, fig.width = 8, fig.height = 3}
+ggplot(data = diamonds, 
+       mapping = aes(x = log(price), fill = cut)) + 
+       geom_density(color = "black") + 
+       facet_wrap(~ cut, nrow = 1) + 
+       labs(x = "Price (log-transformed)", 
+            y = "Count", 
+            title = "Diamond Prices",
+            subtitle = "Separate plots indicate different cuts",
+            caption = "Source: diamonds dataset from ggplot2") +
+       scale_fill_brewer(palette = "YlOrRd") + 
+       theme_bw() +
+       theme(legend.position = "none")
+```
+
+### Boxplot geom `geom_boxplot()`
+
+Look at the help menu for `geom_boxplot()`. Then, create the following boxplot using the following template
+
+```{r, eval = FALSE, echo = TRUE}
+ggplot(data = XX,
+  mapping = aes(x = XX, y = log(XX), fill = XX)) + 
+  geom_boxplot()  + 
+  labs(y = "XX", 
+       x = "XX", 
+       color = "XX",
+       title = "XX",
+       subtitle = "XX") +
+  scale_fill_brewer(palette = "XX") +
+  theme_bw()
+```
+
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 4}
+ggplot(data = diamonds,
+  mapping = aes(x = cut, y = log(price), fill = cut)) + 
+  geom_boxplot()  + 
+  labs(y = "Price (log scale)", x = "Cut", color = "Cut", 
+       title = "Distribution of diamond prices by cut", 
+       subtitle = "Data come from a random sample of 1000 diamonds",
+       caption = "Source: diamonds dataset from ggplot2") +
+  scale_fill_brewer(palette = "YlGnBu") +
+  theme_bw()
+
+```
+
+### Demographic information of midwest counties in the US
+
+Print the `midwest` dataset and look at the help menu to see what values it contains. It should look like this:
+
+```{r, eval = TRUE}
+midwest
+```
+
+Using the following code as a template, create the Following plot showing the relationship between college education and poverty
+
+
+```{r, echo = TRUE, eval = FALSE, fig.width = 7, fig.height = 5}
+ggplot(data = XX, 
+    mapping = aes(x = XX, y = XX)) + 
+    geom_point(aes(fill = XX, size = XX), shape = 21, color = "white") + 
+    geom_smooth(aes(x = XX, y = XX)) +
+    labs(
+        x = "XX", 
+        y = "XX", 
+        title = "XX",
+        subtitle = "XX",
+        caption = "XX") + 
+    scale_color_brewer(palette = "XX") + 
+    scale_size(range = c(XX, XX)) +
+    guides(size = guide_legend(override.aes = list(col = "black")), 
+           fill = guide_legend(override.aes = list(size = 5))) +
+    theme_bw()
+```
+
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 8, fig.height = 5}
+ggplot(data = midwest, 
+    mapping = aes(x = percollege, y = percpovertyknown)) + 
+    geom_point(aes(fill = state, size = popdensity), shape = 21, color = "white") + 
+    geom_smooth(aes(x = percollege, y = percpovertyknown)) +
+    labs(
+        x = "Percent with college education", 
+        y = "Poverty rate", 
+        title = "Midwest Data",
+        subtitle = "States with higher college education rates tend to have lower poverty rates",
+        caption = "Source: ggplot2 package") + 
+    scale_color_brewer(palette = "Set1") + 
+    scale_size(range = c(0, 12)) +
+    guides(size = guide_legend(override.aes = list(col = "black")), 
+           fill = guide_legend(override.aes = list(size = 5))) +
+    theme_bw()
+```
+
+
+Create the following density plot showing the density of inhabitants with a college education in different states using the following template
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(data = XX, 
+       mapping = aes(XX, fill = XX)) + 
+  geom_density(alpha = XX) + 
+  labs(title = "XX", 
+       subtitle = "XX",
+       caption = "XX",
+       x = "XX",
+       y = "XX",
+       fill = "XX") + 
+  theme_bw()
+```
+
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 8, fig.height = 5}
+ggplot(data = midwest, 
+       mapping = aes(percollege, fill = state)) + 
+  geom_density(alpha = 0.8) + 
+  labs(title = "College education rates", 
+       subtitle = "For 5 Midwest states",
+       caption = "Source: midwest dataset in ggplot2",
+       x = "Percent of inhabitants with a college education",
+       y = "Density",
+       fill = "State") + 
+  theme_bw()
+```
+
+### Heatplots with `geom_tile()`
+
+You can create heatplots using the `geom_tile()` function. Try creating the following heatplot of statistics of NBA players using the following template:
+
+```{r, echo = TRUE, eval = FALSE}
+# Read in nba data
+nba_long <- read.csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/nba_long.csv")
+
+ggplot(XX, 
+       mapping = aes(x = XX, y = XX, fill = XX)) + 
+  geom_tile(colour = "XX") + 
+  scale_fill_gradientn(colors = c("XX", "XX", "XX"))+ 
+  labs(x = "XX", 
+       y = "XX", 
+       fill = "XX", 
+       title = "NBA XX performance",
+       subtitle = "XX",
+       caption = "XX") +
+  coord_flip() + 
+  theme_minimal()
+```
+
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 12}
+# Read in nba data
+nba_long <- read.csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/nba_long.csv")
+
+ggplot(nba_long, 
+       mapping = aes(x = Name, y = measure, fill = value)) + 
+  geom_tile(colour = "white") + 
+  scale_fill_gradientn(colors = c("red", "white", "blue"))+ 
+  labs(x = "Player", 
+       y = "Statistic", 
+       fill = "Performance", 
+       title = "NBA player performance",
+       subtitle = "Each tile represents how well the player performed on that statistic relative to other players.",
+       caption = "Source: https://learnr.wordpress.com/2010/01/26/ggplot2-quick-heatmap-plotting/") +
+  coord_flip() + 
+  theme_minimal()
+```
+
+
+
+### Joyplots with `ggjoy()`
+
+The `ggjoy` package contains a new geom called `geom_joy()` that creates a [joyplot](https://eagereyes.org/blog/2017/joy-plots). Install the `ggjoy` package, load it, and then look at the introductory vignette by running `vignette(topic = "introduction", package = "ggjoy")`, 
+
+```{r, eval = FALSE, echo = TRUE}
+# Install the ggjoy package from CRAN
+install.packages("ggjoy")
+
+# Load the package
+library("ggjoy")
+
+# Open the introduction vignette
+vignette(topic = "introduction", package = "ggjoy")
+
+# Open the gallery vignette
+vignette(topic = "gallery", package = "ggjoy")
+```
+
+Now, create the following joyplot of college education rates from the `midwest` data using the following template:
+
+```{r, echo = TRUE, eval = FALSE, fig.width = 7, fig.height = 4}
+library(ggjoy)
+
+ggplot(data = XX,
+       mapping = aes(XX, y = XX, fill = XX)) + 
+  geom_joy(col = "XX") + 
+  scale_fill_cyclical(values = c("XX")) +
+  labs(title = "XX",
+       subtitle = "XX",
+       caption = "XX",
+       x = "XX",
+       y = "XX") +
+  scale_fill_brewer(palette = "XX") +
+  theme_minimal()
+```
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 4}
+library(ggjoy)
+
+ggplot(data = midwest,
+       mapping = aes(percollege, y = state, fill = state)) + 
+  geom_joy(col = "white") + 
+  scale_fill_cyclical(values = c("lightblue")) +
+  labs(title = "College education rates",
+       subtitle = "Wisconson, Ohio, Minnesota, Indiana, Illinois",
+       caption = "Created with the ggjoy package",
+       x = "Percent of residents with a college education",
+       y = "State") +
+  scale_fill_brewer(palette = "Set1") +
+  theme_minimal()
+```
+
+
+### Correlation plot with ggcorplot
+
+The `ggcorplot` package lets you make really nice plots of correlation matrices. Install the package from github with the following code:
+
+```{r, echo = TRUE, eval = FALSE}
+# Install the ggcorrplot package
+
+#install.packages("devtools")   # If you don't have the devtools pacakge, you'll have to install it first
+devtools::install_github("kassambara/ggcorrplot")
+```
+
+Using the following template, try to make your own correlation plot from the `midwest` data that looks like this:
+
+   - First create a correlation matrix using all of the numeric columns in the `midwest` data seen in the plot.
+   - Then, create the plot with `ggcorrplot`
+   
+
+```{r, echo = TRUE, eval = FALSE}
+library(ggcorrplot)
+
+# Select only numeric rows
+midwest_num <- midwest %>% select_if(is.numeric)
+
+# Create a correlation matrix from several numeric columns
+corr_mtx <- cor(midwest_num)
+
+# Create the correlation plot!
+ggcorrplot(cor = XX,
+           type = "XX",
+           lab = TRUE, 
+           lab_size = 3, 
+           method = "X", 
+           colors = c("X", "X", "X"), 
+           title = "XX",
+           subtitle = "XX",
+           caption = "XX",
+           ggtheme = XX)
+```
+
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 10}
+library(ggcorrplot)
+
+# Select only numeric rows
+midwest_num <- midwest %>% select_if(is.numeric)
+
+# Create a correlation matrix from several numeric columns
+corr_mtx <- cor(midwest_num)
+
+# Plot
+ggcorrplot(cor = corr_mtx,
+           type = "lower",
+           lab = TRUE, 
+           lab_size = 3, 
+           method = "circle", 
+           colors = c("red", "white", "springgreen3"), 
+           title = "Correlations of Measures from Midwest Counties",
+           ggtheme = theme_bw)
+```
+
+### Challenges
+
+Make the following plot of savings data (`psavert`) from the `economics` dataset (hint: use the `geom_line()` function and map `date` to the x aesthetic and `psavert` to the y aesthetic.)
+
+```{r, eval = FALSE, echo = TRUE}
+ggplot(data = XX, aes(x = XX, y = XX)) + 
+       geom_line() + 
+       labs(title = "XX", 
+            subtitle = "XX", 
+            caption = "XX", 
+            y = "XX") + 
+       theme_bw() + 
+       geom_smooth()
+```
+
+```{r, eval = TRUE, echo = TRUE, fig.width = 10, fig.height = 6}
+# plot
+ggplot(data = economics, 
+       mapping = aes(x = date, y = psavert)) + 
+  geom_line() + 
+  geom_smooth() +
+  labs(title = "Personal Savings Rates Changes over Time", 
+       subtitle = "Ratio of personal saving to disposable income", 
+       caption = "Source:  http://research.stlouisfed.org/fred2", 
+       y = "Savings Rate %") + 
+  theme_bw()
+```
+
+
+Make this plot from the `diamonds` data showing the relationship between diamond cut (`cut`), color (`color`), and carats (`carat`)
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 10}
+ggplot(data = diamonds, 
+       aes(carat, fill = cut)) +
+  facet_wrap(~ color, labeller = "label_both") + 
+       geom_density(alpha = 0.5) + 
+       labs(title = "Carats", 
+            subtitle = "For diamonds of different cuts",
+            caption = "Source: diamonds dataset in ggplot2",
+            x = "Carats",
+            y = "Density",
+            fill = "Cut") + 
+  theme_bw()
+```
+
+Make the following plot from the `ACTG175` dataset. To do this, you'll need to use both `geom_boxplot()` and `geom_point()`. To jitter the points, use the `position` argument to `geom_point()`, as well as the `position_jitter()` function to control how much to jitter the points.
+
+```{r, eval = TRUE, echo = TRUE, fig.width = 10, fig.height = 6}
+ggplot(data = ACTG175,
+       aes(x = factor(arms), y = days, fill = factor(arms))) +
+   facet_wrap(~ drugs, nrow = 1, labeller = label_both) +
+  geom_boxplot(outlier.size = 0, alpha = .2) + 
+  labs(title = "Number of days until a major negative event",
+       subtitle = "For different treatment arms and separated by drug users and non drug users",
+       caption = "Source: ACTG175 dataset from the speff2trial package",
+       x = "Treatment Arm",
+       y = "Number of days until a major negative event",
+       fill = "Arm") +
+  theme_bw() +  
+  scale_fill_brewer(palette = "Dark2") + 
+  geom_point(alpha = .2, 
+             position = position_jitter(w = 0.1, h = 0))
+
+```
+
+The `Davis` dataframe in the `car` package contains measurements of the reported and measured (i.e.; real!) heights and weights of several men and women. Create the following plot showing the relationship between people's reported, and actual heights.
+
+  - Instead of using `geom_point()`, use `geom_count()` to create points whose size reflects the number of observations at that location.
+  - Include an "identity line" with the `geom_abline()` function.
+
+```{r, eval = TRUE, echo = TRUE, fig.width = 10, fig.height = 6}
+library(car)
+
+ggplot(data = Davis,
+       mapping = aes(x = repht, y = height, color = sex)) + 
+       geom_count(alpha = .8) + 
+       scale_size_area(max_size = 10) + 
+       geom_abline(slope = 1, intercept = 0) + 
+       theme_bw() + 
+  scale_y_continuous(limits = c(125, 200)) + 
+  labs(x = "Reported height (cm)",
+       y = "Measured height (cm)",
+       title = "Relationship between reported and measured height",
+       subtitle = "Separated by men and women",
+       caption = "Source: Davis (1990). Body image and weight preoccupation")
+
+
+```
+
+
+
+### You choose the plot!
+
+#### `ACTG175` (From the `speff2trial` package)
+
+Create a plot showing the relationship between CD4 T cell count at 96 weeks (`cd496`), treatment arm (`arms`) and gender (`gender`).
+
+Create a plot showing the relationship between treatment arm (`arms`), number of days until a major negative event (`days`) and history of intravenous drug use (`drugs`).
+
+#### `heartdisease` (From the `FFTrees` package)
+
+Create a plot showing the relationship between `age`, `chol` and `diagnosis`
+
+Create a plot showing the relationship between `cp`, `slope`, and `diagnosis`
+
+
+
+### References
+
+- Many of the plots in this practical were taken from Selva Prabhakaran's website [http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
+
+- For making maps with ggplot, check out Eric Anderson's tutorial at [http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html](http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html)

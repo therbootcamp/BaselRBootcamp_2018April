@@ -1,0 +1,306 @@
+---
+title: "Recap I"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+
+
+# Essentials of the R language
+
+.pull-left5[
+>"To understand computations in R, two slogans are helpful:
+<br><br>
+>###(1) Everything that exists is an object and 
+>###(2) everything that happens is a function call."
+]
+
+.pull-right5[
+<p align="center"><img src="https://statweb.stanford.edu/~jmc4/CopyPhoto.jpg" width="350" align="center"></p>
+<p align="center">John Chambers<br> <font size=2> Author of S and developer of R</font><br>
+<font size=2><a href="https://statweb.stanford.edu/~jmc4/">statweb.stanford.edu</a>
+</p>
+]
+
+---
+
+.pull-left45[
+# Objects
+>###"Everything in R is an object"<br> 
+><p align="right">*John Chambers*<p>
+
+<br><br>
++ R's objects are have **content and attributes**.
+<br2>
++ The **content can be anything** from numbers or strings to functions or complex data structures. 
+<br2>
++ Attributes often encompass **names**, **dimensions**, and the **class or type** of the object, but other attributes are possible. 
+<br2>
++ Practically all data objects are equipped with those **three essential attributes**.
+
+]
+
+.pull-right5[
+<br><br>
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/objects.png" align="center" width="579" height="560">
+]
+
+
+---
+
+
+# Accessing & changing data frames (and lists)
+
+Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
+
+.pull-left45[
+```{r}
+# retrieve elements using brackets
+my_df <- data.frame('v_1'=c('A', 'B', 'C'), 
+                    'v_2'=c(1, 2, 3))
+my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+```
+]
+
+.pull-right45[
+```{r}
+# retrieve elements using the $-operator
+my_df$v_1
+my_df$v_1 <- c('X', 'Y', 'Z')
+my_df
+
+```
+]
+
+
+---
+
+# Functions
+
+Any operation of your data is done by functions. Functions have 3 elements:
++ **Name**: Used to call (execute) a function.
++ **Argument(s)**: Objects that the function needs to do its job.
++ **Expression**: R code that is the options job.
+    
+.pull-left55[
+```{r}
+# Defining a function that computes the mean
+my_mean <- function(x) return(sum(x) / length(x))
+
+# Defining a function that computes 
+# the mean or median
+my_stat <- function(x, method = 'mean'){
+  
+  # detect and run method
+  if(method == "mean") return(my_mean(x))
+  if(method == "median") return(median(x))
+  
+  # return error if not method detected
+  stop('Method must be mean or median')
+}
+```
+]
+
+.pull-right4[
+```{r}
+# Runnning our functions
+my_vec <- c(1, 4, 6, 3, 7, 5, 12, 9)
+my_mean(x = my_vec)
+my_stat(x = my_vec, method = 'mean')
+my_stat(x = my_vec, method = 'median')
+```
+]
+
+
+---
+
+# Help
+
+.pull-left5[
+
+R provides extremely helpful **help files** and **vignettes**. 
+>**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).<br>
+>**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+
+```{r, eval = F}
+# To access help files
+help("name_of_function")
+?name_of_function
+
+# find help files
+??name_of_function
+
+# To list and access vignettes
+vignette(package = "name_of_package")
+vignette(package = "name_of_vignette")
+```
+
+]
+
+.pull-right45[
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"></p>
+
+<!---
+<br><br><iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"></iframe>
+--->
+]
+
+---
+
+# Importing and Exporting Data
+
+In this session you will learn...
+
+.pull-left45[
+1. How to import data data from **delimeter separated files** (e.g., .csv)?
+<br2>
+2. How to import data data from **proprietory file formats** (e.g., .sav)?
+<br2>
+3. How to save/export data to various formats, including **R's own files types**?
+<br2>
+4. How to use **file connections** to read data in its rawest possible way? 
+<br2>
+5. About a new data format called **tibble**.
+]
+
+.pull-right45[
+<img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" width="150">
+<img src="http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png" width="150">
+<br>
+<img src="http://haven.tidyverse.org/logo.png" width="150">
+<img src="https://www.rstudio.com/wp-content/uploads/2017/05/readxl-259x300.png" width="150">
+
+]
+
+---
+
+# An example
+
+Assume we have a *flat* data set with variables `id`, `var_1`, and `var_2` and cases as rows. Such data can be conveniently read in using `read_csv()`. Moreover, `read_csv()` will **automatically identify** (a) columns and rows, (b) column names, (c) the type of the columns and finally return a `tibble` (more on that later).
+
+.pull-left45[
+```{r, eval = F}
+# define simple data set
+data <- 
+   "id, var_1, var_2\n
+  DCDL,  .287,  .048\n
+  FEFK,  .894,  .383\n
+  ZEWE, 1.374,  .623\n
+  OJEE,  .631,  .826"
+```
+]
+
+.pull-right45[
+```{r, eval = F}
+# read in data
+require(readr)
+read_csv(data)
+```
+
+```{r, echo = F}
+# define simple data set
+data <- 
+   "id, var_1, var_2\n
+  DCDL,  .287,  .048\n
+  FEFK,  .894,  .383\n
+  ZEWE, 1.374,  .623\n
+  OJEE,  .631,  .826"
+
+# read in data
+require(readr)
+read_csv(data)
+```
+]
+
+---
+
+
+# `tibble`s
+
+The **output** from most `tidyverse` read functions such as `read_csv` and the preferred data format for many (but not all) analyses is a `tibble`. `tibble`s are a **modern, leaner version of data.frames**. 
+
+.pull-left45[
+### tibbles ...
++ never change the input's type.
+<br2>
++ never add row names.
+<br2>
++ never change column names.
+<br2>
++ look better in `print`. 
+<br2>
++ are accessed more consistently.
+]
+
+.pull-right45[
+### Functions
+```{r, eval = F}
+# create tibble
+my_data <- tibble(id, var_1, var_2)
+
+# convert to and from data.frame
+as_tibble(my_data_frame)
+as.data.frame(my_tibble)
+```
+
+```{r, echo = F}
+# define simple data set
+data <- 
+   "id, var_1, var_2\n
+  DCDL,  .287,  .048\n
+  FEFK,  .894,  .383\n
+  ZEWE, 1.374,  .623\n
+  OJEE,  .631,  .826"
+
+# read in data
+require(readr)
+read_csv(data)
+```
+]
+
+
+---
+
+# The almighty **tidyverse**
+
+Among its many packages, R contains a collection of high-performance, easy-to-use packages (libraries) designed specifically for handling data know as the [tidyverse](https://www.tidyverse.org/). The tidyverse includes:
+1. `ggplot2` -- creating graphics.
+2. `dplyr` -- data manipulation.
+3. `tidyr` -- tidying data.
+4. `readr` -- read wild data.
+5. `purrr` -- functional programming.
+6. `tibble` -- modern data frame.
+<br><br>
+
+```{r, out.height = "200px", echo = F}
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/071952491ec4a6a532a3f70ecfa2507af4d341f9/c167c/images/hex-dplyr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/5f8c22ec53a1ac61684f3e8d59c623d09227d6b9/b15de/images/hex-tidyr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/9221ddead578362bd17bafae5b85935334984429/37a68/images/hex-purrr.png")
+knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png")
+```
+
