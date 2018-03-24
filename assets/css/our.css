@@ -1,0 +1,16 @@
+.description code {
+  font-family: "Droid Sans Mono";
+  background-color: white;
+}
+
+a {
+  color: black;
+  text-decoration:none;
+  text-align:center;
+  font-weight: bold;
+}
+
+h2 {
+ 
+  font-weight = 500;
+}

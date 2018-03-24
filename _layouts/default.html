@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% include head.html %}
+  <body>
+    <script type="text/javascript">
+	  _linkedin_data_partner_id = "111419";
+    </script>
+    <script type="text/javascript">
+      (function(){var s = document.getElementsByTagName("script")[0];
+      var b = document.createElement("script");
+      b.type = "text/javascript";b.async = true;
+      b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+      s.parentNode.insertBefore(b, s);})();
+    </script>
+  
+    {% include header.html %}
+    <section id="course">
+      {% include course.html %}
+    </section>
+    <section id="upcoming">
+      {% include upcoming.html %}
+    </section>
+    <section id="previous">
+      {% include previous.html %}
+    </section>
+    <section id="about">
+      {% include about.html %}
+    </section>
+    {{ content }}
+    {% include footer.html %}
+  </body>
