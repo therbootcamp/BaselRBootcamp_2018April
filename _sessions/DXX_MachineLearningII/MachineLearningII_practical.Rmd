@@ -45,8 +45,21 @@ Here are the main functions and packages you'll be using. For more information a
 
 For this practical, you will need the following packages:
 
+
+```{r, eval = FALSE}
+install.packages(c("caret", "e1071", "doSNOW", "ipred", "xgboost", "mlbench"))
+```
+
 install.packages(c("caret", "e1071", "doSNOW", "ipred", "xgboost"))
 
+```{r}
+
+library(caret)          # for randomForest()
+library(xgboost)        # for FFTrees and the heartdisease data
+library(tidyverse)      # for dplyr and ggplot2
+
+
+```
 
 
 ### Examples
@@ -65,51 +78,18 @@ install.packages(c("caret", "e1071", "doSNOW", "ipred", "xgboost"))
 # Load libraries
 # -----------------------
 
-library(tidyverse)      # for dplyr and ggplot2
-library(caret)   # for randomForest()
-library(e1071)          # for rpart()
-library(doSNOW)        # for FFTrees and the heartdisease data
-library(ipred)        # for FFTrees and the heartdisease data
+library(caret)          # for randomForest()
 library(xgboost)        # for FFTrees and the heartdisease data
+library(tidyverse)      # for dplyr and ggplot2
+
 
 # -----------------------
 # Part B: Load titanic dataset
 # Look at https://www.kaggle.com/c/titanic/data for a full description
 # -----------------------
 
-train <- read_csv("https://raw.githubusercontent.com/pcsanwald/kaggle-titanic/master/train.csv")
+titanic_full <- read_csv("https://raw.githubusercontent.com/pcsanwald/kaggle-titanic/master/train.csv")
 
-test <- read_csv("https://raw.githubusercontent.com/pcsanwald/kaggle-titanic/master/test.csv")
-
-
-# Replace missing embarked values with mode.
-
-train$embarked[train$embarked == ""] <- "S"
-
-
-# Add a feature for tracking missing ages.
-
-train$missingage <- ifelse(is.na(train$age),
-                           "Y", "N")
-
-
-# Add a feature for family size.
-train$familysize <- 1 + train$sibsp + train$parch
-
-# Set up factors.
-train$survived <- as.factor(train$survived)
-train$pclass <- as.factor(train$pclass)
-train$sex <- as.factor(train$sex)
-train$embarked <- as.factor(train$embarked)
-train$missingage <- as.factor(train$missingage)
-
-
-# Subset data to features we wish to keep/use.
-features <- c("survived", "pclass", "sex", "age", "sibsp",
-              "parch", "fare", "embarked", "missingage",
-              "familysize")
-train <- train[, features]
-train <- as_tibble(train)
 
 #=================================================================
 # Impute Missing Ages
@@ -127,11 +107,6 @@ train_dummy <- predict(dummy_vars, newdata = train %>% select(-survived))
 train_bagImpute_model <- preProcess(train_dummy, method = "bagImpute")
 train_inputed <- as_tibble(predict(train_bagImpute_model, newdata = train_dummy))
 
-# add imputed values of age back to train
-
-train <- train %>%
-  mutate(age = !!train_inputed$age)
-
 #=================================================================
 # Split Data
 #=================================================================
@@ -141,23 +116,114 @@ train <- train %>%
 # same across splits.
 set.seed(100)
 
-train_indices <- as.vector(createDataPartition(train$survived,
-                                     times = 1,
+train_indices <- createDataPartition(train_inputed$survived,
+                                     times = 3,
                                      p = 0.7,
-                                     list = FALSE))
+                                     list = FALSE)
 
-titanic.train <- train %>% slice(1)
-titanic.test <- train[-indexes,]
+titanic_train <- train_inputed %>% 
+  slice(train_indices[,1])
+
+titanic_test <- train_inputed %>% 
+  slice(-train_indices[,1])
 
 
 # Examine the proportions of the Survived class lable across
 # the datasets.
-prop.table(table(train$Survived))
-prop.table(table(titanic.train$Survived))
-prop.table(table(titanic.test$Survived))
+prop.table(table(train$survived))
+prop.table(table(titanic_train$survived))
+prop.table(table(titanic_test$survived))
 
 str(train)
 
 
+#=================================================================
+# Train Model
+#=================================================================
+
+# Set up caret to perform 10-fold cross validation repeated 3 
+# times and to use a grid search for optimal model hyperparamter
+# values.
+train.control <- trainControl(method = "repeatedcv",
+                              number = 10,              # 10-fold 
+                              repeats = 3,              # Do it 3 times
+                              search = "grid")          # Find optimal parameters
+
+
+
+
+
+caret.cv <- train(survived ~ ., 
+                  data = titanic_train,
+                  method = "xgbTree",
+                  trControl = train.control)
 ```
+
+
+### Datasets in the mlbench package
+
+We will explore 5 different datasets from the `mlbench` package. This package contains many different datasets that are used throughout the machine learning commmunity to evaluate and compare machine learning models.
+
+```{r, eval = TRUE}
+library(mlbench)
+
+data(BostonHousing)
+data(DNA)
+data(BreastCancer)
+data(Soybean)
+data(LetterRecognition)
+```
+
+```{r datadescriptions, echo = FALSE}
+tibble(dataset = "BostonHousing", rows = nrow(BostonHousing), columns = ncol(BostonHousing)) %>%
+  add_row(dataset = "DNA", rows = nrow(DNA), columns = ncol(DNA)) %>%
+  add_row(dataset = "BreastCancer", rows = nrow(BreastCancer), columns = ncol(BreastCancer)) %>%
+  add_row(dataset = "Soybean", rows = nrow(Soybean), columns = ncol(Soybean)) %>%
+    add_row(dataset = "LetterRecognition", rows = nrow(LetterRecognition), columns = ncol(LetterRecognition)) %>%
+  knitr::kable()
+```
+
+
+1. Look at the help menu for X to understand the columns
+
+1. Explore the X dataset, do you see any missing data?
+
+2. Impute the missing values with X
+
+3. Using `createPartition`, separate the data into a X% training set X_train and a X% test set called X_test. Make sure to stratify the data so that the training and test sets have relatively equal balances of the criterion.
+
+4. Create a set of control parameters to setup a 10 fold cross validation. Only do 1 repetition.
+
+5. Using `train`, train a decision tree on the data.
+
+6. Look at the results of the object you just created and try to find the original decision tree models
+
+7. Look at the accuracy results, what were the 10 different prediction accuracy levels you got in the 10fold cross validation?
+
+8. Now, using XX predict the criterion for the real test data.
+
+9. Using XX, evaluate the true test accuracy of the model. How did it compare to what you expected from your 10 fold cross validation simulation?
+
+### Optimising parameters with cross validation.
+
+13. Using XX, repeat your processes above to optimize parameter values. 
+
+### Try logistic regression
+
+Now add logisic regression...
+
+### Try random forests
+
+10. Now it's time to try a new model! Instead of a decision tree, try using randomforests with XX. Repeat each of your steps before.
+
+11. Using XX, compare your cross validation results between decision trees and random forests. Which model seems to do better in the cross validations?
+
+12. Let's test your predictions! Predict the test data with your random forest model and evalute it's prediction performance. Do your results coincide with what you expected from your cross validation simulation?
+
+# Using the XXX dataset
+
+Repeat all of your previous steps, but now with the XX dataset. Which model seems to do the best in this dataset?
+
+
+
 

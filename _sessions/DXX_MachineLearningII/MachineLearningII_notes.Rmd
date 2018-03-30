@@ -1,0 +1,60 @@
+---
+title: "MachineLearning_Notes"
+output: html_document
+---
+
+
+## What is CARET?
+
+- Classification and Regression Training
+  - Written by Max Kuhn, is the go-to package for ML in R.
+
+## Why use caret?
+
+- Gives you access to hundreds of ML algorithms in R with a **common** interface.
+    - You don't need to learn all of the unique inputs for each algorithm, it's all the same!
+
+- Split / sample data
+
+- Feature Selection
+    - Makes it easy to select *features* from a dataset that seem reasonable
+
+- Model tuning
+    - Helps you to easily tune models to your unique dataset
+
+## Feature selection
+
+- We have 10s, 100s, or 1000s of 'features', how do we narrow these down?
+    - Why do we want to narrow them down?
+        - Unncessary computation, comprehensibility.
+        - Some columns we know are useless (e.g.; person's name)
+    - What is an unncessary feature?
+        - No variance
+        - Perfectly correlated with another feature (e.g.; weight_lb, weight_kg)
+        - Nominal features with the same number of levels as datapoints (e.g.; names)
+
+- Start by asking yourself "What features in the data do I explicitly want to ignore?"
+    - It's almost always better to use content knowledge before setting an algorithm loose on data.
+
+
+## Imputing missing values
+
+
+
+### Engineering
+
+- Feature Engineering means creating *new* features based on existing ones.
+
+- Examples
+   - Extracting sentiment from text
+   
+   
+
+### Key caret functions
+
+- `preProcess`: Transforms data, fill in missing values, 
+- `createDataPartition`: Splicts data using stratified sampling
+- `train`: Estimate model parameters, evaluate the effect of model parameters on fitting performance, choose 'optimal' parameter values for a dataset.
+- `confusionMatrix`: Get model fit statistics for classification
+- `resamples` Collect, summarise, and contrast the perofrmance of different models
+
