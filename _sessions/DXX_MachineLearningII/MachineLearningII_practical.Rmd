@@ -1,0 +1,163 @@
+---
+title: "Machine Learning II"
+author: "BaselRBootcamp January 2018"
+output: html_document
+---
+
+```{r, echo = FALSE, fig.align = 'center', out.width = "50%", fig.cap = "Source: https://www.toptal.com/machine-learning/machine-learning-theory-an-introductory-primer"}
+knitr::include_graphics("https://uploads.toptal.io/blog/image/443/toptal-blog-image-1407508081138.png")
+```
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE, fig.align = 'center')
+```
+
+
+### Slides
+
+- [Here are the introduction slides for this practical on machine learning!](https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning.html)
+
+
+### Overview
+
+In this practical you'll use the `caret` (**C**lassification **A**nd **RE**gression **T**raining) package to automate many aspects of the machine learning process. By the end of this practical you will know:
+
+1. Which aspects of the machine learning process the `caret` package can automate
+2. Select different 'learners' available in the `caret` package
+3. Fit parameters of a learner to a dataset
+4. Explore learners to understand how they work
+5. Use cross validation techniques to estimate the accuracy of a learner
+
+### Glossary and packages
+
+Here are the main functions and packages you'll be using. For more information about the specific models, click on the link in *Additional Details*.
+
+| Algorithm| Function| Package | Additional Details |
+|:------|:--------|:----|:----|
+|     Regression|    `glm()`| Base R| https://bookdown.org/ndphillips/YaRrr/regression.html#the-linear-model|
+|     Fast-and-Frugal decision trees|    `FFTrees()`| FFTrees| https://cran.r-project.org/web/packages/FFTrees/vignettes/guide.html|
+|     Decision Trees|    `rpart()`| `rpart` | https://statweb.stanford.edu/~lpekelis/talks/13_datafest_cart_talk.pdf|
+| Random Forests | `randomForest()` | `randomForest` | http://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/|
+
+
+### Packages
+
+For this practical, you will need the following packages:
+
+install.packages(c("caret", "e1071", "doSNOW", "ipred", "xgboost"))
+
+
+
+### Examples
+
+- The following examples will take you through all steps of the machine learning process, from creating training and test data, to fitting models, to making predictions. Follow along and try to see how piece of code works!
+
+```{r, eval = FALSE, echo = TRUE}
+# -----------------------------------------------
+# A step-by-step tutorial for conducting machine learning
+# In this tutorial, we'll see how well 3 different models can
+#  predict medical data
+# ------------------------------------------------
+
+# -----------------------
+# Part A:
+# Load libraries
+# -----------------------
+
+library(tidyverse)      # for dplyr and ggplot2
+library(caret)   # for randomForest()
+library(e1071)          # for rpart()
+library(doSNOW)        # for FFTrees and the heartdisease data
+library(ipred)        # for FFTrees and the heartdisease data
+library(xgboost)        # for FFTrees and the heartdisease data
+
+# -----------------------
+# Part B: Load titanic dataset
+# Look at https://www.kaggle.com/c/titanic/data for a full description
+# -----------------------
+
+train <- read_csv("https://raw.githubusercontent.com/pcsanwald/kaggle-titanic/master/train.csv")
+
+test <- read_csv("https://raw.githubusercontent.com/pcsanwald/kaggle-titanic/master/test.csv")
+
+
+# Replace missing embarked values with mode.
+
+train$embarked[train$embarked == ""] <- "S"
+
+
+# Add a feature for tracking missing ages.
+
+train$missingage <- ifelse(is.na(train$age),
+                           "Y", "N")
+
+
+# Add a feature for family size.
+train$familysize <- 1 + train$sibsp + train$parch
+
+# Set up factors.
+train$survived <- as.factor(train$survived)
+train$pclass <- as.factor(train$pclass)
+train$sex <- as.factor(train$sex)
+train$embarked <- as.factor(train$embarked)
+train$missingage <- as.factor(train$missingage)
+
+
+# Subset data to features we wish to keep/use.
+features <- c("survived", "pclass", "sex", "age", "sibsp",
+              "parch", "fare", "embarked", "missingage",
+              "familysize")
+train <- train[, features]
+train <- as_tibble(train)
+
+#=================================================================
+# Impute Missing Ages
+#=================================================================
+
+# Caret supports a number of mechanism for imputing (i.e., 
+# predicting) missing values. Leverage bagged decision trees
+# to impute missing values for the Age feature.
+
+# First, transform all feature to dummy variables.
+dummy_vars <- dummyVars(~ ., data = train %>% select(-survived))
+train_dummy <- predict(dummy_vars, newdata = train %>% select(-survived))
+
+# 
+train_bagImpute_model <- preProcess(train_dummy, method = "bagImpute")
+train_inputed <- as_tibble(predict(train_bagImpute_model, newdata = train_dummy))
+
+# add imputed values of age back to train
+
+train <- train %>%
+  mutate(age = !!train_inputed$age)
+
+#=================================================================
+# Split Data
+#=================================================================
+
+# Use caret to create a 70/30% split of the training data,
+# keeping the proportions of the Survived class label the
+# same across splits.
+set.seed(100)
+
+train_indices <- as.vector(createDataPartition(train$survived,
+                                     times = 1,
+                                     p = 0.7,
+                                     list = FALSE))
+
+titanic.train <- train %>% slice(1)
+titanic.test <- train[-indexes,]
+
+
+# Examine the proportions of the Survived class lable across
+# the datasets.
+prop.table(table(train$Survived))
+prop.table(table(titanic.train$Survived))
+prop.table(table(titanic.test$Survived))
+
+str(train)
+
+
+```
+

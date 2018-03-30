@@ -1,0 +1,659 @@
+---
+title: "Machine Learning"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "January 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+
+# What is machine learning?
+
+.pull-left6[
+
+
+### Algorithms autonomously learning from data.
+
+Given data, an algorithm tunes its *parameters* to match the data, understand how it works, and make predictions for what will occur in the future.
+
+```{r, echo = FALSE, out.width = "80%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mldiagram_A.png")
+```
+
+]
+
+.pull-right4[
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearningcartoon.png")
+```
+
+
+]
+
+---
+# Everyone uses machine learning
+
+.pull-left6[
+
+### Everyone!
+
+- How does Google know what search results you want?
+
+- How does Amazon know what products to recommend?
+
+- How does Netflix decide what shows you'll want to watch next?
+
+- How do Tesla cars recognize objects and predict accidents?
+
+
+> Machine learning drives our algorithms for demand forecasting, product search ranking, product and deals recommendations, merchandising placements, fraud detection, translations, and much more. ~ Jeff Bezos, Amazon founder
+
+]
+
+
+.pull-right4[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlexamples.png")
+```
+
+
+
+
+]
+
+---
+# What is the basic machine learning process?
+
+```{r, echo = FALSE, out.width = "95%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/MLdiagram.png")
+```
+
+
+
+---
+# Why do we separate training from prediction?
+
+.pull-left4[
+
+Just because an algorithm can fit past (training) data well, does *not* necessarily mean that it will *predict* new data well.
+
+
+<br> 
+
+```{r, fig.cap = "Anyone can come up with a model of past stock performance. Predicting future performance is much more difficult.", echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stockpen.jpg")
+```
+
+
+
+]
+
+.pull-right6[
+
+
+> "Prediction is difficult, especially when it is about the future" ~ Niels Bohr
+
+```{r, fig.cap = "Niels Bohr, Nobel Laureate in Physics", echo = FALSE, out.width = "20%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/bohr.jpg")
+```
+
+> "An economist is an expert who will know tomorrow why the things he predicted yesterday didn't happen today." ~ Evan Esar
+
+<!-- > "A prediction about the direction of the stock market tells you nothing about where stocks are headed, but a whole lot about the person doing the predicting" ~ Warren Buffett -->
+
+]
+
+
+---
+# Training (fitting) vs. Testing (prediction)
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_A.png")
+```
+
+---
+# Training (fitting) vs. Testing (prediction)
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_B.png")
+```
+
+---
+# Training (fitting) vs. Testing (prediction)
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_C.png")
+```
+
+---
+# Training (fitting) vs. Testing (prediction)
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_D.png")
+```
+
+
+---
+## What machine learning algorithms are there?
+
+.pull-left6[
+
+- There are hundreds if not thousands of machine learning algorithms from many different fields.
+    - Computer vision, Natural language processing, reinforcement learning...
+
+Wikipedia lists 57 *Categories* of machine learning algorithms, each with dozens of examples
+
+```{r, echo = FALSE, eval = TRUE, out.width = "80%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wikipediaml.png")
+```
+
+]
+
+.pull-right4[
+<br><br>
+We will focus on 3 that apply to both classification and regression
+
+| Algorithm|Complexity|
+|:------|:----|
+|     Regression| Low / Medium | 
+|     Decision Trees| Low |
+|     Random Forests| High |
+
+]
+
+
+
+---
+## Two types of prediction tasks
+
+.pull-left45[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/classification_task.png")
+```
+
+
+]
+
+
+.pull-right45[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/regression_task.png")
+```
+
+
+
+]
+
+
+
+
+---
+
+.pull-left6[
+
+## How do you fit and evaluate models in R?
+
+<br>
+
+| Step|Description| Note / Example |
+|:------|:---|:------------|
+| 1| Install model packages| `rpart` or `FFTrees` for Decision Trees<br>`randomForest` for Random Forests|
+|     2| Get data |Use your own, or get free online datasets|
+|    3| Train model on data and generate insights|Always look at help menus and online tutorials!|
+|    4| Predict new data, possibly with cross-validation|Packages such as `mlr` and `caret` can really help|
+
+]
+
+.pull-right35[
+<br>
+```{r, echo = FALSE, eval = TRUE, out.width = "90%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearning_r_ss.png")
+```
+
+
+]
+
+
+
+
+---
+# How do you fit and evaluate models in R?
+
+.pull-left45[
+
+### Fitting a model
+
+
+```{r, eval = FALSE}
+A_model <- A_fun(formula = y ~.,
+                 data = data_train,
+                 ...)
+```
+
+
+| Argument| Description| Note |
+|------:|:----|:---|
+|     formula|  Formula indicating variables to use|  `y ~ .` is often used as a catch-all |
+|     data|    The dataset for model training| |
+|     ...|  Optional other arguments| See the function help page for details|
+
+
+]
+
+.pull-right5[
+
+
+### Evaluating a model
+
+```{r, eval = FALSE}
+# Common ways to explore / use a model
+
+A_model           # Print generic information
+
+names(A_model)    # Show attributes
+
+summary(A_model)  # Print summary information
+
+predict(A_model,  # Predict test data
+        newdata = data_test)  
+
+plot(A_model)     # Visualize the model
+```
+
+]
+
+
+
+
+
+---
+## Regression with `glm()`
+
+.pull-left5[
+
+In regression, the criterion is modeled as the weighted sum of predictors times *weights* $\beta_{1}$, $\beta_{2}$
+
+### Loan Default:
+
+One could model the risk of defaulting on a loan as:
+
+$$Risk = Age \times \beta_{age} + Income \times \beta_{income} + ...$$
+
+Training a model means finding values of $\beta_{Age}$ and $\beta_{Income}$ that 'best' match the training data.
+
+```{r, echo = FALSE, eval = TRUE, out.width = "50%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/regression.png")
+```
+
+
+]
+
+
+.pull-right5[
+
+Create regressions using the `glm()` function (part of base-R)
+
+```{r, eval = FALSE}
+# glm() function for regression
+glm(formula = y ~.,     # Formula
+    data = data_train,  # Training data
+    family, ...)        # Optional arguments
+
+# Train glm model
+loan_glm_model <- glm(formula = risk ~ ., 
+                      data = data_train)
+
+# Predict new data with glm model
+loan_glm_pred <- predict(loan_glm_model,
+                         newdata = data_test)
+```
+
+
+
+]
+
+
+---
+## Decision Trees with `rpart::rpart()`
+
+.pull-left5[
+
+In decision trees, the criterion is modeled as a sequence of logical Yes or No questions.
+
+### Loan Default:
+
+```{r, echo = FALSE, eval = TRUE}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/defaulttree.png")
+```
+
+
+]
+
+.pull-right5[
+
+Create decision trees using the `rpart` package
+
+```{r, eval = FALSE}
+# Load the rpart package
+library(rpart)
+
+# Calculating a decision tree in R
+rpart(formula = y ~.,       # Formula 
+      data = data_train,    # Training data
+      method, parms, cost)  # Optional arguments
+
+# Train rpart model
+loan_rpart_model <- rpart(formula = risk ~ ., 
+                          data = loan_data,
+                          method = "anova")
+
+# Predict new data with rpart model
+loan_rpart_pred <- predict(loan_rpart_model,
+                          newdata = loan_test)
+```
+
+
+]
+
+
+---
+## Random Forests with `randomForest::randomForest()`
+
+.pull-left5[
+
+A Random Forest is a collection of many (hundreds, thousands) of decision trees
+
+
+```{r, echo = FALSE, eval = TRUE, out.width = "90%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/randomforest_diagram.png")
+```
+
+
+]
+
+.pull-right5[
+
+Create decision trees using the `randomForest` package
+
+```{r, eval = FALSE}
+# Load the randomforest package
+library(randomForest)
+
+# Calculating a randomForest in R
+randomForest(formula = y ~.,    # Formula 
+             data = data_train, # Training data
+             ntree, mtry)       # Optional
+
+# Train rpart model
+loan_rf_model <- randomForest(formula = risk ~ ., 
+                              data = loan_data)
+
+# Predict new data with model
+loan_rf_pred <- predict(loan_rf_model,
+                        newdata = loan_test)
+```
+
+
+]
+
+
+---
+# How do I do machine learning in R?
+
+.pull-left6[
+
+
+
+In the practical, we will go through the basic steps "by hand" so you can see the process:
+
+```{r, eval = FALSE}
+# Create training and test data
+data_train <- ...
+data_test <- ...
+
+# Train models on training data
+model_A <- A_fun(formula = y ~ ., 
+                 data = data_train)
+
+# Model A predictions
+pred_A <- predict(model_A, 
+                  newdata = data_test)
+
+# Calculate Model A error
+pred_err_A <- mean(abs(pred_A - data_test$y))
+
+# Compare to Models B, C, D...
+```
+
+]
+
+.pull-right35[
+
+
+If you're really into machine learning, packages such as `mlr` and `caret` can automate much of the the machine learning process.
+
+```{r, echo = FALSE, eval = TRUE, out.width = "95%", fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlrcaret.png")
+```
+
+]
+
+---
+
+## Machine Learning Live Demo & Practical
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning_practical.html">Link to Machine Learning practical</a>
+
+
+<!-- --- -->
+<!-- # What is the history of machine learning? -->
+
+<!-- - 1805 - 1809: Legendre and Gauss discover least squares. Soon after Galton defines **Regression** in a biological context, followed by Pearson for purely statistical analyses. -->
+
+<!-- - 1952: Arthur Samuel creates first computer learning program for learning checkers and coins the term **Machine Learning** in 1959.  -->
+
+<!-- - 1957: Frank Rosenblatt creates first **Neural Network** to simulate the thought process of the human brain. -->
+
+<!-- - 1963: First algorithm for **Support Vector Machines** is developed by Vapnik & Chervonenkis. -->
+
+<!-- - 1967: **Nearest neighbor algorithm** is developed for classification -->
+
+<!-- - 1984: Breiman & Olshen publish the CART algorithm for **Decision Trees**, followed by Quinlan who publishes the ID3 algorithm followed by C4.5 -->
+
+<!-- - 1986: Rina Dechter introduces **Deep Learning**, with many subsequent updates in the 2000s. -->
+
+<!-- - 1995: Tin Kam Ho develops first algorithm for **Random Forests** -->
+
+<!-- Sources: Wikipedia, Bernard Marr, "A Short History of Machine Learning", Forbes. -->
+
+
+
+---
+### Old
+
+
+
+
+---
+# Why do we separate training from prediction?
+
+- Data comes from two processes: *Signal* and *Noise* (aka Error).
+<br>
+
+```{r, echo = FALSE, fig.width = 7, fig.height = 3, dpi=200, out.width = "80%", fig.align = 'center'}
+
+set.seed(100)
+x <- seq(0, 5, length.out = 50)
+noise <- rnorm(50, mean = 0, sd = 2.5)
+
+model_fun <- function(x) {x ^ 3 - 4 * x ^ 2 + .5 * x + 5}
+
+y <- model_fun(x)
+y_obs <- model_fun(x) + noise
+
+par(mar = c(3, 4, 3, 1))
+
+par(mfrow = c(1, 3))
+
+plot(x, y_obs, main = "Data", xlab = "", ylab = "", col = "black")
+
+# segments(x, y, x, y_obs)
+
+# lines(y, y = y_obs)
+
+
+
+# Plot 1
+
+plot(x, y_obs, main = "Signal", xlab = "", ylab = "", col = "lightgray")
+curve(model_fun, from = 0, to = 5, add = TRUE, col = "green", lwd = 2)
+
+# segments(x, y, x, y_obs)
+
+# lines(y, y = y_obs)
+
+
+
+# Plot 2
+
+plot(x, y_obs, main = "Noise", xlab = "", ylab = "")
+ curve(model_fun, from = 0, to = 5, add = TRUE, col = "darkgray", lwd = .5)
+
+ segments(x, y, x, y_obs)
+
+# lines(y, y = y_obs)
+
+
+# 
+# # Plot 3
+# 
+# plot(x, y_obs, main = "A bad model tries to fit everything", xlab = "", ylab = "")
+# curve(model_fun, from = 0, to = 5, add = TRUE, col = "darkgray", lwd = .5)
+# 
+# text(.5, 20, "Hey I can draw a line through all points\nI don't have any error!", adj = 0)
+# 
+# 
+# lines(x, y_obs)
+# 
+# # Plot 4
+# 
+# plot(x, y_obs, main = "A good model will try to focus on the signal", xlab = "", ylab = "")
+# curve(model_fun, from = 0, to = 5, add = TRUE, col = "blue", lwd = 2)
+# 
+# text(.5, 20, "I won't try to fit all points because\nI think there is random error", adj = 0)
+
+
+# lines(x, y_obs)
+
+
+```
+
+
+
+
+---
+# Why do we separate training from prediction?
+
+- A good model is one that tries to capture the signal and ignore the noise
+- A bad model is one that captures too much unpredictable noise,
+    
+
+```{r, echo = FALSE, fig.width = 7, fig.height = 3, dpi=200, out.width = "80%", fig.align = 'center'}
+
+set.seed(100)
+x <- seq(0, 5, length.out = 50)
+noise <- rnorm(50, mean = 0, sd = 2.5)
+
+model_fun <- function(x) {x ^ 3 - 4 * x ^ 2 + .5 * x + 5}
+
+y <- model_fun(x)
+y_obs <- model_fun(x) + noise
+
+par(mar = c(3, 4, 3, 1))
+
+par(mfrow = c(1, 3))
+
+plot(x, y_obs, main = "Data", xlab = "", ylab = "", col = "black")
+
+# segments(x, y, x, y_obs)
+
+# lines(y, y = y_obs)
+
+
+
+# Plot 1
+
+plot(x, y_obs, main = "Good Model", xlab = "", ylab = "", col = "darkgray")
+
+lines(x, y, col = "blue")
+
+# curve(model_fun, from = 0, to = 5, add = TRUE, col = "green", lwd = 2)
+
+text(.5, 20, "Fitting error = Medium", adj = 0)
+text(.5, 15, "Prediction error = Low", adj = 0)
+
+
+# segments(x, y, x, y_obs)
+
+# lines(y, y = y_obs)
+
+
+
+# Plot 2
+
+plot(x, y_obs, main = "Bad Model", xlab = "", ylab = "")
+
+text(.5, 20, "Fitting error = None", adj = 0)
+text(.5, 15, "Prediction error = High", adj = 0)
+
+
+lines(x, y_obs, col = "red")
+# lines(y, y = y_obs)
+
+
+# 
+# # Plot 3
+# 
+# plot(x, y_obs, main = "A bad model tries to fit everything", xlab = "", ylab = "")
+# curve(model_fun, from = 0, to = 5, add = TRUE, col = "darkgray", lwd = .5)
+# 
+# text(.5, 20, "Hey I can draw a line through all points\nI don't have any error!", adj = 0)
+# 
+# 
+# lines(x, y_obs)
+# 
+# # Plot 4
+# 
+# plot(x, y_obs, main = "A good model will try to focus on the signal", xlab = "", ylab = "")
+# curve(model_fun, from = 0, to = 5, add = TRUE, col = "blue", lwd = 2)
+# 
+# text(.5, 20, "I won't try to fit all points because\nI think there is random error", adj = 0)
+
+
+# lines(x, y_obs)
+
+
+```
+
+
+
