@@ -1,0 +1,643 @@
+---
+title: "Programming in R - Practical"
+author: "BaselRBootcamp April 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval = FALSE)
+```
+
+### Slides
+
+- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/_sessions/...)
+
+### Overview
+
+In this practical you'll practice "Programming in R" with the base and `purrr`-package functions. Although we sort of have been programming already, we always used the `tidyverse` way to do it. While there is nothing against doing it this way, in fact we chose to teach R with the `tidyverse` because we think that it's an easy and very elegant way of doing it, when you work with R in the future, you will almost certainly find yourself in situations were you have to understand the base R way of programming. This may, for example, be the case when you get code from someone, or work with someone who is not familiar with the `tidyverse`. Furthermore, the concepts you learn in this session are the same in most programming languages (of course the exact implementation will vary over languages). So if R is your first programming language, learning about and understanding these concepts will greatly facilitate the understanding and speed of learning of other programming languages. Last but no least, the concepts we touch upon here taken together will allow you to code more efficiently and elegantly, which may save you quite some time. But enough said; let's get started!
+
+
+By the end of this practical you will know how to:
+
+1. Use conditional statements (`if`, `else`, `ifelse`, `switch`)
+2. Program your own functions
+3. Include checks and error messages in your functions to make them robust
+4. Iterate through objects and execute functions on subsets of data (`for`- and `while` loops, `apply` family, `map` family)
+5. Combine the above concepts
+
+### Cheatsheets
+
+- Programming in R with the base R cheatsheet: [https://www.rstudio.com/wp-content/uploads/2016/05/base-r.pdf](https://www.rstudio.com/wp-content/uploads/2016/05/base-r.pdf).
+
+- You can get the `purrr` cheatsheet from: [https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf](https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf).
+
+
+
+## Tasks
+
+### Getting setup
+
+A. Open a new R script and save it as a new file called `programming_in_R.R`. At the top of the script, using comments, write your name and the date. Then, load the `tidyverse`, `yarrr` and `sendmailR` packages. Here's how the top of your script should look:
+
+```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+## NAME
+## DATE
+## Programming in R Practical
+
+library(tidyverse)     # For tidyverse
+library(yarrr)         # For yarrr
+library(sendmailR)     # For sendmailR
+```
+
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
+library(tidyverse)
+```
+
+
+
+B. For this practical, we'll sometimes use the `pirates` data from the `yarrr` package. Load this dataset from your local file. We will also quite often use little datasets, you will create on the fly during the tasks. This should help making the examples very clear.
+
+```{r, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
+# Load data from your local data file of your R project
+
+pirates <- read_csv("data/pirates.csv")
+```
+
+
+C. The `pirates` dataset contains details about 1000 pirates, such as their age, sex, number of tattoos and beard length. For more detail about the dataset just type the following code:
+
+```{r, echo = TRUE, eval = FALSE}
+# Look at documentation for pirates data (contained in the yarrr package)
+library(yarrr)
+?pirates
+```
+
+D. First look at the first few rows of the data (Tip: use `head`).
+
+```{r}
+# Check first rows of the pirates data frame
+head(pirates)
+```
+
+
+### Conditional Statements
+
+You have already used conditional statements, mostly in the form of the `case_when()` function. Now let's look at other functions. Note that for now the example may seem a little arbitrary. That is because usually conditional statements are used in loops or functions. We'll bring everything together towards the end of this practical.
+
+1. Draw one sample from a normal distribution with `mean = 0` and `sd = 1` (there are handy functions that let you draw samples from various distributions. For a normal distribution, use `rnorm()`). Then check whether the drawn number was 0. If so print a message called "Can't divide by 0". Otherwise divide the number by 2.
+
+```{r}
+x <- rnorm(1)
+
+if (x == 0){
+  print("Can't divide by 0")
+} else {
+  x / 2
+}
+```
+
+2. Let's simulate coin tosses. Use the `sample` function to draw one sample from {H, T} (i.e. a set, or in R a vector, containing "H" for head, and "T" for tail). If "H" comes up, print "Head", if "T" comes up, print "Tail".
+
+```{r}
+coin_toss <- sample(c("H", "T"), 1)
+
+if (coin_toss == "H"){
+  print("Head")
+} else {
+  print("Tail")
+}
+```
+
+3. Now let's assume that very rarely (with the coin we are using in 1% of the cases), the coin doesn't fall on one of the two sides, but surprisingly, lands (and stays) on its edge. In this case you don't know how to interpret this and assign it the value `NULL`. To do this use:
+
+```{r, eval = FALSE, echo = TRUE}
+# Create coin toss
+coin_toss <- sample(c("H", "T"), 1)
+
+# In 1 % of the cases insert NULL
+if (runif(1,0,1) <= .01){ # You can use expressions in an if statement
+  coin_toss <- NULL
+}
+```
+
+Now you have to add a check for whether coin_toss is `NULL` in your previous code, to print "Head" in case of "H", or "Tail" in case of "T". Note: There is a function called `is.null()` to check this. Remember that you can reverse any check by adding a `!` in front of it. Also remember that `&` and `&&` are not identical and that only `&&` has short circuiting. If the coin landed on its edge, print "Crazy, that coin just landed on its edge!".
+
+```{r}
+if (!is.null(coin_toss) && coin_toss == "H"){
+  print("Head")
+} else if ((!is.null(coin_toss) && coin_toss == "T")){
+  print("Tail")
+} else {
+  print("Crazy, that coin just landed on its edge!")
+}
+```
+
+4. Now you don't want to toss your coin only once but several (let's say ten) times (you'll have to tweak the `sample` function a bit. Check the help menue for help). Do this, and if *ALL* tosses came up heads, print "Wow, that's ten heads in a row!", if there is at least one head in there, print "The coin showed X times heads, and Y times tails", where X and Y are the respective numbers of heads and tails (use the `paste` function to print and the `sum` function to get the numbers), and print "Wow, that's ten tails in a row!", if *ALL* tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.
+
+```{r}
+coin_tosses <- sample(c("H", "T"), 10, replace = TRUE)
+
+if (all(coin_tosses == "H")){
+  print("Wow, that's ten heads in a row!")
+} else if (any(coin_tosses == "H")){ # This works because if-else statements
+                                     # are executed in the order they are written,
+                                     # so because of the first check it is safe
+                                     # to assume, that not all are heads.
+  paste("The coin showed", sum(coin_tosses == "H"), "times heads, and",
+        sum(coin_tosses == "T"), "times tails.")
+} else {
+  print("Wow, that's ten tails in a row!")
+}
+```
+
+
+5. Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print "They are identical". Remember that `==` is vectorized and won't work (Try it if you want to see what message it yields). So you have to use `identical`.
+
+```{r}
+coin_tosses_1 <- coin_tosses <- sample(c("H", "T"), 5, replace = TRUE)
+coin_tosses_2 <- coin_tosses <- sample(c("H", "T"), 5, replace = TRUE)
+
+# this won't work the way you intended
+if (coin_tosses_1 == coin_tosses_2){
+  print("They are identical")
+}
+
+# The problem is that == is vectorized and yields
+coin_tosses_1 == coin_tosses_2
+
+# so you have to use identical()
+identical(coin_tosses_1, coin_tosses_2)
+
+# so the correct answer is
+if (identical(coin_tosses_1, coin_tosses_2)){
+  print("They are identical")
+}
+```
+
+
+### Functions
+
+Most of the time, conditional statements are either used in combination with functions or loops. We'll start with looking at functions. Remember that a function has two parts, one in which you specify the arguments, and one in which you then write the code that is executed. The last line that is executed determines what the function returns. You can make this explicit with a `return()` statement, but it is good practice to only use this if you want to exit the function before all code is executed 
+
+```{r, eval = TRUE, echo = TRUE}
+## Create a function
+
+# First arguments are specified
+weighted_mean <- function(vls,   # has no default. This means it MUST be
+                                 # specified in a function call.
+                          wghts = 1 / length(vls)){ # Has a default, i.e.
+                                                    # it could be left un-
+                                                    # specified and would then
+                                                    # take the default.
+  
+  if (!is.numeric(vls) || !is.numeric(wghts)){ # Check whether conditions are met
+                                               # and throw an error if they aren't
+    stop("Arguments must be numeric.")
+  }
+  
+  if (sum(wghts) == 0){
+    return(0) # if the sum of the weights is 0, in this case we want it to return
+              # 0. If this condition is TRUE, all following code is NOT executed,
+              # that is the function will be exited early.
+  }
+  
+  # Code block to be executed if the function is called. The result of the 
+  # last line is returned
+  sum(values * weights) / sum(weights)
+}
+
+```
+
+6. Write your own function "check_logical" that tests whether a given logical object is `TRUE` or `FALSE`, and returns "Argument is TRUE", and "Argument is FALSE". 
+
+```{r}
+check_logical <- function(x){
+  if (isTRUE(x)){
+    print("Argument is TRUE")
+  }
+  
+  if (x == FALSE){
+    print("Argument is FALSE")
+  }
+}
+```
+
+7. Did you use `x == TRUE` as check? if so you should change that to `isTRUE(x)`. Both yield the same result, but it's proper style to use these check functions, if they are available. However note that `!isTRUE(x)` will *always* yield `TRUE`, if x is not `TRUE`. That is, if `x = 1`, then `!isTRUE(x)` is `TRUE`. So in the case of `x = FALSE` you will have to use the check `x == FALSE`.
+
+8. One important principle when programming is the *Don't Repeat Yourself* principle. That is, if you have written a block of code several times, with only slight changes in it, it is time to write a function for this. For example:
+
+```{r, eval = FALSE, echo = TRUE}
+# Compute some descriptive statistics on the pirates dataset
+
+# the mean number of tattoos:
+mean(pirates$tattoos)
+
+# the standard deviation of number of tattoos:
+sd(pirates$tattoos)
+
+# the median number of tattoos:
+median(pirates$tattoos)
+
+```
+
+To do this you write the first block (here it's just one line) of code and then copy-paste it several times. As we said, this is bad practice... 
+
+One great thing about functions is that they can take other functions as arguments. Program a function called `compute_statistic`, wich takes a numeric vector, and computes either the mean, median, or standard deviation. To do this you specify a second argument that will take a function, and call it, e.g., `stat` and when you want to use the function passed to that argument you simply write `stat()` and give it the argument on which to perform the function. When you did this, `compute_statistic(rnorm(10), mean)` should give you the mean of the vector 10 samples from a normal distribution with mean = 0 and sd = 1. Note that you don't put quotation marks around `mean` when you pass it as argument.
+
+```{r}
+compute_statistic <- function(vec, stat){
+  stat(vec)
+}
+
+compute_statistic(vec = rnorm(10), stat = mean)
+compute_statistic(vec = rnorm(10), stat = sd)
+compute_statistic(vec = rnorm(10), stat = median)
+
+# But this now also works
+compute_statistic(vec = rnorm(10), stat = sample)
+# So you are not limited to the three examples used, but all other functions you
+# can call on a numeric vector.
+
+```
+
+This can be very handy, especially when you can combine this with `apply` or `map` function so you can enter a list of functions. We'll see an example of that later.
+
+9 There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called `...`. Now add the `...` as last argument to the `compute_statistic` function from the previous task, and also add it to the `stat()` function inside the `compute_statistic` function. Now you can call functions with `compute_statistic` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean, or you can draw a sample of size 3 with `sample(x, size = 3)`. Try these out.
+
+```{r}
+compute_statistic <- function(vec, stat, ...){
+  stat(vec, ...)
+}
+
+compute_statistic(vec = rnorm(10), stat = mean, trim = .2)
+
+compute_statistic(vec = rnorm(10), stat = sample, size = 3)
+
+
+```
+
+
+### Iteration
+
+Iteration is an extremely important feature in programming. It let's you execute a block of code for a large number of objects, with only having to write the block of code once. The iteration methods we will look at in the next few tasks are `for` and `while` loops. Later we will also look at `apply` and `map` functions.
+
+Remember that a `for` loop executes a block of code as many times as you specify, whereas a `while` loop does the same thing but as long until a prespecified condition is met. Here are a few examples:
+
+```{r, eval = TRUE, echo = TRUE}
+## for loops
+
+# example 1:
+for (i in seq_len(10)){
+  print(i)
+}
+
+# By the way, here's the difference between seq_len, and seq_along:
+seq_len(5) # creates a vector from 1 to the number specified
+seq_along(letters[1:5]) # creates a numeric sequence of the positions of the specified
+                        # vector
+
+# you could also use 1:5, instead of seq_len(5), but note that while 
+x <- vector("double", length = 0)
+1:length(x)
+# yields probably not the behavior you'd want in a loop, while
+seq_along(x)
+# will lead to the desired behavior
+
+# example 2:
+x <- vector("double", length = 10) # Output part
+
+for (i in seq_along(x)){           # Sequence part
+  x[i] <- i                        # Body part
+}
+
+x
+
+## while loops
+i <- 1
+while(i < 5){
+  
+  print(i)
+  
+  i <- i + 1
+}
+
+
+```
+
+10. In for loops you cannot only loop over sequences, but also over values of a vector, that are then used in the loop. To do this you simply write `for (val in vector){}`, instead of using either `1: length(vector)`, or `seq_along(vector)` (did you see that we used `val` instead of `i` when defining the sequence in the loop. You can enter any name you want there, just make sure to refer to this name in the body of the loop). Loop over the following vector containing variable names of the pirates dataset (`c("age", "height", "tattoos", "beard.length")`), and compute the mean of each variable and store the value in named vector (i.e. each value should be named to identify it, to do this use `names`) called `pirate_means`.
+
+```{r}
+vars <- c("age", "height", "tattoos", "beard.length")
+
+pirate_means <- vector("double", length(vars))
+names(pirate_means) <- vars
+
+for (nms in vars){
+  
+  pirate_means[nms] <- mean(pirates[, nms])
+  
+}
+
+pirate_means
+```
+
+11. Use a loop to rewrite the code where you called `compute_statistic` multiple times in task 8. Remember that in a loop you have to use `print` explicitly.
+
+```{r}
+for (fns in c(mean, median, sd)){
+  print(compute_statistic(rnorm(10), fns))
+}
+```
+
+12. You want to check whether the college a pirate went to, is related to the number of groggs a pirate drinks a day on average. To get rid of the potentially influential factors of age, sex, and weight, you want to match the two subsamples of 100 pirates each, such that you have a maximum difference in the number of females between the two groups of 12, a maximum mean age difference of 10 years, a maximum difference in the standard deviatio of age of 8 years, a maximum mean weight difference of 8 kilogramms, and a maximum difference in the standard deviation of weight of 7 kilogramms. Use a `while` loop where you take a subsample of 100 pirates from each college, and use the above parameters of this sample for the check. Note: don't bother about doing the analysis afterwards, the exercise is just about the looping part. Also the values for the check are arbitrary. If it takes too long for the loop to run just use larger values, for the exercise the precision doesn't have to be high.
+
+```{r}
+
+sex_diff <- Inf
+age_diff_mean <- Inf
+age_diff_sd <- Inf
+weight_diff_mean <- Inf
+weight_diff_sd <- Inf
+
+while (sex_diff > 12 || age_diff_mean > 10 || age_diff_sd > 8 ||
+       weight_diff_mean > 8 || weight_diff_sd > 7){
+  
+  CCCC_pirates <- pirates %>%
+                    filter(college == "CCCC") %>%
+                    sample_n(100, replace = FALSE)
+  
+  JSSFP_pirates <- pirates %>%
+                    filter(college == "JSSFP") %>%
+                    sample_n(100, replace = FALSE)
+  
+  sex_diff <- abs(sum(CCCC_pirates$sex == "female") -
+                    sum(JSSFP_pirates$sex == "female"))
+  
+  age_diff_mean <- abs(mean(CCCC_pirates$age) - mean(JSSFP_pirates$age))
+  age_diff_sd <- abs(sd(CCCC_pirates$age) - sd(JSSFP_pirates$age))
+  
+  weight_diff_mean <- abs(mean(CCCC_pirates$weight) - mean(JSSFP_pirates$weight))
+  weight_diff_sd <- abs(sd(CCCC_pirates$weight) - sd(JSSFP_pirates$weight))
+}
+
+
+# Here you would proceed with the analysis
+```
+
+13. There are two statements you can use in `while` and `for` loops, that can be handy to know. One of them is `break`, which lets you exit the current loop. The other one is `next` which skips the following code for that iteration and directly goes to the next iteration. Program a while loop that samples two numbers from a normal distribution and divides the one by the other and stores the result in a vector. If the divisor (the number that divides the other number) is 0, skip to the next iteration. Use a counter and if more than 20 iterations are needed break the loop to ensure it's not taking too long. As condition for the `while` loop use a second counter that increases each time a successfull division is executed, and run the loop as long as this counter is 15 or less.
+
+```{r}
+
+loop_count <- 1
+div_count <- 1
+
+div_vec <- vector("double", length = 15)
+
+while (div_count <= 15){
+  
+  loop_count <- loop_count + 1
+  samples <- rnorm(2)
+  
+  if (samples[2] == 0){
+    next
+  }
+  
+  div_vec[div_count] <- samples[1] / samples[2]
+  
+  div_count <- div_count + 1
+  
+  if (loop_count > 20){
+    break
+  }
+  
+}
+```
+
+
+### `apply` and `map` functions
+
+The `apply` and `map` function families are quite similar. The `map` functions from the `purrr` package were introduced as a more consistent and less ambiguous alternative to the `apply` functions. Both function families let you iterate over objects and call functions on the subsets in each iteration. So basically you can use these functions instead of loops. In general, the basic structure is that you first specify the object over which you want to iterate, then the function to call in each iteration and then additional arguments that function might take. Depending on which of the functions you use, there will be additional arguments to specify. For example:
+
+```{r, eval = TRUE, echo = TRUE}
+## apply
+
+# create a vector of variable names from the variables you want to call the same
+# function on
+
+vars <- c("age", "height", "weight", "tattoos", "parrots", "grogg")
+
+# compute the mean of these variables. Note that the second argument specifies,
+# whether the mean should be taken over columns (2), or rows (1)
+apply(pirates[, vars], 2, mean)
+
+# you can also use a simpler apply version called sapply, where it automatically
+# computes the mean column wise
+sapply(pirates[, vars], mean)
+
+## map
+
+# the map equivalent is
+map_dbl(pirates[, vars], mean)
+# remember that in the map functions the suffix (in this case _dbl) stands for the
+# type of vector that should be returned. If this doesn't match, e.g. if a character
+# vector is created in map_dbl, it will throw an error. map without suffix will
+# return a list.
+
+```
+
+
+
+14. Remember the `for` loop you've used in task 11, to run the `compute_statistic` function several times? Rewrite this and replace the `for` loop once with `sapply` and a `map` function (figure out which `map` function would fit best here).
+
+```{r}
+sapply(c(mean, median, sd), compute_statistic, vec = rnorm(10))
+
+map_dbl(c(mean, median, sd), compute_statistic, vec = rnorm(10))
+
+```
+
+15. Now there would be a more elegant way of programming the `compute_statistic` function such that you don't have to use loops or `apply`/ `map` functions outside of it. Redefine the `compute_statistic` function and use a `map_dbl`, such that you can enter multiple functions as argument, instead of only one. For this you will have to use an anonymous function in `map_dbl`. This means that the function is only defined inside the `map_dbl` call and does not exist outside of it. The syntax for a self programmed anonymous `mean` function would be `map_dbl(data, function(x){sum(x) / length(x)})`. That is instead of passing a function name to `map_dbl`, you pass a function definition `function(argument){do something}`. Remember that you can pass functions as arguments. (Of course you could have passed the functions directly to `map_dbl` without wrapping it in another function)
+
+```{r}
+# note that in this definition the ... only works if all specified functions
+# take the argument provided there. So for the functions c(mean, median), the
+# trim argument couldn't be passed to ... because median doesn't have a trim 
+# argument.
+compute_statistic <- function(vec, stat, ...){
+  map_dbl(stat, function(fn, dat, ...){fn(dat, ...)}, dat = vec, ... = ...)
+}
+
+compute_statistic(rnorm(10), c(median, mean, sd))
+
+```
+
+16. There is another `map` function called `map2` (again with the suffixes for the different types of vectors returned), that let's you iterate over two objects simultaneously. Use the appropriate `map2` function and to draw 10 samples from three normal distributions with means 5, 9, 12, and sds, 4, 2, 7, and save them as an object.
+
+
+```{r}
+
+m_vec <- c(5, 9, 12)
+sd_vec <- c(4, 2, 7)
+
+smpls <- map2(m_vec, sd_vec, rnorm, n = 10)
+smpls
+
+```
+
+17. Now use `map` to plot each of the samples drawn. Note: use `par(mfrow = c(1, 3))` to draw three plots in a line the same canvas (i.e., the 1 determines the number of rows of plots and the 3 determines the number of columns of plots. This way you can create multiple-plot panels).
+
+```{r}
+
+par(mfrow = c(1, 3))
+map(smpls, plot, type = "b", ylab = "Random Sample")
+
+```
+
+18. As you can see, besides the plots you've got `NULL` printed in your console each time you called `plot`. This is because map returns whatever the function called returns and in case of plot `NULL` is created as output. To take care of this problem, there is a special family of `purrr` functions called `walk`, that are used for functions like plot that create something on the fly and only have a console output as undesired sideproduct. Create the plots again using `walk`.
+
+```{r}
+
+par(mfrow = c(1, 3))
+walk(smpls, plot, type = "b", ylab = "Random Sample")
+
+```
+
+19. Redo task 16 but this time don't draw 10 samples per distribution but draw 10, 15, and 20 samples, respectively. To iterate over an unlimited number of objects simultaneously, use the `pmap` function. Check the help menue if you're not sure how this works.
+
+```{r}
+
+arg <-list(
+  "mean" = c(5, 9, 12),
+  "sd" = c(4, 2, 7),
+  "n" = c(10, 15, 20)
+)
+
+smpls <- pmap(arg, rnorm)
+smpls
+
+```
+
+
+### Bringing it all together
+
+The next two tasks contain elements of all parts we've covered in this lesson. You will write a function to do a short simulation. Briefly some background: In statistics, we often accept a hypothesis if the p-value, i.e. the probability of the found-, or more extreme data under the H0 hypothesis that assumes that there is no difference between two distributions, is smaller or equal to 5%. This is tested with statistical tests, of which we will use the t-test (r function `t.test(group1, group2)`). We will draw two random samples *from the same distribution* and run a t.test to check whether they are significantly different. If they are not, we will resample from the distribution and run the check once more. We will then see how strong the inflation of the alpha error is, with one resample of size x. 
+
+We will also encounter a new cool thing: you can send mails from R. For example, if you are running a simulation that takes a lot of time and you don't want to check again and again whether it's completed. So you can tell R to send you a mail when it's done, and if you like, even attach the data or some core output. The package to do this is `sendmailR`, with the function `sendmail`.
+
+20. Program a function called `sim_false_positive`, that takes the following arguments: n (the number of samples initially drawn per distribution), m (the mean of the distribution from which samples are drawn), sd (the standard deviation of the distribution from which samples are drawn), resample (the sample size of the resample), iter (number of iterations, i.e. number of times the whole procedure is repeated. The higher the number, the more precise the estimate), mail (a mail address from which to which you want to send your result), mail_subject (the subject of the mail). The start of your function should look like this (we've also included the code for the mail function to make it a little easier):
+
+```{r, eval = FALSE, echo = TRUE}
+## sim_false_positive functoin
+
+sim_false_positive <- function(n = 30,
+                               m = 5,
+                               sd = 2,
+                               resample = 10,
+                               iter = 1000,
+                               mail = NULL,
+                               mail_subject = "Your results"){
+  
+  # Here goes your code for the simulation. It should return an object called
+  # false_positive, containing the proportion of significant results (i.e. with
+  # a p-value smaller or equal to .05)
+  
+  
+  # Here is the part that sends the mail
+  if (!is.null(mail)){
+    
+    # mail addresses and subject
+    from <- mail
+    to <- mail
+    subject <- mail_subject
+    
+    # The body of the mail. Costumize it to your liking
+    body <- list(paste("Here are your results:", paste0("Resample was ",
+                                                        resample, "."),
+                       paste0("The initial samplesize was ", n,
+                              ", and you've drawn ", iter, " samples."),
+                       paste0("The proportion of false positives was",
+                              false_positive, ".")))
+    
+    # Function that acutally sends the mail. Note that not all mail addresses
+    # will work.
+    sendmail(from, to, subject, body,
+                        control=list(smtpServer="ASPMX.L.GOOGLE.COM"))
+  }
+  
+  # return proportion of false positives
+  false_positive
+  
+}
+
+```
+
+Now program the middle part to do the sampling and iteration.
+
+```{r}
+sim_false_positive <- function(n = 30,
+                               m = 5,
+                               sd = 2,
+                               resample = 10,
+                               iter = 1000,
+                               mail = NULL,
+                               mail_subject = "Your results"){
+  
+  p_vals <- vector("double", length = iter)
+  
+  for (i in seq_len(iter)){
+    samples <- matrix(rnorm(n * 2, m, sd), ncol = 2)
+    
+    p_vals[i] <- t.test(samples[,1], samples[,2])$p.value
+    
+    if (p_vals[i] > .05 && resample > 0){
+      
+      samples <- rbind(samples, matrix(rnorm(resample * 2, m, sd), ncol = 2))
+      
+      p_vals[i] <- t.test(samples[,1], samples[,2])$p.value
+      
+    }
+    
+  }
+  
+  false_positive <- mean(p_vals <= .05)
+  
+  if (!is.null(mail)){
+    
+    from <- mail
+    to <- mail
+    subject <- mail_subject
+
+    body <- list(paste("Here are your results:", paste0("Resample was ",
+                                                        resample, "."),
+                       paste0("The initial samplesize was ", n,
+                              ", and you've drawn ", iter, " samples."),
+                       paste0("The proportion of false positives was",
+                              false_positive, ".")))
+
+    sendmail(from, to, subject, body,
+                        control=list(smtpServer="ASPMX.L.GOOGLE.COM"))
+  }
+  
+  false_positive
+  
+}
+```
+
+21. Now that you've created your function, use one of the `map` functions to execute the function several times with different sample sizes and resample sizes. Note that if you only change resample, you will have to create an anonymous function, because otherwise the resample size will be passed to the first argument of `sim_false_positive`, which is `n`.
+
+```{r}
+resample <- list(10, 0)
+
+map_dbl(resample, ~sim_false_positive(resample = ., mail = NULL))
+
+```
+
+
+# Additional reading
+
+- For more details on programming in R, check out Nathaniel's YaRrr! The Pirate's Guide to R [YaRrr!](https://bookdown.org/ndphillips/YaRrr/)
+
+- Hadley Wickham, covers programming in R and purrr in his book R for data science: [R for Data Science link](http://r4ds.had.co.nz/)
+
+

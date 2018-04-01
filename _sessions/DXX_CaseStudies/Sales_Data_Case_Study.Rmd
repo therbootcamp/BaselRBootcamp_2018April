@@ -1,0 +1,240 @@
+---
+title: "Sales Data - Case Study"
+author: "BaselRBootcam April 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval = FALSE)
+```
+
+
+### Overview
+
+In this case study, we will look at sales data from a retailer. The dataset to this case study is called "retailer_sales.csv". Below you find a table with the variable names and a short description of each variable. Since this is a case study, you will have the oportunity to do your own project with the data. For example, you could check how large the fluctuations of sales are per store, or whether sales numbers go up or down in holidays, how well you can predict sales numbers from the other variables, e.g. using a regression, or you could run a time series analysis to predict future turnovers. For each of these suggestions you will find a short paragraph that provides some guidance and hints to what you could do, but feel free to play with the dataset as you wish. Because there are multiple timepoints per store involved, we will often have to either aggregate the data over these, or will not be able to interpret p-values. One method to address this issue is by using mixed effects models. This is rather advanced and we will not cover it here. However, if you are familiar with the method and want to give it a try in R, you can use the `lmer` function from the `lme4` package.
+
+| Variable| Description|
+|:------------------------------|:----------------------------------------------------------------|
+|     store|    Numeric Id of each of the stores|
+|     week_day|    A number representing the day of the week| 
+|     date|    The date|
+|     sales|    The turnover on a given day|
+|     customers|    The number of costumers on a given day|
+|     open|    Whether the store was open (1) or closed (0) on a given day| 
+|     promo|   Whether a store was running a promo that day|
+|     state_holiday|  Whether there where (NA) or were no (0) state holidays that day.|
+|     school_holiday|  If the store on a given date was affected by the closure of public schools (1) or not (0)|
+|     assortment|  What level of assortment a given store has. Can be basic, extra, or extended|
+|     competition_distance|  The distance in meters to the nearest competitor store|
+|     competition_open_since|  The year when the nearest competitor opened  |
+|     store_promo|  Wheter a store is participating (1) or not (2) in a continuing and consecutive promotion for some stores|
+
+
+
+### Getting setup
+
+A. Open a new R script and save it as a new file called `sales_case_study.R`. At the top of the script, using comments, write your name and the date. Then, load the `tidyverse`package. Here's how the top of your script should look:
+
+```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+## NAME
+## DATE
+## Sales Data - Case Study
+
+library(tidyverse)
+
+```
+
+
+
+
+B. Load in the "retailer_sales.csv" dataset from your data folder.
+
+```{r, eval = FALSE, message = FALSE, warning = FALSE}
+# Load data from your local data file of your R project
+
+sales <- read_csv("data/retailer_sales.csv")
+```
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+# Load data from your local data file of your R project
+
+sales <- read_csv("retailer_sales.csv")
+
+```
+
+
+
+C. Get a first impression of the dataset by looking at a few rows of it. 
+
+```{r}
+# Get to know the data
+head(sales)
+
+str(sales)
+```
+
+
+### Flucutations over Days
+
+To look at the average fluctuations over days you, we suggest you take a subsample of a few stores. You could then plot the individual trajectories, and if you like also add a mean line. You can also use a repeated measures test, to have a statistical test of the stability (you could, for example, use a correlation between two timepoints, or aggregate sales data of stores for each timepoint and run a regression. Note that with these two methods you will violate the assumption of independence of the data, so you cannot interpret the p-value. If you want to go a bit fancier and know the method, you can run a mixed effects model, using the `lmer` function from the `lme4` package).
+
+```{r, message=FALSE, warning=FALSE}
+library(yarrr) # for the transparent function
+
+store_ids <- unique(sales$store)
+sales$days <- 0
+
+for (i in store_ids){
+  sales$days[sales$store == i] <- seq_len(sum(sales$store == i))
+}
+
+# take a subsample
+sales_sub <- sales[sales$store %in% sample(1:1115, 30),]
+
+# get rid of dates where the stores were closed
+sales_sub <- filter(sales_sub, sales > 0)
+
+# plot individual lines
+plot(1, xlab = "Time", ylab = "Turnover",
+     ylim = c(0, max(sales_sub$sales) + 200),
+     xlim = c(0, max(sales_sub$days)), type = "l")
+
+# set up loop to plot individual store data
+store_ids <- unique(sales_sub$store)
+
+for (i in seq_along(store_ids)){
+  
+  sales_temp <- sales_sub[sales_sub$store == store_ids[i],]
+  
+  lines(sales_temp$days, sales_temp$sales, col = transparent("lightgray", .8),
+        lwd = 2)
+  
+}
+
+# plot average stability data
+
+lines(sort(unique(sales_sub$days)), map(sort(unique(sales_sub$days)),function(x, sal){
+  mean(sal$sales[sal$days == x])}, sal = sales_sub), col = "black", lwd = 3)
+
+# Or, much easier, with ggplot
+
+ggplot(sales_sub, aes(x = days, y = sales)) +
+  geom_line(col = "grey", alpha = .4) +
+  stat_smooth(lwd = 1.5) + 
+  theme_bw()
+  
+
+# correlation between two of the timepoints
+r_ds <- sample(sales$days, 2)
+
+cor(sales$sales[sales$days == r_ds[1]], sales$sales[sales$days == r_ds[2]])
+
+# regression
+
+# first summarise the data
+sales_agg <- sales %>%
+  group_by(days) %>%
+  summarise(
+    sales = mean(sales)
+  )
+
+# then run regression
+mod <- lm(sales ~ days, data = sales_agg)
+
+summary(mod)
+
+
+```
+
+
+
+### Sales numbers in holidays
+
+To test the effects of holidays (state or school), you should filter the dataset to only include dates on which the given store was open. Then you could average the sales of the holiday days and the non holiday days for each store and run a statistical test. If your familiar with the method, a fancier test you could run would be with a mixed effects model using the `lmer` function of the `lme4` package. Note that the state_holiday data is faulty. There are `NA`s where there should be `1`s. Change this first.
+
+```{r, message=FALSE, warning=FALSE}
+### For state holidays
+
+# aggregate data to do the statistical test
+sales_agg <- sales %>%
+  filter(open != 0) %>%
+  mutate(state_holiday = case_when(is.na(state_holiday) ~ 1,
+                                   TRUE ~ 0)) %>%
+  group_by(store, state_holiday) %>%
+  summarise(
+    sales = mean(sales)
+  )
+
+# check the means
+tapply(sales_agg$sales, sales_agg$state_holiday, mean)
+
+# get rid of stores that weren't open on any state holiday
+sales_agg <- sales_agg %>%
+  filter(store %in% store[state_holiday == 1])
+
+# check the means again
+tapply(sales_agg$sales, sales_agg$state_holiday, mean)
+
+# run a paired t.test
+t.test(sales ~ state_holiday,
+       data = sales_agg,
+       paired = TRUE)
+
+
+
+### Now let's do the same for school holidays
+
+# aggregate data to do the statistical test
+sales_agg <- sales %>%
+  filter(open != 0) %>%
+  group_by(store, school_holiday) %>%
+  summarise(
+    sales = mean(sales)
+  )
+
+# check the means
+tapply(sales_agg$sales, sales_agg$school_holiday, mean)
+
+# get rid of stores that weren't open on any state holiday
+sales_agg <- sales_agg %>%
+  filter(store %in% store[school_holiday == 1])
+
+# check the means again
+tapply(sales_agg$sales, sales_agg$school_holiday, mean)
+
+# run a paired t.test
+t.test(sales ~ school_holiday,
+       data = sales_agg,
+       paired = TRUE)
+
+
+```
+
+
+
+
+### Predict sales numbers from other variables
+
+To not violate the independence assumption you will have to aggregate the sales data of each store over the different time periods. You could then run a linear regression, other machine learning methods, or, if your up to it, a mixed effects model using the `lmer` function of the `lme4` package (with the mixed effects model you won't have to aggregate the data). You can also create a subset to fit your model on and then check on the other subset how well the predictions worked.
+
+```{r, message=FALSE, warning=FALSE}
+
+### Aggregate data
+sales_agg <- sales %>%
+  filter(open != 0) %>%
+  group_by(store, customers, store_promo, competition_distance, assortment) %>%
+  summarise(
+    sales = mean(sales)
+  )
+
+# run a regression model
+mod <- lm(sales ~ .,
+          data = sales_agg)
+summary(mod)
+
+```
+
+
+### Other options
+
+There are many other things you can test, given the many stores and variables such as whether promotion was run on a given day, or whether a store was in a promotion program, or what the influence of competition distance is.
