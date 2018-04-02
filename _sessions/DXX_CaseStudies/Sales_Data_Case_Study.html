@@ -126,8 +126,9 @@ $(document).ready(function () {
 
 <div id="overview" class="section level3">
 <h3>Overview</h3>
-<p>In this case study, we will look at sales data from a retailer. The dataset to this case study is called “retailer_sales.csv”. Below you find a table with the variable names and a short description of each variable. Since this is a case study, you will have the oportunity to do your own project with the data. For example, you could check how large the fluctuations of sales are per store, or whether sales numbers go up or down in holidays, how well you can predict sales numbers from the other variables, e.g. using a regression, or you could run a time series analysis to predict future turnovers. For each of these suggestions you will find a short paragraph that provides some guidance and hints to what you could do, but feel free to play with the dataset as you wish. Because there are multiple timepoints per store involved, we will often have to either aggregate the data over these, or will not be able to interpret p-values. One method to address this issue is by using mixed effects models. This is rather advanced and we will not cover it here. However, if you are familiar with the method and want to give it a try in R, you can use the <code>lmer</code> function from the <code>lme4</code> package.</p>
+<p>In this case study, we will look at sales data from a retailer. There are two datasets, one called “sales.csv”, and one called “stores.csv”. You will first perform some data wrangling and merge the two datasets and then save the merged dataset as “retailer_sales.csv”. Below you find two tables with the variable names and a short description of each variable of the two datasets. After that you will have the oportunity to “pick your adventure” and do the analysis you like. For example, you could check how large the fluctuations of sales are per store, or whether sales numbers go up or down in holidays, how well you can predict sales numbers from the other variables, e.g. using a regression, or you could run a time series analysis to predict future turnovers. For each of these suggestions you will find a short paragraph that provides some guidance and hints to what you could do, but feel free to play with the dataset as you wish. Because there are multiple timepoints per store involved, we will often have to either aggregate the data over these, or will not be able to interpret p-values. One method to address this issue is by using mixed effects models. This is rather advanced and we will not cover it here. However, if you are familiar with the method and want to give it a try in R, you can use the <code>lmer</code> function from the <code>lme4</code> package.</p>
 <table>
+<caption>Table1. “sales.csv” variable description:</caption>
 <colgroup>
 <col width="32%"></col>
 <col width="67%"></col>
@@ -140,86 +141,185 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">store</td>
+<td align="left">Store</td>
 <td align="left">Numeric Id of each of the stores</td>
 </tr>
 <tr class="even">
-<td align="left">week_day</td>
+<td align="left">DayOfWeek</td>
 <td align="left">A number representing the day of the week</td>
 </tr>
 <tr class="odd">
-<td align="left">date</td>
+<td align="left">Date</td>
 <td align="left">The date</td>
 </tr>
 <tr class="even">
-<td align="left">sales</td>
+<td align="left">Sales</td>
 <td align="left">The turnover on a given day</td>
 </tr>
 <tr class="odd">
-<td align="left">customers</td>
+<td align="left">Customers</td>
 <td align="left">The number of costumers on a given day</td>
 </tr>
 <tr class="even">
-<td align="left">open</td>
+<td align="left">Open</td>
 <td align="left">Whether the store was open (1) or closed (0) on a given day</td>
 </tr>
 <tr class="odd">
-<td align="left">promo</td>
+<td align="left">Promo</td>
 <td align="left">Whether a store was running a promo that day</td>
 </tr>
 <tr class="even">
-<td align="left">state_holiday</td>
+<td align="left">StateHoliday</td>
 <td align="left">Whether there where (NA) or were no (0) state holidays that day.</td>
 </tr>
 <tr class="odd">
-<td align="left">school_holiday</td>
+<td align="left">SchoolHoliday</td>
 <td align="left">If the store on a given date was affected by the closure of public schools (1) or not (0)</td>
 </tr>
+</tbody>
+</table>
+<table>
+<caption>Table 2. “stores.csv” variable description:</caption>
+<colgroup>
+<col width="32%"></col>
+<col width="67%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Store</td>
+<td align="left">Numeric Id of each of the stores</td>
+</tr>
 <tr class="even">
-<td align="left">assortment</td>
+<td align="left">Assortment</td>
 <td align="left">What level of assortment a given store has. Can be basic, extra, or extended</td>
 </tr>
 <tr class="odd">
-<td align="left">competition_distance</td>
+<td align="left">CompetitionDistance</td>
 <td align="left">The distance in meters to the nearest competitor store</td>
 </tr>
 <tr class="even">
-<td align="left">competition_open_since</td>
-<td align="left">The year when the nearest competitor opened</td>
+<td align="left">CompetitionOpenSinceMonth</td>
+<td align="left">The month of the year in which the nearest competitor opened</td>
 </tr>
 <tr class="odd">
-<td align="left">store_promo</td>
+<td align="left">CompetitionOpenSinceYear</td>
+<td align="left">The year when the nearest competitor opened</td>
+</tr>
+<tr class="even">
+<td align="left">Promo2</td>
 <td align="left">Wheter a store is participating (1) or not (2) in a continuing and consecutive promotion for some stores</td>
+</tr>
+<tr class="odd">
+<td align="left">Promo2SinceWeek</td>
+<td align="left">The week of the year in which the store promotion started</td>
+</tr>
+<tr class="even">
+<td align="left">Promo2SinceYear</td>
+<td align="left">The year in which the store promotion started</td>
+</tr>
+<tr class="odd">
+<td align="left">PromoInterval</td>
+<td align="left">Describes the consecutive intervals Promo2 is started, naming the months the promotion is started anew. For example, “Feb,May,Aug,Nov” means each round starts in February, May, August, November of any given year for that store</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="getting-setup" class="section level3">
-<h3>Getting setup</h3>
-<p>A. Open a new R script and save it as a new file called <code>sales_case_study.R</code>. At the top of the script, using comments, write your name and the date. Then, load the <code>tidyverse</code>package. Here’s how the top of your script should look:</p>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<ol style="list-style-type: decimal">
+<li>Open a new R script and save it as a new file called <code>sales_case_study.R</code>. At the top of the script, using comments, write your name and the date. Then, load the <code>tidyverse</code>package. Here’s how the top of your script should look:</li>
+</ol>
 <pre class="r"><code>## NAME
 ## DATE
 ## Sales Data - Case Study
 
 library(tidyverse)</code></pre>
-<p>B. Load in the “retailer_sales.csv” dataset from your data folder.</p>
-<p>C. Get a first impression of the dataset by looking at a few rows of it.</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Load in the “sales.csv”, and “stores.csv” datasets from your data folder.</p></li>
+<li><p>Get a first impression of the datasets by looking at a few rows of them.</p></li>
+<li><p>From the stores data, only select the following variables: Store, Assortment, CompetitionDistance, CompetitionOpenSinceYear, Promo2. The variable Assortment contains the values “a”, “b”, and “c”. This is not very helpful. Change them so that “a” is now “basic”, “b” is now “extra”, and “c” is now “extended”.</p></li>
+<li><p>Join the stores data with the sales data.</p></li>
+<li><p>The sales data contains an error in the state_holiday variable. There are <code>NA</code>s where there should be <code>1</code>s. Change this (remember that <code>variable == NA</code> is not an appropriate logical expression, use <code>is.na(variable)</code> instead).</p></li>
+<li><p>Rename the variables to be lower case and with underscores between words. Afterwards your variables should be named like this: “store”, “week_day”, “date”, “sales”, “customers”, “open”, “promo”, “state_holiday”, “school_holiday”, “assortment”, “competition_distance”, “competition_open_since”, and “store_promo”.</p></li>
+<li><p>Save the prepared data as “retailer_sales.csv”.</p></li>
+</ol>
 </div>
-<div id="flucutations-over-days" class="section level3">
-<h3>Flucutations over Days</h3>
-<p>To look at the average fluctuations over days you, we suggest you take a subsample of a few stores. You could then plot the individual trajectories, and if you like also add a mean line. You can also use a repeated measures test, to have a statistical test of the stability (you could, for example, use a correlation between two timepoints, or aggregate sales data of stores for each timepoint and run a regression. Note that with these two methods you will violate the assumption of independence of the data, so you cannot interpret the p-value. If you want to go a bit fancier and know the method, you can run a mixed effects model, using the <code>lmer</code> function from the <code>lme4</code> package).</p>
+<div id="statistics-part" class="section level3">
+<h3>Statistics Part</h3>
+<div id="flucutations-over-days" class="section level4">
+<h4>Flucutations over Days</h4>
+<p>To look at the average fluctuations over days you, we suggest you take a subsample of a few stores. You could then plot the individual trajectories, and if you like also add a mean line. You can also use a repeated measures test, to have a statistical test of the stability (you could, for example, use a correlation between two timepoints, or aggregate sales data of stores for each timepoint and run a regression. Note that with these two methods you will violate the assumption of independence of the data, so you cannot interpret the p-value. If you want to go a bit fancier and know the method, you can run a mixed effects model, using the <code>lmer</code> function from the <code>lme4</code> package). Below you find some help how you could code some of this:</p>
+<pre class="r"><code>library(yarrr) # for the transparent function
+
+
+# first create a variable called &quot;days&quot; that is a counter
+# for the number of days and will be easier to use than
+# the date variable
+store_ids &lt;- unique(sales$store)
+sales$days &lt;- 0
+
+for (i in store_ids){
+  sales$days[sales$store == i] &lt;- seq_len(sum(sales$store == i))
+}
+
+# take a subsample to plot
+sales_sub &lt;- sales[sales$store %in% sample(1:1115, 30),]
+
+# get rid of dates where the stores were closed
+sales_sub &lt;- filter(sales_sub, sales &gt; 0)
+
+### Use the base plot functions
+
+# plot individual lines
+plot(1, xlab = &quot;Time&quot;, ylab = &quot;Turnover&quot;,
+     ylim = c(0, max(sales_sub$sales) + 200),
+     xlim = c(0, max(sales_sub$days)), type = &quot;l&quot;)
+
+# set up loop to plot individual store data
+store_ids &lt;- unique(sales_sub$store)
+
+for (i in seq_along(store_ids)){
+  
+  sales_temp &lt;- sales_sub[sales_sub$store == store_ids[i],]
+  
+  lines(sales_temp$days, sales_temp$sales, col = transparent(&quot;lightgray&quot;, .8),
+        lwd = 2)
+  
+}
+
+# plot average stability data
+
+lines(sort(unique(sales_sub$days)), map(sort(unique(sales_sub$days)),function(x, sal){
+  mean(sal$sales[sal$days == x])}, sal = sales_sub), col = &quot;black&quot;, lwd = 3)
+
+
+### Do a similar plot using ggplot:
+
+# Or, much easier, with ggplot
+
+ggplot(sales_sub, aes(x = days, y = sales)) +
+  geom_line(col = &quot;grey&quot;, alpha = .4) +
+  stat_smooth(lwd = 1.5) + 
+  theme_bw()</code></pre>
 </div>
-<div id="sales-numbers-in-holidays" class="section level3">
-<h3>Sales numbers in holidays</h3>
+<div id="sales-numbers-in-holidays" class="section level4">
+<h4>Sales numbers in holidays</h4>
 <p>To test the effects of holidays (state or school), you should filter the dataset to only include dates on which the given store was open. Then you could average the sales of the holiday days and the non holiday days for each store and run a statistical test. If your familiar with the method, a fancier test you could run would be with a mixed effects model using the <code>lmer</code> function of the <code>lme4</code> package. Note that the state_holiday data is faulty. There are <code>NA</code>s where there should be <code>1</code>s. Change this first.</p>
 </div>
-<div id="predict-sales-numbers-from-other-variables" class="section level3">
-<h3>Predict sales numbers from other variables</h3>
+<div id="predict-sales-numbers-from-other-variables" class="section level4">
+<h4>Predict sales numbers from other variables</h4>
 <p>To not violate the independence assumption you will have to aggregate the sales data of each store over the different time periods. You could then run a linear regression, other machine learning methods, or, if your up to it, a mixed effects model using the <code>lmer</code> function of the <code>lme4</code> package (with the mixed effects model you won’t have to aggregate the data). You can also create a subset to fit your model on and then check on the other subset how well the predictions worked.</p>
 </div>
-<div id="other-options" class="section level3">
-<h3>Other options</h3>
+<div id="other-options" class="section level4">
+<h4>Other options</h4>
 <p>There are many other things you can test, given the many stores and variables such as whether promotion was run on a given day, or whether a store was in a promotion program, or what the influence of competition distance is.</p>
+</div>
 </div>
 
 

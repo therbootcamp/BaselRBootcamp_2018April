@@ -14,7 +14,7 @@ output:
       ratio: '16:9'
 ---
 
-# ***Haven't we been programming for R for the last three days of the course?***
+# ***Haven't we been programming in R for the last three days of the course?***
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 options(width=110)
@@ -31,7 +31,7 @@ Conditional Statements
 - `if`, `else`
 - `ifelse()`
 - `switch()`
-- (`case_when()`)
+- *`case_when()`*
 
 Functions
 - Program your own functions
@@ -39,7 +39,7 @@ Functions
 Iteration
 - `for` loops
 - `while` loops
-- (`apply` functions)
+- *`apply` functions*
 - `map` functions
 ]
 
@@ -61,8 +61,8 @@ compute_circle_area <- function(radius){
 }
 
 # A for loop
-for(i in seq_along(5)){
-  print(i)
+for(i in seq_len(5)){
+  mean(1:i)
 }
 
 
@@ -78,9 +78,9 @@ Allow you to conditionally execute code blocks.
 
 .pull-left45[
 
-*`if`, `else if`, and `else`*
+*`if`; `else if`; and `else`*
 
-`if` lets you check a condition. If this condition is `FALSE` you **can** (but don't have to!) add another check with `else if()` that is then, if `TRUE`, executed. An `else` in the end means this code block is always executed if the above checks evaluated to `FALSE`, i.e. it doesn't include a check.
+`if` lets you check a condition. If this condition is `FALSE` you **can** (but don't have to!) add another check with `else if` that is then, if `TRUE`, executed. An `else` in the end means this code block is always executed if the above checks evaluated to `FALSE`, i.e. it doesn't include a check.
 
 
 ]
@@ -166,7 +166,8 @@ x <- rnorm(10)
 
 type <- "mean"
 
-# requires fewer checks than if-else statements
+# requires fewer checks than
+# if-else statements
 switch(type,
        mean = mean(x),
        median = median(x),
@@ -196,16 +197,24 @@ The conditional statements often require you to specify checks (logical expressi
 
 .pull-right45[
 
-```{r}
+```{r, eval=FALSE}
 
-# uses only the first element of the check
+# uses only the first element of the
+# check
 if (x == y) print("x is equal to y")
+# gives warning that only first element
+# will be used
 
-# works because any only gives one statement back
+```
+
+```{r}
+# works because any only gives one
+# statement back
 if (any(x == y)) print("x is equal to y")
 
-any(x == y)
-
+# all vs identical
+all(c(1L, 2L, 3L) == c(1, 2, 3))
+identical(c(1L, 2L, 3L), c(1, 2, 3))
 
 ```
 
@@ -301,7 +310,7 @@ The last object in a function code is returned to the global environment. If a f
 .pull-right45[
 
 ```{r}
-my_mean <- function(x){
+softmax <- function(x, theta){
   
   # check precondition and
   # return 0 if it's not met
@@ -309,7 +318,7 @@ my_mean <- function(x){
     return(0)
   }
   
-  sum(x) / length(x)
+  exp(x * theta) / sum(exp(x * theta))
   
 }
 
@@ -368,16 +377,34 @@ When writing functions you can add checks and if they are not met provide your o
 
 Possible functions are `stop()`, `message()`, `warning()`, and `stopifnot()`.
 
+- `stopifnot()` takes an unlimited number of assertions as input.
+- With `stop()`, `message()`, and `warning()` you have to use separate `if` statements to test each potential violation. 
+
 
 ]
 
 .pull-right45[
 
 ```{r}
+# with stop you test whether stopping
+# condition is met
 divide_x <- function(x, y){
   if (y == 0){
-    stop("Cannot divide by 0. Enter another value for y.")
+    stop("Cannot divide by 0.
+         Enter another value for y.")
   }
+  
+  x / y
+}
+
+# with stopifnot you test an
+# assertion and throws a generic
+# error message
+divide_x <- function(x, y){
+  
+  stopifnot(y != 0, !is.null(x),
+            !is.null(y),
+            all(!is.na(c(x,y))))
   
   x / y
 }
@@ -532,8 +559,8 @@ These are available `apply` functions:
 - `apply()`
 - `lapply()`
 - `sapply()`
-- `vapply()`
 - `tapply()`
+- *`vapply()`*
 
 
 ]
@@ -549,8 +576,44 @@ apply(df, 2, mean) # columns
 # sapply: simplest apply version
 sapply(df, mean) # columns
 
+```
+
+]
+
+
+---
+
+# Iteration - `apply` Family
+
+
+.pull-left45[
+
+Functions of the `apply` family are another tool to iterate through objects and do the same operation on each subset.
+
+They are very handy, but not always consitently programmed, i.e., for example the argument structure is not always the same.
+
+These are available `apply` functions:
+
+- `apply()`
+- `lapply()`
+- `sapply()`
+- `tapply()`
+- *`vapply()`*
+
+
+]
+
+.pull-right45[
+
+
+```{r}
+
 # tapply: sapply with grouping variables
 tapply(mtcars$mpg, mtcars$cyl, mean)
+
+# vapply: safe apply version: must return
+# a numeric vector of length 1
+vapply(df, mean, 1) 
 
 ```
 
@@ -654,7 +717,7 @@ pirates %>%
   select(age,
          tattoos,
          beard.length)  %>%
-  map_dbl(., function(x){
+  map_dbl(function(x){
     sum(x) / length(x)
   })
 
@@ -663,7 +726,7 @@ pirates %>%
   select(age,
          tattoos,
          beard.length)  %>%
-  map_dbl(., ~sum(.) / length(.))
+  map_dbl(~sum(.) / length(.))
 
 
 ```
