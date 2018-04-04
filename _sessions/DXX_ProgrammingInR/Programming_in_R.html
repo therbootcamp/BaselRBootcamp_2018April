@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Programming in R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Programming in R
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### April 2018
+
+---
+
+
+# ***Haven't we been programming in R for the last three days of the course?***
+
+---
+
+# Content
+
+.pull-left45[
+Conditional Statements
+- `if`, `else`
+- `ifelse()`
+- `switch()`
+- *`case_when()`*
+
+Functions
+- Program your own functions
+
+Iteration
+- `for` loops
+- `while` loops
+- *`apply` functions*
+- `map` functions
+]
+
+.pull-right45[
+
+
+```r
+x &lt;- 1:5
+
+# Conditional statement
+if (length(x) &gt;= 5){
+  x[5]
+} else {
+  print("x is shorter than 5")
+}
+
+# Define own function
+compute_circle_area &lt;- function(radius){
+  radius ** 2 * pi
+}
+
+# A for loop
+for(i in seq_len(5)){
+  mean(1:i)
+}
+```
+
+]
+---
+
+# Conditional Statements
+
+Allow you to conditionally execute code blocks.
+
+.pull-left45[
+
+*`if`; `else if`; and `else`*
+
+`if` lets you check a condition. If this condition is `FALSE` you **can** (but don't have to!) add another check with `else if` that is then, if `TRUE`, executed. An `else` in the end means this code block is always executed if the above checks evaluated to `FALSE`, i.e. it doesn't include a check.
+
+
+]
+
+.pull-right45[
+
+
+```r
+if (this) {
+  
+  # do this
+  
+} else if (that){
+  
+  # do that 
+  
+} else {
+  
+  # do something else
+  
+}
+```
+
+]
+
+
+
+---
+
+# Conditional Statements
+
+Allow you to conditionally execute code blocks.
+
+.pull-left45[
+
+*`ifelse()`*
+
+A function that lets you do checks on an object and returns an object of the same form (not necessarily class!) with the values specified in the `yes`, and `no` arguments.
+
+]
+
+.pull-right45[
+
+
+```r
+# returns a vector
+vec &lt;- 1:10
+
+ifelse(test = vec &gt; 3, yes = 1, no = 0)
+```
+
+```
+##  [1] 0 0 0 1 1 1 1 1 1 1
+```
+
+```r
+# returns a matrix
+tib &lt;- tibble(x = 1:5,
+              y = 5:1)
+
+ifelse(test = tib &gt; 3, yes = "y", no = 0)
+```
+
+```
+##      x   y  
+## [1,] "0" "y"
+## [2,] "0" "y"
+## [3,] "0" "0"
+## [4,] "y" "0"
+## [5,] "y" "0"
+```
+
+]
+
+
+---
+
+# Conditional Statements
+
+Allow you to conditionally execute code blocks.
+
+.pull-left45[
+
+*`switch()`*
+
+Long chains of `if`-`else` statements can become confusing and require a lot of space. This is where the `switch()` function can come in handy.
+
+]
+
+.pull-right45[
+
+
+```r
+x &lt;- rnorm(10)
+
+type &lt;- "mean"
+
+# requires fewer checks than
+# if-else statements
+switch(type,
+       mean = mean(x),
+       median = median(x),
+       trimmed = mean(x, trim = .1))
+```
+
+```
+## [1] -0.2671
+```
+
+]
+
+---
+
+# A Note on Checks
+
+.pull-left45[
+
+The conditional statements often require you to specify checks (logical expressions) which have to evaluate to `TRUE` to execute the following block of code. Note that:
+
+- `&gt;`, `&lt;`, `==`, `&gt;=`, and `&lt;=` are vectorized
+- to prevent errors due to the vectorization use `any`, `all`, and `identical`
+
+
+```r
+(x &lt;- c(1:5))
+```
+
+```
+## [1] 1 2 3 4 5
+```
+
+```r
+(y &lt;- c(9:5))
+```
+
+```
+## [1] 9 8 7 6 5
+```
+
+]
+
+.pull-right45[
+
+
+```r
+# uses only the first element of the
+# check
+if (x == y) print("x is equal to y")
+# gives warning that only first element
+# will be used
+```
+
+
+```r
+# works because any only gives one
+# statement back
+if (any(x == y)) print("x is equal to y")
+```
+
+```
+## [1] "x is equal to y"
+```
+
+```r
+# all vs identical
+all(c(1L, 2L, 3L) == c(1, 2, 3))
+```
+
+```
+## [1] TRUE
+```
+
+```r
+identical(c(1L, 2L, 3L), c(1, 2, 3))
+```
+
+```
+## [1] FALSE
+```
+
+]
+
+---
+
+# A Note on Checks
+
+.pull-left45[
+
+For multiple logical expressions you have to cue logical ands (`&amp;`) or ors (`|`). Note that:
+
+- `&amp;` and `|` are vectorized
+- `&amp;&amp;` and `||` are not vectorized and short-circuiting operations
+
+]
+
+.pull-right45[
+
+
+```r
+# checks the whole sequence
+x &lt;= y &amp; x == y
+```
+
+```
+## [1] FALSE FALSE FALSE FALSE  TRUE
+```
+
+```r
+# checks only the first element
+x &lt;= y &amp;&amp; x == y
+```
+
+```
+## [1] FALSE
+```
+
+```r
+x &lt;- NULL
+
+!is.null(x) &amp; x &gt; 2
+```
+
+```
+## logical(0)
+```
+
+```r
+# &amp;&amp; is short circuiting
+!is.null(x) &amp;&amp; x &gt; 2
+```
+
+```
+## [1] FALSE
+```
+
+]
+
+---
+
+# Functions - General Structure
+
+.pull-left45[
+
+You can define your own functions. This can save a lot of time and space, because by writing your own function you only have to write the whole block of code once.
+
+Benefits of writing code in functions:
+- less typing
+- fewer errors
+- can be more general
+- can be faster
+
+]
+
+.pull-right45[
+
+
+```r
+clean_ws &lt;- function(objs = NULL,
+                     all = FALSE){
+  
+  if (!is.null(objs)){
+    # remove objects
+    rm(objs)
+  }
+  
+  if (isTRUE(all)){
+    # clear whole workspace
+    rm(list = ls())
+    gc()
+  }
+}
+```
+
+]
+
+
+---
+
+# Functions - Return Statement
+
+.pull-left45[
+
+The last object in a function code is returned to the global environment. If a function call should be terminated in the middle of the code and some value be returned, the `return()` function has to be used.
+
+
+]
+
+.pull-right45[
+
+
+```r
+softmax &lt;- function(x, theta){
+  
+  # check precondition and
+  # return 0 if it's not met
+  if (length(x) == 0){
+    return(0)
+  }
+  
+  exp(x * theta) / sum(exp(x * theta))
+  
+}
+```
+
+]
+
+---
+
+# Functions - Lexical Scoping
+
+.pull-left45[
+
+Functions have their own, separate environment, i.e. an object created in a function is not accessable outside the function.
+
+On the other hand variables outside the functions are also accessible within the functions, even when they are not passed as argument. Be careful with this!
+
+
+]
+
+.pull-right45[
+
+
+```r
+add &lt;- function(x){
+  
+  # when R can't find y in the 
+  # function environment it will search
+  # the next level of the hierarchy
+  z &lt;- x + y
+  z
+}
+
+x &lt;- 1; y &lt;- 2
+
+add(x)
+```
+
+```
+## [1] 3
+```
+
+
+```r
+z
+# throws an error because
+# z was only accessible in
+# the function
+```
+
+]
+
+---
+
+# Functions - Error Messages
+
+.pull-left45[
+
+When writing functions you can add checks and if they are not met provide your own error messages.
+
+Possible functions are `stop()`, `message()`, `warning()`, and `stopifnot()`.
+
+- `stopifnot()` takes an unlimited number of assertions as input.
+- With `stop()`, `message()`, and `warning()` you have to use separate `if` statements to test each potential violation. 
+
+
+]
+
+.pull-right45[
+
+
+```r
+# with stop you test whether stopping
+# condition is met
+divide_x &lt;- function(x, y){
+  if (y == 0){
+    stop("Cannot divide by 0.
+         Enter another value for y.")
+  }
+  
+  x / y
+}
+
+# with stopifnot you test an
+# assertion and throws a generic
+# error message
+divide_x &lt;- function(x, y){
+  
+  stopifnot(y != 0, !is.null(x),
+            !is.null(y),
+            all(!is.na(c(x,y))))
+  
+  x / y
+}
+```
+
+]
+
+---
+
+# Iteration - `for` Loops
+
+.pull-left45[
+
+A for loop lets you repeat the execution of a block of code as many times as you wish. It also allows you to loop through positions.
+
+A `for` loop has three components:
+
+- output (object to be prepared before entering the loop)
+- sequence (defines the vector to loop through)
+- body (the code that does the actual work)
+
+
+]
+
+.pull-right45[
+
+
+```r
+df &lt;- tibble(x = rnorm(50),
+             y = rnorm(50),
+             z = rnorm(50))
+
+
+output &lt;- vector(
+  length = ncol(df)) #  output
+
+for (i in seq_along(df)) { # sequence
+  output[i] &lt;- mean(df[[i]]) # body
+}
+output
+```
+
+```
+## [1]  0.3119804 -0.0004959 -0.0713462
+```
+
+```r
+for (i in seq_len(4)) print(i)
+```
+
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+```
+
+]
+
+---
+
+# Iteration - `for` Loops
+
+Remember to define the output prior to entering the loop and creating it in the desired length.
+
+.pull-left45[
+
+**Good:**
+
+
+```r
+# Creates the desired object
+# and fills it subsequently
+output &lt;- vector(
+  length = ncol(df)) #  output
+
+for (i in seq_along(df)) { # sequence
+  output[i] &lt;- mean(df[[i]]) # body
+}
+output
+```
+
+```
+## [1]  0.3119804 -0.0004959 -0.0713462
+```
+
+
+]
+
+.pull-right45[
+
+**Bad:**
+
+
+```r
+# Creates a copy at each iteration
+# and is thus slower
+output &lt;- NULL #  output
+
+for (i in seq_along(df)) { # sequence
+  output &lt;- c(output,
+              mean(df[[i]])) # body
+}
+output
+```
+
+```
+## [1]  0.3119804 -0.0004959 -0.0713462
+```
+
+]
+
+
+---
+
+# Iteration - `while` Loops
+
+
+.pull-left45[
+
+`while` loops let you iterate until a specified condition is met.
+
+This can be handy, but also "dangerous" because if the condition is never met, it will just iterate until you manually stop it.
+
+
+]
+
+.pull-right45[
+
+
+
+```r
+# get similar subset of samples
+while(dist &gt; 1){
+  ind &lt;- sample(nrow(df))
+  x1 &lt;- df$x[ind[1:(length(ind) / 2)]]
+  x2 &lt;- df$x[ind[(length(ind) / 2) + 1:
+                   length(ind)]]
+  
+  dist &lt;- abs(mean(x1) - mean(x2))
+}
+
+# Potentially problematic:
+# get VERY similar subset of samples
+while(dist &gt; .0001){ # very small dist
+  ind &lt;- sample(nrow(df))
+  x1 &lt;- df$x[ind[1:(length(ind) / 2)]]
+  x2 &lt;- df$x[ind[(length(ind) / 2) + 1:
+                   length(ind)]]
+  
+  dist &lt;- abs(mean(x1) - mean(x2))
+}
+```
+
+]
+
+---
+
+# Iteration - `apply` Family
+
+
+.pull-left45[
+
+Functions of the `apply` family are another tool to iterate through objects and do the same operation on each subset.
+
+They are very handy, but not always consitently programmed, i.e., for example the argument structure is not always the same.
+
+These are available `apply` functions:
+
+- `apply()`
+- `lapply()`
+- `sapply()`
+- `tapply()`
+- *`vapply()`*
+
+
+]
+
+.pull-right45[
+
+
+
+```r
+# apply for rows or colums
+apply(df[1:3,], 1, mean) # rows
+```
+
+```
+## [1] -0.1505 -0.8377 -0.5630
+```
+
+```r
+apply(df, 2, mean) # columns
+```
+
+```
+##          x          y          z 
+##  0.3119804 -0.0004959 -0.0713462
+```
+
+```r
+# sapply: simplest apply version
+sapply(df, mean) # columns
+```
+
+```
+##          x          y          z 
+##  0.3119804 -0.0004959 -0.0713462
+```
+
+]
+
+
+---
+
+# Iteration - `apply` Family
+
+
+.pull-left45[
+
+Functions of the `apply` family are another tool to iterate through objects and do the same operation on each subset.
+
+They are very handy, but not always consitently programmed, i.e., for example the argument structure is not always the same.
+
+These are available `apply` functions:
+
+- `apply()`
+- `lapply()`
+- `sapply()`
+- `tapply()`
+- *`vapply()`*
+
+
+]
+
+.pull-right45[
+
+
+
+```r
+# tapply: sapply with grouping variables
+tapply(mtcars$mpg, mtcars$cyl, mean)
+```
+
+```
+##     4     6     8 
+## 26.66 19.74 15.10
+```
+
+```r
+# vapply: safe apply version: must return
+# a numeric vector of length 1
+vapply(df, mean, 1) 
+```
+
+```
+##          x          y          z 
+##  0.3119804 -0.0004959 -0.0713462
+```
+
+]
+
+---
+
+# Iteration - `apply` Family
+
+
+.pull-left45[
+
+
+You can specify *anonymous functions* in functions of the `apply` family. 
+
+An anonymous function exists only temporarily when the `apply` function is called. This means that the anonymous function is not defined in a separate step, but directly within the `apply` function.
+
+
+
+]
+
+.pull-right45[
+
+
+
+```r
+# define weights for weighted mean
+weight &lt;- sample(1:5,
+                 nrow(df),
+                 replace = TRUE)
+
+# anonymous function for 
+# weighted mean
+sapply(df, function(x, w){
+  sum(x * w) / sum(w)
+}, w = weight)
+```
+
+```
+##        x        y        z 
+##  0.38543  0.06265 -0.05959
+```
+
+]
+
+---
+
+# Iteration - `map` Family
+
+
+.pull-left45[
+
+
+The `map` functions are the purrr equivalent of the `apply` functions.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/purrr_hex.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right45[
+
+
+
+```r
+map(df, mean)
+```
+
+```
+## $x
+## [1] 0.312
+## 
+## $y
+## [1] -0.0004959
+## 
+## $z
+## [1] -0.07135
+```
+
+```r
+map_dbl(df, mean)
+```
+
+```
+##          x          y          z 
+##  0.3119804 -0.0004959 -0.0713462
+```
+
+]
+
+---
+
+# Iteration - `map` Family
+
+
+.pull-left45[
+
+
+The `map` functions are the purrr equivalent of the `apply` functions.
+
+There are several `map` functions that iterate over one vector. They are named after the type of object they return:
+
+- `map` returns a list
+- `map_lgl` returns a logical vector
+- `map_int` returns an integer vector
+- `map_dbl` returns a double vector
+- `map_chr` returns a character vector
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/purrr_hex.png" width="20%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right45[
+
+
+
+```r
+pirates %&gt;%
+  select(age,
+         tattoos,
+         beard.length)  %&gt;%
+  map_dbl(function(x){
+    sum(x) / length(x)
+  })
+```
+
+```
+##          age      tattoos beard.length 
+##       27.360        9.429       10.384
+```
+
+```r
+# shorter way to write it
+pirates %&gt;%
+  select(age,
+         tattoos,
+         beard.length)  %&gt;%
+  map_dbl(~sum(.) / length(.))
+```
+
+```
+##          age      tattoos beard.length 
+##       27.360        9.429       10.384
+```
+
+]
+
+
+---
+
+# Iteration - `map` Family
+
+
+.pull-left45[
+
+
+The `map` functions are the purrr equivalent of the `apply` functions.
+
+There are also `map` functions that iterate over two or more vectors. 
+
+They are named `map2`, and `pmap`.
+
+If the objects in the list are named, pmap will use the name, otherwise the position in the list, to determine which object belongs to which argument.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/purrr_hex.png" width="20%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right45[
+
+
+
+```r
+mus &lt;- c(4, 5)
+sds &lt;- c(2, 3)
+
+map2(mus, sds, rnorm, n = 3)
+```
+
+```
+## [[1]]
+## [1]  4.7814  2.9067 -0.1929
+## 
+## [[2]]
+## [1] 3.719 5.048 5.324
+```
+
+```r
+ns &lt;- c(2, 3)
+
+pmap(list(mean = mus,
+          sd = sds,
+          n = ns), rnorm)
+```
+
+```
+## [[1]]
+## [1] 5.583 6.065
+## 
+## [[2]]
+## [1]  1.374 10.184  7.780
+```
+
+]
+
+
+
+---
+
+# Iteration - `map` Family
+
+
+.pull-left45[
+
+
+The `map` functions are the purrr equivalent of the `apply` functions.
+
+You can not only iterate through objects to use as arguments but also through functions. This is done with `invoke_map`.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/purrr_hex.png" width="20%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right45[
+
+
+
+```r
+# list with the arguments
+argumnts &lt;- list(
+  list(mean = 4, sd = 2),
+  list(shape1 = 2, shape2 = 3)
+)
+
+# vector of functions
+functs &lt;- c("rnorm", "rbeta")
+
+invoke_map(functs, argumnts, n = 3)
+```
+
+```
+## [[1]]
+## [1] 3.921 4.905 4.816
+## 
+## [[2]]
+## [1] 0.1276 0.3669 0.2586
+```
+
+]
+
+
+---
+
+# Summary- What We've Learned
+
+
+- How to use conditional statements
+- How to program our own functions
+- How to iterate over blocks of code
+
+This is very helpful to not having to type the same code many times and to keep it more flexible. Remember the DRY (Don't Repeat Yourself) principle, i.e. if you have to write the same block of code more than twice, create a function to do so and iterate over it.
+
+
+
+---
+
+# Programming in R Practical
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
