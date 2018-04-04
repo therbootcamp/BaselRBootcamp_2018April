@@ -36,6 +36,34 @@ output: html_document
 - Start by asking yourself "What features in the data do I explicitly want to ignore?"
     - It's almost always better to use content knowledge before setting an algorithm loose on data.
 
+#### Using Caret
+
+Feature Selection
+
+- Identify features with almost 0 variance with `nearZeroVar(mdrrDescr, saveMetrics= TRUE)`
+- Look for highly correlated predictors with `findCorrelation`
+    
+Pre-Processing
+
+- Rescale data with `preProcess`
+- Impute missing values with `preProcess`
+
+Splitting data
+
+- `createDataPartition` Splits data into balanced training and test sets
+- `createFolds()` Creates mutually exclusive folds of size 1 / k.
+- Other options exist to split data with additional restrictions (i.e.; balance a predictor across folds)
+
+Training data
+
+- To train a model, use the `train()` function
+- There are over 200 models currently available in caret (see https://topepo.github.io/caret/available-models.html)
+- 
+
+
+
+
+
 
 ## Imputing missing values
 
@@ -57,4 +85,12 @@ output: html_document
 - `train`: Estimate model parameters, evaluate the effect of model parameters on fitting performance, choose 'optimal' parameter values for a dataset.
 - `confusionMatrix`: Get model fit statistics for classification
 - `resamples` Collect, summarise, and contrast the perofrmance of different models
+
+
+### Visualisation
+
+- `featurePlot` Look at the relationships among features
+    - Use `type` argument to specify kind.
+    
+    
 

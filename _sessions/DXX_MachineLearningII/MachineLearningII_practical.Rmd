@@ -95,6 +95,11 @@ titanic_full <- read_csv("https://raw.githubusercontent.com/pcsanwald/kaggle-tit
 # Impute Missing Ages
 #=================================================================
 
+# Calculte column summaries
+titanic_full %>%
+  map_dfc(~ sum(is.na(.)))
+
+
 # Caret supports a number of mechanism for imputing (i.e., 
 # predicting) missing values. Leverage bagged decision trees
 # to impute missing values for the Age feature.
@@ -149,10 +154,6 @@ train.control <- trainControl(method = "repeatedcv",
                               repeats = 3,              # Do it 3 times
                               search = "grid")          # Find optimal parameters
 
-
-
-
-
 caret.cv <- train(survived ~ ., 
                   data = titanic_train,
                   method = "xgbTree",
@@ -183,47 +184,53 @@ tibble(dataset = "BostonHousing", rows = nrow(BostonHousing), columns = ncol(Bos
   knitr::kable()
 ```
 
+### BostonHousing
 
-1. Look at the help menu for X to understand the columns
+1. Look at the help menu for your dataset to understand the differnt columns ("features") in the dataset. Make a mental note of which column is the criterion! Is the criterion numeric, binary, or factor?
 
-1. Explore the X dataset, do you see any missing data?
+2. Visually explore the dataset using `summary()`, `str()` and `View()`
 
-2. Impute the missing values with X
+3. Using `createPartition`, split the original dataset into a 70\% training set, and a 30\% test set. Make sure to stratify the data according to the criterion.
 
-3. Using `createPartition`, separate the data into a X% training set X_train and a X% test set called X_test. Make sure to stratify the data so that the training and test sets have relatively equal balances of the criterion.
+4. Using `map_dfc`, look for missing data in the training data. Do you find any?
 
-4. Create a set of control parameters to setup a 10 fold cross validation. Only do 1 repetition.
+```{r, eval = FALSE}
+# Look for missing data in each column of data_train
 
-5. Using `train`, train a decision tree on the data.
+data_train %>%
+  map_dfc(~ sum(is.na(.)))
+```
 
-6. Look at the results of the object you just created and try to find the original decision tree models
+5. If you found mising data, create a model of the missing values using `preProcess`. Then create a new training dataset containing no missing values using `predict()`
 
-7. Look at the accuracy results, what were the 10 different prediction accuracy levels you got in the 10fold cross validation?
+6. Create a set of control parameters to setup a 10 fold cross validation.
 
-8. Now, using XX predict the criterion for the real test data.
+7. Using `train`, train 3 different models on your data: 
+  - Decision tree,
+  - Regression (or logistic regression for a binary predictor)
+  - Support vector machines
 
-9. Using XX, evaluate the true test accuracy of the model. How did it compare to what you expected from your 10 fold cross validation simulation?
+8. Look at the results of the object you just created. Use `names()`, `str()` and `summary()` to see what's in the objects. See if you can access each of the 10 models for each fold of the cross validation.
+
+9. Using XXX, look at the accuracy results, what were the 10 different prediction accuracy levels you got in the 10 fold cross validation? Based on these results, which model do you think will do the best in predicting the true test data?
+
+10. Use XXX to visualise the prediction results for each model.
+
+11. Now, using XX predict the criterion for the *real* test data.
+
+12. Using XX, evaluate the true test accuracy of the model. How did it compare to what you expected from your 10 fold cross validation simulation?
+
+13. Using XX, visualise the final prediction results wi
+
+### Additional options
+
+12. Instead of creating a 70 / 30 training / test split, where 70% of the data were used for training and 30% were used for testing, try repeating your anlyses with a 95 / 5 split. Do your results from before hold?
+
+### Advanced
 
 ### Optimising parameters with cross validation.
 
-13. Using XX, repeat your processes above to optimize parameter values. 
-
-### Try logistic regression
-
-Now add logisic regression...
-
-### Try random forests
-
-10. Now it's time to try a new model! Instead of a decision tree, try using randomforests with XX. Repeat each of your steps before.
-
-11. Using XX, compare your cross validation results between decision trees and random forests. Which model seems to do better in the cross validations?
-
-12. Let's test your predictions! Predict the test data with your random forest model and evalute it's prediction performance. Do your results coincide with what you expected from your cross validation simulation?
-
-# Using the XXX dataset
-
-Repeat all of your previous steps, but now with the XX dataset. Which model seems to do the best in this dataset?
-
+13. Using XX, use cross validation to optimize the parameters of your moedls
 
 
 
