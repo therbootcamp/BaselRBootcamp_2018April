@@ -57,10 +57,16 @@ Splitting data
 Training data
 
 - To train a model, use the `train()` function
+
+    - method = model
+    - tuneGrid = a grid of parameter values to test
+    - metric = the accuracy measure to optimise
+  
 - There are over 200 models currently available in caret (see https://topepo.github.io/caret/available-models.html)
-- 
 
+- Each model has a set of *tuning parameters*. Look at https://topepo.github.io/caret/available-models.html to see them all.
 
+- Once you've trained a model, you can extract the 'best' version of the 
 
 
 
