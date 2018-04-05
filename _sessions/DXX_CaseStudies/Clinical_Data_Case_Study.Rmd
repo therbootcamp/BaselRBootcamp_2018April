@@ -1,0 +1,248 @@
+---
+title: "Sales Data - Case Study"
+author: "BaselRBootcamp April 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval = FALSE)
+```
+
+
+```{r, eval = FALSE}
+
+library(tidyverse)
+set.seed(100)
+
+PatientID_v <- sapply(1:300, FUN = function(x) {
+  
+  
+  paste0(sample(letters, size = 8, replace = TRUE), collapse = "")
+  
+})
+
+
+arm_v <- rep(c("I", "II", "III"), length.out = 300)
+
+dimarta_demographics <- tibble(
+  PatientID = PatientID_v,
+  age = round(rnorm(n = 300, mean = 40, sd = 5), 0),
+  gender = sample(c(0, 1), size = 300, replace = TRUE),
+  site  = sample(c("London", "Paris", "Tokyo"), size = 300, replace = TRUE),
+  diseasestatus = sample(c("Early", "Mid", "Late"), size = 300, replace = TRUE)
+) %>%
+  sample_frac(1)
+
+dimarta_biomarker <- expand.grid(
+  PatientID = PatientID_v,
+  Biomarker = c("dw", "np", "ms"), 
+  stringsAsFactors = FALSE
+) %>% as_tibble() %>%
+  sample_frac(1)
+
+dimarta_biomarker$BiomarkerStatus <- sample(c(TRUE, FALSE),
+                                             size = 300, replace = TRUE, prob = c(.25, .75))
+
+dimarta_trial <-  tibble(
+  PatientID = PatientID_v,
+  arm = arm_v,
+  test_start = round(rnorm(n = 300, mean = 50, sd = 15), 2),
+  test_end = NA
+) %>% as_tibble() %>%
+  sample_frac(1)
+
+dimarta_trial$test_end[dimarta_trial$arm == "I"] <- dimarta_trial$test_start[dimarta_trial$arm == "I"] + round(rnorm(sum(dimarta_trial$arm == "I"), mean = 3, sd = 5), 2)
+dimarta_trial$test_end[dimarta_trial$arm == "II"] <- dimarta_trial$test_start[dimarta_trial$arm == "II"] + round(rnorm(sum(dimarta_trial$arm == "II"), mean = 1, sd = 5), 2)
+dimarta_trial$test_end[dimarta_trial$arm == "III"] <- dimarta_trial$test_start[dimarta_trial$arm == "III"] + round(rnorm(sum(dimarta_trial$arm == "III"), mean = 2, sd = 5), 2)
+
+dimarta_trial$qol_start <- round(rnorm(n = 300, mean = 3, sd = 1), 0)
+dimarta_trial$qol_end <- dimarta_trial$qol_start + round(rnorm(n = 300, mean = 0, sd = 1), 0)
+
+# Add some bad  / NA values
+
+dimarta_trial$test_start[sample(nrow(dimarta_trial), size = 5)] <- c(999, -24, 888, -99, 999)
+dimarta_trial$test_end[sample(nrow(dimarta_trial), size = 10)] <- NA
+dimarta_trial$test_start[sample(nrow(dimarta_trial), size = 7)] <- NA
+
+write_csv(x = dimarta_trial, path = "_sessions/DXX_CaseStudies/dimarta_trial.csv")
+write_csv(x = dimarta_biomarker, path = "_sessions/DXX_CaseStudies/dimarta_biomarker.csv")
+write_csv(x = dimarta_demographics, path = "_sessions/DXX_CaseStudies/dimarta_demographics.csv")
+```
+
+
+### Overview
+
+In this case study, we will look at the results of a clinical study exploring the effectiveness of a new medication called dimarta on reducing histamine in patients. In the study, 300 patients were assigned to one of three different treatment arms. One arm was given a placebo. The other arm was given adiclax -- the standard of care for the disease. Finally, the third arm was given dimarta. There were two main measures of interest in the trial: patient's changes in histamine from the beginning to the end of the trial (measured with a biological test), and their change in quality of life (measured by self report). 
+
+
+**dimarta_biomarker.csv**
+
+| Variable| Description|
+|:------------------------------|:----------------------------------------------------------------|
+|     PatientID|    Unique patient id|
+|     Biomarker|    One of three biomarkers: dw, ms, and np| 
+|     BiomarkerStatus| Result of the test for the biomarker.|
+
+Table: Table1. "dimarta_biomarker.csv" variable description:
+
+
+**dimarta_demographics.csv**
+
+| Variable| Description|
+|:------------------------------|:----------------------------------------------------------------|
+|     PatientID|    Unique patient id|
+|     age|   Patient age| 
+|     gender| Patient gender, 0 = male, 1 = female|
+|     site| Site where the clinical trial was conducted|
+|     diseasestatus| Status of the patient's disease at start of trial|
+
+Table: Table2. "dimarta_demographics.csv" variable description:
+
+
+**dimarta_trial.csv**
+
+| Variable| Description|
+|:------------------------------|:----------------------------------------------------------------|
+|     PatientID|    Unique patient id|
+|     arm|  Treatment arm, either I = placebo, II = adiclax (the standard of treatment), or III = dimarta (the target drug)| 
+|     histamine_start| histamine value at the start of the trial|
+|     histamine_end| histamine value at the end of the trial|
+|     qol_start| Patient's rated quality of life at the start of the trial|
+|     qol_end| Patient's rated quality of life at the end of the trial|
+
+Table: Table1. "dimarta_trial.csv" variable description:
+
+### Data I/O
+
+1. Open a new R script and save it as a new file called `dimarta_casestudy.R`. At the top of the script, using comments, write your name and the date. Then, load the `tidyverse`package. Here's how the top of your script should look:
+
+```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+## NAME
+## DATE
+## dimarta - Case Study
+
+library(tidyverse)
+
+```
+
+2. Using `read_csv()`, load the `dimarta_trial.csv`, `dimarta_demographics.csv`, and `dimarta_biomarker.csv` datasets as three new objects called `trial_df`, `demographics_df`, and `biomarker_df`.
+
+```{r, eval = FALSE, message = FALSE, warning = FALSE}
+# Load data from your local data file of your R project
+
+sales <- read_csv("data/sales.csv")
+stores <- read_csv("data/stores.csv")
+
+```
+
+```{r, eval=FALSE, echo=FALSE, message = FALSE, warning = FALSE}
+# Load data from your local data file of your R project
+
+sales <- read_csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/sales.csv")
+stores <- read_csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/stores.csv")
+
+```
+
+3. Get a first impression of the datasets by exploring them with the `View()`, `head()`, `names()`, and `str()` functions. Were they all loaded correctly?
+
+### Data Wrangling
+
+4. Using `rename()`, change the name of the column `arm` in the `trial_df` data to `StudyArm`.
+
+5. Using the `table()` function, look at the values of the `arm` column in `trial_df`. You'll notice the values are I, II, and III. Using `mutate()` and `case_when()` change these values to the appropriate names of the study arms (look at the variable descriptions to see which is which!)
+
+6. In the `demographics_df` data, you'll see that gender is coded as 0 and 1. Using `mutate()` create a *new* column in `demographics_df` called `gender_c` that shows gender as a string, where 0 = "male", and 1 = "female".
+
+7. Now let's create a new object called `dimarta_df` that combines data from `trial_df` and `demographics_df`. To do this, use `left_join()` to combine the `trial_df` data with the `demographics_df` data. This will merge the two datasets so you can have the study results and demographic data in the same dataframe. Make sure to assign the result to a new object called `dimarta_df`
+
+```{r, eval = FALSE}
+# Create a new dataframe called dimarta_df that contains both trial_df and demographics_df
+dimarta_df <- trial_df %>%
+  left_join(demographics_df)
+```
+
+8. You'll notice that the `biomarker_df` dataframe is in the 'long' format, where each row is a patient's biomarker result. Using the code below, making use of the `spread()` function, create a new dataframe called `biomarker_wide_df` where each row is a patient, and the results from different biomarkers are in different columns. When you finish, look at `biomarker_long_df` to see how it looks!
+
+```{r}
+# Convert biomarker_df to a long format using spread()
+biomarker_long_df <- biomarker_df %>%
+  spread(Biomarker, BiomarkerStatus)
+```
+
+9. Now, using the `left_join` function, add the biomarker results to the `dimarta_df` data! Now you should hve all of the data in a single dataframe called `dimarta_df`
+
+10. View `dimarta_df` to make sure the data look correct.
+
+11. Using `write_csv()`, save `dimarta_df` in a new `.csv` file on your computer called `dimarta.csv`
+
+12. Using the `mean()` function, calculate the mean age of all patients.
+
+13. Using the following template, find out how many male and female patients were in the trial.
+
+```{r, eval = FALSE}
+dimarta_df %>%
+  group_by(XXX) %>%
+  summarise(
+    Counts = n()    
+  )
+```
+
+14. Now, using similar code, find out how many patients were assigned to each study arm.
+
+15. Find out how many men and women were assigned to each study arm (Hint: You can use very similar code to what you used above, just add a second grouping variable!)
+
+16. Using `mutate()`, add a new column to the `dimarta_df` data called `histamine_change` that shows the *change* in patient's histamine levels from the start to the end of the trial (Hint: just subtract `histamine_start` from `histamine_end`!)
+
+17. Using `mutate()` again, add a new column to `dimarta_df` called `qol_change` that shows the change in patient's quality of life.
+
+18. Calculate the percentage of patients who tested positive for each of the three biomarkers using the following template (Hint: If you calculate the `mean()` of a logical vector, you will get the percentage of TRUE values!)
+
+```{r, eval = FALSE}
+# Calculate percent of patients with positive biomarkers
+
+dimarta_df %>%
+  summarise(
+    dw_mean = mean(XXX),
+    ms_percent = mean(XXX),
+    np_percent = mean(XXX)
+  )
+```
+
+
+18. Calculate the mean change in histamine results separately for men and women using the following template
+
+```{r, eval = FALSE}
+# Calculate the mean and standard deviation of age for each study site
+dimarta_df %>%
+  group_by(XX) %>%
+  summarise(
+    histamine_change_mean = mean(XXX)
+  )
+```
+
+19. Were there different distributions of age in the different trial sites? To answer this, separately calculate the mean and standard deviations of patient ages in each site. (Hint: group the data by `site`, then calculate two separate summary statistics: `age_mean = mean(age)`, and `age_sd = sd(age)`.
+
+20. Calculate the mean change in histamine results (`histamine_change`) for each study arm. Which study arm had a largest decrease in histamine?
+
+21. Calculate the mean change in quality of life (`qol_change`) for each study arm. Do the results match what you found with the histamine results?
+
+### Statistics
+
+22. Using `t.test()` conduct a t-test comparing the change in histamine results between the placebo and dimarta. Did dimarta differ from the placebo?
+
+23. Using `t.test()` conduct a t-test comparing the change in histamine results between the adiclax (the standard of care) and dimarta. Did dimarta improve over the standard of care?
+
+24. Using `glm()` conduct a regression analysis predicting `histamine_change` as a function of 4 variables: treatment arm, test results at the start of the trial, age, and quality of life at the start of the trial. Save the result as an object called `histamine_change_glm`. Once you do, apply the `summary()` function to the `histamine_change_glm` object to explore the results. Which variables reliably predict changes in test results?
+
+25. Repeat your previous regression analysis, but now predict change in quality of life. Do you get different results compared to your previous analysis?
+
+26. Now it's time to see if the patient's biomarkers were related to treatment success. For the `dw` biomarker, calculate the mean change in test results (`histamine_change`) separately for patients with different outcomes on the `dw` biomarker (hint: just group the data by `dw` and use `summarise()` to calculate the mean `histamine_change`).
+
+27. Do the same analysis for the other two biomarkers `ms` and `np`. Do either of these biomarkers seem to predict changes in test results?
+
+28. Using `glm()`, create a new regression object called `histamine_change_bio_glm` predicting `histamine_change` as a function of the 3 biomarkers. Explore the results with `summary()`. Do you find that any of these biomarkers predict changes in histamine?
+
+
+
+
+
