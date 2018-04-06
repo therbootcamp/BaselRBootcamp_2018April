@@ -88,7 +88,7 @@ options(digits = 4)
 # Who are we?
 
 <p align="center"><br>
-    <a href="www.nathanieldphillips.com/"><img border="0" alt="W3Schools" src="https://avatars3.githubusercontent.com/u/8480980?v=4&s=460" height="240"></a><br>
+    <a href="www.nathanieldphillips.com/"><img border="0" alt="W3Schools" src="https://psychologie.unibas.ch/fileadmin/_processed_/b/e/csm_markus_72f28a47b1.png?1516116752" height="240"></a><br>
 
 <p align="center">
 <font size = 5>Markus steiner</font><br><br>
