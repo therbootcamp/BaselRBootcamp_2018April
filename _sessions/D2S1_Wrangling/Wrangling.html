@@ -4,7 +4,7 @@
     <title>Data Wrangling</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -127,12 +127,12 @@ ToothGrowth$len %&gt;% mean()
 
 .pull-left3[
 &lt;br&gt;&lt;br&gt;
-&lt;font size = 5&gt; Here is some trial data called X&lt;/font&gt;
+&lt;font size = 5&gt; Here is some trial data called trial&lt;/font&gt;
 
 
 ```r
 # Clinical trial data
-X
+trial
 ```
 
 ```
@@ -154,14 +154,14 @@ X
 
 .pull-right65[
 
-&lt;font size = 5&gt;&lt;i&gt;Task 1: Give me the ids of women above the age of 50 with an outcome greater than 5&lt;/i&gt;&lt;/font&gt;
+&lt;font size = 5&gt;&lt;i&gt;Task 1: Give me the ids of women above the age of 50&lt;/i&gt;&lt;/font&gt;
 
 
 
 ```r
 # Base R Method without pipe (%&gt;%)
 
-X$id[X$sex == "f" &amp; X$age &gt; 50 &amp; X$outcome &gt; 5]
+trial$id[trial$sex == "f" &amp; trial$age &gt; 50]
 ```
 
 ```
@@ -173,8 +173,8 @@ X$id[X$sex == "f" &amp; X$age &gt; 50 &amp; X$outcome &gt; 5]
 ```r
 # dplyr method with pipe (%&gt;%)
 
-X %&gt;%
-  filter(sex == "f" &amp; age &gt; 50 &amp; outcome &gt; 5) %&gt;%
+trial %&gt;%
+  filter(sex == "f" &amp; age &gt; 50) %&gt;%
   select(id)
 ```
 
@@ -194,12 +194,12 @@ X %&gt;%
 
 .pull-left3[
 &lt;br&gt;&lt;br&gt;
-&lt;font size = 5&gt; Here is some trial data called X&lt;/font&gt;
+&lt;font size = 5&gt; Here is some trial data called trial&lt;/font&gt;
 
 
 ```r
 # Clinical trial data
-X
+trial
 ```
 
 ```
@@ -229,8 +229,8 @@ X
 # Base R Method without pipe (%&gt;%)
 
 # Get aggregate statistics
-age_agg &lt;- aggregate(age ~ arm, data = X, FUN = mean)
-out_agg &lt;- aggregate(outcome ~ arm, data = X, FUN = mean)
+age_agg &lt;- aggregate(age ~ arm, data = trial, FUN = mean)
+out_agg &lt;- aggregate(outcome ~ arm, data = trial, FUN = mean)
 
 # Combine results
 data.frame(arm = age_agg$arm,
@@ -254,12 +254,12 @@ data.frame(arm = age_agg$arm,
 
 .pull-left3[
 &lt;br&gt;&lt;br&gt;
-&lt;font size = 5&gt; Here is some trial data called X&lt;/font&gt;
+&lt;font size = 5&gt; Here is some trial data called trial&lt;/font&gt;
 
 
 ```r
 # Clinical trial data
-X
+trial
 ```
 
 ```
@@ -288,7 +288,7 @@ X
 ```r
 # dplyr method with pipe (%&gt;%)
 
-X %&gt;%                             # Start with data X
+trial %&gt;%                             # Start with data trial
   group_by(arm) %&gt;%               # Group data by arm
   summarise(                      # Calculate summary statistics
     age_mean = mean(age),         # age_mean is...
@@ -300,8 +300,8 @@ X %&gt;%                             # Start with data X
 ## # A tibble: 2 x 3
 ##     arm age_mean outcome_mean
 ##   &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;
-## 1     1    47.75          6.5
-## 2     2    56.50          7.0
+## 1    1.     47.8         6.50
+## 2    2.     56.5         7.00
 ```
 ]
 
@@ -339,11 +339,11 @@ X %&gt;%                             # Start with data X
 ```r
 library(tidyverse) # Load tidyverse (includes dplyr)
 
-# load .csv file as trial_X
-trial_X &lt;- read_csv("data/mydata.csv")
+# load .csv file as trial
+trial &lt;- read_csv("data/mydata.csv")
 
 # Start with original dataframe 
-trial_X %&gt;%   # AND THEN
+trial %&gt;%   # AND THEN
   
   # Change column names with rename()
   rename(...)  %&gt;%  # AND THEN...
@@ -423,11 +423,11 @@ patients_df   # Demographic data
 ## # A tibble: 5 x 3
 ##      id     b     c
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    13    38     0
-## 2    22    64     1
-## 3     5    55     0
-## 4    67    34     0
-## 5    34    29     1
+## 1   13.   38.    0.
+## 2   22.   64.    1.
+## 3    5.   55.    0.
+## 4   67.   34.    0.
+## 5   34.   29.    1.
 ```
 
 ### Goal:
@@ -459,11 +459,11 @@ patients_df  # Original
 ## # A tibble: 5 x 3
 ##      id     b     c
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    13    38     0
-## 2    22    64     1
-## 3     5    55     0
-## 4    67    34     0
-## 5    34    29     1
+## 1   13.   38.    0.
+## 2   22.   64.    1.
+## 3    5.   55.    0.
+## 4   67.   34.    0.
+## 5   34.   29.    1.
 ```
 ]
 
@@ -484,11 +484,11 @@ patients_df %&gt;%
 ## # A tibble: 5 x 3
 ##      id   age   arm
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    13    38     0
-## 2    22    64     1
-## 3     5    55     0
-## 4    67    34     0
-## 5    34    29     1
+## 1   13.   38.    0.
+## 2   22.   64.    1.
+## 3    5.   55.    0.
+## 4   67.   34.    0.
+## 5   34.   29.    1.
 ```
 
 ]
@@ -534,11 +534,11 @@ patients_df %&gt;%
 ## # A tibble: 5 x 5
 ##      id   age   arm age_months age_decades
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
-## 1    13    38     0        456         3.8
-## 2    22    64     1        768         6.4
-## 3     5    55     0        660         5.5
-## 4    67    34     0        408         3.4
-## 5    34    29     1        348         2.9
+## 1   13.   38.    0.       456.        3.80
+## 2   22.   64.    1.       768.        6.40
+## 3    5.   55.    0.       660.        5.50
+## 4   67.   34.    0.       408.        3.40
+## 5   34.   29.    1.       348.        2.90
 ```
 
 ]
@@ -581,19 +581,19 @@ patients_df %&gt;%
   mutate(age_months = age * 12,
          age_decades = age / 10,
          arm_char = case_when(arm == 0 ~ "placebo",
-                              arm == 1 ~ "drugX")
+                              arm == 1 ~ "drugtrial")
          )
 ```
 
 ```
 ## # A tibble: 5 x 6
-##      id   age   arm age_months age_decades arm_char
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;    &lt;chr&gt;
-## 1    13    38     0        456         3.8  placebo
-## 2    22    64     1        768         6.4    drugX
-## 3     5    55     0        660         5.5  placebo
-## 4    67    34     0        408         3.4  placebo
-## 5    34    29     1        348         2.9    drugX
+##      id   age   arm age_months age_decades arm_char 
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;    
+## 1   13.   38.    0.       456.        3.80 placebo  
+## 2   22.   64.    1.       768.        6.40 drugtrial
+## 3    5.   55.    0.       660.        5.50 placebo  
+## 4   67.   34.    0.       408.        3.40 placebo  
+## 5   34.   29.    1.       348.        2.90 drugtrial
 ```
 
 ]
@@ -696,7 +696,7 @@ patients_df %&gt;%
   mutate(age_months = age * 12,
          age_decades = age / 10,
          arm_char = case_when(arm == 0 ~ "placebo",
-                              arm == 1 ~ "drugX")
+                              arm == 1 ~ "drugtrial")
          ) %&gt;%
   
   # 3) Add data from results_df with left_join()
@@ -705,13 +705,13 @@ patients_df %&gt;%
 
 ```
 ## # A tibble: 5 x 8
-##      id   age   arm age_months age_decades arm_char time1 time2
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    13    38     0        456         3.8  placebo     4     6
-## 2    22    64     1        768         6.4    drugX     7     5
-## 3     5    55     0        660         5.5  placebo     3     3
-## 4    67    34     0        408         3.4  placebo     2     4
-## 5    34    29     1        348         2.9    drugX     3     5
+##      id   age   arm age_months age_decades arm_char  time1 time2
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1   13.   38.    0.       456.        3.80 placebo      4.    6.
+## 2   22.   64.    1.       768.        6.40 drugtrial    7.    5.
+## 3    5.   55.    0.       660.        5.50 placebo      3.    3.
+## 4   67.   34.    0.       408.        3.40 placebo      2.    4.
+## 5   34.   29.    1.       348.        2.90 drugtrial    3.    5.
 ```
 
 ]
@@ -751,7 +751,7 @@ patients_df &lt;- patients_df %&gt;%
   mutate(age_months = age * 12,
          age_decades = age / 10,
          arm_char = case_when(arm == 0 ~ "placebo",
-                              arm == 1 ~ "drugX")
+                              arm == 1 ~ "drugtrial")
          ) %&gt;%
   
 # 3) Add data from results_df with left_join()
@@ -784,19 +784,19 @@ patients_df
 
 ```
 ## # A tibble: 5 x 8
-##      id   age   arm age_months age_decades arm_char time1 time2
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    13    38     0        456         3.8  placebo     4     6
-## 2    22    64     1        768         6.4    drugX     7     5
-## 3     5    55     0        660         5.5  placebo     3     3
-## 4    67    34     0        408         3.4  placebo     2     4
-## 5    34    29     1        348         2.9    drugX     3     5
+##      id   age   arm age_months age_decades arm_char  time1 time2
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1   13.   38.    0.       456.        3.80 placebo      4.    6.
+## 2   22.   64.    1.       768.        6.40 drugtrial    7.    5.
+## 3    5.   55.    0.       660.        5.50 placebo      3.    3.
+## 4   67.   34.    0.       408.        3.40 placebo      2.    4.
+## 5   34.   29.    1.       348.        2.90 drugtrial    3.    5.
 ```
 
 ### Goal:
 
 - Sort rows by `id` then by `age`
-- Only use drugX over the age of 30
+- Only use drugtrial over the age of 30
 - Get rid of the columns `age_months` and `age_decades`
 
 ]
@@ -836,13 +836,13 @@ patients_df %&gt;%
 
 ```
 ## # A tibble: 5 x 8
-##      id   age   arm age_months age_decades arm_char time1 time2
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     5    55     0        660         5.5  placebo     3     3
-## 2    13    38     0        456         3.8  placebo     4     6
-## 3    22    64     1        768         6.4    drugX     7     5
-## 4    34    29     1        348         2.9    drugX     3     5
-## 5    67    34     0        408         3.4  placebo     2     4
+##      id   age   arm age_months age_decades arm_char  time1 time2
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1    5.   55.    0.       660.        5.50 placebo      3.    3.
+## 2   13.   38.    0.       456.        3.80 placebo      4.    6.
+## 3   22.   64.    1.       768.        6.40 drugtrial    7.    5.
+## 4   34.   29.    1.       348.        2.90 drugtrial    3.    5.
+## 5   67.   34.    0.       408.        3.40 placebo      2.    4.
 ```
 
 ]
@@ -865,7 +865,7 @@ patients_df %&gt;%
 .pull-right65[
 &lt;br&gt;&lt;br&gt;
 
-&lt;font size = 5&gt;2) Select drugX over 30&lt;/font&gt;
+&lt;font size = 5&gt;2) Select drugtrial over 30&lt;/font&gt;
 
 
 ```r
@@ -875,15 +875,15 @@ patients_df %&gt;%
 # 1) Sort by id then age (descending)
   arrange(id, desc(age)) %&gt;%
   
-# 2) Only drugX over 30
-  filter(arm_char == "drugX" &amp; age &gt; 30)
+# 2) Only drugtrial over 30
+  filter(arm_char == "drugtrial" &amp; age &gt; 30)
 ```
 
 ```
 ## # A tibble: 1 x 8
-##      id   age   arm age_months age_decades arm_char time1 time2
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    22    64     1        768         6.4    drugX     7     5
+##      id   age   arm age_months age_decades arm_char  time1 time2
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1   22.   64.    1.       768.        6.40 drugtrial    7.    5.
 ```
 
 ]
@@ -920,8 +920,8 @@ patients_df %&gt;%
 # 1) Sort by id then age (descending)
   arrange(id, desc(age)) %&gt;%
   
-# 2) Only drugX over 30
-  filter(arm_char == "drugX" &amp; age &gt; 30) %&gt;%
+# 2) Only drugtrial over 30
+  filter(arm_char == "drugtrial" &amp; age &gt; 30) %&gt;%
   
 # 3) Remove age_months and age_decades
   select(-age_months, -age_decades)
@@ -929,9 +929,9 @@ patients_df %&gt;%
 
 ```
 ## # A tibble: 1 x 6
-##      id   age   arm arm_char time1 time2
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    22    64     1    drugX     7     5
+##      id   age   arm arm_char  time1 time2
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1   22.   64.    1. drugtrial    7.    5.
 ```
 
 ]
@@ -970,13 +970,13 @@ patients_df
 
 ```
 ## # A tibble: 5 x 5
-##      id   age     arm time1 time2
-##   &lt;dbl&gt; &lt;dbl&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    13    38 placebo     4     6
-## 2    22    64   drugX     7     5
-## 3     5    55 placebo     3     3
-## 4    67    34 placebo     2     4
-## 5    34    29   drugX     3     5
+##      id   age arm       time1 time2
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1   13.   38. placebo      4.    6.
+## 2   22.   64. drugtrial    7.    5.
+## 3    5.   55. placebo      3.    3.
+## 4   67.   34. placebo      2.    4.
+## 5   34.   29. drugtrial    3.    5.
 ```
 
 ### Goal:
@@ -1019,13 +1019,13 @@ patients_df %&gt;%
 ```
 ## # A tibble: 5 x 5
 ## # Groups:   arm [2]
-##      id   age     arm time1 time2
-##   &lt;dbl&gt; &lt;dbl&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1    13    38 placebo     4     6
-## 2    22    64   drugX     7     5
-## 3     5    55 placebo     3     3
-## 4    67    34 placebo     2     4
-## 5    34    29   drugX     3     5
+##      id   age arm       time1 time2
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1   13.   38. placebo      4.    6.
+## 2   22.   64. drugtrial    7.    5.
+## 3    5.   55. placebo      3.    3.
+## 4   67.   34. placebo      2.    4.
+## 5   34.   29. drugtrial    3.    5.
 ```
 
 ]
@@ -1079,10 +1079,10 @@ patients_df %&gt;%
 
 ```
 ## # A tibble: 2 x 5
-##       arm time1_mean time2_mean  diff     N
-##     &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
-## 1   drugX          5      5.000 0.000     2
-## 2 placebo          3      4.333 1.333     3
+##   arm       time1_mean time2_mean  diff     N
+##   &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 drugtrial         5.       5.00  0.       2
+## 2 placebo           3.       4.33  1.33     3
 ```
 
 ]
@@ -1118,7 +1118,7 @@ data %&gt;%    # Start with data, AND THEN...
   VERB3 %&gt;% # Do VERB3, AND THEN...
   group_by(x, y) %&gt;%  # Group by variables x, y
     summarise(
-      VAR_A_New = fun(X),
+      VAR_A_New = fun(trial),
       VAR_B_New = fun(Y)
     )
   )
@@ -1325,7 +1325,7 @@ dplyr is a combination of 3 things:
 
 dplyr is meant to be sequential and work like language
 
-&gt; Take data X, 
+&gt; Take data trial, 
 &gt;   then do Y, 
 &gt;   then do Z,
 &gt;   ...
@@ -1367,12 +1367,12 @@ x
 
 ```
 ## # A tibble: 4 x 4
-##     Diet weight.mean time.mean     N
-##   &lt;fctr&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
-## 1      1       102.6     10.48   220
-## 2      2       122.6     10.92   120
-## 3      3       142.9     10.92   120
-## 4      4       135.3     10.75   118
+##   Diet  weight.mean time.mean     N
+##   &lt;fct&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+## 1 1            103.      10.5   220
+## 2 2            123.      10.9   120
+## 3 3            143.      10.9   120
+## 4 4            135.      10.8   118
 ```
 
 ]
@@ -1390,7 +1390,7 @@ x
 |     `filter()`|    Select rows based on some criteria| `filter(age &gt; 40 &amp; treatment == "drug")`|
 |     `arrange()`|    Sort rows| `arrange(date, group)`|
 |     `select()`|    Select columns (and ignore all others)| `select(age, treatment)`|
-|     `rename()`|    Rename columns| `rename(DATE_MONTHS_X24, date`)|
+|     `rename()`|    Rename columns| `rename(DATE_MONTHS_trial24, date`)|
 |     `mutate()`|    Add new columns| `mutate(height.m = height.cm / 100)`|
 |     `case_when()`|    Recode values of a column| `treat_char = case_when(treatment == 0 ~ "placebo", treatment == 1 ~ "drug")`|
 |     `group_by(), summarise()`|   Group data and then calculate summary statistics|`group_by(treatment) %&gt;% summarise(...)` |
@@ -1497,7 +1497,7 @@ To change the value of 1 to `"female"`, and 0 to `"male"`, you can use `case_whe
 data &lt;- data %&gt;% 
   mutate(
         sex_new = case_when(
-          arm == 1 ~ "drugX",
+          arm == 1 ~ "drugtrial",
           arm == 0 ~ "placebo"
         )
   )
@@ -1577,12 +1577,12 @@ ChickWeight %&gt;%           # Start with the ChickWeight data
 
 ```
 ## # A tibble: 4 x 2
-##     Diet weight.mean
-##   &lt;fctr&gt;       &lt;dbl&gt;
-## 1      1       102.6
-## 2      2       122.6
-## 3      3       142.9
-## 4      4       135.3
+##   Diet  weight.mean
+##   &lt;fct&gt;       &lt;dbl&gt;
+## 1 1            103.
+## 2 2            123.
+## 3 3            143.
+## 4 4            135.
 ```
 
 ---
@@ -1605,11 +1605,11 @@ ChickWeight %&gt;%                # Start with the ChickWeight data
 ## # A tibble: 5 x 2
 ##    Time weight.mean
 ##   &lt;dbl&gt;       &lt;dbl&gt;
-## 1     0       41.06
-## 2     2       49.22
-## 3     4       59.96
-## 4     6       74.31
-## 5     8       91.24
+## 1    0.        41.1
+## 2    2.        49.2
+## 3    4.        60.0
+## 4    6.        74.3
+## 5    8.        91.2
 ```
 
 ---
@@ -1630,12 +1630,12 @@ ChickWeight %&gt;%           # Start with the ChickWeight data
 
 ```
 ## # A tibble: 4 x 4
-##     Diet weight.mean time.max     N
-##   &lt;fctr&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-## 1      1       102.6       21   220
-## 2      2       122.6       21   120
-## 3      3       142.9       21   120
-## 4      4       135.3       21   118
+##   Diet  weight.mean time.max     N
+##   &lt;fct&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+## 1 1            103.      21.   220
+## 2 2            123.      21.   120
+## 3 3            143.      21.   120
+## 4 4            135.      21.   118
 ```
 
 ---
@@ -1665,16 +1665,16 @@ ChickWeight %&gt;%
 
 ```
 ##     Chick weight
-## 163    14    192
-## 10      1    171
-## 241    22    131
-## 329    30     42
-## 233    22     41
-## 190    17    103
-## 291    26    236
-## 201    19     65
-## 76      7     71
-## 328    29    309
+## 208    19    157
+## 50      5     42
+## 441    39     89
+## 79      7    146
+## 52      5     60
+## 179    16     51
+## 486    43     55
+## 41      4     74
+## 99      9     68
+## 134    12     56
 ```
 
 ---
@@ -1708,12 +1708,12 @@ head(time_agg)
 ## # A tibble: 6 x 2
 ##    Time weight.mean
 ##   &lt;dbl&gt;       &lt;dbl&gt;
-## 1     0       41.06
-## 2     2       49.22
-## 3     4       59.96
-## 4     6       74.31
-## 5     8       91.24
-## 6    10      107.84
+## 1    0.        41.1
+## 2    2.        49.2
+## 3    4.        60.0
+## 4    6.        74.3
+## 5    8.        91.2
+## 6   10.       108.
 ```
 
 ]
@@ -1725,8 +1725,15 @@ head(time_agg)
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({

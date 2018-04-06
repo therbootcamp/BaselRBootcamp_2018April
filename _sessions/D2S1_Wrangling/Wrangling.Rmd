@@ -2,7 +2,7 @@
 title: "Data Wrangling"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -121,7 +121,7 @@ ToothGrowth$len %>% mean()
 ## The pipe
 
 ```{r, echo = FALSE}
-X <- data.frame(id = 1:8,
+trial <- data.frame(id = 1:8,
                     sex = c("m", "m", "f", "f", "m", "f", "f", "m"),
                     arm = c(1, 1, 2, 2, 1, 2, 1, 2),
                     age = c(54, 37, 65, 48, 64, 57, 36, 56),
@@ -131,11 +131,11 @@ X <- data.frame(id = 1:8,
 
 .pull-left3[
 <br><br>
-<font size = 5> Here is some trial data called X</font>
+<font size = 5> Here is some trial data called trial</font>
 
 ```{r}
 # Clinical trial data
-X
+trial
 ```
 
 <br>
@@ -145,21 +145,21 @@ X
 
 .pull-right65[
 
-<font size = 5><i>Task 1: Give me the ids of women above the age of 50 with an outcome greater than 5</i></font>
+<font size = 5><i>Task 1: Give me the ids of women above the age of 50</i></font>
 
 
 ```{r}
 # Base R Method without pipe (%>%)
 
-X$id[X$sex == "f" & X$age > 50 & X$outcome > 5]
+trial$id[trial$sex == "f" & trial$age > 50]
 ```
 
 
 ```{r}
 # dplyr method with pipe (%>%)
 
-X %>%
-  filter(sex == "f" & age > 50 & outcome > 5) %>%
+trial %>%
+  filter(sex == "f" & age > 50) %>%
   select(id)
   
 ```
@@ -174,11 +174,11 @@ X %>%
 
 .pull-left3[
 <br><br>
-<font size = 5> Here is some trial data called X</font>
+<font size = 5> Here is some trial data called trial</font>
 
 ```{r}
 # Clinical trial data
-X
+trial
 ```
 
 <br>
@@ -195,8 +195,8 @@ X
 # Base R Method without pipe (%>%)
 
 # Get aggregate statistics
-age_agg <- aggregate(age ~ arm, data = X, FUN = mean)
-out_agg <- aggregate(outcome ~ arm, data = X, FUN = mean)
+age_agg <- aggregate(age ~ arm, data = trial, FUN = mean)
+out_agg <- aggregate(outcome ~ arm, data = trial, FUN = mean)
 
 # Combine results
 data.frame(arm = age_agg$arm,
@@ -215,11 +215,11 @@ data.frame(arm = age_agg$arm,
 
 .pull-left3[
 <br><br>
-<font size = 5> Here is some trial data called X</font>
+<font size = 5> Here is some trial data called trial</font>
 
 ```{r}
 # Clinical trial data
-X
+trial
 ```
 
 <br>
@@ -235,7 +235,7 @@ X
 ```{r}
 # dplyr method with pipe (%>%)
 
-X %>%                             # Start with data X
+trial %>%                             # Start with data trial
   group_by(arm) %>%               # Group data by arm
   summarise(                      # Calculate summary statistics
     age_mean = mean(age),         # age_mean is...
@@ -277,11 +277,11 @@ X %>%                             # Start with data X
 ```{r, eval = FALSE}
 library(tidyverse) # Load tidyverse (includes dplyr)
 
-# load .csv file as trial_X
-trial_X <- read_csv("data/mydata.csv")
+# load .csv file as trial
+trial <- read_csv("data/mydata.csv")
 
 # Start with original dataframe 
-trial_X %>%   # AND THEN
+trial %>%   # AND THEN
   
   # Change column names with rename()
   rename(...)  %>%  # AND THEN...
@@ -482,7 +482,7 @@ patients_df %>%
   mutate(age_months = age * 12,
          age_decades = age / 10,
          arm_char = case_when(arm == 0 ~ "placebo",
-                              arm == 1 ~ "drugX")
+                              arm == 1 ~ "drugtrial")
          )
 ```
 
@@ -572,7 +572,7 @@ patients_df %>%
   mutate(age_months = age * 12,
          age_decades = age / 10,
          arm_char = case_when(arm == 0 ~ "placebo",
-                              arm == 1 ~ "drugX")
+                              arm == 1 ~ "drugtrial")
          ) %>%
   
   # 3) Add data from results_df with left_join()
@@ -615,7 +615,7 @@ patients_df <- patients_df %>%
   mutate(age_months = age * 12,
          age_decades = age / 10,
          arm_char = case_when(arm == 0 ~ "placebo",
-                              arm == 1 ~ "drugX")
+                              arm == 1 ~ "drugtrial")
          ) %>%
   
 # 3) Add data from results_df with left_join()
@@ -648,7 +648,7 @@ patients_df
 ### Goal:
 
 - Sort rows by `id` then by `age`
-- Only use drugX over the age of 30
+- Only use drugtrial over the age of 30
 - Get rid of the columns `age_months` and `age_decades`
 
 ]
@@ -706,7 +706,7 @@ patients_df %>%
 .pull-right65[
 <br><br>
 
-<font size = 5>2) Select drugX over 30</font>
+<font size = 5>2) Select drugtrial over 30</font>
 
 ```{r}
 
@@ -716,8 +716,8 @@ patients_df %>%
 # 1) Sort by id then age (descending)
   arrange(id, desc(age)) %>%
   
-# 2) Only drugX over 30
-  filter(arm_char == "drugX" & age > 30)
+# 2) Only drugtrial over 30
+  filter(arm_char == "drugtrial" & age > 30)
 ```
 
 ]
@@ -754,8 +754,8 @@ patients_df %>%
 # 1) Sort by id then age (descending)
   arrange(id, desc(age)) %>%
   
-# 2) Only drugX over 30
-  filter(arm_char == "drugX" & age > 30) %>%
+# 2) Only drugtrial over 30
+  filter(arm_char == "drugtrial" & age > 30) %>%
   
 # 3) Remove age_months and age_decades
   select(-age_months, -age_decades)
@@ -916,7 +916,7 @@ data %>%    # Start with data, AND THEN...
   VERB3 %>% # Do VERB3, AND THEN...
   group_by(x, y) %>%  # Group by variables x, y
     summarise(
-      VAR_A_New = fun(X),
+      VAR_A_New = fun(trial),
       VAR_B_New = fun(Y)
     )
   )
@@ -1094,7 +1094,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 dplyr is meant to be sequential and work like language
 
-> Take data X, 
+> Take data trial, 
 >   then do Y, 
 >   then do Z,
 >   ...
@@ -1148,7 +1148,7 @@ x
 |     `filter()`|    Select rows based on some criteria| `filter(age > 40 & treatment == "drug")`|
 |     `arrange()`|    Sort rows| `arrange(date, group)`|
 |     `select()`|    Select columns (and ignore all others)| `select(age, treatment)`|
-|     `rename()`|    Rename columns| `rename(DATE_MONTHS_X24, date`)|
+|     `rename()`|    Rename columns| `rename(DATE_MONTHS_trial24, date`)|
 |     `mutate()`|    Add new columns| `mutate(height.m = height.cm / 100)`|
 |     `case_when()`|    Recode values of a column| `treat_char = case_when(treatment == 0 ~ "placebo", treatment == 1 ~ "drug")`|
 |     `group_by(), summarise()`|   Group data and then calculate summary statistics|`group_by(treatment) %>% summarise(...)` |
@@ -1231,7 +1231,7 @@ To change the value of 1 to `"female"`, and 0 to `"male"`, you can use `case_whe
 data <- data %>% 
   mutate(
         sex_new = case_when(
-          arm == 1 ~ "drugX",
+          arm == 1 ~ "drugtrial",
           arm == 0 ~ "placebo"
         )
   )
