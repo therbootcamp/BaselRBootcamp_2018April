@@ -34,23 +34,19 @@ options(digits = 4)
 
 ---
 
-# Bootcamp Materials
-
 
 .pull-left5[
-<p align="center"><img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/homepage_April2018_ss.jpg?raw=true" width="500"></p>
-]
 
+# Bootcamp Materials
+<br><br>
+
+<font size="6" color="#F62D73"><b><a href="www.therbootcamp.com">www.therbootcamp.com</b>
+
+]
 
 .pull-right5[
 
-<font size="5" color="#F62D73"><b><a href="www.therbootcamp.com">www.therbootcamp.com</b>
-
-
-<br><br>
-
-<font size="7" color="#F62D73"><b><a href="http://bit.ly/BaselRBootcamp_April2018">http://bit.ly/BaselRBootcamp_April2018</b>
-
+<p align="center"><img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/homepage_April2018_ss.jpg?raw=true" width="400"></p>
 
 
 ]
@@ -69,7 +65,7 @@ options(digits = 4)
 <font size=4><i>packages: </i></font> 
 <a href="https://cran.r-project.org/web/packages/cstab/index.html"><b>cstab</b></a>, <br>
 <a href="https://cran.r-project.org/web/packages/mousetrap/index.html"><b>mousetrap</b></a>, <a href="https://github.com/dwulff/choicepp"><b>choicepp</b>
-</p>
+</p>  
 ]
 
 .pull-right5[
@@ -86,6 +82,22 @@ options(digits = 4)
 </p>
 
 ]
+
+
+---
+# Who are we?
+
+<p align="center"><br>
+    <a href="www.nathanieldphillips.com/"><img border="0" alt="W3Schools" src="https://avatars3.githubusercontent.com/u/8480980?v=4&s=460" height="240"></a><br>
+
+<p align="center">
+<font size = 5>Markus steiner</font><br><br>
+<a href="www.nathanieldphillips.com/"><b>nathanieldphillips.com</b></a><br>
+<a href="https://github.com/ndphillips"><b>github.com/ndphillips</b></a><br>
+<font size=4><i>packages: </i></font> 
+<a href="https://github.com/ndphillips/yarrr"><b>yarrr</b></a>, <br>
+<a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a>, <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b>
+</p>
 
 
 ---
@@ -263,7 +275,7 @@ options(digits = 4)
 # Session 1: What is R?
 
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S1_WhatIsR/What_is_R.html#1">Link to Session 1: What is R?</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S1_WhatIsR/What_is_R.html#1">Link to Session 1: What is R?</a>
 
 
 ---
