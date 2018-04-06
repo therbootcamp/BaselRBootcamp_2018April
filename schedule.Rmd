@@ -25,7 +25,7 @@ output: html_document
 
 
 <p align="center"><br>
-    <a href="http://i.imgur.com/PgtvQar.png"><img border="0" alt="W3Schools" src="https://photos-3.dropbox.com/t/2/AABpff00LtRR8-d-H1aHFbsHmZ3NtTLILwSQ-8A1P7TKxA/12/7618380/png/32x32/1/_/1/2/schedule_2018Apr.png/EIfK5eAFGM0fIAcoBw/-XECttF9cThd-RltblokyEzHcBZDkhbOd9pzm-gjFAw?preserve_transparency=1&size=2048x1536&size_mode=3" width=660></a><br>
+    <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/schedule.html"><img border="0" alt="April2018Schedule" src="https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/schedule_2018Apr.png?raw=true" width=660></a><br>
 
 
 <!---

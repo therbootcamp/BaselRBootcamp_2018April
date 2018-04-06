@@ -14,14 +14,8 @@ output:
       ratio: '16:9'
 ---
 
-
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-# see: https://github.com/yihui/xaringan
-# install.packages("xaringan")
-# see: 
-# https://github.com/yihui/xaringan/wiki
-# https://github.com/gnab/remark/wiki/Markdown
 options(width=110)
 options(digits = 4)
 ```
@@ -43,7 +37,7 @@ options(digits = 4)
 # Main Bootcamp Link
 
 <br><br>
-<font size="7" color="#F62D73"><b><a href="https://therbootcamp.github.io/schedule_18Jan.html">therbootcamp.github.io/schedule_18Jan.html</b>
+<font size="7" color="#F62D73"><b><a href="http://bit.ly/BaselRBootcamp_April2018">http://bit.ly/BaselRBootcamp_April2018</b>
 
 ---
 
@@ -96,7 +90,7 @@ options(digits = 4)
 
 ---
 
-# Schedule <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/schedule_jan2018.png" height="600" align="right">
+# Schedule <img src="https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/schedule_2018Apr.png?raw=true" height="600" align="right">
 
 
 ---
