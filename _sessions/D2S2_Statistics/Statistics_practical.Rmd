@@ -1,6 +1,6 @@
 ---
 title: "Statistics"
-author: "BaselRBootcamp January 2018"
+author: "BaselRBootcamp April 2018"
 output: html_document
 ---
 
@@ -16,7 +16,7 @@ knitr::include_graphics("https://github.com/therbootcamp/therbootcamp.github.io/
 
 ### Slides
 
-- [Here are the introduction slides for this practical on statistics!](https://therbootcamp.github.io/_sessions/D2S2_Statistics/Statistics.html)
+- [Here are the introduction slides for this practical on statistics!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S2_Statistics/Statistics.html#1)
 
 ### Overview
 
@@ -178,7 +178,7 @@ A. Open a new R script and save it in the `R` folder you just created as a new f
 ```{r, eval = FALSE, echo = TRUE}
 ## NAME
 ## DATE
-## Wrangling Practical
+## Statistics Practical
 
 library(tidyverse)     # For tidyverse
 library(speff2trial)   # For the ACTG175 data documentation

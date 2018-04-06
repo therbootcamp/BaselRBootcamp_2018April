@@ -1,6 +1,6 @@
 ---
 title: "Machine Learning"
-author: "BaselRBootcamp January 2018"
+author: "BaselRBootcamp April 2018"
 output: html_document
 ---
 
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval =
 
 ### Slides
 
-- [Here are the introduction slides for this practical on machine learning!](https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning.html)
+- [Here are the introduction slides for this practical on machine learning!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S3_MachineLearning/MachineLearning.html#1)
 
 
 ### Overview
