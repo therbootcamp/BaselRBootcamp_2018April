@@ -186,6 +186,25 @@ RStudio facilitate project management via the use of *projects*. Projects suppor
 ]
 
 --->
+
+---
+
+# Packages
+
+One of R's best features is its vast and cutting-edge collection of **packages** provided by R's large and highly active user base and the work of [**CRAN**](https://cran.r-project.org/), who apply a rigorous quality control and eventually host the packages on various mirrors throughout the world.         
+
+```{r, eval = F}
+# To install a package
+install.packages('package_name')
+
+# load a package
+library(package_name)
+require(package_name)
+
+
+#Note: Never forget that packages must also be loaded.
+```
+
 ---
 
 # The almighty **tidyverse**
@@ -364,24 +383,6 @@ vignette(package="name_of_vignette")
 <br><br><iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"></iframe>
 --->
 ]
-
----
-
-# Packages
-
-One of R's best features is its vast and cutting-edge collection of **packages** provided by R's large and highly active user base and the work of [**CRAN**](https://cran.r-project.org/), who apply a rigorous quality control and eventually host the packages on various mirrors throughout the world.         
-
-```{r, eval = F}
-# To install a package
-install.packages('package_name')
-
-# load a package
-library(package_name)
-require(package_name)
-
-
-#Note: Never forget that packages must also be loaded.
-```
 
 
 ---

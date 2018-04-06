@@ -2,7 +2,7 @@
 title: "Welcome!"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default","my-theme.css"]
@@ -14,14 +14,8 @@ output:
       ratio: '16:9'
 ---
 
-
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-# see: https://github.com/yihui/xaringan
-# install.packages("xaringan")
-# see: 
-# https://github.com/yihui/xaringan/wiki
-# https://github.com/gnab/remark/wiki/Markdown
 options(width=110)
 options(digits = 4)
 ```
@@ -35,16 +29,27 @@ options(digits = 4)
 
 
 .pull-right5[
-<p align="center"><img src="https://therbootcamp.github.io/assets/img/basel_winter.jpg" width="500"  height="400"></p>
+<p align="center"><img src="https://therbootcamp.github.io/assets/img/640px-Middle_Bridge,_Basel,_Switzerland.jpeg" width="500"  height="400"></p>
 ]
 
 ---
 
-# Main Bootcamp Link
 
+.pull-left5[
+
+# Bootcamp Materials
 <br><br>
-<font size="7" color="#F62D73"><b><a href="https://therbootcamp.github.io/schedule_18Jan.html">therbootcamp.github.io/schedule_18Jan.html</b>
 
+<font size="6" color="#F62D73"><b><a href="www.therbootcamp.com">www.therbootcamp.com</b>
+
+]
+
+.pull-right5[
+
+<p align="center"><img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/homepage_April2018_ss.jpg?raw=true" width="400"></p>
+
+
+]
 ---
 
 # Who are we?
@@ -60,7 +65,7 @@ options(digits = 4)
 <font size=4><i>packages: </i></font> 
 <a href="https://cran.r-project.org/web/packages/cstab/index.html"><b>cstab</b></a>, <br>
 <a href="https://cran.r-project.org/web/packages/mousetrap/index.html"><b>mousetrap</b></a>, <a href="https://github.com/dwulff/choicepp"><b>choicepp</b>
-</p>
+</p>  
 ]
 
 .pull-right5[
@@ -77,6 +82,23 @@ options(digits = 4)
 </p>
 
 ]
+
+
+---
+# Who are we?
+
+<p align="center"><br>
+    <a href="www.nathanieldphillips.com/"><img border="0" alt="W3Schools" src="https://psychologie.unibas.ch/fileadmin/_processed_/b/e/csm_markus_72f28a47b1.png?1516116752" height="240"></a><br>
+
+<p align="center">
+<font size = 5>Markus steiner</font><br><br>
+<a href="www.nathanieldphillips.com/"><b>nathanieldphillips.com</b></a><br>
+<a href="https://github.com/ndphillips"><b>github.com/ndphillips</b></a><br>
+<font size=4><i>packages: </i></font> 
+<a href="https://github.com/ndphillips/yarrr"><b>yarrr</b></a>, <br>
+<a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a>, <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b>
+</p>
+
 
 ---
 
@@ -96,7 +118,7 @@ options(digits = 4)
 
 ---
 
-# Schedule <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/schedule_jan2018.png" height="600" align="right">
+# Schedule <img src="https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/schedule_2018Apr.png?raw=true" height="600" align="right">
 
 
 ---
@@ -253,7 +275,7 @@ options(digits = 4)
 # Session 1: What is R?
 
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S1_WhatIsR/What_is_R.html#1">Link to Session 1: What is R?</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S1_WhatIsR/What_is_R.html#1">Link to Session 1: What is R?</a>
 
 
 ---
