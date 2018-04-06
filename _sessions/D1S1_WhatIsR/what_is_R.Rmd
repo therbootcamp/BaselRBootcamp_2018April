@@ -2,7 +2,7 @@
 title: "What is R?"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -147,20 +147,14 @@ There are many good reasons to prefer R over superficially more user friendly so
 
 .pull-right45[
 ### Con
-1. Sometimes slow and wordy, but... 
+Sometimes slow and awkward, but... 
 
+[Tidyverse](https://www.tidyverse.org/)
 [Rcpp](http://www.rcpp.org/), [BH](https://cran.r-project.org/web/packages/BH/index.html): Links R to C++ and high-performance C++ libraries<br>
 [rPython](http://rpython.r-forge.r-project.org/): Links R to Python<br>
 [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki): Links R to Hadoop for big data applications.<br>
 ]
 
----
-
-# RStudio: R's favorite environment
-
-Next to many useful packages, R users greatly benefit from R's integrated development environment [**RStudio**](https://www.rstudio.com/). Rstudio is a **graphical user interface** that allows you to (a) edit code, (b) run code, (c) access files and history, and (d) create plots. RStudio also helps you with **project management**, **version control** via [Github](https://github.com/), writing **reports** using [markdown](http://rmarkdown.rstudio.com/authoring_basics.html) and [knitr](https://yihui.name/knitr/), and many other aspects of working with R.  
-
-<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_plus.png" height="360"></p>
 
 <!---
 
@@ -191,7 +185,9 @@ RStudio facilitate project management via the use of *projects*. Projects suppor
 
 # Packages
 
-One of R's best features is its vast and cutting-edge collection of **packages** provided by R's large and highly active user base and the work of [**CRAN**](https://cran.r-project.org/), who apply a rigorous quality control and eventually host the packages on various mirrors throughout the world.         
+.pull-left35[
+
+R features a vast and cutting-edge collection of **packages** provided on [**CRAN**](https://cran.r-project.org/) and [**Git/GitHub**](https://github.com/hadley) by R's large and highly active user base and the work of .         
 
 ```{r, eval = F}
 # To install a package
@@ -202,9 +198,19 @@ library(package_name)
 require(package_name)
 
 
-#Note: Never forget that packages must also be loaded.
+#Note: 
+# Don't forget that packages 
+# must also be loaded.
 ```
 
+]
+
+.pull-right55[
+
+<iframe src="https://www.rdocumentation.org/trends?page1=1&sort1=total&page2=1&sort2=total&page3=1&page4=1" width="600" height="400" frameborder="0" marginheight="0" marginwidth="0" zoom="0.5"></iframe>
+
+<font size=2><a href="https://www.rdocumentation.org/trends">https://www.rdocumentation.org/trends</a></font>
+]
 ---
 
 # The almighty **tidyverse**
@@ -226,6 +232,15 @@ knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b
 knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/9221ddead578362bd17bafae5b85935334984429/37a68/images/hex-purrr.png")
 knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png")
 ```
+
+---
+
+# RStudio: R's favorite environment
+
+Next to many useful packages, R users greatly benefit from R's integrated development environment [**RStudio**](https://www.rstudio.com/). Rstudio is a **graphical user interface** that allows you to (a) edit code, (b) run code, (c) access files and history, and (d) create plots. RStudio also helps you with **project management**, **version control** via [Github](https://github.com/), writing **reports** using [markdown](http://rmarkdown.rstudio.com/authoring_basics.html) and [knitr](https://yihui.name/knitr/), and many other aspects of working with R.  
+
+<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_plus.png" height="360"></p>
+
 
 ---
 
@@ -254,34 +269,36 @@ R programs evolve through functions: Every action entails **passing on arguments
 
 .pull-left45[
 ```{r}
-# defining a function - arithm. mean
-my_fun <- function(x, b){ x * b }
+# a prototypical function
+some_function <- function(argument_1, argument_2){ 
+  
+  # do something with arguments
+  result <- argument_1 + argument_2 
+  
+  # return result
+  result
+  }
 
-# define some data
-my_data <- c(1, 5, 7, 3) 
 
-# pass on arguments and call function
-my_fun(my_data, 5) 
-
-# store output by assignment
-my_out <- my_fun(my_data, 5)
 ```
 
 ]
 
 .pull-right45[
 ```{r}
-# a basic expression
+# Expressions
+some_function(2, 2)
 2 + 2
 
-# is also a function
-'+'(2,2)
+# Assignments
+my_object1 <- some_function(2, 2)
+my_object2 <- 2 + 2 
 
 ```
 ]
 
----
 
+<!---
 # Object-orientation
 
 R is an object-oriented language. For us this entails:<br> 
@@ -310,6 +327,7 @@ print(my_vector) # still unsorted
 ```
 ]
 
+--->
 
 ---
 
@@ -385,11 +403,11 @@ vignette(package="name_of_vignette")
 ]
 
 
----
-
+<!---
 # The workflow of R
 <p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_workings.png" height="500" align="center"></p>
 
+--->
 ---
 
 # Interactive session

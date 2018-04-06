@@ -1,6 +1,6 @@
 ---
 title: "Practical: Data objects and functions"
-author: "BaselRBootcamp January 2018"
+author: "BaselRBootcamp April 2018"
 output: html_document
 ---
 
@@ -10,7 +10,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval =
 
 ### Slides
 
-Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/_sessions/D1S2_Objects/Objects.html"><b>LINK</b></a>
+Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S2_Objects/Objects.html"><b>LINK</b></a>
 
 ### Overview
 
@@ -47,8 +47,8 @@ Here are the main functions for object selection.
 | Function| Description|
 |:------|:--------------------------------------------------------------------------|
 |     `[ ]` | Single brackets: Select individual elements from `vector`|
-|     `[[ ]]` | Double brackets: Select element/variable in list or `data.frame` |
-|     `$` | Dollar: Select named element/variable from list or `data.frame` |
+|     `[[ ]]` | Double brackets: Select element/variable in list or `data_frame` |
+|     `$` | Dollar: Select named element/variable from list or `data_frame` (preferred)|
 
 Here is the function to create a function.
 

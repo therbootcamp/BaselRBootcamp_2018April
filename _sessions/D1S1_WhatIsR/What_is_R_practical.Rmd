@@ -1,6 +1,6 @@
 ---
 title: "Practical: What is R"
-author: "BaselRBootcamp January 2018"
+author: "BaselRBootcamp April 2018"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval =
 
 ### Slides
 
-Here is a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/_sessions/D1S1_WhatIsR/What_is_R.html"><b>LINK</b></a>
+Here is a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S1_WhatIsR/What_is_R.html"><b>LINK</b></a>
 
 ### Overview
 
@@ -25,14 +25,16 @@ In this practical you'll get started with R. By the end of this practical you wi
 
 For this practical you will go through an existing analysis script chunk by chunk to experience how programming and analyzing in R works. The idea is that you go through the code, copy the code chunks to the script editor, send the code to the console, and evaluate what happens.
 
-While at it try to practice two very useful shortcuts: (1) `cmd + enter (MAC)` or `cntrl + enter (Windows)` for running the current line in the console. (2) `cmd + shift + p (MAC)` or `cntrl + shift + p (Windows)` for running the same block of code again in the console. The latter is really helpful because you can rerun the a chunk of code after you have made changes to it.  
+While at it, try to practice two very useful shortcuts: (1) `cmd + enter (MAC)` or `cntrl + enter (Windows)` for running the current line in the console. (2) `cmd + shift + p (MAC)` or `cntrl + shift + p (Windows)` for running the same block of code again in the console. The latter is really helpful because you can rerun the a chunk of code after you have made changes to it. 
+
+Also, try to take a look at the help-files of a functions used in the code below using `?function`, e.g., `?mean` to inspect the help-file of the `mean()`-function and try to understand why they work. You may also already try to evaluate the type of the various objects using `typeof(object)`, e.g., `typeof(pirates)` or `typeof(mean)`, to learn about the different types (of objects) in R.
 
 All of the code used in this tutorial is based on **base-R functions**. While they are already powerful, we will later in the course introduce you to more modern, better options for most of the steps. 
 
 
 ### Install and load the yarrr package
 
-1. First we’ll install and load the yarrr package. The yarrr package contains many data sets and functions (created by Nathaniel Phillips).
+1. First we’ll install and load the yarrr package. The yarrr package contains many data sets and functions.
 
 ```{r, eval=F}
 # Install and load the yarrr package
@@ -45,7 +47,7 @@ library(yarrr)
 2. The pirates data set contains data from a survey of 1,000 pirates. Inspect it one-by-one using the following functions.
 
 ```{r, eval=F}
-# Get help for pirates data
+# Get help for pirates data - included in package yarrr
 ?pirates
 
 # Print the first few rows of the dataset
@@ -69,6 +71,7 @@ max(pirates$height)
 
 # How many pirates are there of each sex?
 table(pirates$sex)
+
 ```
 
 4. Descriptive statistics as a function of another categorical variable.

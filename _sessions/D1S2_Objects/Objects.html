@@ -4,7 +4,7 @@
     <title>Data objects and functions</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -13,7 +13,7 @@ class: center, middle, inverse, title-slide
 
 # Data objects and functions
 ### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
-### January 2018
+### April 2018
 
 ---
 
@@ -55,9 +55,6 @@ R's most **basic (and most simple) data format** - even single values (aka **sca
 # creating a vector (incl. names)
 my_vec &lt;- c(t_1 = 1.343, t_2 = 5.232)
 
-# vectors are always flat
-my_vec &lt;- c(1.343, c(5.232, 2.762))
-
 # naming vectors
 my_vec &lt;- c(t_1 = 1.343, t_2 = 5.232)
 names(my_vec) &lt;- c("new_1","new_2")
@@ -78,7 +75,7 @@ typeof(my_vec)
 
 # Types
 
-A vector contains elements of one of four **basic types**: `integer`, `double`, `numeric`, and `character`. You can **test** the type using `typeof()` or the type-specific `is.*()`, e.g., `is.integer()`.
+Vectors contains elements of only one type. Most often one of the four **basic types**: `integer`, `double`, `numeric`, and `character`. You can **test** the type using `typeof()` or the type-specific `is.*()`, e.g., `is.integer()`.
 
 
 .pull-left45[
@@ -86,29 +83,21 @@ A vector contains elements of one of four **basic types**: `integer`, `double`, 
 ```r
 # numeric vectors
 my_vec &lt;- c(1.343, 5.232)
-typeof(my_vec) ; is.integer(my_vec)
+typeof(my_vec)
 ```
 
 ```
 ## [1] "double"
-```
-
-```
-## [1] FALSE
 ```
 
 ```r
-# integer vectors (overruled by R)
-my_vec &lt;- c(1, 7, 2)
-typeof(my_vec) ; is.integer(my_vec)
+# integer vectors (L avoids coercion)
+my_vec &lt;- c(1L, 7L, 2L)
+typeof(my_vec)
 ```
 
 ```
-## [1] "double"
-```
-
-```
-## [1] FALSE
+## [1] "integer"
 ```
 ]
 
@@ -117,30 +106,22 @@ typeof(my_vec) ; is.integer(my_vec)
 ```r
 # logical vectors
 my_vec &lt;- c(TRUE, FALSE)
-typeof(my_vec) ; is.logical(my_vec)
+typeof(my_vec)
 ```
 
 ```
 ## [1] "logical"
 ```
 
-```
-## [1] TRUE
-```
-
 
 ```r
 # character vectors
 my_vec &lt;- c('a', 'hello', 'world')
-typeof(my_vec) ; is.character(my_vec)
+typeof(my_vec)
 ```
 
 ```
 ## [1] "character"
-```
-
-```
-## [1] TRUE
 ```
 ]
 
@@ -148,36 +129,30 @@ typeof(my_vec) ; is.character(my_vec)
 
 # Coercion
 
-R allows you to **flexibly change types** into another using `as.*()` and often R does this for you. For instance, mathematical operations &amp; functions will coerce logical to double or integer and logical operations (&amp;, |, any, etc) will coerce to a logical. Importantly, coercion may introduce **information loss!**
+R allows you to **flexibly change types** into another using `as.*()`, e.g., `as.numeric` or `as.logical`, and often R does this for you. For instance, mathematical operations &amp; functions will coerce logical to double or integer and logical operations (&amp;, |, any, etc) will coerce to a logical. Importantly, coercion may introduce **information loss!**
 
 .pull-left45[
 
 ```r
-# double to integer
-my_vec &lt;- as.logical(c(1.21, 7.24, 0))
-is.numeric(my_vec)
+# everything becomes character
+my_vec &lt;- c(1L, 1.23, 'a', TRUE)
+my_vec
 ```
 
 ```
-## [1] FALSE
+## [1] "1"    "1.23" "a"    "TRUE"
 ```
 
-
-```r
-# double to logical (and back - &gt; info loss)
-as.logical(my_vec)
-```
-
-```
-## [1]  TRUE  TRUE FALSE
-```
 
 ```r
-as.numeric(as.logical(my_vec))
+# logicals become 0s and 1s
+TRUE + FALSE + TRUE
 ```
 
 ```
-## [1] 1 1 0
+## [1] 2
+```
+
 ```
 ]
 
@@ -194,85 +169,22 @@ c(1, 7, 2) &gt; 3
 ```
 
 
-```r
-# mathematical operation -&gt; numeric type 
-c(TRUE, FALSE, TRUE) + 3 
-```
-
-```
-## [1] 4 3 4
-```
-
 
 ```r
-# anything can be coerced to character 
-as.character(c(TRUE, FALSE, 0)) 
+# R can parse character
+as.numeric(c("1", "2", "TRUE")) 
 ```
 
 ```
-## [1] "1" "0" "0"
+## Warning: NAs introduced by coercion
+```
+
+```
+## [1]  1  2 NA
 ```
 ]
 
 
----
-
-# Factors
-
-Factors are a special case of vector that can contain only **predifined values** so-called `levels`. Factors are rarely useful and sometimes **dangerous**, yet R will often coerce `character` to `factor`.  
-
-.pull-left45[
-
-
-```r
-# create a factor
-my_fact &lt;- factor(c('A','B','C'))
-levels(my_fact)
-```
-
-```
-## [1] "A" "B" "C"
-```
-
-```r
-# test type
-typeof(my_fact)
-```
-
-```
-## [1] "integer"
-```
-
-```r
-# add value at 4th position
-my_fact[4] &lt;- 'A'
-# my_fact[4] &lt;- 'D' # leads to error
-```
-
-]
-
-.pull-right45[
-
-```r
-# dangerous behavior of factors pt. 1
-my_fact &lt;- factor(c('A','B','C'))
-mean(as.integer(my_fact))
-```
-
-```
-## [1] 2
-```
-
-```r
-# dangerous behavior of factors pt. 2
-my_fact &lt;- factor(c(1.32,4.52,.23))
-as.double(my_fact) # ranks
-```
-
-```
-## [1] 2 3 1
-```
-]
 
 &lt;!---
 
@@ -284,29 +196,6 @@ Matrices and arrays are **straightforward extensions** of vectors with 2 (matrix
 &lt;p align="center"&gt;&lt;br&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/matrix and array.png" width="682px" height="381px"&gt;&lt;/p&gt;
 
 ---&gt;
-
----
-
-# `data.frame`s
-
-.pull-left45[
-
-* Data frames (and its variants, e.g., **tibble**s) are R's **main data format**. 
-
-* **Data frames are lists** with specific **requirements**:
-
-  + Every element must be a vector.
-
-  + The lengths of the vectors must be equal (or multiples of another).  
-
-* Use `data.frame()` and `as.data.frame` to create or to coerce to data frame.
-]
-
-.pull-right45[
-&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/data.frame.png" width="409px" height="266px"&gt;&lt;/p&gt;
-]
-
-
 
 ---
 
@@ -326,6 +215,57 @@ Matrices and arrays are **straightforward extensions** of vectors with 2 (matrix
 .pull-right45[
 &lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/list.png" width="581px" height="307px"&gt;&lt;/p&gt;
 ]
+
+---
+
+# `data_frame`s
+
+.pull-left45[
+
+* Data frames (and its variants, e.g., **tibble**s) are R's **main data format**. 
+
+* **Data frames are lists** with specific **requirements**:
+
+  + Every element must be a vector.
+
+  + The lengths of the vectors must be equal (or multiples of another).  
+
+* Use `data_frame()` and `as_data_frame` to create or to coerce to data frame, to `tibble` to be exact.
+]
+
+.pull-right45[
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/data.frame.png" width="409px" height="266px"&gt;&lt;/p&gt;
+]
+
+---
+
+# Inspecting `data_frame`s
+
+Data frames (or `tibbles`) can be inspecting in various ways.
+
+- `print()` - shows the default print (good with `tibbles`, bad with everything else)
+- `head()`,`tail()` - prints the first/last six rows
+- `str()` - gives an overview of the variables
+- `View()` - opens Excel-like window
+&lt;br&gt;&lt;br&gt;
+
+
+```
+## # A tibble: 1,000 x 17
+##      id sex      age height weight headband college tattoos tchests parrots
+## * &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1     1 male     28.   173.   70.5 yes      JSSFP        9.      0.      0.
+## 2     2 male     31.   209.  106.  yes      JSSFP        9.     11.      0.
+## 3     3 male     26.   170.   77.1 yes      CCCC        10.     10.      1.
+## 4     4 female   31.   144.   58.5 no       JSSFP        2.      0.      2.
+## 5     5 female   41.   158.   58.4 yes      JSSFP        9.      6.      4.
+## 6     6 male     26.   190.   85.4 yes      CCCC         7.     19.      0.
+## 7     7 female   31.   158.   59.6 yes      JSSFP        9.      1.      7.
+## 8     8 female   31.   173.   74.5 yes      JSSFP        5.     13.      7.
+## # ... with 992 more rows, and 7 more variables: favorite.pirate &lt;chr&gt;,
+## #   sword.type &lt;chr&gt;, eyepatch &lt;dbl&gt;, sword.time &lt;dbl&gt;, beard.length &lt;dbl&gt;,
+## #   fav.pixar &lt;chr&gt;, grogg &lt;dbl&gt;
+```
 
 
 &lt;!---
@@ -352,7 +292,7 @@ Matrices and arrays are **straightforward extensions** of vectors with 2 (matrix
 
 # Accessing &amp; changing vectors
 
-To access (aka **subset**) and change atomic data objects use **brackets** `[]` and provide either **integers**, **logicals**, or  **names** to indicate the relevant vector content. To change content, assign new content of matching size to subset using ´&lt;-´. 
+To access (aka **subset** or **slicing**) and change atomic data objects use **brackets** `[]` and provide either **integers**, **logicals**, or  **names** to indicate the relevant vector content. To change content, assign new content of matching size to subset using ´&lt;-´. 
 
 .pull-left45[
 
@@ -368,20 +308,12 @@ my_vec[2]
 
 ```r
 # change the second element 
-my_vec[2] &lt;- 'D' ; my_vec
+my_vec[2] &lt;- 'D'
+my_vec
 ```
 
 ```
 ## [1] "A" "D" "C"
-```
-
-```r
-# change beyond length(my_vec) 
-my_vec[7] &lt;- 1 ; my_vec
-```
-
-```
-## [1] "A" "D" "C" NA  NA  NA  "1"
 ```
 
 ]
@@ -390,26 +322,21 @@ my_vec[7] &lt;- 1 ; my_vec
 
 ```r
 # Use logical comparison to access vector
-my_vec &lt;- c(1, 2, 3, 4, 5)
-my_vec ; my_vec[my_vec &lt; 4]
+my_vec[my_vec != 'A']
 ```
 
 ```
-## [1] 1 2 3 4 5
-```
-
-```
-## [1] 1 2 3
+## [1] "D" "C"
 ```
 
 ```r
 # Change vector using logical comparison
-my_vec[my_vec &lt; 4] &lt;- my_vec[my_vec &lt; 4] - 5
+my_vec[my_vec != 'A'] &lt;- c('E', 'F')
 my_vec
 ```
 
 ```
-## [1] -4 -3 -2  4  5
+## [1] "A" "E" "F"
 ```
 ]
 
@@ -419,55 +346,57 @@ my_vec
 
 Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
 
+
+
+
+```r
+# define data frame
+my_df &lt;- data_frame('v_1' = c('A', 'B'), 'v_2' = c(1, 2))
+```
+
 .pull-left45[
 
 ```r
-# retrieve elements using brackets
-my_df &lt;- data.frame('v_1'=c('A', 'B', 'C'), 
-                    'v_2'=c(1, 2, 3))
+# One bad, two correct ways to subset
 my_df[1] ; my_df[[1]] ; my_df[['v_1']]
 ```
 
 ```
-##   v_1
-## 1   A
-## 2   B
-## 3   C
+## # A tibble: 2 x 1
+##   v_1  
+##   &lt;chr&gt;
+## 1 A    
+## 2 B
 ```
 
 ```
-## [1] A B C
-## Levels: A B C
+## [1] "A" "B"
 ```
 
 ```
-## [1] A B C
-## Levels: A B C
+## [1] "A" "B"
 ```
 ]
 
 .pull-right45[
 
 ```r
-# retrieve elements using the $-operator
+# Best use $-operator to access
 my_df$v_1
 ```
 
 ```
-## [1] A B C
-## Levels: A B C
+## [1] "A" "B"
 ```
 
 ```r
-my_df$v_1 &lt;- c('X', 'Y', 'Z')
-my_df
+# and change
+my_df$v_1 &lt;- c('Y', 'Z')
+my_df$v_1
 ```
 
 ```
-##   v_1 v_2
-## 1   X   1
-## 2   Y   2
-## 3   Z   3
+## [1] "Y" "Z"
 ```
 ]
 
@@ -633,6 +562,148 @@ my_df[1,] ; my_df[,1] ; my_df[1,2]
 
 ---&gt;
 
+
+
+---
+
+# Functions
+
+Functions are objects that conduct operations on objects using objects. Functions have 3 elements:
++ **Name**: Used to call (execute) the function.
++ **Argument(s)**: Objects that the function needs to do its job. May have *default arguments*.
++ **Expression**: R code that does the job.
+    
+.pull-left5[
+
+```r
+# Defining a function that computes 
+# the mean or median
+my_stat &lt;- function(x, method = 'mean'){
+  
+  # detect and run method
+  if(method == "mean") return(mean(x))
+  if(method == "median") return(median(x))
+}
+
+# Define object
+my_vec &lt;- c(1, 4, 6, 3, 7, 5, 12, 9)
+```
+]
+
+.pull-right45[
+
+```r
+# Runnning our functions
+mean(x = my_vec)
+```
+
+```
+## [1] 5.875
+```
+
+```r
+my_stat(x = my_vec, method = 'mean')
+```
+
+```
+## [1] 5.875
+```
+
+```r
+my_stat(x = my_vec, method = 'median')
+```
+
+```
+## [1] 5.5
+```
+]
+
+---
+
+# Help
+
+.pull-left5[
+
+**help files** (and **vignettes**) are very usefl. 
+
+Pay attention to...
+
+- Usage - shows function's use, its arguments and their defaults.
+- Arguments - explains arguments, and their `type`/`class`
+
+
+
+```r
+# To access help files
+?name_of_function
+
+# search help files
+??name_of_function
+```
+
+]
+
+.pull-right45[
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"&gt;&lt;/p&gt;
+
+&lt;!---
+&lt;br&gt;&lt;br&gt;&lt;iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"&gt;&lt;/iframe&gt;
+---&gt;
+]
+---
+
+# Factors
+
+Factors are a special case of vector that can contain only **predifined values** so-called `levels`. Factors are **rarely useful** and sometimes **dangerous**, yet R will often coerce `character` to `factor`. Modern packages, include those included in the `tidyverse` tend to avoid factors. Otherwise R can be told excplicitly to avoid factors using `options(stringsAsFactors = FALSE)`.
+
+.pull-left45[
+
+
+```r
+# create a factor
+my_fact &lt;- factor(c('A','B','C'))
+my_fact
+```
+
+```
+## [1] A B C
+## Levels: A B C
+```
+
+```r
+# test type
+typeof(my_fact)
+```
+
+```
+## [1] "integer"
+```
+
+]
+
+.pull-right45[
+
+```r
+# dangerous behavior of factors pt. 1
+my_fact &lt;- factor(c('A','B','C'))
+mean(as.integer(my_fact))
+```
+
+```
+## [1] 2
+```
+
+```r
+# dangerous behavior of factors pt. 2
+my_fact &lt;- factor(c(1.32,4.52,.23))
+as.numeric(my_fact) # ranks
+```
+
+```
+## [1] 2 3 1
+```
+]
+
 ---
 
 # Object algebra
@@ -682,99 +753,6 @@ my_vec %*% my_mat
 
 ---
 
-# Functions
-
-Any operation of your data is done by functions. Functions have 3 elements:
-+ **Name**: Used to call (execute) a function.
-+ **Argument(s)**: Objects that the function needs to do its job.
-+ **Expression**: R code that is the options job.
-    
-.pull-left55[
-
-```r
-# Defining a function that computes the mean
-my_mean &lt;- function(x) return(sum(x) / length(x))
-
-# Defining a function that computes 
-# the mean or median
-my_stat &lt;- function(x, method = 'mean'){
-  
-  # detect and run method
-  if(method == "mean") return(my_mean(x))
-  if(method == "median") return(median(x))
-  
-  # return error if not method detected
-  stop('Method must be mean or median')
-}
-```
-]
-
-.pull-right4[
-
-```r
-# Runnning our functions
-my_vec &lt;- c(1, 4, 6, 3, 7, 5, 12, 9)
-my_mean(x = my_vec)
-```
-
-```
-## [1] 5.875
-```
-
-```r
-my_stat(x = my_vec, method = 'mean')
-```
-
-```
-## [1] 5.875
-```
-
-```r
-my_stat(x = my_vec, method = 'median')
-```
-
-```
-## [1] 5.5
-```
-]
-
----
-
-# Help
-
-.pull-left5[
-
-R provides extremely helpful **help files** and **vignettes**. 
-&gt;**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).&lt;br&gt;
-&gt;**Vignettes** are long tutorials sometimes provided by the authors of a package.     
-
-
-```r
-# To access help files
-help("name_of_function")
-?name_of_function
-
-# find help files
-??name_of_function
-
-# To list and access vignettes
-vignette(package = "name_of_package")
-vignette(package = "name_of_vignette")
-```
-
-]
-
-.pull-right45[
-&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mean_help.png" width="500"&gt;&lt;/p&gt;
-
-&lt;!---
-&lt;br&gt;&lt;br&gt;&lt;iframe src="http://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html" height="510" width="800" align="center"&gt;&lt;/iframe&gt;
----&gt;
-]
----
-
-
-
 # Practical
 
 &lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/_sessions/D1S2_Objects/Objects_practical.html"&gt;Link to practical&lt;/a&gt;
@@ -786,8 +764,15 @@ vignette(package = "name_of_vignette")
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({

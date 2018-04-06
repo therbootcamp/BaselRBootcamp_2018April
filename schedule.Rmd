@@ -13,10 +13,19 @@ output: html_document
 
 |  | Day 1<br>Essentials | Day 2<br>Statistics | Day 3<br>Plotting | Day 4<br> Productivity |
 |:--|:-------------|:-------------|:-------------|:--------------|
+|0| Welcome!<br>[slides](_sessions/D1S0_Intro/Intro.html) | Recap I | Recap II| Recap III |
+|1| What is R?<br>[slides](_sessions/D1S1_WhatIsR/What_is_R.html), [practical](_sessions/D1S1_WhatIsR/What_is_R_practical.html) | Data Wrangling |A) Tidy Projects<br>B) Machine Learning II| A) Efficient Code<br> B) Programming in R|
+|2|  Objects & Functions<br>[slides](_sessions/D1S2_Objects/Objects.html), [practical](_sessions/D1S2_Objects/Objects_practical.html) | Statistics| Plotting 1.0|  Dynamic Reports|
+|3|   Data I/O<br>[slides](_sessions/D1S3_DataIO/Data_IO.html), [practical](_sessions/D1S3_DataIO/Data_IO_practical.html) |A) Machine Learning<br>B) Case Studies| A) Plotting 2.0<br> B) Natural Language Processing| Next Steps|
+
+<!---
+|  | Day 1<br>Essentials | Day 2<br>Statistics | Day 3<br>Plotting | Day 4<br> Productivity |
+|:--|:-------------|:-------------|:-------------|:--------------|
 |0| Welcome!<br>[slides](_sessions/D1S0_Intro/Intro.html) | Recap I<br>[slides](_sessions/D2S0_Recap/Recap_I.html) | Recap II<br>[slides](_sessions/D3S0_Recap/Recap_II.html)| Recap III<br>[slides](_sessions/D4S0_Recap/Recap_III.html) |
 |1| What is R?<br>[slides](_sessions/D1S1_WhatIsR/What_is_R.html), [practical](_sessions/D1S1_WhatIsR/What_is_R_practical.html), [solutions](_sessions/D1S1_WhatIsR/What_is_R_practical_answers.html) | Data Wrangling<br> [slides](_sessions/D2S1_Wrangling/Wrangling.html), [practical](_sessions/D2S1_Wrangling/Wrangling_practical.html), [solutions](_sessions/D2S1_Wrangling/Wrangling_practical_answers.html) |A) Tidy Projects<br>[slides](_sessions/D3S1_Tidying/Tidying.html), [practical](_sessions/D3S1_Tidying/Tidying_practical.html)<br>B) Machine Learning II| A) Efficient Code<br>[slides](_sessions/D4S1_EfficientCode/EfficientCode.html), [practical](_sessions/D4S1_EfficientCode/EfficientCode_practical.html) <br> B) Programming in R|
 |2|  Objects & Functions<br>[slides](_sessions/D1S2_Objects/Objects.html), [practical](_sessions/D1S2_Objects/Objects_practical.html), [solutions](_sessions/D1S2_Objects/Objects_practical_answers.html) | Statistics<br> [slides](_sessions/D2S2_Statistics/Statistics.html), [practical](_sessions/D2S2_Statistics/Statistics_practical.html), [solutions](_sessions/D2S2_Statistics/Statistics_practical_answers.html)| Plotting 1.0<br>[slides](_sessions/D3S2_PlottingI/PlottingI.html), [practical](_sessions/D3S2_PlottingI/PlottingI_practical.html)|  Dynamic Reports<br>[slides](_sessions/D4S2_DynamicReports/DynamicReports.html), [practical](_sessions/D4S2_DynamicReports/DynamicReports_practical.html)|
 |3|   Data I/O<br>[slides](_sessions/D1S3_DataIO/Data_IO.html), [practical](_sessions/D1S3_DataIO/Data_IO_practical.html), [solutions](_sessions/D1S3_DataIO/Data_IO_practical_answers.html) |A) Machine Learning<br> [slides](_sessions/D2S3_MachineLearning/MachineLearning.html)<br>[practical](_sessions/D2S3_MachineLearning/MachineLearning_practical.html), [solutions](_sessions/D2S3_MachineLearning/MachineLearning_practical_answers.html)<br>B) Case Studies<br>[slides]()<br>[1: Clinical Trial](_sessions/DXX_CaseStudies/Clinical_Data_Case_Study.html)<br>[2: Sales ](_sessions/DXX_CaseStudies/Sales_Data_Case_Study.html)| A) Plotting 2.0<br>[slides](_sessions/D3S3_PlottingII/PlottingII.html), [practical](_sessions/D3S3_PlottingII/PlottingII_practical.html) <br> B) Natural Language Processing| Next Steps<br>[slides](_sessions/D4S3_NextSteps/NextSteps.html)|
+--->
 
 
 <br>
@@ -25,7 +34,7 @@ output: html_document
 
 
 <p align="center"><br>
-    <a href="http://i.imgur.com/PgtvQar.png"><img border="0" alt="W3Schools" src="https://photos-3.dropbox.com/t/2/AABpff00LtRR8-d-H1aHFbsHmZ3NtTLILwSQ-8A1P7TKxA/12/7618380/png/32x32/1/_/1/2/schedule_2018Apr.png/EIfK5eAFGM0fIAcoBw/-XECttF9cThd-RltblokyEzHcBZDkhbOd9pzm-gjFAw?preserve_transparency=1&size=2048x1536&size_mode=3" width=660></a><br>
+    <a href="http://i.imgur.com/PgtvQar.png"><img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/schedule_2018Apr.png" width=660></a><br>
 
 
 <!---

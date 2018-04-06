@@ -13,7 +13,7 @@ class: center, middle, inverse, title-slide
 
 # What is R?
 ### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
-### January 2018
+### April 2018
 
 ---
 
@@ -139,20 +139,14 @@ There are many good reasons to prefer R over superficially more user friendly so
 
 .pull-right45[
 ### Con
-1. Sometimes slow and wordy, but... 
+Sometimes slow and awkward, but... 
 
+[Tidyverse](https://www.tidyverse.org/)
 [Rcpp](http://www.rcpp.org/), [BH](https://cran.r-project.org/web/packages/BH/index.html): Links R to C++ and high-performance C++ libraries&lt;br&gt;
 [rPython](http://rpython.r-forge.r-project.org/): Links R to Python&lt;br&gt;
 [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki): Links R to Hadoop for big data applications.&lt;br&gt;
 ]
 
----
-
-# RStudio: R's favorite environment
-
-Next to many useful packages, R users greatly benefit from R's integrated development environment [**RStudio**](https://www.rstudio.com/). Rstudio is a **graphical user interface** that allows you to (a) edit code, (b) run code, (c) access files and history, and (d) create plots. RStudio also helps you with **project management**, **version control** via [Github](https://github.com/), writing **reports** using [markdown](http://rmarkdown.rstudio.com/authoring_basics.html) and [knitr](https://yihui.name/knitr/), and many other aspects of working with R.  
-
-&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_plus.png" height="360"&gt;&lt;/p&gt;
 
 &lt;!---
 
@@ -183,7 +177,9 @@ RStudio facilitate project management via the use of *projects*. Projects suppor
 
 # Packages
 
-One of R's best features is its vast and cutting-edge collection of **packages** provided by R's large and highly active user base and the work of [**CRAN**](https://cran.r-project.org/), who apply a rigorous quality control and eventually host the packages on various mirrors throughout the world.         
+.pull-left35[
+
+R features a vast and cutting-edge collection of **packages** provided on [**CRAN**](https://cran.r-project.org/) and [**Git/GitHub**](https://github.com/hadley) by R's large and highly active user base and the work of .         
 
 
 ```r
@@ -195,9 +191,19 @@ library(package_name)
 require(package_name)
 
 
-#Note: Never forget that packages must also be loaded.
+#Note: 
+# Don't forget that packages 
+# must also be loaded.
 ```
 
+]
+
+.pull-right55[
+
+&lt;iframe src="https://www.rdocumentation.org/trends?page1=1&amp;sort1=total&amp;page2=1&amp;sort2=total&amp;page3=1&amp;page4=1" width="600" height="400" frameborder="0" marginheight="0" marginwidth="0" zoom="0.5"&gt;&lt;/iframe&gt;
+
+&lt;font size=2&gt;&lt;a href="https://www.rdocumentation.org/trends"&gt;https://www.rdocumentation.org/trends&lt;/a&gt;&lt;/font&gt;
+]
 ---
 
 # The almighty **tidyverse**
@@ -212,6 +218,15 @@ Among its many packages, R newly contains a collection of high-performance, user
 &lt;br&gt;&lt;br&gt;
 
 &lt;img src="http://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/071952491ec4a6a532a3f70ecfa2507af4d341f9/c167c/images/hex-dplyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/5f8c22ec53a1ac61684f3e8d59c623d09227d6b9/b15de/images/hex-tidyr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b9ddb95fc48da074b69fb07/7dfb6/images/hex-readr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/9221ddead578362bd17bafae5b85935334984429/37a68/images/hex-purrr.png" height="200px" /&gt;&lt;img src="http://d33wubrfki0l68.cloudfront.net/f55c43407ae8944b985e2547fe868e5e2b3f9621/720bb/images/hex-tibble.png" height="200px" /&gt;
+
+---
+
+# RStudio: R's favorite environment
+
+Next to many useful packages, R users greatly benefit from R's integrated development environment [**RStudio**](https://www.rstudio.com/). Rstudio is a **graphical user interface** that allows you to (a) edit code, (b) run code, (c) access files and history, and (d) create plots. RStudio also helps you with **project management**, **version control** via [Github](https://github.com/), writing **reports** using [markdown](http://rmarkdown.rstudio.com/authoring_basics.html) and [knitr](https://yihui.name/knitr/), and many other aspects of working with R.  
+
+&lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_plus.png" height="360"&gt;&lt;/p&gt;
+
 
 ---
 
@@ -241,23 +256,15 @@ R programs evolve through functions: Every action entails **passing on arguments
 .pull-left45[
 
 ```r
-# defining a function - arithm. mean
-my_fun &lt;- function(x, b){ x * b }
-
-# define some data
-my_data &lt;- c(1, 5, 7, 3) 
-
-# pass on arguments and call function
-my_fun(my_data, 5) 
-```
-
-```
-## [1]  5 25 35 15
-```
-
-```r
-# store output by assignment
-my_out &lt;- my_fun(my_data, 5)
+# a prototypical function
+some_function &lt;- function(argument_1, argument_2){ 
+  
+  # do something with arguments
+  result &lt;- argument_1 + argument_2 
+  
+  # return result
+  result
+  }
 ```
 
 ]
@@ -265,7 +272,15 @@ my_out &lt;- my_fun(my_data, 5)
 .pull-right45[
 
 ```r
-# a basic expression
+# Expressions
+some_function(2, 2)
+```
+
+```
+## [1] 4
+```
+
+```r
 2 + 2
 ```
 
@@ -274,17 +289,14 @@ my_out &lt;- my_fun(my_data, 5)
 ```
 
 ```r
-# is also a function
-'+'(2,2)
-```
-
-```
-## [1] 4
+# Assignments
+my_object1 &lt;- some_function(2, 2)
+my_object2 &lt;- 2 + 2 
 ```
 ]
 
----
 
+&lt;!---
 # Object-orientation
 
 R is an object-oriented language. For us this entails:&lt;br&gt; 
@@ -334,6 +346,7 @@ print(my_vector) # still unsorted
 ```
 ]
 
+---&gt;
 
 ---
 
@@ -410,11 +423,11 @@ vignette(package="name_of_vignette")
 ]
 
 
----
-
+&lt;!---
 # The workflow of R
 &lt;p align="center"&gt;&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_workings.png" height="500" align="center"&gt;&lt;/p&gt;
 
+---&gt;
 ---
 
 # Interactive session
