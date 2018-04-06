@@ -72,11 +72,11 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ### We will cover...
 
 -  Basic structure and arguments of most statistical functions
-    - `formula`, `data`, `subset`
+    - `formula`, `data`
     
 - Simple `htest` objects
 
-- General linear model 
+- Generalized linear model 
     - `glm`, `aov`
 
 - Common methods
@@ -95,8 +95,8 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ```{r, eval = FALSE}
 # T-test comparing weights from Diets 1 and 2
 t.test(formula = weight ~ Diet,
-       data = Chickweight,
-       subset = Diet %in% c(1, 2))
+       data = ChickWeight %>%
+              filter(Diet %in% c(1, 2)))
 
 # Regression model
 
@@ -133,7 +133,6 @@ y <- x1 + x2 + noise
 |:------|:----|
 |     `formula`|The dependent variable and one or more independent variables|
 |     `data`|  The dataframe containing variables|
-|   `subset`  | Optional subset of data to test |
 
 
 ```{r}
@@ -147,8 +146,7 @@ trial_X
 
 ```{r, eval = FALSE}
 TEST(formula = Y ~ X1 + X2 + ...
-     data = DATA,
-     subset = SUBSET,
+     data = DATA
      ...)
 ```
 
@@ -163,10 +161,10 @@ t.test(formula = y_primary ~ arm
 
 # Regression
 # DV = y_secondary, IV = arm, sex, age
-# Subset = only id > 50
+# Data = trial_X (with filters)
 glm(formula = y_secondary ~ arm + sex + age
-    data = trial_X,
-    subset = id > 50)
+    data = trial_X %>%
+             filter(id > 50 & BMI == "Normal"))
 ```
 
 ]
@@ -279,9 +277,9 @@ head(x)
 > Is the mean weight of the chicks on Diet 1 different from Diet 2?
 
 ```{r, eval = TRUE}
-t.test(formula = weight ~ Diet,    # Formula
-       data = ChickWeight,         # Data in Chickweight
-       subset = Diet %in% c(1, 2)) # Only Diets 1,2
+t.test(formula = weight ~ Diet,     # Formula
+       data = ChickWeight %>%       # Data in Chickweight
+                filter(Diet %in% c(1, 2)))
 ```
 
 ]
@@ -729,7 +727,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 .pull-left45[
 
-### General linear model
+### Generalised linear model
 
 
 
@@ -797,8 +795,8 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ```{r, eval = FALSE}
 # Run test and save as test_A
 test_A <- t.test(formula = weight ~ Diet,
-                 data = ChickWeight,
-                 subset = Diet %in% c(1, 2))
+                 data = ChickWeight %>%
+                        filter(Diet %in% c(1, 2)))
 
 names(test_A)  # What is in the object?
 
