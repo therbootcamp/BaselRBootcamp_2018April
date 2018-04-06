@@ -54,8 +54,11 @@ options(digits = 4)
 
 # Who are we?
 
-.pull-left5[
-<p align="center"><br>
+<table class="tg">
+  <tr>
+    <th class="tg-yw4l">
+    
+  <p align="center"><br>
     <a href="www.dirkwulff.org"><img border="0" alt="W3Schools" src="https://www.mpib-berlin.mpg.de/sites/default/files/imagecache/marginal/dirk_wulff2smallnarrow.jpg" height="240"></a><br>
 
 <p align="center">
@@ -66,10 +69,9 @@ options(digits = 4)
 <a href="https://cran.r-project.org/web/packages/cstab/index.html"><b>cstab</b></a>, <br>
 <a href="https://cran.r-project.org/web/packages/mousetrap/index.html"><b>mousetrap</b></a>, <a href="https://github.com/dwulff/choicepp"><b>choicepp</b>
 </p>  
-]
-
-.pull-right5[
-<p align="center"><br>
+  
+    </th>
+    <th class="tg-yw4l"><p align="center"><br>
     <a href="www.nathanieldphillips.com/"><img border="0" alt="W3Schools" src="https://avatars3.githubusercontent.com/u/8480980?v=4&s=460" height="240"></a><br>
 
 <p align="center">
@@ -78,15 +80,9 @@ options(digits = 4)
 <a href="https://github.com/ndphillips"><b>github.com/ndphillips</b></a><br>
 <font size=4><i>packages: </i></font> 
 <a href="https://github.com/ndphillips/yarrr"><b>yarrr</b></a>, <br>
-<a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a>, <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b>
-</p>
+<a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a>, <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b></th>
 
-]
-
-
----
-# Who are we?
-
+ <th class="tg-yw4l"><p align="center">
 <p align="center"><br>
     <a href="www.nathanieldphillips.com/"><img border="0" alt="W3Schools" src="https://psychologie.unibas.ch/fileadmin/_processed_/b/e/csm_markus_72f28a47b1.png?1516116752" height="240"></a><br>
 
@@ -97,8 +93,8 @@ options(digits = 4)
 <font size=4><i>packages: </i></font> 
 <a href="https://github.com/ndphillips/yarrr"><b>yarrr</b></a>, <br>
 <a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a>, <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b>
-</p>
-
+</p></th></tr>
+</table>
 
 ---
 
@@ -110,7 +106,6 @@ options(digits = 4)
 
 ]
 
-
 .pull-right4[
 <p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/target.png" height="350"></p>
 
@@ -120,11 +115,9 @@ options(digits = 4)
 
 # Schedule <img src="https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/schedule_2018Apr.png?raw=true" height="600" align="right">
 
-
 ---
 
 .pull-left4[
-
 
 <br>
 # Sessions
