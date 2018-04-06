@@ -52,7 +52,7 @@ trial_X <- data.frame(id = 1:5,
 |     `rpart`|    Decision Trees|
 |     `lme4`|   Mixed effects regression|
 |     `BayesFactor`| Bayesian statistics|
-|     `igraph`| Cluster analyses|
+|     `igraph`| Network analysis|
 |     `neuralnet`| Neural networks|
 
 ]
@@ -155,16 +155,17 @@ TEST(formula = Y ~ X1 + X2 + ...
 
 ```{r, eval = FALSE}
 # T-test
-# DV = y_primary, IV = arm
-t.test(formula = y_primary ~ arm
+# DV = y_1, IV = arm
+t.test(formula = y_1 ~ arm
        data = trial_X)
 
 # Regression
-# DV = y_secondary, IV = arm, sex, age
+# DV = y_sec, IV = arm, sex, age
 # Data = trial_X (with filters)
-glm(formula = y_secondary ~ arm + sex + age
+glm(formula = y_2 ~ arm + sex + age
     data = trial_X %>%
-             filter(id > 50 & BMI == "Normal"))
+             filter(id > 50 & 
+                    BMI == "Normal"))
 ```
 
 ]
@@ -207,10 +208,10 @@ t.test(formula = t_primary ~ arm,
 ```{r, eval = FALSE}
 # Additional arguments to glm
 
-glm(formula = y_secondary ~ arm + sex + age,
+# Include -1 to not have an intercept!
+glm(formula = y_secondary ~ arm + sex + age - 1,
     data = trial_X,
-    family = "binomial",     # Logistic Reg
-    intercept = FALSE)       # No intercept
+    family = "binomial")     # Logistic Reg
 ```
 
 
@@ -387,7 +388,7 @@ weight_tt <- t.test(x = ChickWeight$weight,
                     mu = 120,
                     alternative = "two.sided")
 
-# What's in the weight.tt object?
+# What's in the weight_tt object?
 names(weight_tt)
 
 # Get the p.value
@@ -598,11 +599,11 @@ chick_glm <- glm(formula = weight ~ Time,
                  data = ChickWeight)
 
 # Create a dataframe of new data
-NewData <- tibble(Time = c(10, 15, 20, 45, 5))
+New_Data <- tibble(Time = c(10, 15, 20, 45, 5))
 
-# Predict weights of NewData using chick_glm
+# Predict weights of New_Data using chick_glm
 predict(chick_glm, 
-        newdata = NewData)
+        newdata = New_Data)
 ```
 
 ]
