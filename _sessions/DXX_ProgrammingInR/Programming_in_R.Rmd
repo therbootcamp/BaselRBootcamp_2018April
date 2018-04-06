@@ -29,9 +29,9 @@ library(yarrr)
 .pull-left45[
 Conditional Statements
 - `if`, `else`
-- `ifelse()`
-- `switch()`
-- *`case_when()`*
+- `ifelse`
+- `switch`
+- *`case_when`*
 
 Functions
 - Program your own functions
@@ -143,40 +143,6 @@ ifelse(test = tib > 3, yes = "y", no = 0)
 
 ]
 
-
----
-
-# Conditional Statements
-
-Allow you to conditionally execute code blocks.
-
-.pull-left45[
-
-*`switch()`*
-
-Long chains of `if`-`else` statements can become confusing and require a lot of space. This is where the `switch()` function can come in handy.
-
-]
-
-.pull-right45[
-
-```{r}
-
-x <- rnorm(10)
-
-type <- "mean"
-
-# requires fewer checks than
-# if-else statements
-switch(type,
-       mean = mean(x),
-       median = median(x),
-       trimmed = mean(x, trim = .1))
-
-```
-
-]
-
 ---
 
 # A Note on Checks
@@ -189,8 +155,11 @@ The conditional statements often require you to specify checks (logical expressi
 - to prevent errors due to the vectorization use `any`, `all`, and `identical`
 
 ```{r}
-(x <- c(1:5))
-(y <- c(9:5))
+x <- c(1:5)
+x
+
+y <- c(9:5)
+y
 ```
 
 ]
@@ -353,7 +322,8 @@ add <- function(x){
   z
 }
 
-x <- 1; y <- 2
+x <- 1
+y <- 2
 
 add(x)
 ```
@@ -404,7 +374,7 @@ divide_x <- function(x, y){
   
   stopifnot(y != 0, !is.null(x),
             !is.null(y),
-            all(!is.na(c(x,y))))
+            all(!is.na(c(x, y))))
   
   x / y
 }
@@ -452,54 +422,6 @@ for (i in seq_len(4)) print(i)
 
 ]
 
----
-
-# Iteration - `for` Loops
-
-Remember to define the output prior to entering the loop and creating it in the desired length.
-
-.pull-left45[
-
-**Good:**
-
-```{r}
-
-# Creates the desired object
-# and fills it subsequently
-output <- vector(
-  length = ncol(df)) #  output
-
-for (i in seq_along(df)) { # sequence
-  output[i] <- mean(df[[i]]) # body
-}
-output
-
-
-```
-
-
-]
-
-.pull-right45[
-
-**Bad:**
-
-```{r}
-
-# Creates a copy at each iteration
-# and is thus slower
-output <- NULL #  output
-
-for (i in seq_along(df)) { # sequence
-  output <- c(output,
-              mean(df[[i]])) # body
-}
-output
-
-```
-
-]
-
 
 ---
 
@@ -519,25 +441,17 @@ This can be handy, but also "dangerous" because if the condition is never met, i
 
 
 ```{r, eval = FALSE}
-# get similar subset of samples
-while(dist > 1){
-  ind <- sample(nrow(df))
-  x1 <- df$x[ind[1:(length(ind) / 2)]]
-  x2 <- df$x[ind[(length(ind) / 2) + 1:
-                   length(ind)]]
-  
-  dist <- abs(mean(x1) - mean(x2))
+trunc_norm <- rnorm(30)
+
+# get normal dist trucated at 0
+while(any(trunc_norm) < 0){
+  trunc_norm <- rnorm(30)
 }
 
 # Potentially problematic:
-# get VERY similar subset of samples
-while(dist > .0001){ # very small dist
-  ind <- sample(nrow(df))
-  x1 <- df$x[ind[1:(length(ind) / 2)]]
-  x2 <- df$x[ind[(length(ind) / 2) + 1:
-                   length(ind)]]
-  
-  dist <- abs(mean(x1) - mean(x2))
+# get normal dist trucated at 0
+while(any(trunc_norm) < 0){
+  trunc_norm <- rnorm(500)
 }
 ```
 
@@ -720,13 +634,6 @@ pirates %>%
   map_dbl(function(x){
     sum(x) / length(x)
   })
-
-# shorter way to write it
-pirates %>%
-  select(age,
-         tattoos,
-         beard.length)  %>%
-  map_dbl(~sum(.) / length(.))
 
 
 ```
