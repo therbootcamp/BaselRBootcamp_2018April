@@ -4,7 +4,7 @@
     <title>Machine Learning</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -13,7 +13,7 @@ class: center, middle, inverse, title-slide
 
 # Machine Learning
 ### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
-### January 2018
+### April 2018
 
 ---
 
@@ -72,6 +72,91 @@ Given data, an algorithm tunes its *parameters* to match the data, understand ho
 
 ]
 
+
+---
+# Predicting Disease
+
+
+
+.pull-left45[
+
+
+### Past "Training" Data
+
+| id|sex | age|fam_history |smoking | disease|
+|--:|:---|---:|:-----------|:-------|-------:|
+|  1|m   |  46|Yes         |TRUE    |       0|
+|  2|m   |  47|Yes         |FALSE   |       1|
+|  3|f   |  42|No          |FALSE   |       1|
+|  4|m   |  49|No          |FALSE   |       1|
+|  5|m   |  41|No          |TRUE    |       1|
+|  6|m   |  43|Yes         |FALSE   |       0|
+|  7|f   |  45|Yes         |FALSE   |       1|
+|  8|m   |  45|No          |TRUE    |       1|
+
+]
+
+
+.pull-right45[
+
+### Future "Test" Data
+
+| id|sex | age|fam_history |smoking |disease |
+|--:|:---|---:|:-----------|:-------|:-------|
+| 91|m   |  39|No          |TRUE    |?       |
+| 92|m   |  46|No          |FALSE   |?       |
+| 93|m   |  45|No          |FALSE   |?       |
+| 94|m   |  54|No          |FALSE   |?       |
+| 95|m   |  44|No          |TRUE    |?       |
+| 96|m   |  44|No          |FALSE   |?       |
+| 97|f   |  42|No          |FALSE   |?       |
+| 98|m   |  44|Yes         |TRUE    |?       |
+
+]
+
+
+---
+# Predicting Sales
+
+
+
+.pull-left45[
+
+
+### Past "Training" Data
+
+|product    | last_month| tweets|sentiment | sales|
+|:----------|----------:|------:|:---------|-----:|
+|speaker    |        950|     17|++        |   956|
+|tv         |       1013|     64|--        |  1076|
+|cable      |        992|    109|-         |  1026|
+|headphones |       1089|    110|--        |  1077|
+|phones     |       1012|     80|+         |   919|
+|movies     |       1032|    174|-         |   956|
+|games      |        942|    112|--        |   928|
+|drone      |       1071|     97|+         |  1023|
+
+]
+
+
+.pull-right45[
+
+### Future "Test" Data
+
+|product | last_month| tweets|sentiment |sales |
+|:-------|----------:|------:|:---------|:-----|
+|camera  |        884|    118|++        |?     |
+|office  |       1025|    142|-         |?     |
+|network |        991|    207|--        |?     |
+|storage |       1176|    197|+         |?     |
+|watch   |        986|     90|++        |?     |
+|jewelry |        989|    240|++        |?     |
+|glasses |        931|    -78|--        |?     |
+|vape    |        978|    162|++        |?     |
+
+]
+
+
 ---
 # What is the basic machine learning process?
 
@@ -115,6 +200,52 @@ Just because an algorithm can fit past (training) data well, does *not* necessar
 ]
 
 
+
+---
+# What do you think?
+
+&lt;font size = 5&gt;Can anyone come up with a model that will perfectly match past data but is worthless in predicting future data?&lt;/font&gt;&lt;br&gt;&lt;br&gt;
+
+
+
+
+.pull-left45[
+
+
+### Past "Training" Data
+
+| id|sex | age|fam_history |smoking | disease|
+|--:|:---|---:|:-----------|:-------|-------:|
+|  1|m   |  46|Yes         |TRUE    |       0|
+|  2|m   |  47|Yes         |FALSE   |       1|
+|  3|f   |  42|No          |FALSE   |       1|
+|  4|m   |  49|No          |FALSE   |       1|
+|  5|m   |  41|No          |TRUE    |       1|
+|  6|m   |  43|Yes         |FALSE   |       0|
+|  7|f   |  45|Yes         |FALSE   |       1|
+|  8|m   |  45|No          |TRUE    |       1|
+
+]
+
+
+.pull-right45[
+
+### Future "Test" Data
+
+| id|sex | age|fam_history |smoking |disease |
+|--:|:---|---:|:-----------|:-------|:-------|
+| 91|m   |  39|No          |TRUE    |?       |
+| 92|m   |  46|No          |FALSE   |?       |
+| 93|m   |  45|No          |FALSE   |?       |
+| 94|m   |  54|No          |FALSE   |?       |
+| 95|m   |  44|No          |TRUE    |?       |
+| 96|m   |  44|No          |FALSE   |?       |
+| 97|f   |  42|No          |FALSE   |?       |
+| 98|m   |  44|Yes         |TRUE    |?       |
+
+]
+
+
 ---
 # Training (fitting) vs. Testing (prediction)
 &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_A.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -135,12 +266,12 @@ Just because an algorithm can fit past (training) data well, does *not* necessar
 ---
 ## What machine learning algorithms are there?
 
-.pull-left6[
+.pull-left55[
 
-- There are hundreds if not thousands of machine learning algorithms from many different fields.
-    - Computer vision, Natural language processing, reinforcement learning...
+There thousands of machine learning algorithms from many different fields.
+  - Computer vision, natural language processing, reinforcement learning...
 
-Wikipedia lists 57 *Categories* of machine learning algorithms, each with dozens of examples
+Wikipedia lists 57 *categories* (!) of machine learning algorithms
 
 &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wikipediaml.png" width="80%" style="display: block; margin: auto;" /&gt;
 
@@ -148,7 +279,10 @@ Wikipedia lists 57 *Categories* of machine learning algorithms, each with dozens
 
 .pull-right4[
 &lt;br&gt;&lt;br&gt;
-We will focus on 3 that apply to both classification and regression
+
+### 3 Algorithims
+
+We will focus on 3 algorithms that apply to most tasks:
 
 | Algorithm|Complexity|
 |:------|:----|
@@ -394,8 +528,6 @@ loan_rf_pred &lt;- predict(loan_rf_model,
 
 .pull-left6[
 
-
-
 In the practical, we will go through the basic steps "by hand" so you can see the process:
 
 
@@ -422,8 +554,7 @@ pred_err_A &lt;- mean(abs(pred_A - data_test$y))
 
 .pull-right35[
 
-
-If you're really into machine learning, packages such as `mlr` and `caret` can automate much of the the machine learning process.
+When you do lots of machine learning, the `caret` and `mlr` packages can automate much of the the machine learning process.
 
 &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlrcaret.png" width="95%" style="display: block; margin: auto;" /&gt;
 
@@ -471,7 +602,7 @@ If you're really into machine learning, packages such as `mlr` and `caret` can a
 - Data comes from two processes: *Signal* and *Noise* (aka Error).
 &lt;br&gt;
 
-&lt;img src="MachineLearning_files/figure-html/unnamed-chunk-25-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MachineLearning_files/figure-html/unnamed-chunk-34-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -483,7 +614,7 @@ If you're really into machine learning, packages such as `mlr` and `caret` can a
 - A bad model is one that captures too much unpredictable noise,
     
 
-&lt;img src="MachineLearning_files/figure-html/unnamed-chunk-26-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MachineLearning_files/figure-html/unnamed-chunk-35-1.png" width="80%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
@@ -492,8 +623,15 @@ If you're really into machine learning, packages such as `mlr` and `caret` can a
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({

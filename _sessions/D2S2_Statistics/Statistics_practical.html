@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="BaselRBootcamp January 2018" />
+<meta name="author" content="BaselRBootcamp April 2018" />
 
 
 <title>Statistics</title>
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Statistics</h1>
-<h4 class="author"><em>BaselRBootcamp January 2018</em></h4>
+<h4 class="author"><em>BaselRBootcamp April 2018</em></h4>
 
 </div>
 
@@ -133,7 +133,7 @@ Source: <a href="https://cdn.lynda.com/course/495322/495322-636154038826424503-1
 <div id="slides" class="section level3">
 <h3>Slides</h3>
 <ul>
-<li><a href="https://therbootcamp.github.io/_sessions/D2S2_Statistics/Statistics.html">Here are the introduction slides for this practical on statistics!</a></li>
+<li><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S2_Statistics/Statistics.html#1">Here are the introduction slides for this practical on statistics!</a></li>
 </ul>
 </div>
 <div id="overview" class="section level3">
@@ -360,7 +360,7 @@ sd(samp_B)</code></pre>
 <p>A. Open a new R script and save it in the <code>R</code> folder you just created as a new file called <code>datawrangling.R</code>. At the top of the script, using comments, write your name and the date. The, load the set of <code>tidyverse</code> and <code>speff2trial</code> packages with <code>library()</code>. Here’s how the top of your script should look:</p>
 <pre class="r"><code>## NAME
 ## DATE
-## Wrangling Practical
+## Statistics Practical
 
 library(tidyverse)     # For tidyverse
 library(speff2trial)   # For the ACTG175 data documentation</code></pre>
@@ -376,22 +376,22 @@ trial_act &lt;- as_tibble(ACTG175)</code></pre>
 <pre class="r"><code># Print trial_act
 trial_act</code></pre>
 <pre><code># A tibble: 2,139 x 27
-   pidnum   age    wtkg  hemo  homo drugs karnof oprior   z30 zprior
-    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
- 1  10056    48 89.8128     0     0     0    100      0     0      1
- 2  10059    61 49.4424     0     0     0     90      0     1      1
- 3  10089    45 88.4520     0     1     1     90      0     1      1
- 4  10093    47 85.2768     0     1     0    100      0     1      1
- 5  10124    43 66.6792     0     1     0    100      0     1      1
- 6  10140    46 88.9056     0     1     1    100      0     1      1
- 7  10165    31 73.0296     0     1     0    100      0     1      1
- 8  10190    41 66.2256     0     1     1    100      0     1      1
- 9  10198    40 82.5552     0     1     0     90      0     1      1
-10  10229    35 78.0192     0     1     0    100      0     1      1
-# ... with 2,129 more rows, and 17 more variables: preanti &lt;int&gt;,
-#   race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;,
-#   treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;,
-#   r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
+   pidnum   age  wtkg  hemo  homo drugs karnof oprior   z30 zprior preanti
+    &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;
+ 1  10056    48  89.8     0     0     0    100      0     0      1       0
+ 2  10059    61  49.4     0     0     0     90      0     1      1     895
+ 3  10089    45  88.5     0     1     1     90      0     1      1     707
+ 4  10093    47  85.3     0     1     0    100      0     1      1    1399
+ 5  10124    43  66.7     0     1     0    100      0     1      1    1352
+ 6  10140    46  88.9     0     1     1    100      0     1      1    1181
+ 7  10165    31  73.0     0     1     0    100      0     1      1     930
+ 8  10190    41  66.2     0     1     1    100      0     1      1    1329
+ 9  10198    40  82.6     0     1     0     90      0     1      1    1074
+10  10229    35  78.0     0     1     0    100      0     1      1     964
+# ... with 2,129 more rows, and 16 more variables: race &lt;int&gt;,
+#   gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;,
+#   offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;,
+#   cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
 <p>D. Before we can analyse the data, we need to make one important change. Specifically. we need to clarify that the <code>arms</code> column is a factor, <em>not</em> an integer. Run the following code to make this change.</p>
 <pre class="r"><code># traial_act data cleaning
 

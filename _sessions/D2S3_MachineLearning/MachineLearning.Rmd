@@ -2,7 +2,7 @@
 title: "Machine Learning"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -24,6 +24,8 @@ options(htmltools.dir.version = FALSE)
 # https://github.com/gnab/remark/wiki/Markdown
 options(width=110)
 options(digits = 4)
+
+library(tidyverse)
 ```
 
 
@@ -83,6 +85,90 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ]
 
+
+---
+# Predicting Disease
+
+```{r, echo = FALSE}
+set.seed(100)
+past <- tibble(id = 1:8,
+               sex = sample(c("m", "f"), size  = 8, replace = TRUE),
+               age = round(rnorm(8, mean = 45, sd = 5), 0),
+               fam_history = sample(c("Yes", "No"), size = 8, replace = TRUE),
+               smoking = sample(c(TRUE, FALSE), size = 8, replace = TRUE),
+               disease = sample(c(0, 1), size = 8, replace = TRUE))
+
+present <- tibble(id = 91:98,
+                  sex = sample(c("m", "f"), size  = 8, replace = TRUE),
+               age = round(rnorm(8, mean = 45, sd = 5), 0),
+               fam_history = sample(c("Yes", "No"), size = 8, replace = TRUE),
+               smoking = sample(c(TRUE, FALSE), size = 8, replace = TRUE),
+               disease = rep("?", 8))
+```
+
+.pull-left45[
+
+
+### Past "Training" Data
+```{r, results = 'asis', echo = FALSE}
+knitr::kable(past, format = "markdown")
+```
+
+]
+
+
+.pull-right45[
+
+### Future "Test" Data
+```{r, echo = FALSE}
+knitr::kable(present, format = "markdown")
+
+```
+
+]
+
+
+---
+# Predicting Sales
+
+```{r, echo = FALSE}
+set.seed(100)
+past <- tibble(product = c("speaker", "tv", "cable", "headphones", "phones", "movies", "games", "drone"),
+               last_month = round(rnorm(8, mean = 1000, sd = 100), 0),
+               tweets = round(rnorm(8, mean = 100, sd = 100), 0),
+               sentiment =  sample(c("+", "++", "-", "--"), size = 8, replace = TRUE),
+               sales = round(rnorm(8, mean = 1000, sd = 100), 0))
+
+present <- tibble(
+               product = c("camera", "office", "network", "storage", "watch", "jewelry", "glasses", "vape"),
+               last_month = round(rnorm(8, mean = 1000, sd = 100), 0),
+               tweets = round(rnorm(8, mean = 100, sd = 100), 0),
+               sentiment =  sample(c("+", "++", "-", "--"), size = 8, replace = TRUE),
+               sales = rep("?", 8))
+```
+
+.pull-left45[
+
+
+### Past "Training" Data
+```{r, results = 'asis', echo = FALSE}
+knitr::kable(past, format = "markdown")
+```
+
+]
+
+
+.pull-right45[
+
+### Future "Test" Data
+```{r, echo = FALSE}
+knitr::kable(present, format = "markdown")
+
+```
+
+]
+
+
 ---
 # What is the basic machine learning process?
 
@@ -126,6 +212,52 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ]
 
 
+
+---
+# What do you think?
+
+<font size = 5>Can anyone come up with a model that will perfectly match past data but is worthless in predicting future data?</font><br><br>
+
+
+```{r, echo = FALSE}
+set.seed(100)
+past <- tibble(id = 1:8,
+               sex = sample(c("m", "f"), size  = 8, replace = TRUE),
+               age = round(rnorm(8, mean = 45, sd = 5), 0),
+               fam_history = sample(c("Yes", "No"), size = 8, replace = TRUE),
+               smoking = sample(c(TRUE, FALSE), size = 8, replace = TRUE),
+               disease = sample(c(0, 1), size = 8, replace = TRUE))
+
+present <- tibble(id = 91:98,
+                  sex = sample(c("m", "f"), size  = 8, replace = TRUE),
+               age = round(rnorm(8, mean = 45, sd = 5), 0),
+               fam_history = sample(c("Yes", "No"), size = 8, replace = TRUE),
+               smoking = sample(c(TRUE, FALSE), size = 8, replace = TRUE),
+               disease = rep("?", 8))
+```
+
+.pull-left45[
+
+
+### Past "Training" Data
+```{r, results = 'asis', echo = FALSE}
+knitr::kable(past, format = "markdown")
+```
+
+]
+
+
+.pull-right45[
+
+### Future "Test" Data
+```{r, echo = FALSE}
+knitr::kable(present, format = "markdown")
+
+```
+
+]
+
+
 ---
 # Training (fitting) vs. Testing (prediction)
 ```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
@@ -154,12 +286,12 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ---
 ## What machine learning algorithms are there?
 
-.pull-left6[
+.pull-left55[
 
-- There are hundreds if not thousands of machine learning algorithms from many different fields.
-    - Computer vision, Natural language processing, reinforcement learning...
+There thousands of machine learning algorithms from many different fields.
+  - Computer vision, natural language processing, reinforcement learning...
 
-Wikipedia lists 57 *Categories* of machine learning algorithms, each with dozens of examples
+Wikipedia lists 57 *categories* (!) of machine learning algorithms
 
 ```{r, echo = FALSE, eval = TRUE, out.width = "80%", fig.align = 'center'}
 knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wikipediaml.png")
@@ -169,7 +301,10 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 .pull-right4[
 <br><br>
-We will focus on 3 that apply to both classification and regression
+
+### 3 Algorithims
+
+We will focus on 3 algorithms that apply to most tasks:
 
 | Algorithm|Complexity|
 |:------|:----|
@@ -422,8 +557,6 @@ loan_rf_pred <- predict(loan_rf_model,
 
 .pull-left6[
 
-
-
 In the practical, we will go through the basic steps "by hand" so you can see the process:
 
 ```{r, eval = FALSE}
@@ -449,8 +582,7 @@ pred_err_A <- mean(abs(pred_A - data_test$y))
 
 .pull-right35[
 
-
-If you're really into machine learning, packages such as `mlr` and `caret` can automate much of the the machine learning process.
+When you do lots of machine learning, the `caret` and `mlr` packages can automate much of the the machine learning process.
 
 ```{r, echo = FALSE, eval = TRUE, out.width = "95%", fig.align = 'center'}
 knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlrcaret.png")

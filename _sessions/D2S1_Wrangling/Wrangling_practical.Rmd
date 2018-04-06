@@ -1,6 +1,6 @@
 ---
 title: "Data wrangling with dplyr"
-author: "BaselRBootcamp January 2018"
+author: "BaselRBootcamp April 2018"
 output: html_document
 ---
 
@@ -14,7 +14,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ### Slides
 
-- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/_sessions/D2S1_Wrangling/Wrangling.html)
+- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S1_Wrangling/Wrangling.html#1)
 
 ### Overview
 

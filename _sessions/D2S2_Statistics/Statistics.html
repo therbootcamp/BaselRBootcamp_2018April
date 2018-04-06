@@ -4,7 +4,7 @@
     <title>Statistics</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -13,7 +13,7 @@ class: center, middle, inverse, title-slide
 
 # Statistics
 ### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
-### January 2018
+### April 2018
 
 ---
 
@@ -35,7 +35,7 @@ class: center, middle, inverse, title-slide
 |     `rpart`|    Decision Trees|
 |     `lme4`|   Mixed effects regression|
 |     `BayesFactor`| Bayesian statistics|
-|     `igraph`| Cluster analyses|
+|     `igraph`| Network analysis|
 |     `neuralnet`| Neural networks|
 
 ]
@@ -53,11 +53,11 @@ class: center, middle, inverse, title-slide
 ### We will cover...
 
 -  Basic structure and arguments of most statistical functions
-    - `formula`, `data`, `subset`
+    - `formula`, `data`
     
 - Simple `htest` objects
 
-- General linear model 
+- Generalized linear model 
     - `glm`, `aov`
 
 - Common methods
@@ -77,8 +77,8 @@ class: center, middle, inverse, title-slide
 ```r
 # T-test comparing weights from Diets 1 and 2
 t.test(formula = weight ~ Diet,
-       data = Chickweight,
-       subset = Diet %in% c(1, 2))
+       data = ChickWeight %&gt;%
+              filter(Diet %in% c(1, 2)))
 
 # Regression model
 
@@ -114,7 +114,6 @@ y &lt;- x1 + x2 + noise
 |:------|:----|
 |     `formula`|The dependent variable and one or more independent variables|
 |     `data`|  The dataframe containing variables|
-|   `subset`  | Optional subset of data to test |
 
 
 
@@ -139,8 +138,7 @@ trial_X
 
 ```r
 TEST(formula = Y ~ X1 + X2 + ...
-     data = DATA,
-     subset = SUBSET,
+     data = DATA
      ...)
 ```
 
@@ -150,16 +148,17 @@ TEST(formula = Y ~ X1 + X2 + ...
 
 ```r
 # T-test
-# DV = y_primary, IV = arm
-t.test(formula = y_primary ~ arm
+# DV = y_1, IV = arm
+t.test(formula = y_1 ~ arm
        data = trial_X)
 
 # Regression
-# DV = y_secondary, IV = arm, sex, age
-# Subset = only id &gt; 50
-glm(formula = y_secondary ~ arm + sex + age
-    data = trial_X,
-    subset = id &gt; 50)
+# DV = y_sec, IV = arm, sex, age
+# Data = trial_X (with filters)
+glm(formula = y_2 ~ arm + sex + age
+    data = trial_X %&gt;%
+             filter(id &gt; 50 &amp; 
+                    BMI == "Normal"))
 ```
 
 ]
@@ -204,10 +203,10 @@ t.test(formula = t_primary ~ arm,
 ```r
 # Additional arguments to glm
 
-glm(formula = y_secondary ~ arm + sex + age,
+# Include -1 to not have an intercept!
+glm(formula = y_secondary ~ arm + sex + age - 1,
     data = trial_X,
-    family = "binomial",     # Logistic Reg
-    intercept = FALSE)       # No intercept
+    family = "binomial")     # Logistic Reg
 ```
 
 
@@ -276,9 +275,9 @@ ChickWeight
 
 
 ```r
-t.test(formula = weight ~ Diet,    # Formula
-       data = ChickWeight,         # Data in Chickweight
-       subset = Diet %in% c(1, 2)) # Only Diets 1,2
+t.test(formula = weight ~ Diet,     # Formula
+       data = ChickWeight %&gt;%       # Data in Chickweight
+                filter(Diet %in% c(1, 2)))
 ```
 
 ```
@@ -442,7 +441,7 @@ weight_tt &lt;- t.test(x = ChickWeight$weight,
                     mu = 120,
                     alternative = "two.sided")
 
-# What's in the weight.tt object?
+# What's in the weight_tt object?
 names(weight_tt)
 ```
 
@@ -724,11 +723,11 @@ chick_glm &lt;- glm(formula = weight ~ Time,
                  data = ChickWeight)
 
 # Create a dataframe of new data
-NewData &lt;- tibble(Time = c(10, 15, 20, 45, 5))
+New_Data &lt;- tibble(Time = c(10, 15, 20, 45, 5))
 
-# Predict weights of NewData using chick_glm
+# Predict weights of New_Data using chick_glm
 predict(chick_glm, 
-        newdata = NewData)
+        newdata = New_Data)
 ```
 
 ```
@@ -878,7 +877,7 @@ t.test(x = rand_samp) # Perform 1 sample t-test
 
 .pull-left45[
 
-### General linear model
+### Generalised linear model
 
 
 
@@ -950,8 +949,8 @@ ChickWeight
 ```r
 # Run test and save as test_A
 test_A &lt;- t.test(formula = weight ~ Diet,
-                 data = ChickWeight,
-                 subset = Diet %in% c(1, 2))
+                 data = ChickWeight %&gt;%
+                        filter(Diet %in% c(1, 2)))
 
 names(test_A)  # What is in the object?
 
@@ -1133,8 +1132,15 @@ TukeyHSD(D)  # Conduct post-hoc tests
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
