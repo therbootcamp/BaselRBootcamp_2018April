@@ -84,7 +84,7 @@ options(digits = 4)
 
  <th class="tg-yw4l"><p align="center">
 <p align="center"><br>
-    <a href="https://psychologie.unibas.ch/de/personen/markus-steiner/about-me/"><img border="0" alt="W3Schools" src="https://psychologie.unibas.ch/fileadmin/_processed_/b/e/csm_markus_72f28a47b1.png?1516116752" height="240"></a><br>
+    <a href="https://psychologie.unibas.ch/de/personen/markus-steiner/about-me/"><img border="0" alt="W3Schools" src="https://avatars0.githubusercontent.com/u/26483702?s=400&u=d2bfbcee6585b175144fbd2cb17d1bab9a2bac05&v=4" height="240"></a><br>
 
 <p align="center">
 <font size = 5>Markus steiner</font><br><br>
