@@ -4,7 +4,7 @@
     <title>What is R?</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -178,6 +178,26 @@ RStudio facilitate project management via the use of *projects*. Projects suppor
 ]
 
 ---&gt;
+
+---
+
+# Packages
+
+One of R's best features is its vast and cutting-edge collection of **packages** provided by R's large and highly active user base and the work of [**CRAN**](https://cran.r-project.org/), who apply a rigorous quality control and eventually host the packages on various mirrors throughout the world.         
+
+
+```r
+# To install a package
+install.packages('package_name')
+
+# load a package
+library(package_name)
+require(package_name)
+
+
+#Note: Never forget that packages must also be loaded.
+```
+
 ---
 
 # The almighty **tidyverse**
@@ -389,25 +409,6 @@ vignette(package="name_of_vignette")
 ---&gt;
 ]
 
----
-
-# Packages
-
-One of R's best features is its vast and cutting-edge collection of **packages** provided by R's large and highly active user base and the work of [**CRAN**](https://cran.r-project.org/), who apply a rigorous quality control and eventually host the packages on various mirrors throughout the world.         
-
-
-```r
-# To install a package
-install.packages('package_name')
-
-# load a package
-library(package_name)
-require(package_name)
-
-
-#Note: Never forget that packages must also be loaded.
-```
-
 
 ---
 
@@ -429,8 +430,15 @@ require(package_name)
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
