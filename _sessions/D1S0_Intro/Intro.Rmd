@@ -80,7 +80,7 @@ options(digits = 4)
 <a href="https://github.com/ndphillips"><b>github.com/ndphillips</b></a><br>
 <font size=4><i>packages: </i></font> 
 <a href="https://github.com/ndphillips/yarrr"><b>yarrr</b></a>, <br>
-<a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a>, <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b></th>
+<a href="https://github.com/ndphillips/FFTrees"><b>FFTrees</b></a></th>
 
  <th class="tg-yw4l"><p align="center">
 <p align="center"><br>
