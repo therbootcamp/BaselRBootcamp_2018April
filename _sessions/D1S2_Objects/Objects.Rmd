@@ -428,7 +428,7 @@ my_stat(x = my_vec, method = 'median')
 
 .pull-left5[
 
-**help files** (and **vignettes**) are very usefl. 
+**help files** (and **vignettes**) are very useful. 
 
 Pay attention to...
 
@@ -520,6 +520,6 @@ my_vec %*% my_mat
 
 # Practical
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S2_Objects/Objects_practical.html">Link to practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S2_Objects/Objects_practical.html">Link to practical</a>
 
 

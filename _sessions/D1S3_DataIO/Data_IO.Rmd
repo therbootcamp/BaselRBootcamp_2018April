@@ -372,7 +372,7 @@ my_data <- readRDS("my_data.rds")
 
 # File connections
 
-Under the hood, practically all of R's reading and writing functions relies on a **file connection** architecture, just as most other programming languages do. To the experienced programmer file connections represent a flexible option to access and manipulate files on **any accessible location** (harddrive, server, www). 
+Under the hood, practically all of R's reading and writing functions relies on a **file connection** architecture, just as most other programming languages do. To the experienced programmer file connections represent a flexible option to access and manipulate files on **any accessible location** (hard drive, server, www). 
 
 .pull-left45[
 ### Benefits of file connections
@@ -456,7 +456,7 @@ read_csv(data)
 
 <p><font size=6>**Live demonstration**</font>
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S3_DataIO/Data_IO_practical.html">Link to practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S3_DataIO/Data_IO_practical.html">Link to practical</a>
 
 
 
