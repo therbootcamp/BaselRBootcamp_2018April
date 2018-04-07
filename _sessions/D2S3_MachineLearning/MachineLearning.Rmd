@@ -185,19 +185,15 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 Just because an algorithm can fit past (training) data well, does *not* necessarily mean that it will *predict* new data well.
 
-
 <br> 
 
 ```{r, fig.cap = "Anyone can come up with a model of past stock performance. Predicting future performance is much more difficult.", echo = FALSE, out.width = "70%", fig.align = 'center'}
 knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stockpen.jpg")
 ```
 
-
-
 ]
 
 .pull-right6[
-
 
 > "Prediction is difficult, especially when it is about the future" ~ Niels Bohr
 
@@ -588,7 +584,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ## Machine Learning Live Demo & Practical
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning_practical.html">Link to Machine Learning practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S3_MachineLearning/MachineLearning_practical.html">Link to Machine Learning practical</a>
 
 
 <!-- --- -->
