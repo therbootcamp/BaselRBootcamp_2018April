@@ -96,7 +96,7 @@ options(digits = 4)
     <a href="https://psychologie.unibas.ch/de/personen/markus-steiner/about-me/"><img border="0" alt="W3Schools" src="https://avatars0.githubusercontent.com/u/26483702?s=400&u=d2bfbcee6585b175144fbd2cb17d1bab9a2bac05&v=4" height="240"></a><br>
 
 <p align="center">
-<font size = 5>Markus steiner</font><br><br>
+<font size = 5>Markus Steiner</font><br><br>
 <a href="https://github.com/mdsteiner"><b>github.com/mdsteiner</b></a><br>
 <font size=4><i>package: </i></font> 
 <a href="https://github.com/ndphillips/ShinyPsych"><b>ShinyPsych</b> <br><br><br>
