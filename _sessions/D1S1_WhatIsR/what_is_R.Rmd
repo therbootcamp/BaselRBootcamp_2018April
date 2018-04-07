@@ -408,6 +408,11 @@ vignette(package="name_of_vignette")
 <p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_workings.png" height="500" align="center"></p>
 
 --->
+
+# Datasets Day 1
+
+<font size="6" color="#F62D73">https://bit.ly/data_bootcamp_day1</font>
+
 ---
 
 # Interactive session
