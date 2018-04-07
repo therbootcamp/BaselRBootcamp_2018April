@@ -40,14 +40,14 @@ options(digits = 4)
 # Bootcamp Materials
 <br><br>
 
-<font size="6" color="#F62D73"><b><a href="www.therbootcamp.com">www.therbootcamp.com</b>
+<font size="6" color="#F62D73"><a href="www.therbootcamp.com"><b>www.therbootcamp.com</b></a>
 
 
 <br>
 
 ### OR
 
-<font size="6" color="#F62D73"><b><a href="bit.ly/BaselRBootcamp_April2018">bit.ly/BaselRBootcamp_April2018</b>
+<font size="6" color="#F62D73"><a href="bit.ly/BaselRBootcamp_April2018">Direct:<b>BaselRBootcamp_April2018</b></a>
 
 
 
