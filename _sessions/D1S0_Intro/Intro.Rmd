@@ -24,7 +24,7 @@ options(digits = 4)
 # Welcome!
 
 .pull-left5[
-<p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/homepage_jan18_ss.png" width="500" height="400"></p>
+<p align="center"><img src="https://github.com/therbootcamp/therbootcamp.github.io/blob/master/_sessions/_image/bootcamp_april_ss.jpg?raw=true" width="500" height="400"></p>
 ]
 
 
@@ -41,6 +41,15 @@ options(digits = 4)
 <br><br>
 
 <font size="6" color="#F62D73"><b><a href="www.therbootcamp.com">www.therbootcamp.com</b>
+
+
+<br>
+
+### OR
+
+<font size="6" color="#F62D73"><b><a href="bit.ly/BaselRBootcamp_April2018">bit.ly/BaselRBootcamp_April2018</b>
+
+
 
 ]
 
