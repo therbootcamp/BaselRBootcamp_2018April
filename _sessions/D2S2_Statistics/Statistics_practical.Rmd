@@ -168,12 +168,17 @@ sd(samp_B)
 
 ```
 
-
 ## Tasks
+
+### Data
+
+You'll use one dataset in this practical: `ACTG175.csv`. It is available in the `data_BaselRBootcamp_Day2.zip` file available through the main course page. If you haven't already, download the `data_BaselRBootcamp_Day2.zip` folder and unzip it to get the `ACTG175.csv` file.
 
 ### Getting setup
 
-A. Open a new R script and save it in the `R` folder you just created as a new file called `datawrangling.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
+A. Open your `BaselRBootcamp` project. This project should have the folders `R` and `data` in the working directory. The `ACTG175.csv` file should already be in the `data` folder. (If it isn't, you'll need to get it from the  `data_BaselRBootcamp_Day2.zip` folder and move it to the `data` folder).
+
+A. Open a new R script and save it in the `R` folder you just created as a new file called `statistics_practical.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
 
 ```{r, eval = FALSE, echo = TRUE}
 ## NAME
@@ -185,21 +190,18 @@ library(speff2trial)   # For the ACTG175 data documentation
 ```
 
 
-A. For this practical, we'll use the `ACTG175` dataframe from the `speff2trial` package, load the package with the `library()` function. Also load the `tidyverse` as always!
-
-```{r, message = FALSE, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE}
-# Load libraries
-
-library(tidyverse)     # Tidyverse as always!
-library(speff2trial)   # For ACTG175 data
+```{r, eval = TRUE, echo = FALSE}
+trial_act <- ACTG175
 ```
 
 
-B. Convert the data to a tibble called `trial_act` as follows. The reason we're changing the name is so that if we mess up the data, we can always get the original data back from the `ACTG175` object.
+B. For this practical, we'll use the `ACTG175` data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. Using the following template, load the data into R and store it as a new object called `trial_act`.
 
-```{r, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE}
-# Create trial_act, a tibble copy of ACTG175
-trial_act <- as_tibble(ACTG175)
+```{r, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
+# Load ACTG175.csv from the data folder 
+# The ACTG175.csv file MUST be in a folder called data in your working directory!!
+
+trial_act <- read_csv(file = "data/ACTG175.csv")
 ```
 
 C. First thing's first, take a look at the data by printing it. It should look like this
