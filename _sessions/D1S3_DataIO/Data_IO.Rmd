@@ -2,7 +2,7 @@
 title: "Data I/O"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -88,8 +88,7 @@ knitr::include_graphics("http://d33wubrfki0l68.cloudfront.net/66d3133b4a19949d0b
 
 Assume we have a *flat* data set with variables `id`, `var_1`, and `var_2` and cases as rows. Such data can be conveniently read in using `read_csv()`. Moreover, `read_csv()` will **automatically identify** (a) columns and rows, (b) column names, (c) the type of the columns and finally return a `tibble` (more on that later).
 
-.pull-left45[
-```{r, eval = F}
+```{r, eval = T, echo = F}
 # define simple data set
 data <- 
    "id, var_1, var_2\n
@@ -98,13 +97,27 @@ data <-
   ZEWE, 1.374,  .623\n
   OJEE,  .631,  .826"
 ```
+
+
+.pull-left45[
+
+```{r, eval = F}
+# This is how a text file may look
+# on your hard-drive
+
+id\tvar_1\tvar_2\n
+DCDL\t.287\t.048\n
+FEFK\t.894\t.383\n
+ZEWE\t1.374\t.623\n
+OJEE\t.631\t.826"
+```
 ]
 
 .pull-right45[
 ```{r, eval = F}
-# read in data
+# read in data (-> tibble)
 require(readr)
-read_csv(data)
+read_delim("data/my_dataset.csv")
 ```
 
 ```{r, echo = F}
@@ -127,21 +140,48 @@ read_csv(data)
 
 # Data source
 
-Most of R's read functions allow to load data from a **variety of sources**, including most importantly the computer's hard drive and the internet. When loading from the hard drive, use auto-complete (using *tab*) to find the right **file path**.
+Most of R's read functions allow to load data from a **variety of sources**, including most importantly the computer's hard drive and the internet.
  
 .pull-left45[
-```{r, eval = T}
-# Loading data from url
-read_csv("https://tinyurl.com/ydgrcyt5")
+```{r, eval = F, message = F, warning = F}
+# Loading data hard drive
+read_csv("data/titanic.csv")
 ```
+
+```{r, eval = T, echo = F, message = F, warning = F}
+read_csv(data)
+```
+
 ]
 
 .pull-right45[
-```{r, eval = T}
+```{r, eval = T, message = F, warning = F}
 # Loading data from url
 read_csv("https://tinyurl.com/ydgrcyt5")
 ```
+
 ]
+
+---
+
+
+.pull-left2[
+
+# Report
+
+Many of the newer read functions provide a detailed report on how it interpreted the data.
+ 
+]
+
+.pull-right75[
+<br>
+```{r, eval = T, echo = F, message = T, warning = F}
+# Loading data from url
+print(read_csv("data/titanic.csv"), width = 70, n = 12)
+```
+
+]
+
 
 
 ---
@@ -413,6 +453,8 @@ read_csv(data)
 ---
 
 # Practical
+
+<p><font size=6>**Live demonstration**</font>
 
 <p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D1S3_DataIO/Data_IO_practical.html">Link to practical</a>
 

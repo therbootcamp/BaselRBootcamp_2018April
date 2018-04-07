@@ -4,7 +4,7 @@
     <title>Data I/O</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -13,7 +13,7 @@ class: center, middle, inverse, title-slide
 
 # Data I/O
 ### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
-### January 2018
+### April 2018
 
 ---
 
@@ -82,25 +82,30 @@ parse_date()    # parse date -&gt; lubridate package
 
 Assume we have a *flat* data set with variables `id`, `var_1`, and `var_2` and cases as rows. Such data can be conveniently read in using `read_csv()`. Moreover, `read_csv()` will **automatically identify** (a) columns and rows, (b) column names, (c) the type of the columns and finally return a `tibble` (more on that later).
 
+
+
+
 .pull-left45[
 
+
 ```r
-# define simple data set
-data &lt;- 
-   "id, var_1, var_2\n
-  DCDL,  .287,  .048\n
-  FEFK,  .894,  .383\n
-  ZEWE, 1.374,  .623\n
-  OJEE,  .631,  .826"
+# This is how a text file may look
+# on your hard-drive
+
+id\tvar_1\tvar_2\n
+DCDL\t.287\t.048\n
+FEFK\t.894\t.383\n
+ZEWE\t1.374\t.623\n
+OJEE\t.631\t.826"
 ```
 ]
 
 .pull-right45[
 
 ```r
-# read in data
+# read in data (-&gt; tibble)
 require(readr)
-read_csv(data)
+read_delim("data/my_dataset.csv")
 ```
 
 
@@ -110,12 +115,12 @@ read_csv(data)
 
 ```
 ## # A tibble: 4 x 3
-##      id var_1 var_2
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  DCDL 0.287 0.048
-## 2  FEFK 0.894 0.383
-## 3  ZEWE 1.374 0.623
-## 4  OJEE 0.631 0.826
+##   id    var_1  var_2
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 DCDL  0.287 0.0480
+## 2 FEFK  0.894 0.383 
+## 3 ZEWE  1.37  0.623 
+## 4 OJEE  0.631 0.826
 ```
 ]
 
@@ -124,33 +129,26 @@ read_csv(data)
 
 # Data source
 
-Most of R's read functions allow to load data from a **variety of sources**, including most importantly the computer's hard drive and the internet. When loading from the hard drive, use auto-complete (using *tab*) to find the right **file path**.
+Most of R's read functions allow to load data from a **variety of sources**, including most importantly the computer's hard drive and the internet.
  
 .pull-left45[
 
 ```r
-# Loading data from url
-read_csv("https://tinyurl.com/ydgrcyt5")
+# Loading data hard drive
+read_csv("data/titanic.csv")
 ```
 
-```
-## Parsed with column specification:
-## cols(
-##   id = col_character(),
-##   var_1 = col_double(),
-##   var_2 = col_double()
-## )
-```
 
 ```
 ## # A tibble: 4 x 3
-##      id var_1 var_2
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  DCDL 0.287 0.048
-## 2  FEFK 0.894 0.383
-## 3  ZEWE 1.374 0.623
-## 4  OJEE 0.631 0.826
+##   id    var_1  var_2
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 DCDL  0.287 0.0480
+## 2 FEFK  0.894 0.383 
+## 3 ZEWE  1.37  0.623 
+## 4 OJEE  0.631 0.826
 ```
+
 ]
 
 .pull-right45[
@@ -161,24 +159,65 @@ read_csv("https://tinyurl.com/ydgrcyt5")
 ```
 
 ```
+## # A tibble: 4 x 3
+##   id    var_1  var_2
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 DCDL  0.287 0.0480
+## 2 FEFK  0.894 0.383 
+## 3 ZEWE  1.37  0.623 
+## 4 OJEE  0.631 0.826
+```
+
+]
+
+---
+
+
+.pull-left2[
+
+# Report
+
+Many of the newer read functions provide a detailed report on how it interpreted the data.
+ 
+]
+
+.pull-right75[
+&lt;br&gt;
+
+```
 ## Parsed with column specification:
 ## cols(
-##   id = col_character(),
-##   var_1 = col_double(),
-##   var_2 = col_double()
+##   X1 = col_integer(),
+##   Name = col_character(),
+##   PClass = col_character(),
+##   Age = col_double(),
+##   Sex = col_character(),
+##   Survived = col_integer(),
+##   SexCode = col_integer()
 ## )
 ```
 
 ```
-## # A tibble: 4 x 3
-##      id var_1 var_2
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  DCDL 0.287 0.048
-## 2  FEFK 0.894 0.383
-## 3  ZEWE 1.374 0.623
-## 4  OJEE 0.631 0.826
+## # A tibble: 1,313 x 7
+##       X1 Name                    PClass    Age Sex   Survived SexCode
+##    &lt;int&gt; &lt;chr&gt;                   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;
+##  1     1 Allen, Miss Elisabeth … 1st    29.0   fema…        1       1
+##  2     2 Allison, Miss Helen Lo… 1st     2.00  fema…        0       1
+##  3     3 Allison, Mr Hudson Jos… 1st    30.0   male         0       0
+##  4     4 Allison, Mrs Hudson JC… 1st    25.0   fema…        0       1
+##  5     5 Allison, Master Hudson… 1st     0.920 male         1       0
+##  6     6 Anderson, Mr Harry      1st    47.0   male         1       0
+##  7     7 Andrews, Miss Kornelia… 1st    63.0   fema…        1       1
+##  8     8 Andrews, Mr Thomas, jr  1st    39.0   male         0       0
+##  9     9 Appleton, Mrs Edward D… 1st    58.0   fema…        1       1
+## 10    10 Artagaveytia, Mr Ramon  1st    71.0   male         0       0
+## 11    11 Astor, Colonel John Ja… 1st    47.0   male         0       0
+## 12    12 Astor, Mrs John Jacob … 1st    19.0   fema…        1       1
+## # ... with 1,301 more rows
 ```
+
 ]
+
 
 
 ---
@@ -209,10 +248,10 @@ parse_integer(c("123", "345", "abc", "123.45"))
 ## [1] 123 345  NA  NA
 ## attr(,"problems")
 ## # A tibble: 2 x 4
-##     row   col               expected actual
-##   &lt;int&gt; &lt;int&gt;                  &lt;chr&gt;  &lt;chr&gt;
-## 1     3    NA             an integer    abc
-## 2     4    NA no trailing characters    .45
+##     row   col expected               actual
+##   &lt;int&gt; &lt;int&gt; &lt;chr&gt;                  &lt;chr&gt; 
+## 1     3    NA an integer             abc   
+## 2     4    NA no trailing characters .45
 ```
 ]
 
@@ -491,18 +530,20 @@ as.data.frame(my_tibble)
 
 ```
 ## # A tibble: 4 x 3
-##      id var_1 var_2
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  DCDL 0.287 0.048
-## 2  FEFK 0.894 0.383
-## 3  ZEWE 1.374 0.623
-## 4  OJEE 0.631 0.826
+##   id    var_1  var_2
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 DCDL  0.287 0.0480
+## 2 FEFK  0.894 0.383 
+## 3 ZEWE  1.37  0.623 
+## 4 OJEE  0.631 0.826
 ```
 ]
 
 ---
 
 # Practical
+
+&lt;p&gt;&lt;font size=6&gt;**Live demonstration**&lt;/font&gt;
 
 &lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/_sessions/D1S3_DataIO/Data_IO_practical.html"&gt;Link to practical&lt;/a&gt;
 
@@ -558,8 +599,15 @@ as.data.frame() ---&gt;
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({

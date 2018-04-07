@@ -69,7 +69,7 @@ chr_vec <- c('a','b','c','d','e','f','g','h','i','j')
 log_vec <- c(TRUE,TRUE,FALSE,TRUE,FALSE,FALSE,TRUE,TRUE,TRUE,TRUE)
 ```
 
-2. Test the *type* and *length* of the vectors using the functions `typeof()` and `length()`. To run the functions simply place the name of the individual vectors in the parenthesis and then send to the console to execute. Remember you can send any line in your editor using `cmd + enter (MAC)` or `cntrl + enter (Windows)`. 
+2. Test the *type* and *length* of the vectors using the functions `typeof()` and `length()`. To run the functions simply place the name of the individual vectors in the parenthesis and then send to the console to execute. Remember you can send any line  in your editor to the console using `cmd + enter` (MAC) or `cntrl + enter` (Windows). 
 
 ```{r, eval=F, echo=F}
 typeof(dbl_vec) ; length(dbl_vec) 
@@ -77,7 +77,7 @@ typeof(chr_vec) ; length(chr_vec)
 typeof(log_vec) ; length(log_vec) 
 ```
 
-3. Expand each of the vectors using `rep()` to two times their length. `rep()` is a general purpose repeat function for vectors. It takes (at least) two arguments: `x` the vector and `times`, which can be a single integer, e.g., `2`. Take a look at the functions help file using `?rep`. To expand the vectors, you need to apply `rep()` and assign the result back to our vector object, i.e., `object <- function(object, arguments)`.  
+3. Expand each of the vectors using `rep()` to two times their length. `rep()` is a general purpose repeat function for vectors. It takes (at least) two arguments: `x` the vector and `times`, which can be a single integer, e.g., `2`. Take a look at the functions help file using `?rep`. To expand the vectors, you need to apply `rep()` and assign the result back to your vector object, i.e., `object <- rep(object, argument)`.  
 
 ```{r, eval=F, echo=F}
 dbl_vec <- rep(dbl_vec, 2)
@@ -87,16 +87,18 @@ log_vec <- rep(log_vec, 2)
 
 ### Data frames
 
-4. Use your three vectors to create a 3xN `data.frame`, where N is the length of each of the vectors. To create a data frame use the `data.frame()` function. Look at the help file (`?data.frame`). The first argument to `data.frame()` is `...` which is a placeholder for as many objects as you want to include in the data frame. To create a `data.frame` from your three vectors pass on the three vectors separated by comma, e.g., `data.frame(vector_1, vector_2, vector_3)`, and assign the result to, e.g., `my_df`. Now that you created your data.frame, look at the data frame using `head()`. Observe that the variables are included in the order that you provided them in. Next, test its type (`typeof`) and dimension (`dim()`). Do they make sense?
+4. Use your three vectors to create a 3xN `data_frame`, where N is the length of each of the vectors. To do this, first load the `tibble` package, which is part of the `tidyverse`. To create a data frame use the `data_frame()` function. Look at the help file (`?data_frame` & `?data_frame`). The first argument to `data_frame()` is `...` which is a placeholder for as many objects as you want to include in the data frame. To create a `data_._frame` from your three vectors pass on the three vectors separated by comma, e.g., `data_frame(vector_1, vector_2, vector_3)`, and assign the result to, e.g., `my_df`. Now that you created your data.frame, look at the data frame using `head()`. Observe that the variables are included in the order that you provided them in. Next, test its type (`typeof`) and dimension (`dim()`). Do they make sense?
 
 ```{r, eval=F, echo=F}
-my_df <- data.frame(dbl_vec,chr_vec,log_vec)
+library(tibble)
+
+my_df <- data_frame(dbl_vec,chr_vec,log_vec)
 head(my_df)
 typeof(my_df)
 dim(my_df)
 ```
 
-5. Now, we practice accessing elements from a data.frame. Try to select the first element using (1) double brackets and index, e.g., `[[1]]`, (2) using double brackets and name `[['dbl_vec']]`, an our preferred way using the dollar operator and name, e.g., `$dbl_vec`. To inspect the names of the elements use `names(my_df)` or `str(my_df)`, which provides a richer overview over your data object.  
+5. Now, practice accessing elements from a data.frame. Try to select the first element using (1) double brackets and index, e.g., `[[1]]`, (2) using double brackets and name `[['dbl_vec']]`, and our preferred way using the dollar operator and name, e.g., `$dbl_vec`. To inspect the names of the elements use `names(my_df)` or `str(my_df)`, which provides a richer overview over your data object.  
 
 ```{r, eval=F, echo=F}
 names(my_df)
@@ -106,7 +108,7 @@ my_df[['chr_vec']]
 my_df$dbl_vec
 ```
 
-6. Now, we try what happens when we use single brackets instead of double brackets, when accessing elements from a data.frame. Try, e.g., `my_df["dbl_vec"]`, and  name, e.g., `my_df[["dbl_vec"]]` and test their types using `typeof()`. What kind of object do you get in the first and second case? Understand why we prefer the `$`-operator?
+6. Now, try what happens when you use single brackets instead of double brackets, when accessing elements from a data.frame. Try, e.g., `my_df["dbl_vec"]`, and  name, e.g., `my_df[["dbl_vec"]]` and test their types using `typeof()`. What kind of object do you get in the first and second case? Understand why we prefer the `$`-operator?
 
 ```{r, eval=F, echo=F}
 typeof(my_df[["dbl_vec"]])
@@ -129,26 +131,26 @@ as.character(log_vec)
 
 ### Logical comparisons
 
-8. An important tool of working with data are logical comparisons. Logical comparisons can be used to conveniently select parts of the data. They can also be used to conduct checks throughout script. For instance, we could use logical comparisons to compare whether the names of, e.g., `my_df` are equal to are now equal `c("dbl_vec", "chr_vec", "log_vec")`. This can be done using the is-equal-to operator `==`, e.g., `vec_1 == vec_2`. In the case of vectors, logical comparisons iterate through the vectors one by one and compare whether the elements at the present location are equal. The result is a logical vector of the same length as the two objects involved in the logical comparison. To evaluate whether all elements are equal one can conveniently use the `all()` function. Try compare the names of `my_df` to `c(dbl_vec", "chr_vec", "log_vec")` and test whether all comparisons resulted in `TRUE`.
+8. An important tool of working with data are logical comparisons. Logical comparisons can be used to conveniently select parts of the data. They can also be used to conduct checks throughout script. For instance, you can use logical comparisons to compare whether the names of, e.g., `my_df` are equal `c("dbl_vec", "chr_vec", "log_vec")`. This can be done using the is-equal-to operator `==`, e.g., `vec_1 == vec_2`. In the case of vectors, logical comparisons iterate through the vectors one by one and evaluate whether the elements at the present location are equal. The result is a logical vector of the same length as the two objects involved in the logical comparison. To evaluate whether all elements are equal one can conveniently use the `all()` function. Try compare the names of `my_df` to `c(dbl_vec", "chr_vec", "log_vec")` and test whether all comparisons resulted in `TRUE`.
 
 ```{r, eval=F, echo=F}
 all(names(my_df) == c("dbl_vec", "chr_vec", "log_vec"))
 ```
 
-9. A second important use for logicals is accessing objects All object accessing using brackets, e.g., `[]` or `[[]]`, can take logical vectors as an argument (provided that the dimensions match). E.g., `c(1, 2, 3)[c(TRUE, FALSE, TRUE)]` returns the first and the third element of the vector. The program thus iterates through every index and returns those elements for which the logical vector is `TRUE`. Try to use this now on the three vectors. Use `log_vec` to subset the elements in `dbl_vec` and `chr_vec`.
+9. A second important use for logicals is inside of brackets to access objects. Brackets (`[]` or `[[]]`) can take logical vectors as an argument (provided that the dimensions match to the to be accessed data object). E.g., `c(1, 2, 3)[c(TRUE, FALSE, TRUE)]` returns the first and the third element of the vector, that is it returns those elements for which the logical vector is `TRUE`. Try to use this now on your three vectors. Use `log_vec` to subset the elements in `dbl_vec` and `chr_vec`.
 
 ```{r, eval=F, echo=F}
 dbl_vec[log_vec]
 chr_vec[log_vec]
 ```
 
-10. Logical vectors become especially useful, when they are used to subset based on specific conditions. For instance, we may be interested in retrieving all values in `chr_vec` for which `dbl_vec` is larger than some value. This can be easily accomplished by coercing `dbl_vec` to a logical vector using `>`. Consider `c(1, 4, 7, 2) > 3`. Try this for `chr_vec` and `dbl_vec` with an appropriate cut-off value. 
+10. Logical vectors become especially useful when they are used to subset created from comparisons. For instance, you may be interested in retrieving all values in `chr_vec` for which `dbl_vec` is larger than some value. This can be easily accomplished by coercing `dbl_vec` to a logical vector using `>`. Consider `c(1, 4, 7, 2) > 3`. Try this for `chr_vec` and `dbl_vec` with an appropriate cut-off value. 
 
 ```{r, eval=F, echo=F}
 chr_vec[dbl_vec > 2]
 ```
 
-11. Another convenient aspect of working with logical vectors is that they can be conveniently combined using the logical AND operator `&` and the logical `OR` operator `|`. Run `c(1, 4, 7, 2) > 3 & c(1, 4, 7, 2) < 6` and `c(1, 4, 7, 2) > 3 | c(1, 4, 7, 2) < 6` and study the result. Try now combining the logical vector coerced from `dbl_vec` with `log_vec` to subset `chr_vec`.
+11. Another convenient aspect of working with logical vectors is that they can be conveniently combined using the logical AND operator `&` and the logical `OR` operator `|`. Run `c(1, 4, 7, 2) > 3 & c(1, 4, 7, 2) < 6` and `c(1, 4, 7, 2) > 3 | c(1, 4, 7, 2) < 6` and observe the results. Try now combining the logical vector that results from coercing `dbl_vec` to logical and `log_vec` to subset `chr_vec`.
 
 ```{r, eval=F, echo=F}
 chr_vec[dbl_vec > 2 & log_vec]
@@ -156,7 +158,7 @@ chr_vec[dbl_vec > 2 & log_vec]
 
 ### Lists
 
-12. Use your three vectors to create a list of length using `list()`. `list()` works exactly as `c()` or `data.frame`. Call the object `my_list` and inspect it using `str()`. Compare the output of `str()` to the output for `str(my_df)`. What is different, and why?
+12. Use your three vectors to create a list using `list()`. `list()` works exactly as `c()` or `data_frame()`. Call the object `my_list` and inspect it using `str()`. Compare the output of `str()` to the output for `str(my_df)`. What is different, and why?
 
 
 ```{r, eval=F, echo=F}
@@ -165,7 +167,7 @@ str(my_list)
 str(my_df)
 ```
 
-13. Coerce `my_list` into a data frame using `as.data.frame()` and assign it to `my_df_from_list`. Inspect again using `str()`. Rename the columns to the original names of the vectors. To do this assign `names(my_df)` to `names(my_df_from_list)`. Confirm that it worked using either `names()` or `str()`.
+13. Coerce `my_list` into a data frame using `as_data_frame()` and assign it to `my_df_from_list`. Inspect again using `str()`. Rename the columns to the original names of the vectors. To do this assign `names(my_df)` to `names(my_df_from_list)`. Confirm that it worked using either `names()` or `str()`.
 
 ```{r, eval=F, echo=F}
 my_df_from_list <- as.data.frame(my_list)
@@ -177,7 +179,7 @@ str(my_df_from_list)
 
 ### Functions
 
-14. So far you have used several functions like `c()`, `typeof()`, etc. Now, we are going to practice writing simple functions. Let's start with programming a function that calculates the arithmetic mean using the functions `sum()`, which calculates the sum of all values in a (numeric) vector and `length()`, which determines the length of vectors (and other objects). The basic form of a function is: `my_fun <- function(argument) {expression}`. The challenge in writing a function is now to determine the argument(s) (aka the function's input) and the expression (aka the  function's job). In this case both are relatively straightforward to determine. The functions argument is any numeric `vector` and the functions expression is to be `sum(vector)/length(vector)`, i.e., `my_mean <- function(vector) {sum(vector) / length(vector)}`. You may ask now how does R know that `vector` is supposed to be of type `numeric`? It doesn't! R will attempt to execute the function with anything you through at it. Try it out! Define your `my_mean` function and try it out for your `double` and `character` vectors from above.       
+14. So far you have used several functions like `c()`, `typeof()`, etc. Now, you are going to practice writing your own little functions. Let's start with programming a function that calculates the arithmetic mean using the functions `sum()`, which calculates the sum of all values in a vector and `length()`, which determines the length of vectors (and other objects). The basic form of a function is: `my_fun <- function(argument) {expression}`. The challenge in writing a function is to determine the argument(s), which are the the function's input, and the expression, which defines the function's job. In this case, both are relatively straightforward to define. The functions argument is any `numeric` `vector` and the functions expression should be the vectors sum divided by its length, i.e., `sum(vector)/length(vector)`. Together: `my_mean <- function(vector) {sum(vector) / length(vector)}`. You may ask now how does R know that `vector` is supposed to be of type `numeric`? It does not! R will attempt to execute the function with anything you through at it. Try it out! Define your `my_mean` function and try it out for your `double` and `character` vectors from above.       
 
 
 ```{r, eval=F, echo=F}
@@ -186,7 +188,7 @@ my_mean(dbl_vec)
 #my_mean(chr_vec)
 ```
 
-15. The `character` vector produced an error, right? The reason is that R does not interpret the names you use for the arguments. That is, R does not understand that an argument named *vector* is supposed to be a vector. For R these names are merely placeholders. In the background, are will use these names to pass on the object provided at the respective location. I.e., in the above case, R will take your vector, may it be `dbl_vec` or `chr_vec`, name it `vector` and pass this new object on to the expression. This means that you can choose anything as the argument names. The only thing you need to ensure is that you use the argument names in the expression. Try redefining the your `my_mean` function using a different argument name, e.g., `x`.   
+15. The `character` vector produced an error, right? The reason is that R does not interpret the names you use for the arguments. That is, R does not understand that an argument named *vector* is supposed to be a vector. For R these names are merely placeholders. In the background, R will use these names to pass on the object provided at the respective location. I.e., in the above case, R will take your vector, may it be `dbl_vec` or `chr_vec`, assign it to the name `vector`, and pass this new object on to the expression. This means that you can choose anything as the argument names. The only thing you need to ensure is that you work with the names of the arguments in the expression, rather than the object's real names. Try redefining the your `my_mean` function using a different argument name, e.g., `x`.   
 
 ```{r, eval=F, echo=F}
 my_mean <- function(x) {sum(x) / length(x)}
@@ -199,9 +201,9 @@ Note: R literally creates new objects by assigning the object you provide to a f
 
 ### Non-flat objects
 
-In working with R, we often encounter objects that have a non-flat, nested structure. This means that there is more than one level of elements. Such objects are almost always `list`s. Lists are the only object type that can store any other object, even themselves. That is we can have a list of lists or a list of data.frames. Working with non-flat, nested objects is easier than it may seem. To access elements from such an object simply combine several double bracket `[[]]` and/or dollar `$` operators to descend into the objects structure. Let's take a look.    
+In working with R, you often encounter objects that have a non-flat, nested structure. This means that there is more than one level of elements. Such objects are always `list`s. `List`s are the only object type that can store any other object, including themselves. That is, you can have a list of lists or a list of data.frames. Working with non-flat, nested objects is easier than it may seem. To access elements from such an object simply combine several dollar `$` operators (or double bracket `[[]]`) to descend into the objects structure. Let's take a look.    
 
-16. Create a list containing `my_df` and your three vectors (for a total of four elements). Try to verify (using the list structure) that each of the columns of `my_df` is equal the respective vector. To access the columns in `my_df` you have to combine selectors e.g., `my_list[[index/name]][[index/name]]`, `my_list[[index]]$name`, or `my_list$name$name` (the preferred way). 
+16. Create a list containing `my_df` and your three vectors (for a total of four elements). Try to verify (using the list structure) that each of the columns of `my_df` is equal the respective vector. To access the columns in `my_df` you have to combine selectors e.g., `my_list$name$name` (the preferred way). 
 
 ```{r, eval=F, echo=F}
 my_list_2 <- list(my_df, dbl_vec, chr_vec, log_vec)
