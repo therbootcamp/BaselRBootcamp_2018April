@@ -404,7 +404,7 @@ vignette(package="name_of_vignette")
 
 
 <!---
-# The workflow of R
+## The workflow of R
 <p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rstudio_workings.png" height="500" align="center"></p>
 
 --->
