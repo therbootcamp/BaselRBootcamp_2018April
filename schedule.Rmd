@@ -11,12 +11,12 @@ output: html_document
 
 <br>
 
-|  | Day 1<br>Essentials | Day 2<br>Statistics | Day 3<br>Plotting | Day 4<br> Productivity |
+|  | Day 1<br>Essentials<br>[Datasets](https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/_sessions/_data/data_BaselRBoocamp_Day1.zip?raw=true) | Day 2<br>Statistics<br>[Datasets](https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/_sessions/_data/data_BaselRBootcamp_Day2.zip?raw=true) | Day 3<br>Plotting | Day 4<br> Productivity |
 |:--|:-------------|:-------------|:-------------|:--------------|
 |0| Welcome!<br>[slides](_sessions/D1S0_Intro/Intro.html) | Recap I | Recap II| Recap III |
-|1| What is R?<br>[slides](_sessions/D1S1_WhatIsR/What_is_R.html), [practical](_sessions/D1S1_WhatIsR/What_is_R_practical.html) | Data Wrangling |A) Tidy Projects<br>B) Machine Learning II| A) Efficient Code<br> B) Programming in R|
-|2|  Objects & Functions<br>[slides](_sessions/D1S2_Objects/Objects.html), [practical](_sessions/D1S2_Objects/Objects_practical.html) | Statistics| Plotting 1.0|  Dynamic Reports|
-|3|   Data I/O<br>[slides](_sessions/D1S3_DataIO/Data_IO.html), [practical](_sessions/D1S3_DataIO/Data_IO_practical.html) |A) Machine Learning<br>B) Case Studies| A) Plotting 2.0<br> B) Natural Language Processing| Next Steps|
+|1| What is R?<br>[slides](_sessions/D1S1_WhatIsR/What_is_R.html), [practical](_sessions/D1S1_WhatIsR/What_is_R_practical.html) | Data Wrangling<br>[slides](_sessions/D2S1_Wrangling/Wrangling.html) |A) Tidy Projects<br>B) Machine Learning II| A) Efficient Code<br> B) Programming in R|
+|2|  Objects & Functions<br>[slides](_sessions/D1S2_Objects/Objects.html), [practical](_sessions/D1S2_Objects/Objects_practical.html) | Statistics<br>[slides](_sessions/D2S2_Statistics/Statistics.html)| Plotting 1.0|  Dynamic Reports|
+|3|   Data I/O<br>[slides](_sessions/D1S3_DataIO/Data_IO.html), [practical](_sessions/D1S3_DataIO/Data_IO_practical.html) |A) Machine Learning<br>[slides](_sessions/D2S3_MachineLearning/MachineLearning.html)<br>B) Case Studies| A) Plotting 2.0<br> B) Natural Language Processing| Next Steps|
 
 <!---
 |  | Day 1<br>Essentials | Day 2<br>Statistics | Day 3<br>Plotting | Day 4<br> Productivity |
