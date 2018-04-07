@@ -35,13 +35,11 @@ Here are the main functions and packages you'll be using. For more information a
 |:------|:--------|:----|:----|
 |     Regression|    `glm()`| Base R| https://bookdown.org/ndphillips/YaRrr/regression.html#the-linear-model|
 |     Fast-and-Frugal decision trees|    `FFTrees()`| FFTrees| https://cran.r-project.org/web/packages/FFTrees/vignettes/guide.html|
-|     Decision Trees|    `rpart()`| `rpart` | https://statweb.stanford.edu/~lpekelis/talks/13_datafest_cart_talk.pdf|
 | Random Forests | `randomForest()` | `randomForest` | http://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/|
-
 
 ### Datasets
 
-You'll use two datasets in this practical: `heartdisease.csv`, and `ACTG175.csv`
+You'll use two datasets in this practical: `heartdisease.csv`, and `ACTG175.csv`. They are available in the .zip file at https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/_sessions/_data/data_BaselRBootcamp_Day2.zip?raw=true. Open the link in a browser to install the .zip folder. Unzip the folder (by double clicking it). When you do, you should seee the two files!
 
 ### Examples
 
@@ -61,7 +59,6 @@ You'll use two datasets in this practical: `heartdisease.csv`, and `ACTG175.csv`
 
 library(tidyverse)      # for dplyr and ggplot2
 library(randomForest)   # for randomForest()
-library(rpart)          # for rpart()
 library(FFTrees)        # for FFTrees and the heartdisease data
 
 # -----------------------
@@ -69,20 +66,20 @@ library(FFTrees)        # for FFTrees and the heartdisease data
 #  heart_train, heart_test
 # -----------------------
 
-heart <- read_csv(file = "data/heartdisease.csv")   # Save a copy of the heartdisease data as heart
+heartdisease <- read_csv(file = "data/heartdisease.csv")   # Save a copy of the heartdisease data as heart
 
 set.seed(100)           # To fix the training / test randomization
 
-heart <- heart %>%
+heartdisease <- heartdisease %>%
    mutate_if(is.character, factor) %>%   # Convert character to factor
    sample_frac(1)                        # Randomly sort rows
 
 # Savew first 100 rows as heart_train and remaining as heart_test
-heart_train <- heart %>% 
+heart_train <- heartdisease %>% 
                 slice(1:100)
 
-heart_test <- heart %>% 
-                slice(101:nrow(heart))
+heart_test <- heartdisease %>% 
+                slice(101:nrow(heartdisease))
 
 # ------------------------------
 # Part I: Build Models
@@ -198,17 +195,19 @@ ggplot(data = testing_results,
 
 #### Part A: Load packages
 
-A. Load all of the necessary packages. For this practical, we'll need `FFTrees`, `e1071`, `randomForest`, `rpart`, and `tidyverse`. 
+A. Load all of the necessary packages. For this practical, we'll need `FFTrees`, `e1071`, `randomForest`, and `tidyverse`. 
 
 #### Part B: Create training and test data
 
-B. Now run the code in Part B to save a copy of the data as a tibble called `heart`. Afterwards, print it to make sure it looks ok.
+B. Move the `heartdisease.csv` file to a folder called `data` in your working directory. Then, using `read_csv()`, read the `heartdisease.csv` data and assign it to a new object in R called `heartdisease`. 
 
-C. Create separate training dataframes `heart_train` for model training and `heart_test` for model testing. Print each of these dataframes to make sure they look ok.
+C. Explore the `heart` dataset using `summary()`, and `View()`
+
+D. Create separate training dataframes `heart_train` for model training and `heart_test` for model testing. Print each of these dataframes to make sure they look ok.
 
 #### Part I: Train models on `diagnosis`
 
-1. In our analyses, we will try to predict each patient's diagnosis `diagnosis`. Look at the help menu for `heartdisease` to see what this, and the other variables, mean. Then, Create three new model objects `FFTrees_model`, `glm_model`, and `randomForest_model`, each predicting `diagnosis`.
+1. In the example code, we predicted patient's sex. Now, in our analyses, we will try to predict each patient's diagnosis using the column `diagnosis`. To do this, create three new model objects `FFTrees_model`, `glm_model`, and `randomForest_model`, each predicting `diagnosis` using the training data `heart_train`
 
 #### Part II: Calculate fits for training data
 
@@ -239,16 +238,17 @@ randomForest_model$importance
 
 5. Calculate predictions for each model based on `heart_test`, and then calculate the prediction accuracies. Don't forget to change the value of `truth_test` to reflect the true value for the current analysis! Then plot the results. Which model predicted each patient's diagnosis the best?
 
-
 ### Extra Challenges
 
 6. By default, random forests creates 500 trees. You can change this using the `ntree` argument in `randomForest()`. Try creating 2 new randomForest objects, one based on either a small number of trees (e.g. 10), and one based on 10,000 trees. How much better (or worse) do these models do compared to the default model with 500 trees?
 
-7. A colleague of yours thinks that support vector machines should perform better than the models you used. Is she right? Test her prediction by including support vector machines using the `svm()` function from the `e1071` package in all of your analyses. You'll need to add code for support vector machines at each stage of the machine learning process, model building, data fitting, and data prediction. Was she right?
+7. You can use the `my.tree` argument in `FFTrees()` to create your own custom tree 'in words'. To see how this works, look at the "Specifying FFTs directly" vignette in the `FFTrees` package by running `vignette("FFTrees_mytree", package = "FFTrees")`. Look through the vignette to see how the `my.tree` argument works. Then, try creating a new `FFTrees` object called `custom_FFTrees_model` trained on the `heart_train` data using the following rule: "If sex = 0, predict False. If chol > 250, predict True. Otherwise, predict True.". Plot the object to see how the tree did!
 
-8. In all of our machine learning, we have allowed all models to use all data in the `heartdisease` dataset. However, some of the data is more expensive to collect than other data. What do you think would happen if we only let the models use a few cheap predictors like `age`, `sex` and `chol`? Test your prediction by replicating the machine learning process, but *only* allow the models to make predictions based on the three variables `age`, `sex` and `chol`. Does one model substantially outperform the others? (Hint: You can easily tell a model what specific variables to include using the `formula` argument. For example, `formula = y ~ a + b` will tell a model to model a variable y, but *only* using variables a and b.)
+8. A colleague of yours thinks that support vector machines should perform better than the models you used. Is she right? Test her prediction by including support vector machines using the `svm()` function from the `e1071` package in all of your analyses. You'll need to add code for support vector machines at each stage of the machine learning process, model building, data fitting, and data prediction. Was she right?
 
-9. How do you think these algorithms would perform on a randomly generated dataset? Let's test this by creating a random training and test dataset, and then see how well the algorithms do. Run the code below to add a random column of data called `random` to `heart_train` and `heart_test`. Then, run your machine learning analysis, but now train and test the models on the new random data column. How well do the models do in training and testing?
+9. In all of our machine learning, we have allowed all models to use all data in the `heartdisease` dataset. However, some of the data is more expensive to collect than other data. What do you think would happen if we only let the models use a few cheap predictors like `age`, `sex` and `chol`? Test your prediction by replicating the machine learning process, but *only* allow the models to make predictions based on the three variables `age`, `sex` and `chol`. Does one model substantially outperform the others? (Hint: You can easily tell a model what specific variables to include using the `formula` argument. For example, `formula = y ~ a + b` will tell a model to model a variable y, but *only* using variables a and b.)
+
+10. How do you think these algorithms would perform on a randomly generated dataset? Let's test this by creating a random training and test dataset, and then see how well the algorithms do. Run the code below to add a random column of data called `random` to `heart_train` and `heart_test`. Then, run your machine learning analysis, but now train and test the models to predict the new random data column. How well do the models do in training and testing?
 
 ```{r, eval = FALSE}
 # Add a new column random to heart_train and heart_test
@@ -264,7 +264,7 @@ heart_test <- heart_test %>%
   )
 ```
 
-10. So far we've only looked at the `heartdisease` data. Try conducting a similar analysis on the `ACTG175` data. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren't present in the `heartdisease` data?
+11. So far we've only looked at the `heartdisease` data. Try conducting a similar analysis on the `ACTG175` data. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren't present in the `heartdisease` data?
 
     - To predict whether the number of days is greater than 1,000, you'll need to create a new column called `days_gt1000` that indicates this. You can do this with `ACTG175 <- ACTG175 %>% mutate(days_gt1000 = days > 1000)`
     - You may wish to exclude the `pidnum` column from the data when fitting the models as the patient id is meaningless and should not be included in any models.
