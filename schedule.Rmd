@@ -1,6 +1,6 @@
 ---
 title: "BaselRBootcamp - April 2018"
-author: "http://therbootcamp.github.io"
+author: "http://www.therbootcamp.com"
 output: html_document
 ---
 
