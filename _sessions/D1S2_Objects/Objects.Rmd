@@ -459,7 +459,7 @@ Pay attention to...
 
 # Factors
 
-Factors are a special case of vector that can contain only **predifined values** so-called `levels`. Factors are **rarely useful** and sometimes **dangerous**, yet R will often coerce `character` to `factor`. Modern packages, include those included in the `tidyverse` tend to avoid factors. Otherwise R can be told excplicitly to avoid factors using `options(stringsAsFactors = FALSE)`.
+Factors are a special case of vector that can contain only **predefined values** so-called `levels`. Factors are **rarely useful** and sometimes **dangerous**, yet R will often coerce `character` to `factor`. Modern packages, include those included in the `tidyverse` tend to avoid factors. Otherwise R can be told excplicitly to avoid factors using `options(stringsAsFactors = FALSE)`.
 
 .pull-left45[
 

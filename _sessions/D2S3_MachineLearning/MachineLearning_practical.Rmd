@@ -39,6 +39,10 @@ Here are the main functions and packages you'll be using. For more information a
 | Random Forests | `randomForest()` | `randomForest` | http://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/|
 
 
+### Datasets
+
+You'll use two datasets in this practical: `heartdisease.csv`, and `ACTG175.csv`
+
 ### Examples
 
 - The following examples will take you through all steps of the machine learning process, from creating training and test data, to fitting models, to making predictions. Follow along and try to see how piece of code works!
@@ -65,7 +69,7 @@ library(FFTrees)        # for FFTrees and the heartdisease data
 #  heart_train, heart_test
 # -----------------------
 
-heart <- heartdisease   # Save a copy of the heartdisease data as heart
+heart <- read_csv(file = "data/heartdisease.csv")   # Save a copy of the heartdisease data as heart
 
 set.seed(100)           # To fix the training / test randomization
 
@@ -260,7 +264,7 @@ heart_test <- heart_test %>%
   )
 ```
 
-10. So far we've only looked at the `heartdisease` data. Try conducting a similar analysis on the `ACTG175` data from the `speff2trial` package. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren't present in the `heartdisease` data?
+10. So far we've only looked at the `heartdisease` data. Try conducting a similar analysis on the `ACTG175` data. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren't present in the `heartdisease` data?
 
     - To predict whether the number of days is greater than 1,000, you'll need to create a new column called `days_gt1000` that indicates this. You can do this with `ACTG175 <- ACTG175 %>% mutate(days_gt1000 = days > 1000)`
     - You may wish to exclude the `pidnum` column from the data when fitting the models as the patient id is meaningless and should not be included in any models.
