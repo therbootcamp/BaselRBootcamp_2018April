@@ -409,6 +409,8 @@ vignette(package="name_of_vignette")
 
 --->
 
+---
+
 # Datasets Day 1
 
 <font size="6" color="#F62D73">https://bit.ly/data_bootcamp_day1</font>
