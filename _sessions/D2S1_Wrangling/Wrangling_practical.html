@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="BaselRBootcamp January 2018" />
+<meta name="author" content="BaselRBootcamp April 2018" />
 
 
 <title>Data wrangling with dplyr</title>
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Data wrangling with dplyr</h1>
-<h4 class="author"><em>BaselRBootcamp January 2018</em></h4>
+<h4 class="author"><em>BaselRBootcamp April 2018</em></h4>
 
 </div>
 
@@ -128,7 +128,7 @@ $(document).ready(function () {
 <div id="slides" class="section level3">
 <h3>Slides</h3>
 <ul>
-<li><a href="https://therbootcamp.github.io/_sessions/D2S1_Wrangling/Wrangling.html">Here are the introduction slides for this practical on data wrangling!</a></li>
+<li><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S1_Wrangling/Wrangling.html#1">Here are the introduction slides for this practical on data wrangling!</a></li>
 </ul>
 </div>
 <div id="overview" class="section level3">
@@ -285,43 +285,49 @@ chick %&gt;%
 </div>
 <div id="tasks" class="section level2">
 <h2>Tasks</h2>
+<div id="datasets" class="section level3">
+<h3>Datasets</h3>
+<p>You’ll use one dataset in this practical: <code>ACTG175.csv</code>. It is available in the <code>data_BaselRBootcamp_Day2.zip</code>.zip file at <a href="https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/_sessions/_data/data_BaselRBootcamp_Day2.zip?raw=true" class="uri">https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/_sessions/_data/data_BaselRBootcamp_Day2.zip?raw=true</a>. If you haven’t already, open the link in a browser to install the <code>data_BaselRBootcamp_Day2.zip</code> folder. Unzip the folder (by double clicking it). When you do, you should seee the <code>ACTG175.csv</code> file in this folder!</p>
+</div>
 <div id="getting-setup" class="section level3">
 <h3>Getting setup</h3>
-<p>A. Open a new R script and save it as a new file called <code>datawrangling.R</code>. At the top of the script, using comments, write your name and the date. The, load the set of <code>tidyverse</code> and <code>speff2trial</code> packages with <code>library()</code>. Here’s how the top of your script should look:</p>
+<p>A. In RStudio, Create a new project called <code>BaselRBootcamp</code>. In the project root directory, create two folders <code>data</code> and <code>R</code>.</p>
+<p>B. Outside of RStudio (on your computer), move the <code>ACTG175.csv</code> file you just downloaded in to the <code>data</code> folder you just created.</p>
+<p>C. Open a new R script and save it as a new file called <code>wrangling_practical.R</code> in the <code>R</code> folder in your working directory. At the top of the script, using comments, write your name and the date. The, load the set of <code>tidyverse</code> and <code>speff2trial</code> packages with <code>library()</code>. Here’s how the top of your script should look:</p>
 <pre class="r"><code>## NAME
 ## DATE
 ## Wrangling Practical
 
 library(tidyverse)     # For tidyverse
 library(speff2trial)   # For the ACTG175 data documentation</code></pre>
-<p>B. For this practical, we’ll use the <code>ACTG175</code> data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. The data are stored at the following link: <a href="https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv" class="uri">https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv</a>. Using the following template, load the data into R and store it as a new object called <code>trial_act</code>.</p>
-<pre class="r"><code># Load data from weblink as a new tibble in R using read_csv
-# https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv
+<p>B. For this practical, we’ll use the <code>ACTG175</code> data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. Using the following template, load the data into R and store it as a new object called <code>trial_act</code>.</p>
+<pre class="r"><code># Load ACTG175.csv from the data folder 
+# The ACTG175.csv file MUST be in a folder called data in your working directory!!
 
-trial_act &lt;- read_csv(file = &quot;XXX&quot;)</code></pre>
-<p>C. The <code>trial_act</code> data is comes from the <code>speff2trial</code> package where it was originally called <code>ACTG175</code>. Look at the help menu for the <code>ACTG175</code> data by running <code>?ACTG175</code>. (Note: If you become really interested in the data, you can also read an article discussing the trial here: <a href="http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article" class="uri">http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article</a>)</p>
+trial_act &lt;- read_csv(file = &quot;data/ACTG175.csv&quot;)</code></pre>
+<p>C. The <code>trial_act</code> data is actually a copy of a dataset from the <code>speff2trial</code> package called <code>ACTG175</code>. We can make Look at the help menu for the <code>ACTG175</code> data by running <code>?ACTG175</code> (If you become really interested in the data, you can also read an article discussing the trial here: <a href="http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article" class="uri">http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article</a>)</p>
 <pre class="r"><code># Look at documentation for ACTG175 data (contained in the speff2trial package)
 ?ACTG175</code></pre>
 <p>D. First thing’s first, take a look at the first few rows of the data by printing the <code>trial_act</code> object. It should look like this:</p>
 <pre class="r"><code># Print trial_act object
 trial_act</code></pre>
 <pre><code># A tibble: 2,139 x 27
-   pidnum   age    wtkg  hemo  homo drugs karnof oprior   z30 zprior
-    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
- 1  10056    48 89.8128     0     0     0    100      0     0      1
- 2  10059    61 49.4424     0     0     0     90      0     1      1
- 3  10089    45 88.4520     0     1     1     90      0     1      1
- 4  10093    47 85.2768     0     1     0    100      0     1      1
- 5  10124    43 66.6792     0     1     0    100      0     1      1
- 6  10140    46 88.9056     0     1     1    100      0     1      1
- 7  10165    31 73.0296     0     1     0    100      0     1      1
- 8  10190    41 66.2256     0     1     1    100      0     1      1
- 9  10198    40 82.5552     0     1     0     90      0     1      1
-10  10229    35 78.0192     0     1     0    100      0     1      1
-# ... with 2,129 more rows, and 17 more variables: preanti &lt;int&gt;,
-#   race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;,
-#   treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;,
-#   r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
+   pidnum   age  wtkg  hemo  homo drugs karnof oprior   z30 zprior preanti
+    &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;
+ 1  10056    48  89.8     0     0     0    100      0     0      1       0
+ 2  10059    61  49.4     0     0     0     90      0     1      1     895
+ 3  10089    45  88.5     0     1     1     90      0     1      1     707
+ 4  10093    47  85.3     0     1     0    100      0     1      1    1399
+ 5  10124    43  66.7     0     1     0    100      0     1      1    1352
+ 6  10140    46  88.9     0     1     1    100      0     1      1    1181
+ 7  10165    31  73.0     0     1     0    100      0     1      1     930
+ 8  10190    41  66.2     0     1     1    100      0     1      1    1329
+ 9  10198    40  82.6     0     1     0     90      0     1      1    1074
+10  10229    35  78.0     0     1     0    100      0     1      1     964
+# ... with 2,129 more rows, and 16 more variables: race &lt;int&gt;,
+#   gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;,
+#   offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;,
+#   cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
 </div>
 <div id="rename" class="section level3">
 <h3><code>rename()</code></h3>
@@ -379,13 +385,13 @@ trial_act</code></pre>
 </ol>
 <pre><code># A tibble: 6 x 3
   pidnum exercise education
-   &lt;int&gt;    &lt;int&gt;     &lt;chr&gt;
-1 250091        1        HS
-2  70444        3        BA
-3 220425        4        HS
-4  50300        3       PHD
-5 630013        3       &lt;HS
-6  60972        1        MS</code></pre>
+   &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    
+1 250091        1 HS       
+2  70444        3 BA       
+3 220425        4 HS       
+4  50300        3 PHD      
+5 630013        3 &lt;HS      
+6  60972        1 MS       </code></pre>
 <p>Using <code>left_join()</code> to add the demographic data to the <code>trial_act</code> data. To do this, first load the demographic data into R as a new dataframe called <code>trial_act_demo</code>. Then, use the following template to combine the data (Hint: Replace XXX with the correct values.)</p>
 <pre class="r"><code># Get trial_act_demo data
 
@@ -446,7 +452,6 @@ trial_act &lt;- trial_act %&gt;%
 <ul>
 <li><p>For more details on data wrangling with R, check out the chapter in YaRrr! The Pirate’s Guide to R <a href="https://bookdown.org/ndphillips/YaRrr/advanceddataframe.html">YaRrr! Chapter Link</a></p></li>
 <li><p>Hadley Wickham, the author of dplyr, also has great examples in the dplyr vignette here: <a href="https://cran.r-project.org/web/packageys/dplyr/vignettes/dplyr.html">dplyr vignette link</a></p></li>
-<li><p>The <code>tidyr</code> package is a natural extension to <code>dplyr</code> that allows you to reshape your data into a format that is easier to manage. Check out the <a href="https://cran.r-project.org/web/packageys/tidyr/vignettes/tidy-data.html">tidyr vignette</a> for examples.</p></li>
 </ul>
 </div>
 

@@ -185,19 +185,15 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 Just because an algorithm can fit past (training) data well, does *not* necessarily mean that it will *predict* new data well.
 
-
 <br> 
 
 ```{r, fig.cap = "Anyone can come up with a model of past stock performance. Predicting future performance is much more difficult.", echo = FALSE, out.width = "70%", fig.align = 'center'}
 knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stockpen.jpg")
 ```
 
-
-
 ]
 
 .pull-right6[
-
 
 > "Prediction is difficult, especially when it is about the future" ~ Niels Bohr
 
@@ -352,7 +348,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 | Step|Description| Note / Example |
 |:------|:---|:------------|
-| 1| Install model packages| `rpart` or `FFTrees` for Decision Trees<br>`randomForest` for Random Forests|
+| 1| Install model packages| `FFTrees` for Decision Trees<br>`randomForest` for Random Forests|
 |     2| Get data |Use your own, or get free online datasets|
 |    3| Train model on data and generate insights|Always look at help menus and online tutorials!|
 |    4| Predict new data, possibly with cross-validation|Packages such as `mlr` and `caret` can really help|
@@ -469,7 +465,7 @@ loan_glm_pred <- predict(loan_glm_model,
 
 
 ---
-## Decision Trees with `rpart::rpart()`
+## Decision Trees with `FFTrees::FFTrees()`
 
 .pull-left5[
 
@@ -486,25 +482,19 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 .pull-right5[
 
-Create decision trees using the `rpart` package
+Create decision trees using the `FFTrees` package
 
 ```{r, eval = FALSE}
-# Load the rpart package
-library(rpart)
+# Load the FFTrees package
+library(FFTrees)
 
-# Calculating a decision tree in R
-rpart(formula = y ~.,       # Formula 
-      data = data_train,    # Training data
-      method, parms, cost)  # Optional arguments
+# Train FFTrees model
+loan_FFTrees_mod <- FFTrees(formula = risk ~ ., 
+                            data = loan_data)
 
-# Train rpart model
-loan_rpart_model <- rpart(formula = risk ~ ., 
-                          data = loan_data,
-                          method = "anova")
-
-# Predict new data with rpart model
-loan_rpart_pred <- predict(loan_rpart_model,
-                          newdata = loan_test)
+# Predict new data with FFTrees model
+loan_FFTrees_pred <- predict(loan_FFTrees_mod,
+                             newdata = loan_test)
 ```
 
 
@@ -539,7 +529,7 @@ randomForest(formula = y ~.,    # Formula
              data = data_train, # Training data
              ntree, mtry)       # Optional
 
-# Train rpart model
+# Train randomForest model
 loan_rf_model <- randomForest(formula = risk ~ ., 
                               data = loan_data)
 
@@ -594,7 +584,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ## Machine Learning Live Demo & Practical
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning_practical.html">Link to Machine Learning practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S3_MachineLearning/MachineLearning_practical.html">Link to Machine Learning practical</a>
 
 
 <!-- --- -->

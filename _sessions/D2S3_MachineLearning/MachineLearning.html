@@ -179,12 +179,9 @@ Just because an algorithm can fit past (training) data well, does *not* necessar
 &lt;p class="caption"&gt;Anyone can come up with a model of past stock performance. Predicting future performance is much more difficult.&lt;/p&gt;
 &lt;/div&gt;
 
-
-
 ]
 
 .pull-right6[
-
 
 &gt; "Prediction is difficult, especially when it is about the future" ~ Niels Bohr
 
@@ -326,7 +323,7 @@ We will focus on 3 algorithms that apply to most tasks:
 
 | Step|Description| Note / Example |
 |:------|:---|:------------|
-| 1| Install model packages| `rpart` or `FFTrees` for Decision Trees&lt;br&gt;`randomForest` for Random Forests|
+| 1| Install model packages| `FFTrees` for Decision Trees&lt;br&gt;`randomForest` for Random Forests|
 |     2| Get data |Use your own, or get free online datasets|
 |    3| Train model on data and generate insights|Always look at help menus and online tutorials!|
 |    4| Predict new data, possibly with cross-validation|Packages such as `mlr` and `caret` can really help|
@@ -442,7 +439,7 @@ loan_glm_pred &lt;- predict(loan_glm_model,
 
 
 ---
-## Decision Trees with `rpart::rpart()`
+## Decision Trees with `FFTrees::FFTrees()`
 
 .pull-left5[
 
@@ -457,26 +454,20 @@ In decision trees, the criterion is modeled as a sequence of logical Yes or No q
 
 .pull-right5[
 
-Create decision trees using the `rpart` package
+Create decision trees using the `FFTrees` package
 
 
 ```r
-# Load the rpart package
-library(rpart)
+# Load the FFTrees package
+library(FFTrees)
 
-# Calculating a decision tree in R
-rpart(formula = y ~.,       # Formula 
-      data = data_train,    # Training data
-      method, parms, cost)  # Optional arguments
+# Train FFTrees model
+loan_FFTrees_mod &lt;- FFTrees(formula = risk ~ ., 
+                            data = loan_data)
 
-# Train rpart model
-loan_rpart_model &lt;- rpart(formula = risk ~ ., 
-                          data = loan_data,
-                          method = "anova")
-
-# Predict new data with rpart model
-loan_rpart_pred &lt;- predict(loan_rpart_model,
-                          newdata = loan_test)
+# Predict new data with FFTrees model
+loan_FFTrees_pred &lt;- predict(loan_FFTrees_mod,
+                             newdata = loan_test)
 ```
 
 
@@ -510,7 +501,7 @@ randomForest(formula = y ~.,    # Formula
              data = data_train, # Training data
              ntree, mtry)       # Optional
 
-# Train rpart model
+# Train randomForest model
 loan_rf_model &lt;- randomForest(formula = risk ~ ., 
                               data = loan_data)
 
@@ -564,7 +555,7 @@ When you do lots of machine learning, the `caret` and `mlr` packages can automat
 
 ## Machine Learning Live Demo &amp; Practical
 
-&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning_practical.html"&gt;Link to Machine Learning practical&lt;/a&gt;
+&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S3_MachineLearning/MachineLearning_practical.html"&gt;Link to Machine Learning practical&lt;/a&gt;
 
 
 &lt;!-- --- --&gt;

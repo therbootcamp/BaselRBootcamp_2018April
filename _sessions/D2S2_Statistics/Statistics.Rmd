@@ -709,9 +709,6 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ]
 
-
-
-
 ---
 
 ## Live Demo & Pratical
@@ -720,7 +717,6 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 
 ---
-
 
 
 

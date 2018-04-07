@@ -68,7 +68,6 @@ write_csv(x = dimarta_biomarker, path = "_sessions/DXX_CaseStudies/dimarta_bioma
 write_csv(x = dimarta_demographics, path = "_sessions/DXX_CaseStudies/dimarta_demographics.csv")
 ```
 
-
 ### Overview
 
 In this case study, we will look at the results of a clinical study exploring the effectiveness of a new medication called dimarta on reducing histamine in patients with a disease that leads to chronically high histamine levels. In the study, 300 patients were assigned to one of three different treatment arms. One arm was given a placebo. The other arm was given adiclax -- the standard of care for the disease. Finally, the third arm was given dimarta. There were two main measures of interest in the trial: patient's changes in histamine from the beginning to the end of the trial, and their change in quality of life (measured by self report). 
@@ -77,9 +76,7 @@ In addition to exploring the effects of the three medications, the researchers a
 
 ## Data Description
 
-The data for this case study are in three separate files: `dimarta_biomarker.csv`, `dimarta_demographics.csv`, and  `dimarta_trial.csv`. Here are descriptions of the columns in these files:
-
-
+The data for this case study are in three separate files: `dimarta_biomarker.csv`, `dimarta_demographics.csv`, and  `dimarta_trial.csv`. The files are located in the `data_BaselRBootcamp_Day2.zip` folder available through the schedule.  Here are descriptions of the columns in these files:
 
 **dimarta_trial.csv**
 
@@ -138,25 +135,9 @@ Table: Table3. "dimarta_biomarker.csv" variable description:
 library(tidyverse)
 ```
 
-3. Using `read_csv()`, load the `dimarta_trial.csv`, `dimarta_demographics.csv`, and `dimarta_biomarker.csv` datasets as three new objects called `trial_df`, `demographics_df`, and `biomarker_df`.
+3. Using `read_csv()`, load the `dimarta_trial.csv`, `dimarta_demographics.csv`, and `dimarta_biomarker.csv` datasets as *three* new objects called `trial_df`, `demographics_df`, and `biomarker_df`.
 
-```{r, eval = FALSE, message = FALSE, warning = FALSE}
-# Load data from your local data file of your R project
-
-sales <- read_csv("data/sales.csv")
-stores <- read_csv("data/stores.csv")
-
-```
-
-```{r, eval=FALSE, echo=FALSE, message = FALSE, warning = FALSE}
-# Load data from your local data file of your R project
-
-sales <- read_csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/sales.csv")
-stores <- read_csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/stores.csv")
-
-```
-
-4. Get a first impression of the datasets by exploring them with the `View()`, `head()`, `names()`, and `str()` functions. Were they all loaded correctly?
+4. Get a first impression of the objects you just created by exploring them with the `View()`, `head()`, `names()`, and `str()` functions. Were they all loaded correctly?
 
 ### Data Wrangling
 
@@ -242,6 +223,15 @@ dimarta_df %>%
 ### Statistics
 
 24. Using `t.test()` conduct a t-test comparing the change in histamine results between the placebo and dimarta. Did dimarta differ from the placebo?
+
+```{r, eval = FALSE}
+# T.test comparing change in histamine between placebo and dimarta
+
+t.test(formula = XX ~ XX,
+       data = XXX %>%
+              filter(XXX %in% c(XXX, XXX)))  # Only include placebo and dimarta
+```
+
 
 25. Using `t.test()` conduct a t-test comparing the change in histamine results between the adiclax (the standard of care) and dimarta. Did dimarta improve over the standard of care?
 

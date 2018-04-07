@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="BaselRBootcamp January 2018" />
+<meta name="author" content="BaselRBootcamp April 2018" />
 
 
 <title>Machine Learning</title>
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Machine Learning</h1>
-<h4 class="author"><em>BaselRBootcamp January 2018</em></h4>
+<h4 class="author"><em>BaselRBootcamp April 2018</em></h4>
 
 </div>
 
@@ -133,7 +133,7 @@ Source: <a href="https://www.toptal.com/machine-learning/machine-learning-theory
 <div id="slides" class="section level3">
 <h3>Slides</h3>
 <ul>
-<li><a href="https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning.html">Here are the introduction slides for this practical on machine learning!</a></li>
+<li><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S3_MachineLearning/MachineLearning.html#1">Here are the introduction slides for this practical on machine learning!</a></li>
 </ul>
 </div>
 <div id="overview" class="section level3">
@@ -179,12 +179,6 @@ Source: <a href="https://www.toptal.com/machine-learning/machine-learning-theory
 <td align="left"><a href="https://cran.r-project.org/web/packages/FFTrees/vignettes/guide.html" class="uri">https://cran.r-project.org/web/packages/FFTrees/vignettes/guide.html</a></td>
 </tr>
 <tr class="odd">
-<td align="left">Decision Trees</td>
-<td align="left"><code>rpart()</code></td>
-<td align="left"><code>rpart</code></td>
-<td align="left"><a href="https://statweb.stanford.edu/~lpekelis/talks/13_datafest_cart_talk.pdf" class="uri">https://statweb.stanford.edu/~lpekelis/talks/13_datafest_cart_talk.pdf</a></td>
-</tr>
-<tr class="even">
 <td align="left">Random Forests</td>
 <td align="left"><code>randomForest()</code></td>
 <td align="left"><code>randomForest</code></td>
@@ -192,6 +186,10 @@ Source: <a href="https://www.toptal.com/machine-learning/machine-learning-theory
 </tr>
 </tbody>
 </table>
+</div>
+<div id="datasets" class="section level3">
+<h3>Datasets</h3>
+<p>You’ll use two datasets in this practical: <code>heartdisease.csv</code> and <code>ACTG175.csv</code>. They available in the <code>data_BaselRBootcamp_Day2.zip</code> file available through the main course page. If you haven’t already, download the <code>data_BaselRBootcamp_Day2.zip</code> folder and unzip it to get the two files.</p>
 </div>
 <div id="examples" class="section level3">
 <h3>Examples</h3>
@@ -211,7 +209,6 @@ Source: <a href="https://www.toptal.com/machine-learning/machine-learning-theory
 
 library(tidyverse)      # for dplyr and ggplot2
 library(randomForest)   # for randomForest()
-library(rpart)          # for rpart()
 library(FFTrees)        # for FFTrees and the heartdisease data
 
 # -----------------------
@@ -219,20 +216,20 @@ library(FFTrees)        # for FFTrees and the heartdisease data
 #  heart_train, heart_test
 # -----------------------
 
-heart &lt;- heartdisease   # Save a copy of the heartdisease data as heart
+heartdisease &lt;- read_csv(file = &quot;data/heartdisease.csv&quot;)   # Save a copy of the heartdisease data as heart
 
 set.seed(100)           # To fix the training / test randomization
 
-heart &lt;- heart %&gt;%
+heartdisease &lt;- heartdisease %&gt;%
    mutate_if(is.character, factor) %&gt;%   # Convert character to factor
    sample_frac(1)                        # Randomly sort rows
 
 # Savew first 100 rows as heart_train and remaining as heart_test
-heart_train &lt;- heart %&gt;% 
+heart_train &lt;- heartdisease %&gt;% 
                 slice(1:100)
 
-heart_test &lt;- heart %&gt;% 
-                slice(101:nrow(heart))
+heart_test &lt;- heartdisease %&gt;% 
+                slice(101:nrow(heartdisease))
 
 # ------------------------------
 # Part I: Build Models
@@ -346,19 +343,29 @@ ggplot(data = testing_results,
 <li>You should start by copying and pasting all of the code in the examples into a new .R file.</li>
 <li>Try running pieces of the code line by line and understand what it’s doing!</li>
 </ul>
-<div id="part-a-load-packages" class="section level4">
-<h4>Part A: Load packages</h4>
-<p>A. Load all of the necessary packages. For this practical, we’ll need <code>FFTrees</code>, <code>e1071</code>, <code>randomForest</code>, <code>rpart</code>, and <code>tidyverse</code>.</p>
+<div id="part-a-getting-setup" class="section level4">
+<h4>Part A: Getting setup</h4>
+<p>A. Open your <code>BaselRBootcamp</code> project. This project should have the folders <code>R</code> and <code>data</code> in the working directory.</p>
+<p>B. Open a new R script and save it in the <code>R</code> folder you just created as a new file called <code>machinelearning_practical.R</code>. At the top of the script, using comments, write your name and the date. The, load the <code>tidyverse</code>, <code>randomForest</code> and <code>FFTrees</code> packages. Here’s how the top of your script should look:</p>
+<pre class="r"><code>## NAME
+## DATE
+## Machine Learning Practical
+
+library(tidyverse)      # for dplyr and ggplot2
+library(randomForest)   # for randomForest()
+library(FFTrees)        # for FFTrees and the heartdisease data</code></pre>
+<p>C. Make sure the <code>heartdisease.csv</code> file is in the <code>data</code> in your working directory. Then, using <code>read_csv()</code>, read the <code>heartdisease.csv</code> data and assign it to a new object in R called <code>heartdisease</code>.</p>
+<p>D. Explore the <code>heartdisease</code> dataset using <code>summary()</code>, and <code>View()</code></p>
+<p>E. There is a help menu for the <code>heartdisease</code> dataset in the <code>FFTrees</code> package. Look at the help menu for <code>heartedisease</code> by running <code>?heartdisease</code></p>
 </div>
 <div id="part-b-create-training-and-test-data" class="section level4">
 <h4>Part B: Create training and test data</h4>
-<p>B. Now run the code in Part B to save a copy of the data as a tibble called <code>heart</code>. Afterwards, print it to make sure it looks ok.</p>
-<p>C. Create separate training dataframes <code>heart_train</code> for model training and <code>heart_test</code> for model testing. Print each of these dataframes to make sure they look ok.</p>
+<p>F. Create separate training dataframes <code>heart_train</code> for model training and <code>heart_test</code> for model testing. Print each of these dataframes to make sure they look ok.</p>
 </div>
 <div id="part-i-train-models-on-diagnosis" class="section level4">
 <h4>Part I: Train models on <code>diagnosis</code></h4>
 <ol style="list-style-type: decimal">
-<li>In our analyses, we will try to predict each patient’s diagnosis <code>diagnosis</code>. Look at the help menu for <code>heartdisease</code> to see what this, and the other variables, mean. Then, Create three new model objects <code>FFTrees_model</code>, <code>glm_model</code>, and <code>randomForest_model</code>, each predicting <code>diagnosis</code>.</li>
+<li>In the example code, we predicted patient’s sex. Now, in our analyses, we will try to predict each patient’s diagnosis using the column <code>diagnosis</code>. To do this, create three new model objects <code>FFTrees_model</code>, <code>glm_model</code>, and <code>randomForest_model</code>, each predicting <code>diagnosis</code> using the training data <code>heart_train</code></li>
 </ol>
 </div>
 <div id="part-ii-calculate-fits-for-training-data" class="section level4">
@@ -396,9 +403,10 @@ randomForest_model$importance</code></pre>
 <h3>Extra Challenges</h3>
 <ol start="6" style="list-style-type: decimal">
 <li><p>By default, random forests creates 500 trees. You can change this using the <code>ntree</code> argument in <code>randomForest()</code>. Try creating 2 new randomForest objects, one based on either a small number of trees (e.g. 10), and one based on 10,000 trees. How much better (or worse) do these models do compared to the default model with 500 trees?</p></li>
+<li><p>You can use the <code>my.tree</code> argument in <code>FFTrees()</code> to create your own custom tree ‘in words’. To see how this works, look at the “Specifying FFTs directly” vignette in the <code>FFTrees</code> package by running <code>vignette(&quot;FFTrees_mytree&quot;, package = &quot;FFTrees&quot;)</code>. Look through the vignette to see how the <code>my.tree</code> argument works. Then, try creating a new <code>FFTrees</code> object called <code>custom_FFTrees_model</code> trained on the <code>heart_train</code> data using the following rule: “If sex = 0, predict False. If chol &gt; 250, predict True. Otherwise, predict True.”. Plot the object to see how the tree did!</p></li>
 <li><p>A colleague of yours thinks that support vector machines should perform better than the models you used. Is she right? Test her prediction by including support vector machines using the <code>svm()</code> function from the <code>e1071</code> package in all of your analyses. You’ll need to add code for support vector machines at each stage of the machine learning process, model building, data fitting, and data prediction. Was she right?</p></li>
 <li><p>In all of our machine learning, we have allowed all models to use all data in the <code>heartdisease</code> dataset. However, some of the data is more expensive to collect than other data. What do you think would happen if we only let the models use a few cheap predictors like <code>age</code>, <code>sex</code> and <code>chol</code>? Test your prediction by replicating the machine learning process, but <em>only</em> allow the models to make predictions based on the three variables <code>age</code>, <code>sex</code> and <code>chol</code>. Does one model substantially outperform the others? (Hint: You can easily tell a model what specific variables to include using the <code>formula</code> argument. For example, <code>formula = y ~ a + b</code> will tell a model to model a variable y, but <em>only</em> using variables a and b.)</p></li>
-<li><p>How do you think these algorithms would perform on a randomly generated dataset? Let’s test this by creating a random training and test dataset, and then see how well the algorithms do. Run the code below to add a random column of data called <code>random</code> to <code>heart_train</code> and <code>heart_test</code>. Then, run your machine learning analysis, but now train and test the models on the new random data column. How well do the models do in training and testing?</p></li>
+<li><p>How do you think these algorithms would perform on a randomly generated dataset? Let’s test this by creating a random training and test dataset, and then see how well the algorithms do. Run the code below to add a random column of data called <code>random</code> to <code>heart_train</code> and <code>heart_test</code>. Then, run your machine learning analysis, but now train and test the models to predict the new random data column. How well do the models do in training and testing?</p></li>
 </ol>
 <pre class="r"><code># Add a new column random to heart_train and heart_test
 
@@ -411,8 +419,8 @@ heart_test &lt;- heart_test %&gt;%
   mutate(
     random = sample(c(0, 1), size = nrow(.), replace = TRUE)
   )</code></pre>
-<ol start="10" style="list-style-type: decimal">
-<li><p>So far we’ve only looked at the <code>heartdisease</code> data. Try conducting a similar analysis on the <code>ACTG175</code> data from the <code>speff2trial</code> package. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren’t present in the <code>heartdisease</code> data?</p>
+<ol start="11" style="list-style-type: decimal">
+<li><p>So far we’ve only looked at the <code>heartdisease</code> data. Try conducting a similar analysis on the <code>ACTG175</code> data. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren’t present in the <code>heartdisease</code> data?</p>
 <ul>
 <li>To predict whether the number of days is greater than 1,000, you’ll need to create a new column called <code>days_gt1000</code> that indicates this. You can do this with <code>ACTG175 &lt;- ACTG175 %&gt;% mutate(days_gt1000 = days &gt; 1000)</code></li>
 <li>You may wish to exclude the <code>pidnum</code> column from the data when fitting the models as the patient id is meaningless and should not be included in any models.</li>

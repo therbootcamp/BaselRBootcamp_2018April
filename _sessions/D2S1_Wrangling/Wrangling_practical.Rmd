@@ -126,9 +126,17 @@ chick %>%
 
 ## Tasks
 
+### Datasets
+
+You'll use one dataset in this practical: `ACTG175.csv`. It is available in the `data_BaselRBootcamp_Day2.zip` file available through the main course page. If you haven't already, download the `data_BaselRBootcamp_Day2.zip` folder and unzip it to get the `ACTG175.csv` file.
+
 ### Getting setup
 
-A. Open a new R script and save it as a new file called `datawrangling.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
+A. In RStudio, Create a new project called `BaselRBootcamp`. In the project root directory, create two folders `data` and `R`. 
+
+B. Outside of RStudio (on your computer), move the `ACTG175.csv` file you just downloaded in to the `data` folder you just created.
+
+C. Open a new R script and save it as a new file called `wrangling_practical.R` in the `R` folder in your working directory. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
 
 ```{r, eval = FALSE, echo = TRUE}
 ## NAME
@@ -145,13 +153,13 @@ library(tidyverse)
 library(speff2trial)
 ```
 
-B. For this practical, we'll use the `ACTG175` data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. The data are stored at the following link: [https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv](https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv). Using the following template, load the data into R and store it as a new object called `trial_act`.
+B. For this practical, we'll use the `ACTG175` data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. Using the following template, load the data into R and store it as a new object called `trial_act`.
 
 ```{r, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
-# Load data from weblink as a new tibble in R using read_csv
-# https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv
+# Load ACTG175.csv from the data folder 
+# The ACTG175.csv file MUST be in a folder called data in your working directory!!
 
-trial_act <- read_csv(file = "XXX")
+trial_act <- read_csv(file = "data/ACTG175.csv")
 ```
 
 ```{r, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
@@ -162,7 +170,7 @@ trial_act <- read_csv(file = "https://raw.githubusercontent.com/therbootcamp/Bas
 library(tidyverse)
 ```
 
-C. The `trial_act` data is comes from the `speff2trial` package where it was originally called `ACTG175`. Look at the help menu for the `ACTG175` data by running `?ACTG175`. (Note: If you become really interested in the data, you can also read an article discussing the trial here: [http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article](http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article))
+C. The `trial_act` data is actually a copy of a dataset from the `speff2trial` package called `ACTG175`. We can make Look at the help menu for the `ACTG175` data by running `?ACTG175` (If you become really interested in the data, you can also read an article discussing the trial here: [http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article](http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article))
 
 ```{r, echo = TRUE}
 # Look at documentation for ACTG175 data (contained in the speff2trial package)
@@ -497,8 +505,6 @@ trial_act %>%
 - For more details on data wrangling with R, check out the chapter in YaRrr! The Pirate's Guide to R [YaRrr! Chapter Link](https://bookdown.org/ndphillips/YaRrr/advanceddataframe.html)
 
 - Hadley Wickham, the author of dplyr, also has great examples in the dplyr vignette here: [dplyr vignette link](https://cran.r-project.org/web/packageys/dplyr/vignettes/dplyr.html)
-
-- The `tidyr` package is a natural extension to `dplyr` that allows you to reshape your data into a format that is easier to manage. Check out the [tidyr vignette](https://cran.r-project.org/web/packageys/tidyr/vignettes/tidy-data.html) for examples.
 
 
 
