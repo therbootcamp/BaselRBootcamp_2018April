@@ -139,7 +139,7 @@ my_stat(x = my_vec, method = 'median')
 
 # Example
 
-```{r}
+```{r, eval = F}
 c(22, 45, 32, 18, 19, 24)
 age <- c(22, 45, 32, 18, 19, 24)
 
