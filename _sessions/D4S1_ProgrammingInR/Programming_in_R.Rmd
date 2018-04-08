@@ -46,13 +46,15 @@ Iteration
 .pull-right45[
 
 ```{r eval = FALSE}
-x <- 1:5
+dwarfs <- paste0("dwarf", 1:5)
 
 # Conditional statement
-if (length(x) >= 5){
-  x[5]
+if (length(x) < 6){
+  print("There are dwarfs missing")
+} else if (length(x) == 6){
+  print("There's a drawf missing")
 } else {
-  print("x is shorter than 5")
+  print("All dwarfs are present")
 }
 
 # Define own function
@@ -243,19 +245,16 @@ Benefits of writing code in functions:
 .pull-right45[
 
 ```{r}
-clean_ws <- function(objs = NULL,
-                     all = FALSE){
+softmax <- function(x, theta = 1){
   
-  if (!is.null(objs)){
-    # remove objects
-    rm(objs)
+  # check precondition and
+  # return 0 if it's not met
+  if (length(x) == 0){
+    return(0)
   }
   
-  if (isTRUE(all)){
-    # clear whole workspace
-    rm(list = ls())
-    gc()
-  }
+  exp(x * theta) / sum(exp(x * theta))
+  
 }
 
 
@@ -279,7 +278,7 @@ The last object in a function code is returned to the global environment. If a f
 .pull-right45[
 
 ```{r}
-softmax <- function(x, theta){
+softmax <- function(x, theta = 1){
   
   # check precondition and
   # return 0 if it's not met
