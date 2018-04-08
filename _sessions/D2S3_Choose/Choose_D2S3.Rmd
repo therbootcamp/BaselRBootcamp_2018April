@@ -54,7 +54,7 @@ lefjwölek<br><br>
 
 Learn... 
 
-...when and why machine learning algorithms like **Random forests**, **Decisions trees**, and **Regression** work and why.
+...when machine learning algorithms like **Random forests**, **Decisions trees**, and **Regression** work and why.
 
 ...how they are **implemented in R** to improve prediction performance in a real world data set.  
 

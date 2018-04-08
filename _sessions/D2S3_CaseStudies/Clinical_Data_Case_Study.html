@@ -126,7 +126,7 @@ $(document).ready(function () {
 
 <div id="overview" class="section level3">
 <h3>Overview</h3>
-<p>In this case study, we will look at the results of a clinical study exploring the effectiveness of a new medication called dimarta on reducing histamine in patients with a disease that leads to chronically high histamine levels. In the study, 300 patients were assigned to one of three different treatment arms. One arm was given a placebo. The other arm was given adiclax – the standard of care for the disease. Finally, the third arm was given dimarta. There were two main measures of interest in the trial: patient’s changes in histamine from the beginning to the end of the trial, and their change in quality of life (measured by self report).</p>
+<p>In this case study, we will look at the results of a clinical trial exploring the effectiveness of a new medication called dimarta on reducing histamine in patients with a disease that leads to chronically high histamine levels. In the study, 300 patients were assigned to one of three different treatment arms. One arm was given a placebo. The other arm was given adiclax – the standard of care for the disease. Finally, the third arm was given dimarta. There were two main measures of interest in the trial: patient’s changes in histamine from the beginning to the end of the trial, and their change in quality of life (measured by self report).</p>
 <p>In addition to exploring the effects of the three medications, the researchers are interested in the extent to which three different biomarkers, dw, ms, and np, are correlated with therapeutic outcomes. In other words, to patients that express one or more of these biomarkers have better, or worse, outcomes that those that do not express these biomarkers?</p>
 </div>
 <div id="data-description" class="section level2">
@@ -307,13 +307,22 @@ dimarta_df %&gt;%
 <div id="statistics" class="section level3">
 <h3>Statistics</h3>
 <ol start="24" style="list-style-type: decimal">
-<li><p>Using <code>t.test()</code> conduct a t-test comparing the change in histamine results between the placebo and dimarta. Did dimarta differ from the placebo?</p></li>
+<li>Using <code>t.test()</code> conduct a t-test comparing the change in histamine results between the placebo and dimarta. Did dimarta differ from the placebo?</li>
+</ol>
+<pre class="r"><code># T.test comparing change in histamine between placebo and dimarta
+
+t.test(formula = XX ~ XX,
+       data = XXX %&gt;%
+              filter(XXX %in% c(XXX, XXX)))  # Only include placebo and dimarta</code></pre>
+<ol start="25" style="list-style-type: decimal">
 <li><p>Using <code>t.test()</code> conduct a t-test comparing the change in histamine results between the adiclax (the standard of care) and dimarta. Did dimarta improve over the standard of care?</p></li>
 <li><p>Using <code>glm()</code> conduct a regression analysis predicting <code>histamine_change</code> as a function of 4 variables: treatment arm, test results at the start of the trial, age, and quality of life at the start of the trial. Save the result as an object called <code>histamine_change_glm</code>. Once you do, apply the <code>summary()</code> function to the <code>histamine_change_glm</code> object to explore the results. Which variables reliably predict changes in test results?</p></li>
 <li><p>Repeat your previous regression analysis, but now predict change in quality of life. Do you get different results compared to your previous analysis?</p></li>
 <li><p>Now it’s time to see if the patient’s biomarkers were related to treatment success. For the <code>dw</code> biomarker, calculate the mean change in test results (<code>histamine_change</code>) separately for patients with different outcomes on the <code>dw</code> biomarker (hint: just group the data by <code>dw</code> and use <code>summarise()</code> to calculate the mean <code>histamine_change</code>).</p></li>
 <li><p>Do the same analysis for the other two biomarkers <code>ms</code> and <code>np</code>. Do either of these biomarkers seem to predict changes in test results?</p></li>
 <li><p>Using <code>glm()</code>, create a new regression object called <code>histamine_change_bio_glm</code> predicting <code>histamine_change</code> as a function of the 3 biomarkers. Explore the results with <code>summary()</code>. Do you find that any of these biomarkers predict changes in histamine?</p></li>
+<li><p>Did some drugs work better for patients with some biomarkers than others? For example, did patients who expressed the <code>dw</code> biomarker have better results when given dimarta compared to patients who do not express the <code>dw</code> biomarker? To answer this, start by calculating the descriptive statistics by calculating mean change in histamine <code>histamine_change</code> for all groups of <code>dw</code> and <code>StudyArm</code> (Hint: Just use <code>group_by(dw, StudyArm)</code> and <code>summarise(histamine_change_mean = mean(histamine_change))</code>).</p></li>
+<li><p>Once you’ve looked at the descriptive statistics, conduct a regression analysis predicting <code>histamine_change</code> based on the <em>interaction</em> between <code>dw</code> and <code>StudyArm</code>. Remember to calculate an interaction term in regression, use the <code>*</code> symbol in the formula. What do the results show?</p></li>
 </ol>
 </div>
 </div>
