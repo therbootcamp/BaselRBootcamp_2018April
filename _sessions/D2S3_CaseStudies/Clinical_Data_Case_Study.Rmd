@@ -224,7 +224,7 @@ dimarta_df %>%
 
 24. Using `t.test()` conduct a t-test comparing the change in histamine results between the placebo and dimarta. Did dimarta differ from the placebo?
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, echo = TRUE}
 # T.test comparing change in histamine between placebo and dimarta
 
 t.test(formula = XX ~ XX,

@@ -307,7 +307,14 @@ dimarta_df %&gt;%
 <div id="statistics" class="section level3">
 <h3>Statistics</h3>
 <ol start="24" style="list-style-type: decimal">
-<li><p>Using <code>t.test()</code> conduct a t-test comparing the change in histamine results between the placebo and dimarta. Did dimarta differ from the placebo?</p></li>
+<li>Using <code>t.test()</code> conduct a t-test comparing the change in histamine results between the placebo and dimarta. Did dimarta differ from the placebo?</li>
+</ol>
+<pre class="r"><code># T.test comparing change in histamine between placebo and dimarta
+
+t.test(formula = XX ~ XX,
+       data = XXX %&gt;%
+              filter(XXX %in% c(XXX, XXX)))  # Only include placebo and dimarta</code></pre>
+<ol start="25" style="list-style-type: decimal">
 <li><p>Using <code>t.test()</code> conduct a t-test comparing the change in histamine results between the adiclax (the standard of care) and dimarta. Did dimarta improve over the standard of care?</p></li>
 <li><p>Using <code>glm()</code> conduct a regression analysis predicting <code>histamine_change</code> as a function of 4 variables: treatment arm, test results at the start of the trial, age, and quality of life at the start of the trial. Save the result as an object called <code>histamine_change_glm</code>. Once you do, apply the <code>summary()</code> function to the <code>histamine_change_glm</code> object to explore the results. Which variables reliably predict changes in test results?</p></li>
 <li><p>Repeat your previous regression analysis, but now predict change in quality of life. Do you get different results compared to your previous analysis?</p></li>
