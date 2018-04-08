@@ -72,67 +72,83 @@ options(digits = 4)
 ---
 
 
-# Accessing & changing data frames (and lists)
+# Accessing & changing vectors
 
-Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
+To access (aka **subset** or **slicing**) and change atomic data objects use **brackets** `[]` and provide either **integers**, **logicals**, or  **names** to indicate the relevant vector content. To change content, assign new content of matching size to subset using ´<-´. 
 
 .pull-left45[
 ```{r}
-# retrieve elements using brackets
-my_df <- data.frame('v_1'=c('A', 'B', 'C'), 
-                    'v_2'=c(1, 2, 3))
-my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+# retrieve second element from vector
+my_vec <- c('A', 'B', 'C')
+my_vec[2] 
+
+# change the second element 
+my_vec[2] <- 'D'
+my_vec
+
 ```
+
 ]
 
 .pull-right45[
 ```{r}
-# retrieve elements using the $-operator
-my_df$v_1
-my_df$v_1 <- c('X', 'Y', 'Z')
-my_df
+# Use logical comparison to access vector
+my_vec[my_vec != 'A']
+
+# Change vector using logical comparison
+my_vec[my_vec != 'A'] <- c('E', 'F')
+my_vec
 
 ```
 ]
-
-
 ---
 
 # Functions
 
-Any operation of your data is done by functions. Functions have 3 elements:
-+ **Name**: Used to call (execute) a function.
-+ **Argument(s)**: Objects that the function needs to do its job.
-+ **Expression**: R code that is the options job.
+Functions are objects that conduct operations on objects using objects. Functions have 3 elements:
++ **Name**: Used to call (execute) the function.
++ **Argument(s)**: Objects that the function needs to do its job. May have *default arguments*.
++ **Expression**: R code that does the job.
     
-.pull-left55[
+.pull-left5[
 ```{r}
-# Defining a function that computes the mean
-my_mean <- function(x) return(sum(x) / length(x))
-
 # Defining a function that computes 
 # the mean or median
 my_stat <- function(x, method = 'mean'){
   
   # detect and run method
-  if(method == "mean") return(my_mean(x))
+  if(method == "mean") return(mean(x))
   if(method == "median") return(median(x))
-  
-  # return error if not method detected
-  stop('Method must be mean or median')
 }
+
+# Define object
+my_vec <- c(1, 4, 6, 3, 7, 5, 12, 9)
 ```
 ]
 
-.pull-right4[
+.pull-right45[
 ```{r}
 # Runnning our functions
-my_vec <- c(1, 4, 6, 3, 7, 5, 12, 9)
-my_mean(x = my_vec)
+mean(x = my_vec)
 my_stat(x = my_vec, method = 'mean')
 my_stat(x = my_vec, method = 'median')
 ```
 ]
+
+---
+
+# Example
+
+```{r}
+c(22, 45, 32, 18, 19, 24)
+age <- c(22, 45, 32, 18, 19, 24)
+
+as.character(age)
+age <- as.character(age)
+
+mean(age)
+
+```
 
 
 ---
@@ -141,21 +157,22 @@ my_stat(x = my_vec, method = 'median')
 
 .pull-left5[
 
-R provides extremely helpful **help files** and **vignettes**. 
->**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).<br>
->**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+**help files** (and **vignettes**) are very useful. 
+
+Pay attention to...
+
+- `Usage` - shows function's use, its arguments and their defaults.
+- `Arguments` - explains arguments, and their `type`/`class`
+- `Value` - explains what the function returns
+- `Examples` - 
 
 ```{r, eval = F}
 # To access help files
-help("name_of_function")
 ?name_of_function
 
-# find help files
+# search help files
 ??name_of_function
 
-# To list and access vignettes
-vignette(package = "name_of_package")
-vignette(package = "name_of_vignette")
 ```
 
 ]

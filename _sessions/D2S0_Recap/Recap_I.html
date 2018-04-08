@@ -4,7 +4,7 @@
     <title>Recap I</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -67,98 +67,86 @@ class: center, middle, inverse, title-slide
 ---
 
 
-# Accessing &amp; changing data frames (and lists)
+# Accessing &amp; changing vectors
 
-Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
+To access (aka **subset** or **slicing**) and change atomic data objects use **brackets** `[]` and provide either **integers**, **logicals**, or  **names** to indicate the relevant vector content. To change content, assign new content of matching size to subset using ´&lt;-´. 
 
 .pull-left45[
 
 ```r
-# retrieve elements using brackets
-my_df &lt;- data.frame('v_1'=c('A', 'B', 'C'), 
-                    'v_2'=c(1, 2, 3))
-my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+# retrieve second element from vector
+my_vec &lt;- c('A', 'B', 'C')
+my_vec[2] 
 ```
 
 ```
-##   v_1
-## 1   A
-## 2   B
-## 3   C
+## [1] "B"
+```
+
+```r
+# change the second element 
+my_vec[2] &lt;- 'D'
+my_vec
 ```
 
 ```
-## [1] A B C
-## Levels: A B C
+## [1] "A" "D" "C"
+```
+
+]
+
+.pull-right45[
+
+```r
+# Use logical comparison to access vector
+my_vec[my_vec != 'A']
 ```
 
 ```
-## [1] A B C
-## Levels: A B C
+## [1] "D" "C"
+```
+
+```r
+# Change vector using logical comparison
+my_vec[my_vec != 'A'] &lt;- c('E', 'F')
+my_vec
+```
+
+```
+## [1] "A" "E" "F"
+```
+]
+---
+
+# Functions
+
+Functions are objects that conduct operations on objects using objects. Functions have 3 elements:
++ **Name**: Used to call (execute) the function.
++ **Argument(s)**: Objects that the function needs to do its job. May have *default arguments*.
++ **Expression**: R code that does the job.
+    
+.pull-left5[
+
+```r
+# Defining a function that computes 
+# the mean or median
+my_stat &lt;- function(x, method = 'mean'){
+  
+  # detect and run method
+  if(method == "mean") return(mean(x))
+  if(method == "median") return(median(x))
+}
+
+# Define object
+my_vec &lt;- c(1, 4, 6, 3, 7, 5, 12, 9)
 ```
 ]
 
 .pull-right45[
 
 ```r
-# retrieve elements using the $-operator
-my_df$v_1
-```
-
-```
-## [1] A B C
-## Levels: A B C
-```
-
-```r
-my_df$v_1 &lt;- c('X', 'Y', 'Z')
-my_df
-```
-
-```
-##   v_1 v_2
-## 1   X   1
-## 2   Y   2
-## 3   Z   3
-```
-]
-
-
----
-
-# Functions
-
-Any operation of your data is done by functions. Functions have 3 elements:
-+ **Name**: Used to call (execute) a function.
-+ **Argument(s)**: Objects that the function needs to do its job.
-+ **Expression**: R code that is the options job.
-    
-.pull-left55[
-
-```r
-# Defining a function that computes the mean
-my_mean &lt;- function(x) return(sum(x) / length(x))
-
-# Defining a function that computes 
-# the mean or median
-my_stat &lt;- function(x, method = 'mean'){
-  
-  # detect and run method
-  if(method == "mean") return(my_mean(x))
-  if(method == "median") return(median(x))
-  
-  # return error if not method detected
-  stop('Method must be mean or median')
-}
-```
-]
-
-.pull-right4[
-
-```r
 # Runnning our functions
-my_vec &lt;- c(1, 4, 6, 3, 7, 5, 12, 9)
-my_mean(x = my_vec)
+mean(x = my_vec)
 ```
 
 ```
@@ -182,6 +170,43 @@ my_stat(x = my_vec, method = 'median')
 ```
 ]
 
+---
+
+# Example
+
+
+```r
+c(22, 45, 32, 18, 19, 24)
+```
+
+```
+## [1] 22 45 32 18 19 24
+```
+
+```r
+age &lt;- c(22, 45, 32, 18, 19, 24)
+
+as.character(age)
+```
+
+```
+## [1] "22" "45" "32" "18" "19" "24"
+```
+
+```r
+age &lt;- as.character(age)
+
+mean(age)
+```
+
+```
+## Warning in mean.default(age): argument is not numeric or logical: returning NA
+```
+
+```
+## [1] NA
+```
+
 
 ---
 
@@ -189,22 +214,22 @@ my_stat(x = my_vec, method = 'median')
 
 .pull-left5[
 
-R provides extremely helpful **help files** and **vignettes**. 
-&gt;**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).&lt;br&gt;
-&gt;**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+**help files** (and **vignettes**) are very useful. 
+
+Pay attention to...
+
+- `Usage` - shows function's use, its arguments and their defaults.
+- `Arguments` - explains arguments, and their `type`/`class`
+- `Value` - explains what the function returns
+- `Examples` - 
 
 
 ```r
 # To access help files
-help("name_of_function")
 ?name_of_function
 
-# find help files
+# search help files
 ??name_of_function
-
-# To list and access vignettes
-vignette(package = "name_of_package")
-vignette(package = "name_of_vignette")
 ```
 
 ]
@@ -278,12 +303,12 @@ read_csv(data)
 
 ```
 ## # A tibble: 4 x 3
-##      id var_1 var_2
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  DCDL 0.287 0.048
-## 2  FEFK 0.894 0.383
-## 3  ZEWE 1.374 0.623
-## 4  OJEE 0.631 0.826
+##   id    var_1  var_2
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 DCDL  0.287 0.0480
+## 2 FEFK  0.894 0.383 
+## 3 ZEWE  1.37  0.623 
+## 4 OJEE  0.631 0.826
 ```
 ]
 
@@ -322,12 +347,12 @@ as.data.frame(my_tibble)
 
 ```
 ## # A tibble: 4 x 3
-##      id var_1 var_2
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  DCDL 0.287 0.048
-## 2  FEFK 0.894 0.383
-## 3  ZEWE 1.374 0.623
-## 4  OJEE 0.631 0.826
+##   id    var_1  var_2
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 DCDL  0.287 0.0480
+## 2 FEFK  0.894 0.383 
+## 3 ZEWE  1.37  0.623 
+## 4 OJEE  0.631 0.826
 ```
 ]
 
@@ -354,8 +379,15 @@ Among its many packages, R contains a collection of high-performance, easy-to-us
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({

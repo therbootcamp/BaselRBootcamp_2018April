@@ -248,9 +248,9 @@ library(tidyverse)</code></pre>
 <div id="data-wrangling" class="section level3">
 <h3>Data Wrangling</h3>
 <ol start="4" style="list-style-type: decimal">
-<li><p>From the stores data, only select the following variables: Store, Assortment, CompetitionDistance, CompetitionOpenSinceYear, Promo2. The variable Assortment contains the values “a”, “b”, and “c”. This is not very helpful. Change them so that “a” is now “basic”, “b” is now “extra”, and “c” is now “extended”.</p></li>
+<li><p>From the stores data, only select the following variables: Store, Assortment, CompetitionDistance, CompetitionOpenSinceYear, Promo2. The variable Assortment contains the values “a”, “b”, and “c”. These are not very helpful labels. Change them so that “a” is now “basic”, “b” is now “extra”, and “c” is now “extended”.</p></li>
 <li><p>Join the stores data with the sales data (check out the <code>left_join()</code> function for this).</p></li>
-<li><p>The sales data contains an error in the state_holiday variable. There are <code>NA</code>s where there should be <code>1</code>s. Change this (remember that <code>variable == NA</code> won’t yield the result you want; use <code>is.na(variable)</code> instead).</p></li>
+<li><p>The sales data contains an error in the state_holiday variable. There are <code>NA</code>s where there should be <code>1</code>s. Change this (remember that <code>variable == NA</code> won’t yield the result you want when you want to check whether something contains <code>NA</code>s or use the expression to index a variable; use <code>is.na(variable)</code> instead).</p></li>
 <li><p>Rename the variables to be lower case and with underscores between words. Afterwards your variables should be named like this: “store”, “week_day”, “date”, “sales”, “customers”, “open”, “promo”, “state_holiday”, “school_holiday”, “assortment”, “competition_distance”, “competition_open_since”, and “store_promo”.</p></li>
 </ol>
 </div>
@@ -322,7 +322,7 @@ ggplot(sales_sub, aes(x = days, y = sales)) + # specify the data
 </div>
 <div id="extra" class="section level4">
 <h4>Extra</h4>
-<p>Because we have repeated measures in the data, we always had to aggregate before we could run a statistical test. Using mixed effects models, this would not have been necessary, because there you can account for the dependent structure of the data with random effects. Covering the method itself is beyond the scope of this course, but if you already know the method and want to try it out, here is a code example of how you could do this. The most often used package for mixed effects modeling in R is called <code>lme4</code> with the <code>lmer()</code> function for linear mixed effects models, and the <code>glmer()</code> function for generalized mixed effects models.</p>
+<p>Because we have repeated measures in the data, we always had to aggregate before we could run a statistical test. Using mixed effects models, this would not have been necessary, because there you can account for the dependent structure of the data with random effects. Covering the method itself is beyond the scope of this course, but if you already know the method and want to try it out, here is a code example of how you could do this. The most often used package for mixed effects modeling in R is called <code>lme4</code> with the <code>lmer()</code> function for linear mixed effects models, and the <code>glmer()</code> function for generalized mixed effects models. <em>Note that this illustration code example directly below will not work if you try to run it. It is just there to give you an idea of the <code>lmer()</code> syntax. An example that should work on your data is in the next code block.</em></p>
 <pre class="r"><code># load the package
 library(lme4)
 
