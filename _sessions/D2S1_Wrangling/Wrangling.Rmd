@@ -977,7 +977,7 @@ data <- data %>%
 # Live Demo & Practical
 
 <br><br><br>
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D2S1_Wrangling/Wrangling_practical.html">Link to Wrangling practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S1_Wrangling/Wrangling_practical.html">Link to Wrangling practical</a>
 
 
 ---
