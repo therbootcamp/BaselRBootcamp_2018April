@@ -218,8 +218,7 @@ In this session you will learn...
 
 Assume we have a *flat* data set with variables `id`, `var_1`, and `var_2` and cases as rows. Such data can be conveniently read in using `read_csv()`. Moreover, `read_csv()` will **automatically identify** (a) columns and rows, (b) column names, (c) the type of the columns and finally return a `tibble` (more on that later).
 
-.pull-left45[
-```{r, eval = F}
+```{r, eval = T, echo = F}
 # define simple data set
 data <- 
    "id, var_1, var_2\n
@@ -228,13 +227,27 @@ data <-
   ZEWE, 1.374,  .623\n
   OJEE,  .631,  .826"
 ```
+
+
+.pull-left45[
+
+```{r, eval = F}
+# This is how a text file may look
+# on your hard-drive
+
+id\tvar_1\tvar_2\n
+DCDL\t.287\t.048\n
+FEFK\t.894\t.383\n
+ZEWE\t1.374\t.623\n
+OJEE\t.631\t.826"
+```
 ]
 
 .pull-right45[
 ```{r, eval = F}
-# read in data
+# read in data (-> tibble)
 require(readr)
-read_csv(data)
+read_delim("data/my_dataset.csv")
 ```
 
 ```{r, echo = F}
@@ -252,6 +265,7 @@ read_csv(data)
 ```
 ]
 
+
 ---
 
 
@@ -261,7 +275,7 @@ The **output** from most `tidyverse` read functions such as `read_csv` and the p
 
 .pull-left45[
 ### tibbles ...
-+ never change the input's type.
++ never change the input's type -> no factors.
 <br2>
 + never add row names.
 <br2>
