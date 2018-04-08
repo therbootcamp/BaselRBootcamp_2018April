@@ -38,9 +38,9 @@ options(digits = 4)
 Work on one or all of 3 case studies designed to repeat the central elements of **Data I/O**, **Data Wrangling**, and **Statistics**<br><br>
 
 <b>1 Clinical trial</b><br>
-lefjwölek<br><br>
+Analyse a clinical trial comparing the effectiveness of drugs on reducing histamine.<br><br>
 <b>2 Finance</b><br>
-Study the development of key financial markets across the last 20 years?<br><br>
+Study the development of key financial markets across the last 20 years<br><br>
 <b>3 Sales</b><br>
 lefjwölek<br><br>
 
