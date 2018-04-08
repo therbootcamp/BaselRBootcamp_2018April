@@ -95,7 +95,7 @@ str(stores)
 
 ### Data Wrangling
 
-4. From the stores data, only select the following variables: Store, Assortment, CompetitionDistance, CompetitionOpenSinceYear, Promo2. The variable Assortment contains the values "a", "b", and "c". This is not very helpful. Change them so that "a" is now "basic", "b" is now "extra", and "c" is now "extended".
+4. From the stores data, only select the following variables: Store, Assortment, CompetitionDistance, CompetitionOpenSinceYear, Promo2. The variable Assortment contains the values "a", "b", and "c". These are not very helpful labels. Change them so that "a" is now "basic", "b" is now "extra", and "c" is now "extended".
 
 ```{r}
 stores <- stores %>%
@@ -112,7 +112,7 @@ stores <- stores %>%
 sales <- left_join(sales, stores, by = "Store")
 ```
 
-6. The sales data contains an error in the state_holiday variable. There are `NA`s where there should be `1`s. Change this (remember that `variable == NA` won't yield the result you want; use `is.na(variable)` instead).
+6. The sales data contains an error in the state_holiday variable. There are `NA`s where there should be `1`s. Change this (remember that `variable == NA` won't yield the result you want when you want to check whether something contains `NA`s or use the expression to index a variable; use `is.na(variable)` instead).
 
 ```{r}
 sales <- sales %>%
@@ -337,7 +337,7 @@ summary(mod)
 
 #### Extra
 
-Because we have repeated measures in the data, we always had to aggregate before we could run a statistical test. Using mixed effects models, this would not have been necessary, because there you can account for the dependent structure of the data with random effects. Covering the method itself is beyond the scope of this course, but if you already know the method and want to try it out, here is a code example of how you could do this. The most often used package for mixed effects modeling in R is called `lme4` with the `lmer()` function for linear mixed effects models, and the `glmer()` function for generalized mixed effects models.
+Because we have repeated measures in the data, we always had to aggregate before we could run a statistical test. Using mixed effects models, this would not have been necessary, because there you can account for the dependent structure of the data with random effects. Covering the method itself is beyond the scope of this course, but if you already know the method and want to try it out, here is a code example of how you could do this. The most often used package for mixed effects modeling in R is called `lme4` with the `lmer()` function for linear mixed effects models, and the `glmer()` function for generalized mixed effects models. *Note that this illustration code example directly below will not work if you try to run it. It is just there to give you an idea of the `lmer()` syntax. An example that should work on your data is in the next code block.*
 
 ```{r, echo = TRUE, eval = FALSE, message=FALSE, warning=FALSE}
 
