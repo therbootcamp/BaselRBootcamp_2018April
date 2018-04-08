@@ -2,7 +2,7 @@
 title: "Recap I"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
