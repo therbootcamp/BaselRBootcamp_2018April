@@ -180,7 +180,7 @@ A. Open your `BaselRBootcamp` project. This project should have the folders `R` 
 
 A. Open a new R script and save it in the `R` folder you just created as a new file called `statistics_practical.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
 
-```{r, eval = FALSE, echo = TRUE}
+```{r, eval = TRUE, echo = TRUE, message = FALSE}
 ## NAME
 ## DATE
 ## Statistics Practical
@@ -203,6 +203,11 @@ B. For this practical, we'll use the `ACTG175` data, this is the result of a ran
 
 trial_act <- read_csv(file = "data/ACTG175.csv")
 ```
+
+```{r, eval = TRUE}
+trial_act <- as_tibble(trial_act)
+```
+
 
 C. First thing's first, take a look at the data by printing it. It should look like this
 
