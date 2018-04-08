@@ -42,7 +42,7 @@ Analyse a clinical trial comparing the effectiveness of drugs on reducing histam
 <b>2 Finance</b><br>
 Study the development of key financial markets across the last 20 years<br><br>
 <b>3 Sales</b><br>
-lefjwölek<br><br>
+Analyze the from a real-world retailer to analyze the development of sales across time and locations.<br><br>
 
 ]
 

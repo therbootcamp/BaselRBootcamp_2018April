@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Overview
 
-In this case study, you will jointly analyse historic data of three major stock indices, the **Dow Jones**, the **DAX**, and the **Nikkei**, and the exchange rates between the **US dollar**, the **Euro**, and the **Yen**. Using this data, you will address several questions. How large was the impact of the recent financial crisis on the respective stock markets? How related is the development between the stock markets? What is the relationship between stock market returns and exchange rates? To address these questions, you will import several data files, while tuning import parameters to match the idiosyncracies of the data. You will merge the data files into a single data frame, and mutate the data to reflect changes in index value and exchange rate. You will analyze correlations among changes in stock indices, as well as to exchange rates. You create illustrative plots for each of the analyses. Below you will find several tasks that will guide you through these steps. For the most part these tasks require you to make use what you have learned in the sessions **Data I/O**, **Data Wrangling**, and **Statistics**. However, they will also go beyond what you have learned, in particular when it comes to plotting. In those cases, the tasks will provide the necessary code and guidance.  
+In this case study, you will jointly analyse historic data of three major stock indices, the **Dow Jones**, the **DAX**, and the **Nikkei**, and the exchange rates between the **US dollar**, the **Euro**, and the **Yen**. Using this data, you will address several questions. How large was the impact of the recent financial crisis on the respective stock markets? How correlated is the development between the stock markets? What is the relationship between stock market returns and exchange rates? To address these questions, you will import several data files, while tuning import parameters to match the idiosyncracies of the data. You will merge the data files into a single data frame, and mutate the data to reflect changes in index price and exchange rate. You will analyze correlations of stock indices among themselves and to exchange rates. You create illustrative plots for each of the analyses. Below you will find several tasks that will guide you through these steps. For the most part these tasks require you to make use of what you have learned in the sessions **Data I/O**, **Data Wrangling**, and **Statistics**. However, they will also go beyond what you have learned, in particular when it comes to plotting. In those cases, the tasks will provide the necessary code and guidance.  
 
 | Variable| Description|
 |:------------------------------|:----------------------------------------------------------------|
@@ -55,7 +55,7 @@ nik <- read_csv(file = '^N225.csv', na = 'null')
 
 ```
 
-3. Load in the exchange rate data sets, "euro-dollar.txt" and "yen-dollar.txt", from the data folder, using the `read_delim()`-function and `\t` as the `delim`-argument (separates by *tabulator*). Observe the inferred data types and the variables names. There's something wrong. First, we want the columns to be called `Date` and `Rate` (and not be taken from the first row). To achieve this, include the `col_names`-argument and assign to it a vector that contains the variable names. Second, we want the `Date`-variable of be of type `date`. To achieve this, use the `parse_date` function  with `format = '%d %b %Y'`, which specifies the exact format the dates are formatted in, and overwrite the existing `Date`-variable.  
+3. Load in the exchange rate data sets, "euro-dollar.txt" and "yen-dollar.txt", from the data folder, using the `read_delim()`-function and `\t` as the `delim`-argument (separates by *tabulator*). Observe the inferred data types and the variables names. There's something wrong. First, we want the columns to be called `Date` and `Rate` (and not be taken from the first row). To achieve this, include the `col_names`-argument and assign to it a vector that contains the variable names. Second, we want the `Date`-variable to be of type `date`. To achieve this, use the `parse_date` function  with `format = '%d %b %Y'`, which specifies the exact format the dates are formatted in, and overwrite the existing `Date`-variable.  
 
 ```{r, eval = FALSE, echo = FALSE, message = FALSE, warning = FALSE}
 # Load exchange rate data from local data folder 
@@ -81,7 +81,7 @@ typeof(yen_usd) ; str(yen_usd)
 
 ## Data Wrangling
 
-5. Create a single data frame from all five datasets including only the variables containing the dates, the stock index (unadjusted) closing prices, and the exchange rates. Do this by *piping* (i.e., using `%>%`) together several `inner_join()`-function calls, joining the data sets, one-by-one, using the `Date` variable. At the end, rename the variables using the `rename()`-function. Note, you can control the naming of overlapping variables names using the `suffix`-argument of the `inner_join()`-function. Observe that `inner_join()` takes care of the fact that different dates are available in each of the data sets by only retaining dates for which all data sets provide data on.  
+5. Create a single data frame from all five datasets that includes only the variables containing the dates, the stock index (unadjusted) closing prices, and the exchange rates. Do this by *piping* (i.e., using `%>%`) together several `inner_join()`-functions, joining the data sets one-by-one using the `Date` variable. At the end, rename the variables appropriately using the `rename()`-function. Note, in joining two data sets you can control the naming of overlapping variable names using the `suffix`-argument of the `inner_join()`-function. Observe that `inner_join()` takes care of the fact that different dates are available in each of the data sets by only retaining dates for which all data sets provide data on.  
 
 ```{r, eval = FALSE, echo = FALSE, message = FALSE, warning = FALSE}
 # create single data frame
@@ -94,7 +94,7 @@ data = dow %>% select('Date','Close') %>%
 
 ```
 
-6. Create new variables containing the change in index price and exchange rate for each variable using the `mutate`-function(). To compute the change use the `diff()`-function. Since `diff()` will return `n - 1` change values, add an `NA` as the first position of the change variable à la `c(NA, diff(my_variable))`. 
+6. Create new variables containing the change in index price and exchange rate for each variable using the `mutate`-function(). To compute the change, use the `diff()`-function. Since `diff()` will return `n - 1` change values, add an `NA` at the first position of the change variable à la `c(NA, diff(my_variable))`. 
 
 ```{r, eval = FALSE, echo = FALSE, message = FALSE, warning = FALSE}
 # create variables representing day-to-day changes
@@ -119,7 +119,7 @@ data = data %>% mutate(year = year(Date))
 
 ```
 
-8. Create a long version of data frame, in which variables occupy different rows rather than columns, using the `gather()`-function from the `tidyr`-package (also part of the `tidyverse`). To do this use the command below. You may have to (or want to) change the object/variable names. The first two arguments (given we used *pipes*) to `gather` specify the names of the new variables, the third and fourth specify the names of the variable containing the dates and years with a leading hyphen. Check out the example in the `?gather`-help file. When done, inspect the object and compare it (visually) to the original, wide version.   
+8. Create a long version of data frame, in which variables occupy different rows rather than columns, using the `gather()`-function from the `tidyr`-package (also part of the `tidyverse`). To do this use the command below. You may have to (or want to) change the object/variable names. The first two arguments (given we used *pipes*) to the `gather`-function specify the names of the new variables, the third and fourth specify the names of the variable containing the dates and years with a leading hyphen. Check out the example in the `?gather`-help file. When done, inspect the object and compare it (visually) to the original, wide version.   
 
 ```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE}
 # create long version of data frame
@@ -128,7 +128,7 @@ long_data = data %>% gather(variable, value, -Date, -year)
 
 ## Statistics (& Plotting)
 
-8. Plot the price development of the three stock indices using the following command (using the long data object). The code uses a modern and very powerful plotting package called `ggplot2`, which you will be introduced to on the second weekend of the course. For the code to work, you may have to adjust the object and variable names. Inspecting the plot, do you see a significant drop anywhere?   
+8. Plot the price development of the three stock indices using the following command (using the long data object). The code uses a modern and very powerful plotting package called `ggplot2`, which you will be introduced to on the second weekend of the course. For the code to work, you may have to adjust the object and variable names to match the ones in your data frame. Inspecting the plot, do you see a significant drop anywhere?   
 
 ```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE}
 # create long version of data frame
