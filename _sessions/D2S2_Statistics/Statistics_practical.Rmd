@@ -208,7 +208,7 @@ C. First thing's first, take a look at the data by printing it. It should look l
 
 ```{r, eval = TRUE, echo = TRUE}
 # Print trial_act
-trial_act
+head(trial_act)
 ```
 
 D. Before we can analyse the data, we need to make one important change. Specifically. we need to clarify that the `arms` column is a factor, *not* an integer. Run the following code to make this change.
