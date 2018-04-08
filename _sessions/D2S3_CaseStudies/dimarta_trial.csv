@@ -1,4 +1,4 @@
-PatientID,arm,test_start,test_end,qol_start,qol_end
+PatientID,arm,histamine_start,histamine_end,qol_start,qol_end
 txdjezeo,I,58.56,66.96000000000001,3,3
 htxfjlxk,III,36.07,27.950000000000003,3,4
 vkdqhyez,I,57.66,57.269999999999996,2,2

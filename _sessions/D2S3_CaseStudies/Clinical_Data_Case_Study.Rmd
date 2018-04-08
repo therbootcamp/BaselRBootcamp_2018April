@@ -23,7 +23,7 @@ PatientID_v <- sapply(1:300, FUN = function(x) {
 
 arm_v <- rep(c("I", "II", "III"), length.out = 300)
 
-dimarta_demographics <- tibble(
+demographics_df <- tibble(
   PatientID = PatientID_v,
   age = round(rnorm(n = 300, mean = 40, sd = 5), 0),
   gender = sample(c(0, 1), size = 300, replace = TRUE),
@@ -32,17 +32,17 @@ dimarta_demographics <- tibble(
 ) %>%
   sample_frac(1)
 
-dimarta_biomarker <- expand.grid(
+biomarker_df <- expand.grid(
   PatientID = PatientID_v,
   Biomarker = c("dw", "np", "ms"), 
   stringsAsFactors = FALSE
 ) %>% as_tibble() %>%
   sample_frac(1)
 
-dimarta_biomarker$BiomarkerStatus <- sample(c(TRUE, FALSE),
+biomarker_df$BiomarkerStatus <- sample(c(TRUE, FALSE),
                                              size = 300, replace = TRUE, prob = c(.25, .75))
 
-dimarta_trial <-  tibble(
+trial_df <-  tibble(
   PatientID = PatientID_v,
   arm = arm_v,
   histamine_start = round(rnorm(n = 300, mean = 50, sd = 15), 2),
@@ -50,27 +50,27 @@ dimarta_trial <-  tibble(
 ) %>% as_tibble() %>%
   sample_frac(1)
 
-dimarta_trial$histamine_end[dimarta_trial$arm == "I"] <- dimarta_trial$histamine_start[dimarta_trial$arm == "I"] + round(rnorm(sum(dimarta_trial$arm == "I"), mean = 3, sd = 5), 2)
-dimarta_trial$histamine_end[dimarta_trial$arm == "II"] <- dimarta_trial$histamine_start[dimarta_trial$arm == "II"] + round(rnorm(sum(dimarta_trial$arm == "II"), mean = 1, sd = 5), 2)
-dimarta_trial$histamine_end[dimarta_trial$arm == "III"] <- dimarta_trial$histamine_start[dimarta_trial$arm == "III"] + round(rnorm(sum(dimarta_trial$arm == "III"), mean = 2, sd = 5), 2)
+trial_df$histamine_end[trial_df$arm == "I"] <- trial_df$histamine_start[trial_df$arm == "I"] + round(rnorm(sum(trial_df$arm == "I"), mean = 3, sd = 5), 2)
+trial_df$histamine_end[trial_df$arm == "II"] <- trial_df$histamine_start[trial_df$arm == "II"] + round(rnorm(sum(trial_df$arm == "II"), mean = 1, sd = 5), 2)
+trial_df$histamine_end[trial_df$arm == "III"] <- trial_df$histamine_start[trial_df$arm == "III"] + round(rnorm(sum(trial_df$arm == "III"), mean = 2, sd = 5), 2)
 
-dimarta_trial$qol_start <- round(rnorm(n = 300, mean = 3, sd = 1), 0)
-dimarta_trial$qol_end <- dimarta_trial$qol_start + round(rnorm(n = 300, mean = 0, sd = 1), 0)
+trial_df$qol_start <- round(rnorm(n = 300, mean = 3, sd = 1), 0)
+trial_df$qol_end <- trial_df$qol_start + round(rnorm(n = 300, mean = 0, sd = 1), 0)
 
 # Add some bad  / NA values
 
-dimarta_trial$histamine_start[sample(nrow(dimarta_trial), size = 5)] <- c(999, -24, 888, -99, 999)
-dimarta_trial$histamine_end[sample(nrow(dimarta_trial), size = 10)] <- NA
-dimarta_trial$histamine_start[sample(nrow(dimarta_trial), size = 7)] <- NA
+trial_df$histamine_start[sample(nrow(trial_df), size = 5)] <- c(999, -24, 888, -99, 999)
+trial_df$histamine_end[sample(nrow(trial_df), size = 10)] <- NA
+trial_df$histamine_start[sample(nrow(trial_df), size = 7)] <- NA
 
-write_csv(x = dimarta_trial, path = "_sessions/DXX_CaseStudies/dimarta_trial.csv")
-write_csv(x = dimarta_biomarker, path = "_sessions/DXX_CaseStudies/dimarta_biomarker.csv")
-write_csv(x = dimarta_demographics, path = "_sessions/DXX_CaseStudies/dimarta_demographics.csv")
+write_csv(x = trial_df, path = "_sessions/D2S3_CaseStudies/dimarta_trial.csv")
+write_csv(x = biomarker_df, path = "_sessions/D2S3_CaseStudies/dimarta_biomarker.csv")
+write_csv(x = demographics_df, path = "_sessions/D2S3_CaseStudies/dimarta_demographics.csv")
 ```
 
 ### Overview
 
-In this case study, we will look at the results of a clinical study exploring the effectiveness of a new medication called dimarta on reducing histamine in patients with a disease that leads to chronically high histamine levels. In the study, 300 patients were assigned to one of three different treatment arms. One arm was given a placebo. The other arm was given adiclax -- the standard of care for the disease. Finally, the third arm was given dimarta. There were two main measures of interest in the trial: patient's changes in histamine from the beginning to the end of the trial, and their change in quality of life (measured by self report). 
+In this case study, we will look at the results of a clinical trial exploring the effectiveness of a new medication called dimarta on reducing histamine in patients with a disease that leads to chronically high histamine levels. In the study, 300 patients were assigned to one of three different treatment arms. One arm was given a placebo. The other arm was given adiclax -- the standard of care for the disease. Finally, the third arm was given dimarta. There were two main measures of interest in the trial: patient's changes in histamine from the beginning to the end of the trial, and their change in quality of life (measured by self report). 
 
 In addition to exploring the effects of the three medications, the researchers are interested in the extent to which three different biomarkers, dw, ms, and np, are correlated with therapeutic outcomes. In other words, to patients that express one or more of these biomarkers have better, or worse, outcomes that those that do not express these biomarkers?
 
@@ -158,16 +158,20 @@ dimarta_df <- trial_df %>%
 9. You'll notice that the `biomarker_df` dataframe is in the 'long' format, where each row is a patient's biomarker result. Using the code below, making use of the `spread()` function, create a new dataframe called `biomarker_wide_df` where each row is a patient, and the results from different biomarkers are in different columns. When you finish, look at `biomarker_long_df` to see how it looks!
 
 ```{r, echo = TRUE}
-# Convert biomarker_df to a long format using spread()
-biomarker_long_df <- biomarker_df %>%
+# Convert biomarker_df to a wide format using spread()
+biomarker_wide_df <- biomarker_df %>%
   spread(Biomarker, BiomarkerStatus)
 ```
 
-10. Now, using the `left_join` function, add the biomarker results to the `dimarta_df` data! Now you should hve all of the data in a single dataframe called `dimarta_df`
+10. Now, using the `left_join` function, add the `biomarker_wide_df` data  to the `dimarta_df` data! Now you should hve all of the data in a single dataframe called `dimarta_df`
 
-11. View `dimarta_df` to make sure the data look correct.
+```{r, eval = FALSE, echo = FALSE}
+dimarta_df <- dimarta_df %>% left_join(biomarker_wide_df)
+```
 
-12. Using `write_csv()`, save `dimarta_df` in a new `.csv` file on your computer called `dimarta.csv`
+11. View `dimarta_df` to make sure the data look correct! The data should have one row for each patient, and 13 separate columns, includeing  `dw`, `ms`, and `np` 
+
+12. Using `write_csv()`, save `dimarta_df` in a new `.csv` file in your `data` folder called `dimarta.csv`
 
 13. Using the `mean()` function, calculate the mean age of all patients.
 
@@ -202,7 +206,6 @@ dimarta_df %>%
   )
 ```
 
-
 20. Calculate the mean change in histamine results separately for men and women using the following template
 
 ```{r, eval = FALSE, echo = TRUE}
@@ -210,7 +213,7 @@ dimarta_df %>%
 dimarta_df %>%
   group_by(XX) %>%
   summarise(
-    histamine_change_mean = mean(XXX)
+    histamine_change_mean = mean(XXX, na.rm = TRUE)
   )
 ```
 
@@ -219,6 +222,18 @@ dimarta_df %>%
 22. Calculate the mean change in histamine results (`histamine_change`) for each study arm. Which study arm had a largest decrease in histamine?
 
 23. Calculate the mean change in quality of life (`qol_change`) for each study arm. Do the results match what you found with the histamine results?
+
+
+### Plotting
+
+24. Run the following code to create a boxplot showing the relationship between study arm and histameine change:
+
+```{r}
+ggplot(data = dimarta_df,
+       mapping = aes(x = arm, y = histamine_change)) +
+  geom_boxplot()
+```
+
 
 ### Statistics
 
@@ -245,6 +260,9 @@ t.test(formula = XX ~ XX,
 
 30. Using `glm()`, create a new regression object called `histamine_change_bio_glm` predicting `histamine_change` as a function of the 3 biomarkers. Explore the results with `summary()`. Do you find that any of these biomarkers predict changes in histamine?
 
+31. Did some drugs work better for patients with some biomarkers than others? For example, did patients who expressed the `dw` biomarker have better results when given dimarta compared to patients who do not express the `dw` biomarker? To answer this, start by calculating the descriptive statistics by calculating mean change in histamine `histamine_change` for all groups of `dw` and `StudyArm` (Hint: Just use `group_by(dw, StudyArm)` and `summarise(histamine_change_mean = mean(histamine_change))`). 
+
+32. Once you've looked at the descriptive statistics, conduct a regression analysis predicting `histamine_change` based on the *interaction* between `dw` and `StudyArm`. Remember to calculate an interaction term in regression, use the `*` symbol in the formula. What do the results show?
 
 
 
