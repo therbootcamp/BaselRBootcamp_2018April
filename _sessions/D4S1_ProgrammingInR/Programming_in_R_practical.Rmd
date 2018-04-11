@@ -10,7 +10,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval 
 
 ### Slides
 
-- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/_sessions/...)
+- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R.html)
 
 ### Overview
 

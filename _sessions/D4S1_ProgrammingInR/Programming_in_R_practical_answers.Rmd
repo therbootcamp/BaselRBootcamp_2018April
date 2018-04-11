@@ -10,7 +10,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval =
 
 ### Slides
 
-- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/_sessions/...)
+- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R.html)
 
 ### Overview
 
@@ -155,8 +155,8 @@ if (all(coin_tosses == "H")){
 5. Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print "They are identical". Remember that `==` is vectorized and won't work (Try it if you want to see what message it yields). So you have to use `identical`.
 
 ```{r}
-coin_tosses_1 <- coin_tosses <- sample(c("H", "T"), 5, replace = TRUE)
-coin_tosses_2 <- coin_tosses <- sample(c("H", "T"), 5, replace = TRUE)
+coin_tosses_1 <- sample(c("H", "T"), 5, replace = TRUE)
+coin_tosses_2 <- sample(c("H", "T"), 5, replace = TRUE)
 
 # this won't work the way you intended
 if (coin_tosses_1 == coin_tosses_2){
