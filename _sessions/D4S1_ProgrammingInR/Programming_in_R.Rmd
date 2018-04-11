@@ -294,6 +294,43 @@ softmax <- function(dat, theta = 1){
 
 ]
 
+
+---
+
+# Functions - Arguments
+
+.pull-left45[
+
+Functions can take any object as input to arguments. Since functions themselves are also objects, this means that also functions can be passed as arguments.
+
+The `...` argument let's you input a variety of unspecified arguments to a function, that are then passed to another function.
+
+When calling a function you can use objects or expressions as input to an argument.
+
+
+]
+
+.pull-right45[
+
+```{r}
+# function definition
+call_fun <- function(dat, fn, ...){
+  fn(dat, ...)
+}
+
+# input a function and additional statements
+call_fun(dat = pirates$parrots,
+         fn = mean, na.rm = TRUE)
+
+# input expression as argument
+call_fun(pirates$weight / (pirates$height / 100) ** 2,
+         fn = median, na.rm = TRUE)
+
+
+
+```
+
+]
 ---
 
 # Functions - Lexical Scoping
@@ -670,22 +707,16 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 
 ```{r}
-
 mus <- c(4, 5)
 sds <- c(2, 3)
 
-# argument positions matter
 map2(mus, sds, rnorm, n = 3)
 
 ns <- c(2, 3)
 
-# argument names matter, if list
-# is unnamed, positionsare used
 pmap(list(mean = mus,
           sd = sds,
           n = ns), rnorm)
-
-
 ```
 
 ]

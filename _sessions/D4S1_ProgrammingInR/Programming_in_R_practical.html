@@ -173,15 +173,23 @@ library(sendmailR)     # For sendmailR</code></pre>
 <li><p>Let’s simulate coin tosses. Use the <code>sample</code> function to draw one sample from {H, T} (i.e. a set, or in R a vector, containing “H” for head, and “T” for tail). If “H” comes up, print “Head”, if “T” comes up, print “Tail”.</p></li>
 <li><p>Now let’s assume that very rarely (with the coin we are using in 1% of the cases), the coin doesn’t fall on one of the two sides, but surprisingly, lands (and stays) on its edge. In this case you don’t know how to interpret this and assign it the value <code>NULL</code>. To do this use:</p></li>
 </ol>
+<pre class="r"><code># Create coin toss, i.e. sample once from {H, T} without replacing
+coin_toss &lt;- sample(c(&quot;H&quot;, &quot;T&quot;), 1)
+
+# In 1 % of the cases insert NULL
+if (runif(1, 0, 1) &lt;= .01){ # You can use expressions / function calls 
+                            # in an if statement
+  coin_toss &lt;- NULL
+}</code></pre>
 <p>Now you have to add a check for whether coin_toss is <code>NULL</code> in your previous code, to print “Head” in case of “H”, or “Tail” in case of “T”. Note: There is a function called <code>is.null()</code> to check this. Remember that you can reverse any check by adding a <code>!</code> in front of it. Also remember that <code>&amp;</code> and <code>&amp;&amp;</code> are not identical and that only <code>&amp;&amp;</code> is short circuiting. If the coin landed on its edge, print “Crazy, that coin just landed on its edge!”.</p>
 <ol start="4" style="list-style-type: decimal">
-<li><p>Now you don’t want to toss your coin only once but several (let’s say ten) times (you’ll have to tweak the <code>sample</code> function a bit. Check the help menue for help). Do this, and if <em>ALL</em> tosses came up heads, print “Wow, that’s ten heads in a row!”, if there is at least one head in there, print “The coin showed X times heads, and Y times tails”, where X and Y are the respective numbers of heads and tails (use the <code>paste</code> function to print and the <code>sum</code> function to get the numbers), and print “Wow, that’s ten tails in a row!”, if <em>ALL</em> tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.</p></li>
-<li><p>Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print “They are identical”. Remember that <code>==</code> is vectorized and won’t work (Try it if you want to see what message it yields). So you have to use <code>identical</code>.</p></li>
+<li><p>Now you don’t want to toss your coin only once but several (let’s say ten) times (you’ll have to tweak the <code>sample</code> function a bit. Check the help menue for help). Do this, and if <em>ALL</em> tosses came up heads, print “Wow, that’s ten heads in a row!”, if there is at least one head in there, print “The coin showed X times heads, and Y times tails”, where X and Y are the respective numbers of heads and tails (use the <code>paste</code> function to print and the <code>sum</code> function to get the correct numbers, check the help menus if you don’t know how to do this), and print “Wow, that’s ten tails in a row!”, if <em>ALL</em> tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.</p></li>
+<li><p>Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print “They are identical”. Remember that <code>==</code> is vectorized and won’t work (Try it if you want to see what message it yields). So you have to use <code>all()</code> or <code>identical()</code>.</p></li>
 </ol>
 </div>
 <div id="functions" class="section level3">
 <h3>Functions</h3>
-<p>Most of the time, conditional statements are either used in combination with functions or loops. We’ll start with looking at functions. Remember that a function has two parts, one in which you specify the arguments, and one in which you then write the code that is executed. The last line that is executed determines what the function returns. You can make this explicit with a <code>return()</code> statement, but it is good practice to only use this if you want to exit the function before all code is executed</p>
+<p>Most of the time, conditional statements are either used in combination with functions or loops. We’ll start with looking at functions. Remember that a function has two parts, one in which you specify the arguments, and one in which you then write the code that is executed. The last line that is executed determines what the function returns. You can make this explicit with a <code>return()</code> statement, but it is good practice to only use this if you want to exit the function before all code is executed.</p>
 <pre class="r"><code>## Create a function
 
 # First arguments are specified
@@ -208,7 +216,7 @@ weighted_mean &lt;- function(vls,   # has no default. This means it MUST be
   sum(values * weights) / sum(weights)
 }</code></pre>
 <ol start="6" style="list-style-type: decimal">
-<li><p>Write your own function “check_logical” that tests whether a given logical object is <code>TRUE</code> or <code>FALSE</code>, and returns “Argument is TRUE”, and “Argument is FALSE”.</p></li>
+<li><p>Write your own function <code>check_logical</code> that tests whether a given logical object is <code>TRUE</code> or <code>FALSE</code>, and returns “Argument is TRUE”, and “Argument is FALSE”, respectively.</p></li>
 <li><p>One important principle when programming is the <em>Don’t Repeat Yourself</em> (DRY) principle. That is, if you have written a block of code several times, with only slight changes in it, it is time to write a function for this. For example:</p></li>
 </ol>
 <pre class="r"><code># Compute the absolute difference between means of a variable
@@ -225,13 +233,15 @@ abs(mean(pirates$age[pirates$sex == &quot;male&quot;]) -
 # for height
 abs(mean(pirates$height[pirates$sex == &quot;male&quot;]) - 
     mean(pirates$height[pirates$sex == &quot;female&quot;]))</code></pre>
-<p>Each time you copy the code and change a small part, there is a small chance of making a mistake, for example by forgetting to change the name of one variable. Also imagine having coded the above example for 10 variables and then your boss comes and tells you that you should take the <code>male</code> and <code>other</code> group together to see the mean difference between these two and <code>females</code>. Then you would have to go to each line again to manipulate it.</p>
-<p>Now write a function called <code>avs_mean_diff</code>, that computes the absolute mean difference, that takes a vector <code>mean_vec</code> with data to compute the mean on, a vector <code>cat_vec</code> with data to separate the first, and a list <code>sep_list</code> with two vectors of categories to separate for. Then use the same function to compute the same mean differences as in the code above.</p>
+<p>Each time you copy the code and change a small part, there is a small chance of making a mistake, for example by forgetting to change the name of one variable. Also imagine having coded the above example for 10 variables and then you realize that you should have taken the <code>male</code> and <code>other</code> group together to see the mean difference between these two and <code>females</code>. Then you would have to go to each line again to manipulate it.</p>
+<p>Now write a function called <code>abs_mean_diff</code>, that computes the absolute mean difference, that takes a vector <code>mean_vec</code> with data to compute the mean on, a vector <code>cat_vec</code> with data to separate the first, and a list <code>sep_list</code> with two vectors of categories to separate for. Then use the same function to compute the same mean differences as in the code above.</p>
 <ol start="8" style="list-style-type: decimal">
 <li>One great thing about functions is that they can take other functions as arguments. Let’s say you don’t only want to be able to compute the abs mean difference, but also the median difference. Reprogram the <code>abs_mean_diff</code> function from task 7 by adding a fourth argument <code>met</code> (short for method), where you pass the function name as an argument <em>WITHOUT</em> quotationmarks. Set the default value to this argument to <code>mean</code>. Name the function <code>abs_diff</code>. Then compute the mean and the median absolute difference of tattoos for male and female pirates.</li>
 </ol>
 <p>Passing functions as arguments can be very hancy, especially when you can combine this with <code>apply</code> or <code>map</code> function so you can enter a list of functions. We’ll see an example of that later.</p>
-<p>9 There is one argument you can use when programming a function, that let’s you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called <code>...</code>. Now add the <code>...</code> as last argument to the <code>abs_diff</code> function from the previous task, and also add it to the <code>met()</code> function inside the <code>abs_diff</code> function. Now you can call functions with <code>abs_diff</code> that take more than just the numeric vector as argument, for example you can compute a trimmed mean with <code>mean(x, trim = .2)</code> for the 20% trimmed mean. Compute the 20% trimmed mean.</p>
+<ol start="9" style="list-style-type: decimal">
+<li>There is one argument you can use when programming a function, that let’s you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called <code>...</code>. Now add the <code>...</code> as last argument to the <code>abs_diff</code> function from the previous task, and also add it to the <code>met()</code> function inside the <code>abs_diff</code> function. Now you can call functions with <code>abs_diff</code> that take more than just the numeric vector as argument, for example you can compute a trimmed mean with <code>mean(x, trim = .2)</code> for the 20% trimmed mean. Compute the 20% trimmed mean.</li>
+</ol>
 </div>
 <div id="iteration" class="section level3">
 <h3>Iteration</h3>

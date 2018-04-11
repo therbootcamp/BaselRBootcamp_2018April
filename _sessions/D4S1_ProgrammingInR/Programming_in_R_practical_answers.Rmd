@@ -85,7 +85,7 @@ head(pirates)
 
 You have already used conditional statements, mostly in the form of the `case_when()` function. Now let's look at other functions. Note that for now the example may seem a little arbitrary. That is because usually conditional statements are used in loops or functions. We'll bring everything together towards the end of this practical.
 
-1. Draw one sample from a normal distribution with `mean = 0` and `sd = 1` (there are handy functions that let you draw samples from various distributions. For a normal distribution, use `rnorm()`). Then check whether the drawn number was 0. If so print a message called "Can't divide by 0". Otherwise divide the number by 2.
+1. Draw one sample from a normal distribution with `mean = 0` and `sd = 1` (there are handy functions that let you draw samples from various distributions. For a normal distribution, use `rnorm()`). Then check whether the drawn number was 0. If so print a message called "Can't divide by 0". Otherwise divide the number by 2 (use `if()`, `else` statements).
 
 ```{r}
 x <- rnorm(1)
@@ -112,11 +112,12 @@ if (coin_toss == "H"){
 3. Now let's assume that very rarely (with the coin we are using in 1% of the cases), the coin doesn't fall on one of the two sides, but surprisingly, lands (and stays) on its edge. In this case you don't know how to interpret this and assign it the value `NULL`. To do this use:
 
 ```{r, eval = TRUE, echo = TRUE}
-# Create coin toss
+# Create coin toss, i.e. sample once from {H, T} without replacing
 coin_toss <- sample(c("H", "T"), 1)
 
 # In 1 % of the cases insert NULL
-if (runif(1, 0, 1) <= .01){ # You can use expressions in an if statement
+if (runif(1, 0, 1) <= .01){ # You can use expressions / function calls 
+                            # in an if statement
   coin_toss <- NULL
 }
 ```
@@ -133,7 +134,7 @@ if (!is.null(coin_toss) && coin_toss == "H"){
 }
 ```
 
-4. Now you don't want to toss your coin only once but several (let's say ten) times (you'll have to tweak the `sample` function a bit. Check the help menue for help). Do this, and if *ALL* tosses came up heads, print "Wow, that's ten heads in a row!", if there is at least one head in there, print "The coin showed X times heads, and Y times tails", where X and Y are the respective numbers of heads and tails (use the `paste` function to print and the `sum` function to get the numbers), and print "Wow, that's ten tails in a row!", if *ALL* tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.
+4. Now you don't want to toss your coin only once but several (let's say ten) times (you'll have to tweak the `sample` function a bit. Check the help menue for help). Do this, and if *ALL* tosses came up heads, print "Wow, that's ten heads in a row!", if there is at least one head in there, print "The coin showed X times heads, and Y times tails", where X and Y are the respective numbers of heads and tails (use the `paste` function to print and the `sum` function to get the correct numbers, check the help menus if you don't know how to do this), and print "Wow, that's ten tails in a row!", if *ALL* tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.
 
 ```{r}
 coin_tosses <- sample(c("H", "T"), 10, replace = TRUE)
@@ -152,7 +153,7 @@ if (all(coin_tosses == "H")){
 ```
 
 
-5. Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print "They are identical". Remember that `==` is vectorized and won't work (Try it if you want to see what message it yields). So you have to use `identical`.
+5. Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print "They are identical". Remember that `==` is vectorized and won't work (Try it if you want to see what message it yields). So you have to use `all()` or `identical()`.
 
 ```{r}
 coin_tosses_1 <- sample(c("H", "T"), 5, replace = TRUE)
@@ -168,9 +169,16 @@ coin_tosses_1 == coin_tosses_2
 
 # so you have to use identical()
 identical(coin_tosses_1, coin_tosses_2)
+# or all()
+all(coin_tosses_1 == coin_tosses_2)
 
 # so the correct answer is
 if (identical(coin_tosses_1, coin_tosses_2)){
+  print("They are identical")
+}
+
+# so the correct answer is
+if (all(coin_tosses_1 == coin_tosses_2)){
   print("They are identical")
 }
 ```
@@ -178,7 +186,7 @@ if (identical(coin_tosses_1, coin_tosses_2)){
 
 ### Functions
 
-Most of the time, conditional statements are either used in combination with functions or loops. We'll start with looking at functions. Remember that a function has two parts, one in which you specify the arguments, and one in which you then write the code that is executed. The last line that is executed determines what the function returns. You can make this explicit with a `return()` statement, but it is good practice to only use this if you want to exit the function before all code is executed 
+Most of the time, conditional statements are either used in combination with functions or loops. We'll start with looking at functions. Remember that a function has two parts, one in which you specify the arguments, and one in which you then write the code that is executed. The last line that is executed determines what the function returns. You can make this explicit with a `return()` statement, but it is good practice to only use this if you want to exit the function before all code is executed.
 
 ```{r, eval = TRUE, echo = TRUE}
 ## Create a function
@@ -209,7 +217,7 @@ weighted_mean <- function(vls,   # has no default. This means it MUST be
 
 ```
 
-6. Write your own function "check_logical" that tests whether a given logical object is `TRUE` or `FALSE`, and returns "Argument is TRUE", and "Argument is FALSE". 
+6. Write your own function named `check_logical` that tests whether a given logical object is `TRUE` or `FALSE`, and returns "Argument is TRUE", and "Argument is FALSE", respectively. 
 
 ```{r}
 check_logical <- function(x){
@@ -235,19 +243,20 @@ check_logical <- function(x){
 abs(mean(pirates$tattoos[pirates$sex == "male"]) - 
     mean(pirates$tattoos[pirates$sex == "female"]))
 
-# for tattoos
+# for age
 abs(mean(pirates$age[pirates$sex == "male"]) - 
     mean(pirates$age[pirates$sex == "female"]))
 
-# for tattoos
+# for height
 abs(mean(pirates$height[pirates$sex == "male"]) - 
     mean(pirates$height[pirates$sex == "female"]))
 
+
 ```
 
-Each time you copy the code and change a small part, there is a small chance of making a mistake, for example by forgetting to change the name of one variable. Also imagine having coded the above example for 10 variables and then your boss comes and tells you that you should take the `male` and `other` group together to see the mean difference between these two and `females`. Then you would have to go to each line again to manipulate it.
+Each time you copy the code and change a small part, there is a small chance of making a mistake, for example by forgetting to change the name of one variable. Also imagine having coded the above example for 10 variables and then you realize that you should have taken the `male` and `other` group together to see the mean difference between these two and `females`. Then you would have to go to each line again to manipulate it.
 
-Now write a function called `avs_mean_diff`, that computes the absolute mean difference, that takes a vector `mean_vec` with data to compute the mean on, a vector `cat_vec` with data to separate the first, and a list `sep_list` with two vectors of categories to separate for. Then use the same function to compute the same mean differences as in the code above.
+Now write a function called `abs_mean_diff`, that computes the absolute mean difference, that takes a vector `mean_vec` with data to compute the mean on, a vector `cat_vec` with data to separate the first, and a list `sep_list` with two vectors of categories to separate for. Then use the same function to compute the same mean differences as in the code above.
 
 ```{r}
 abs_mean_diff <- function(mean_vec, cat_vec, sep_list){
@@ -275,7 +284,7 @@ abs_diff(pirates$tattoos, pirates$sex, list("male", "female"), median)
 
 Passing functions as arguments can be very hancy, especially when you can combine this with `apply` or `map` function so you can enter a list of functions. We'll see an example of that later.
 
-9 There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called `...`. Now add the `...` as last argument to the `abs_diff` function from the previous task, and also add it to the `met()` function inside the `abs_diff` function. Now you can call functions with `abs_diff` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean. Compute the 20% trimmed mean.
+9. There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called `...`. Now add the `...` as last argument to the `abs_diff` function from the previous task, and also add it to the `met()` function inside the `abs_diff` function. Now you can call functions with `abs_diff` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean. Compute the 20% trimmed mean.
 
 ```{r}
 abs_diff <- function(mean_vec, cat_vec, sep_list, met = mean, ...){

@@ -345,6 +345,51 @@ softmax &lt;- function(dat, theta = 1){
 
 ]
 
+
+---
+
+# Functions - Arguments
+
+.pull-left45[
+
+Functions can take any object as input to arguments. Since functions themselves are also objects, this means that also functions can be passed as arguments.
+
+The `...` argument let's you input a variety of unspecified arguments to a function, that are then passed to another function.
+
+When calling a function you can use objects or expressions as input to an argument.
+
+
+]
+
+.pull-right45[
+
+
+```r
+# function definition
+call_fun &lt;- function(dat, fn, ...){
+  fn(dat, ...)
+}
+
+# input a function and additional statements
+call_fun(dat = pirates$parrots,
+         fn = mean, na.rm = TRUE)
+```
+
+```
+## [1] 2.819
+```
+
+```r
+# input expression as argument
+call_fun(pirates$weight / (pirates$height / 100) ** 2,
+         fn = median, na.rm = TRUE)
+```
+
+```
+## [1] 23.93
+```
+
+]
 ---
 
 # Functions - Lexical Scoping
@@ -785,23 +830,20 @@ If the objects in the list are named, pmap will use the name, otherwise the posi
 mus &lt;- c(4, 5)
 sds &lt;- c(2, 3)
 
-# argument positions matter
 map2(mus, sds, rnorm, n = 3)
 ```
 
 ```
 ## [[1]]
-## [1]  2.125  7.476 -2.787
+## [1] 3.271 3.071 5.488
 ## 
 ## [[2]]
-## [1] 6.169 8.579 6.768
+## [1] 8.915 3.960 6.758
 ```
 
 ```r
 ns &lt;- c(2, 3)
 
-# argument names matter, if list
-# is unnamed, positionsare used
 pmap(list(mean = mus,
           sd = sds,
           n = ns), rnorm)
@@ -809,10 +851,10 @@ pmap(list(mean = mus,
 
 ```
 ## [[1]]
-## [1] 6.519 6.073
+## [1] 6.291 6.639
 ## 
 ## [[2]]
-## [1] 7.805 6.999 4.823
+## [1] 7.412 4.225 9.339
 ```
 
 ]
@@ -854,10 +896,10 @@ invoke_map(functs, argumnts, n = 3)
 
 ```
 ## [[1]]
-## [1] 4.7977 0.5975 7.5949
+## [1] 1.791 2.066 1.998
 ## 
 ## [[2]]
-## [1] 0.4236 0.6149 0.2498
+## [1] 0.6833 0.5768 0.5830
 ```
 
 ]
