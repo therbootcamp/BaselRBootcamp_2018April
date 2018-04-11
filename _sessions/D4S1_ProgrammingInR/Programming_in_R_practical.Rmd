@@ -56,18 +56,18 @@ library(tidyverse)
 
 
 
-B. For this practical, we'll sometimes use the `pirates` data from the `yarrr` package. Load this dataset from your local file. We will also quite often use little datasets, you will create on the fly during the tasks. This should help making the examples very clear.
+B. For this practical, we'll sometimes use the `pirates` data from the `yarrr` package. Load this dataset from your local data folder. We will also quite often use little datasets which you will create on the fly during the tasks. This should help making the examples very clear and give you some experience in how to create own data to test your code.
 
-```{r, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE}
 # Load data from your local data file of your R project
 
 pirates <- read_csv("data/pirates.csv")
 ```
 
 
-C. The `pirates` dataset contains details about 1000 pirates, such as their age, sex, number of tattoos and beard length. For more detail about the dataset just type the following code:
+C. The `pirates` dataset contains details about 1000 pirates, such as their age, sex, number of tattoos and beard length. For more information about the dataset just type the following code:
 
-```{r, echo = TRUE, eval = FALSE}
+```{r}
 # Look at documentation for pirates data (contained in the yarrr package)
 library(yarrr)
 ?pirates
@@ -111,17 +111,17 @@ if (coin_toss == "H"){
 
 3. Now let's assume that very rarely (with the coin we are using in 1% of the cases), the coin doesn't fall on one of the two sides, but surprisingly, lands (and stays) on its edge. In this case you don't know how to interpret this and assign it the value `NULL`. To do this use:
 
-```{r, eval = FALSE, echo = TRUE}
+```{r}
 # Create coin toss
 coin_toss <- sample(c("H", "T"), 1)
 
 # In 1 % of the cases insert NULL
-if (runif(1,0,1) <= .01){ # You can use expressions in an if statement
+if (runif(1, 0, 1) <= .01){ # You can use expressions in an if statement
   coin_toss <- NULL
 }
 ```
 
-Now you have to add a check for whether coin_toss is `NULL` in your previous code, to print "Head" in case of "H", or "Tail" in case of "T". Note: There is a function called `is.null()` to check this. Remember that you can reverse any check by adding a `!` in front of it. Also remember that `&` and `&&` are not identical and that only `&&` has short circuiting. If the coin landed on its edge, print "Crazy, that coin just landed on its edge!".
+Now you have to add a check for whether coin_toss is `NULL` in your previous code, to print "Head" in case of "H", or "Tail" in case of "T". Note: There is a function called `is.null()` to check this. Remember that you can reverse any check by adding a `!` in front of it. Also remember that `&` and `&&` are not identical and that only `&&` is short circuiting. If the coin landed on its edge, print "Crazy, that coin just landed on its edge!".
 
 ```{r}
 if (!is.null(coin_toss) && coin_toss == "H"){
@@ -155,8 +155,8 @@ if (all(coin_tosses == "H")){
 5. Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print "They are identical". Remember that `==` is vectorized and won't work (Try it if you want to see what message it yields). So you have to use `identical`.
 
 ```{r}
-coin_tosses_1 <- coin_tosses <- sample(c("H", "T"), 5, replace = TRUE)
-coin_tosses_2 <- coin_tosses <- sample(c("H", "T"), 5, replace = TRUE)
+coin_tosses_1 <- sample(c("H", "T"), 5, replace = TRUE)
+coin_tosses_2 <- sample(c("H", "T"), 5, replace = TRUE)
 
 # this won't work the way you intended
 if (coin_tosses_1 == coin_tosses_2){
@@ -223,57 +223,67 @@ check_logical <- function(x){
 }
 ```
 
-7. Did you use `x == TRUE` as check? if so you should change that to `isTRUE(x)`. Both yield the same result, but it's proper style to use these check functions, if they are available. However note that `!isTRUE(x)` will *always* yield `TRUE`, if x is not `TRUE`. That is, if `x = 1`, then `!isTRUE(x)` is `TRUE`. So in the case of `x = FALSE` you will have to use the check `x == FALSE`.
 
-8. One important principle when programming is the *Don't Repeat Yourself* principle. That is, if you have written a block of code several times, with only slight changes in it, it is time to write a function for this. For example:
+7. One important principle when programming is the *Don't Repeat Yourself* (DRY) principle. That is, if you have written a block of code several times, with only slight changes in it, it is time to write a function for this. For example:
+
 
 ```{r, eval = FALSE, echo = TRUE}
-# Compute some descriptive statistics on the pirates dataset
+# Compute the absolute difference between means of a variable
+# separated by another variable
 
-# the mean number of tattoos:
-mean(pirates$tattoos)
+# for tattoos
+abs(mean(pirates$tattoos[pirates$sex == "male"]) - 
+    mean(pirates$tattoos[pirates$sex == "female"]))
 
-# the standard deviation of number of tattoos:
-sd(pirates$tattoos)
+# for age
+abs(mean(pirates$age[pirates$sex == "male"]) - 
+    mean(pirates$age[pirates$sex == "female"]))
 
-# the median number of tattoos:
-median(pirates$tattoos)
-
-```
-
-To do this you write the first block (here it's just one line) of code and then copy-paste it several times. As we said, this is bad practice... 
-
-One great thing about functions is that they can take other functions as arguments. Program a function called `compute_statistic`, wich takes a numeric vector, and computes either the mean, median, or standard deviation. To do this you specify a second argument that will take a function, and call it, e.g., `stat` and when you want to use the function passed to that argument you simply write `stat()` and give it the argument on which to perform the function. When you did this, `compute_statistic(rnorm(10), mean)` should give you the mean of the vector 10 samples from a normal distribution with mean = 0 and sd = 1. Note that you don't put quotation marks around `mean` when you pass it as argument.
-
-```{r}
-compute_statistic <- function(vec, stat){
-  stat(vec)
-}
-
-compute_statistic(vec = rnorm(10), stat = mean)
-compute_statistic(vec = rnorm(10), stat = sd)
-compute_statistic(vec = rnorm(10), stat = median)
-
-# But this now also works
-compute_statistic(vec = rnorm(10), stat = sample)
-# So you are not limited to the three examples used, but all other functions you
-# can call on a numeric vector.
+# for height
+abs(mean(pirates$height[pirates$sex == "male"]) - 
+    mean(pirates$height[pirates$sex == "female"]))
 
 ```
 
-This can be very handy, especially when you can combine this with `apply` or `map` function so you can enter a list of functions. We'll see an example of that later.
+Each time you copy the code and change a small part, there is a small chance of making a mistake, for example by forgetting to change the name of one variable. Also imagine having coded the above example for 10 variables and then your boss comes and tells you that you should take the `male` and `other` group together to see the mean difference between these two and `females`. Then you would have to go to each line again to manipulate it.
 
-9 There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called `...`. Now add the `...` as last argument to the `compute_statistic` function from the previous task, and also add it to the `stat()` function inside the `compute_statistic` function. Now you can call functions with `compute_statistic` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean, or you can draw a sample of size 3 with `sample(x, size = 3)`. Try these out.
+Now write a function called `avs_mean_diff`, that computes the absolute mean difference, that takes a vector `mean_vec` with data to compute the mean on, a vector `cat_vec` with data to separate the first, and a list `sep_list` with two vectors of categories to separate for. Then use the same function to compute the same mean differences as in the code above.
 
 ```{r}
-compute_statistic <- function(vec, stat, ...){
-  stat(vec, ...)
+abs_mean_diff <- function(mean_vec, cat_vec, sep_list){
+  abs(mean(mean_vec[cat_vec %in% sep_list[[1]]]) -
+    mean(mean_vec[cat_vec %in% sep_list[[2]]]))
 }
 
-compute_statistic(vec = rnorm(10), stat = mean, trim = .2)
+abs_mean_diff(pirates$tattoos, pirates$sex, list("male", "female"))
+abs_mean_diff(pirates$age, pirates$sex, list("male", "female"))
+abs_mean_diff(pirates$height, pirates$sex, list("male", "female"))
+```
 
-compute_statistic(vec = rnorm(10), stat = sample, size = 3)
+8. One great thing about functions is that they can take other functions as arguments. Let's say you don't only want to be able to compute the abs mean difference, but also the median difference. Reprogram the `abs_mean_diff` function from task 7 by adding a fourth argument `met` (short for method), where you pass the function name as an argument *WITHOUT* quotationmarks. Set the default value to this argument to `mean`. Name the function `abs_diff`. Then compute the mean and the median absolute difference of tattoos for male and female pirates.
 
+```{r}
+abs_diff <- function(mean_vec, cat_vec, sep_list, met = mean){
+  abs(met(mean_vec[cat_vec %in% sep_list[[1]]]) -
+    met(mean_vec[cat_vec %in% sep_list[[2]]]))
+}
+
+abs_diff(pirates$tattoos, pirates$sex, list("male", "female"))
+abs_diff(pirates$tattoos, pirates$sex, list("male", "female"), median)
+
+```
+
+Passing functions as arguments can be very hancy, especially when you can combine this with `apply` or `map` function so you can enter a list of functions. We'll see an example of that later.
+
+9 There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called `...`. Now add the `...` as last argument to the `abs_diff` function from the previous task, and also add it to the `met()` function inside the `abs_diff` function. Now you can call functions with `abs_diff` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean. Compute the 20% trimmed mean.
+
+```{r}
+abs_diff <- function(mean_vec, cat_vec, sep_list, met = mean, ...){
+  abs(met(mean_vec[cat_vec %in% sep_list[[1]]], ...) -
+    met(mean_vec[cat_vec %in% sep_list[[2]]], ...))
+}
+
+abs_diff(pirates$tattoos, pirates$sex, list("male", "female"), mean, trim = .2)
 
 ```
 
@@ -342,11 +352,13 @@ for (nms in vars){
 pirate_means
 ```
 
-11. Use a loop to rewrite the code where you called `compute_statistic` multiple times in task 8. Remember that in a loop you have to use `print` explicitly.
+11. Use a loop to rewrite the code where you called `abs_diff` multiple times in task 7. Remember that in a loop you have to use `print` explicitly.
 
 ```{r}
-for (fns in c(mean, median, sd)){
-  print(compute_statistic(rnorm(10), fns))
+vars <- c("age", "height", "tattoos")
+for (v in vars){
+  print(abs_diff(pirates[[v]], pirates$sex,
+                 list("male", "female")))
 }
 ```
 
@@ -448,27 +460,33 @@ map_dbl(pirates[, vars], mean)
 
 
 
-14. Remember the `for` loop you've used in task 11, to run the `compute_statistic` function several times? Rewrite this and replace the `for` loop once with `sapply` and a `map` function (figure out which `map` function would fit best here).
+14. Remember the `for` loop you've used in task 11, to run the `abs_diff` function several times? Rewrite this and replace the `for` loop once with `sapply` and a `map` function (figure out which `map` function would fit best here).
 
 ```{r}
-sapply(c(mean, median, sd), compute_statistic, vec = rnorm(10))
 
-map_dbl(c(mean, median, sd), compute_statistic, vec = rnorm(10))
+
+sapply(pirates[,c("age", "height", "tattoos")], abs_diff, cat_vec =pirates$sex,
+       sep_list = list("male", "female"))
+map_dbl(pirates[,c("age", "height", "tattoos")], abs_diff, cat_vec =pirates$sex,
+       sep_list = list("male", "female"))
+
 
 ```
 
-15. Now there would be a more elegant way of programming the `compute_statistic` function such that you don't have to use loops or `apply`/ `map` functions outside of it. Redefine the `compute_statistic` function and use a `map_dbl`, such that you can enter multiple functions as argument, instead of only one. For this you will have to use an anonymous function in `map_dbl`. This means that the function is only defined inside the `map_dbl` call and does not exist outside of it. The syntax for a self programmed anonymous `mean` function would be `map_dbl(data, function(x){sum(x) / length(x)})`. That is instead of passing a function name to `map_dbl`, you pass a function definition `function(argument){do something}`. Remember that you can pass functions as arguments. (Of course you could have passed the functions directly to `map_dbl` without wrapping it in another function)
+15. Now there would be a more elegant way of programming the `abs_diff` function such that you don't have to use loops or `apply`/ `map` functions outside of it. Redefine the `abs_diff` function and use `map_dbl`, such that you can enter multiple columns to the `mean_vec` argument, instead of only one. For this you will have to use an anonymous function in `map_dbl`. This means that the function is only defined inside the `map_dbl` call and does not exist outside of it. The syntax for a self programmed anonymous `mean` function would be `map_dbl(data, function(x){sum(x) / length(x)})`. That is instead of passing a function name to `map_dbl`, you pass a function definition `function(argument){do something}`. Remember that you can pass functions as arguments.
 
 ```{r}
-# note that in this definition the ... only works if all specified functions
-# take the argument provided there. So for the functions c(mean, median), the
-# trim argument couldn't be passed to ... because median doesn't have a trim 
-# argument.
-compute_statistic <- function(vec, stat, ...){
-  map_dbl(stat, function(fn, dat, ...){fn(dat, ...)}, dat = vec, ... = ...)
+
+abs_diff <- function(mean_vec, cat_vec, sep_list, met = mean, ...){
+  map_dbl(mean_vec, function(x, cat_vec, sep_list, ...){
+    abs(met(x[cat_vec %in% sep_list[[1]]], ...) - 
+          met(x[cat_vec %in% sep_list[[2]]], ...))
+  }, cat_vec = cat_vec, sep_list = sep_list, ... = ...)
 }
 
-compute_statistic(rnorm(10), c(median, mean, sd))
+
+abs_diff(pirates[,c("age", "height", "tattoos")], pirates$sex,
+         list("male", "female"))
 
 ```
 
@@ -639,5 +657,3 @@ map_dbl(resample, ~sim_false_positive(resample = ., mail = NULL))
 - For more details on programming in R, check out Nathaniel's YaRrr! The Pirate's Guide to R [YaRrr!](https://bookdown.org/ndphillips/YaRrr/)
 
 - Hadley Wickham, covers programming in R and purrr in his book R for data science: [R for Data Science link](http://r4ds.had.co.nz/)
-
-
