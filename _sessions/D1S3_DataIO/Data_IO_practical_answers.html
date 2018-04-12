@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="BaselRBootcamp January 2018" />
+<meta name="author" content="BaselRBootcamp April 2018" />
 
 
 <title>Practical: Data I/O</title>
@@ -117,23 +117,23 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Practical: Data I/O</h1>
-<h4 class="author"><em>BaselRBootcamp January 2018</em></h4>
+<h4 class="author"><em>BaselRBootcamp April 2018</em></h4>
 
 </div>
 
 
 <div id="slides" class="section level3">
 <h3>Slides</h3>
-<p>Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/_sessions/D1S3_DataIO/Data_IO.html"><b>LINK</b></a></p>
+<p>Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S3_DataIO/Data_IO.html"><b>LINK</b></a></p>
 </div>
 <div id="overview" class="section level3">
 <h3>Overview</h3>
 <p>In this practical you’ll learn how to read and save data. By the end of this practical you will know how to:</p>
 <ol style="list-style-type: decimal">
-<li>Identify the location of a file</li>
+<li>Identify the location of a file (on your hard drive)</li>
 <li>Read in data of various types</li>
 <li>Use R’s file connections</li>
-<li>Scrape the internet (if you get there)</li>
+<li>Scrape the internet (advanced)</li>
 </ol>
 </div>
 <div id="functions" class="section level3">
@@ -203,20 +203,8 @@ $(document).ready(function () {
 </div>
 <div id="tasks" class="section level2">
 <h2>Tasks</h2>
-<p>The tutorial begins with the titanic data set, which contains records of 1313 passengers on their name (<code>Name</code>), their passenger class (<code>PClass</code>), their age (<code>Age</code>), their sex (<code>Sex</code>), whether they survived (<code>Survived</code>), and finally a numeric coding of their sex (<code>SexCode</code>).</p>
-<p>Later you will be working with a randomly generated artificial data set of mine, which will help demonstrate differences in speed and file size.</p>
-<p>Please download the following data files and save them to an appropriate location on the disc:</p>
-<p><a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.csv">titanic.csv</a><br> <a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.sav">titanic.sav</a><br> <a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.sas7bdat">titanic.sas7bdat</a><br> <a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/my_data.csv">my_data.csv</a></p>
-<p>If you can, please verify whether the <code>.sav</code> and <code>sas7bdat</code> are appropriate SPSS and SAS files, respectively.</p>
-<pre><code>Loading tidyverse: ggplot2
-Loading tidyverse: tibble
-Loading tidyverse: tidyr
-Loading tidyverse: readr
-Loading tidyverse: purrr
-Loading tidyverse: dplyr</code></pre>
-<pre><code>Conflicts with tidy packages ----------------------------------------------</code></pre>
-<pre><code>filter(): dplyr, stats
-lag():    dplyr, stats</code></pre>
+<p>This tutorial begins with the titanic data set, which contains records of 1313 passengers of their name (<code>Name</code>), their passenger class (<code>PClass</code>), their age (<code>Age</code>), their sex (<code>Sex</code>), whether they survived (<code>Survived</code>), and a numeric coding of their sex (<code>SexCode</code>).</p>
+<p>Later you will be working with a randomly generated artificial data set, which will help demonstrate the relationship of file size and speed.</p>
 <div id="identify-the-filepath" class="section level3">
 <h3>Identify the (file)path</h3>
 <ol style="list-style-type: decimal">
@@ -226,10 +214,10 @@ lag():    dplyr, stats</code></pre>
 <div id="read-to-tibble" class="section level3">
 <h3>Read to <code>tibble</code></h3>
 <ol start="2" style="list-style-type: decimal">
-<li><p>OK, let’s read some data sets. But first we need to load the packages <code>readr</code> and <code>haven</code> using <code>library()</code>, i.e., <code>library(readr)</code> and <code>library(haven)</code>.</p></li>
-<li><p>Now, read in the three titanic data files using <code>read_csv()</code>, <code>read_sas()</code>, and <code>read_sav()</code> by passing on the respective file paths from above and assigning the functions’ outcomes to <code>df_csv</code>, <code>df_sas</code>, and <code>df_sav</code>, respectively. Inspect each of the imported objects using <code>print()</code> and <code>str()</code> and <code>typeof</code>.</p></li>
+<li><p>OK, let’s read some data sets. First you need to load the packages <code>readr</code> and <code>haven</code> using <code>library()</code>, i.e., <code>library(readr)</code> and <code>library(haven)</code>.</p></li>
+<li><p>Now, read in the three titanic data files “titanic.csv”, “titanic.sav”, and “titanic.sas7bdat” using <code>read_csv()</code>, <code>read_sas()</code>, and <code>read_sav()</code> by passing on the respective file paths (i.e., <code>data/filename.csv</code>) and assigning the functions’ outcomes to <code>df_csv</code>, <code>df_sas</code>, and <code>df_sav</code>, respectively. Inspect each of the imported objects using <code>print()</code> and <code>str()</code> and <code>typeof</code>.</p></li>
 </ol>
-<pre class="r"><code>df_csv &lt;- read_csv('data_files/titanic.csv')</code></pre>
+<pre class="r"><code>df_csv &lt;- read_csv('data/titanic.csv')</code></pre>
 <pre><code>Warning: Missing column names filled in: 'X1' [1]</code></pre>
 <pre><code>Parsed with column specification:
 cols(
@@ -241,54 +229,51 @@ cols(
   Survived = col_integer(),
   SexCode = col_integer()
 )</code></pre>
-<pre class="r"><code>df_sas &lt;- read_sas('data_files/titanic.sas7bdat')
-df_sav &lt;- read_sav('data_files/titanic.sav')
+<pre class="r"><code>df_sas &lt;- read_sas('data/titanic.sas7bdat')
+df_sav &lt;- read_sav('data/titanic.sav')
 print(df_csv) ; print(df_sas) ; print(df_sav)</code></pre>
 <pre><code># A tibble: 1,313 x 7
-      X1                                          Name PClass   Age    Sex
-   &lt;int&gt;                                         &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;  &lt;chr&gt;
- 1     1                  Allen, Miss Elisabeth Walton    1st 29.00 female
- 2     2                   Allison, Miss Helen Loraine    1st  2.00 female
- 3     3           Allison, Mr Hudson Joshua Creighton    1st 30.00   male
- 4     4 Allison, Mrs Hudson JC (Bessie Waldo Daniels)    1st 25.00 female
- 5     5                 Allison, Master Hudson Trevor    1st  0.92   male
- 6     6                            Anderson, Mr Harry    1st 47.00   male
- 7     7              Andrews, Miss Kornelia Theodosia    1st 63.00 female
- 8     8                        Andrews, Mr Thomas, jr    1st 39.00   male
- 9     9  Appleton, Mrs Edward Dale (Charlotte Lamson)    1st 58.00 female
-10    10                        Artagaveytia, Mr Ramon    1st 71.00   male
-# ... with 1,303 more rows, and 2 more variables: Survived &lt;int&gt;,
-#   SexCode &lt;int&gt;</code></pre>
+      X1 Name                         PClass    Age Sex   Survived SexCode
+   &lt;int&gt; &lt;chr&gt;                        &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;
+ 1     1 Allen, Miss Elisabeth Walton 1st    29.0   fema…        1       1
+ 2     2 Allison, Miss Helen Loraine  1st     2.00  fema…        0       1
+ 3     3 Allison, Mr Hudson Joshua C… 1st    30.0   male         0       0
+ 4     4 Allison, Mrs Hudson JC (Bes… 1st    25.0   fema…        0       1
+ 5     5 Allison, Master Hudson Trev… 1st     0.920 male         1       0
+ 6     6 Anderson, Mr Harry           1st    47.0   male         1       0
+ 7     7 Andrews, Miss Kornelia Theo… 1st    63.0   fema…        1       1
+ 8     8 Andrews, Mr Thomas, jr       1st    39.0   male         0       0
+ 9     9 Appleton, Mrs Edward Dale (… 1st    58.0   fema…        1       1
+10    10 Artagaveytia, Mr Ramon       1st    71.0   male         0       0
+# ... with 1,303 more rows</code></pre>
 <pre><code># A tibble: 1,313 x 7
-      X1                                          Name PClass   Age    Sex
-   &lt;dbl&gt;                                         &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;  &lt;chr&gt;
- 1     1                  Allen, Miss Elisabeth Walton    1st 29.00 female
- 2     2                   Allison, Miss Helen Loraine    1st  2.00 female
- 3     3           Allison, Mr Hudson Joshua Creighton    1st 30.00   male
- 4     4 Allison, Mrs Hudson JC (Bessie Waldo Daniels)    1st 25.00 female
- 5     5                 Allison, Master Hudson Trevor    1st  0.92   male
- 6     6                            Anderson, Mr Harry    1st 47.00   male
- 7     7              Andrews, Miss Kornelia Theodosia    1st 63.00 female
- 8     8                        Andrews, Mr Thomas, jr    1st 39.00   male
- 9     9  Appleton, Mrs Edward Dale (Charlotte Lamson)    1st 58.00 female
-10    10                        Artagaveytia, Mr Ramon    1st 71.00   male
-# ... with 1,303 more rows, and 2 more variables: Survived &lt;dbl&gt;,
-#   SexCode &lt;dbl&gt;</code></pre>
+      X1 Name                         PClass    Age Sex   Survived SexCode
+   &lt;dbl&gt; &lt;chr&gt;                        &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+ 1    1. Allen, Miss Elisabeth Walton 1st    29.0   fema…       1.      1.
+ 2    2. Allison, Miss Helen Loraine  1st     2.00  fema…       0.      1.
+ 3    3. Allison, Mr Hudson Joshua C… 1st    30.0   male        0.      0.
+ 4    4. Allison, Mrs Hudson JC (Bes… 1st    25.0   fema…       0.      1.
+ 5    5. Allison, Master Hudson Trev… 1st     0.920 male        1.      0.
+ 6    6. Anderson, Mr Harry           1st    47.0   male        1.      0.
+ 7    7. Andrews, Miss Kornelia Theo… 1st    63.0   fema…       1.      1.
+ 8    8. Andrews, Mr Thomas, jr       1st    39.0   male        0.      0.
+ 9    9. Appleton, Mrs Edward Dale (… 1st    58.0   fema…       1.      1.
+10   10. Artagaveytia, Mr Ramon       1st    71.0   male        0.      0.
+# ... with 1,303 more rows</code></pre>
 <pre><code># A tibble: 1,313 x 7
-      X1                                          Name PClass   Age    Sex
-   &lt;dbl&gt;                                         &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;  &lt;chr&gt;
- 1     1                  Allen, Miss Elisabeth Walton    1st 29.00 female
- 2     2                   Allison, Miss Helen Loraine    1st  2.00 female
- 3     3           Allison, Mr Hudson Joshua Creighton    1st 30.00   male
- 4     4 Allison, Mrs Hudson JC (Bessie Waldo Daniels)    1st 25.00 female
- 5     5                 Allison, Master Hudson Trevor    1st  0.92   male
- 6     6                            Anderson, Mr Harry    1st 47.00   male
- 7     7              Andrews, Miss Kornelia Theodosia    1st 63.00 female
- 8     8                        Andrews, Mr Thomas, jr    1st 39.00   male
- 9     9  Appleton, Mrs Edward Dale (Charlotte Lamson)    1st 58.00 female
-10    10                        Artagaveytia, Mr Ramon    1st 71.00   male
-# ... with 1,303 more rows, and 2 more variables: Survived &lt;dbl&gt;,
-#   SexCode &lt;dbl&gt;</code></pre>
+      X1 Name                         PClass    Age Sex   Survived SexCode
+   &lt;dbl&gt; &lt;chr&gt;                        &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+ 1    1. Allen, Miss Elisabeth Walton 1st    29.0   fema…       1.      1.
+ 2    2. Allison, Miss Helen Loraine  1st     2.00  fema…       0.      1.
+ 3    3. Allison, Mr Hudson Joshua C… 1st    30.0   male        0.      0.
+ 4    4. Allison, Mrs Hudson JC (Bes… 1st    25.0   fema…       0.      1.
+ 5    5. Allison, Master Hudson Trev… 1st     0.920 male        1.      0.
+ 6    6. Anderson, Mr Harry           1st    47.0   male        1.      0.
+ 7    7. Andrews, Miss Kornelia Theo… 1st    63.0   fema…       1.      1.
+ 8    8. Andrews, Mr Thomas, jr       1st    39.0   male        0.      0.
+ 9    9. Appleton, Mrs Edward Dale (… 1st    58.0   fema…       1.      1.
+10   10. Artagaveytia, Mr Ramon       1st    71.0   male        0.      0.
+# ... with 1,303 more rows</code></pre>
 <pre class="r"><code>str(df_csv) ; str(df_sas) ; str(df_sav)</code></pre>
 <pre><code>Classes 'tbl_df', 'tbl' and 'data.frame':   1313 obs. of  7 variables:
  $ X1      : int  1 2 3 4 5 6 7 8 9 10 ...
@@ -341,7 +326,7 @@ print(df_csv) ; print(df_sas) ; print(df_sav)</code></pre>
  $ SexCode : atomic  1 1 0 1 0 0 1 0 1 0 ...
   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F8.0&quot;</code></pre>
 <ol start="4" style="list-style-type: decimal">
-<li>Try to verify that the three data sets are identical. Try to do this using the <em>is-equal-to</em> operator <code>==</code> introduced in the last tutorial and <code>all()</code>.</li>
+<li>Verify that the three data sets are identical. To do this use the <em>is-equal-to</em> operator <code>==</code> introduced in the last tutorial and <code>all()</code>.</li>
 </ol>
 <pre class="r"><code>all(df_csv == df_sas)</code></pre>
 <pre><code>[1] NA</code></pre>
@@ -350,7 +335,7 @@ print(df_csv) ; print(df_sas) ; print(df_sav)</code></pre>
 <pre class="r"><code>all(df_sas == df_sav)</code></pre>
 <pre><code>[1] NA</code></pre>
 <ol start="5" style="list-style-type: decimal">
-<li>Received an error? This is because the data sets contain <code>NA</code>’s, that is, missing values. One way to see this is via the summary function <code>summary()</code>. Try it out.</li>
+<li>Received an error? This is because the data sets contain <code>NA</code>’s, that is, missing values. One way to see this is via the summary function <code>summary()</code>. Try it out for each of the data sets.</li>
 </ol>
 <pre class="r"><code>summary(df_csv)</code></pre>
 <pre><code>       X1           Name              PClass               Age       
@@ -404,20 +389,26 @@ print(df_csv) ; print(df_sas) ; print(df_sav)</code></pre>
                     Max.   :1.0000   Max.   :1.0000  
                                                      </code></pre>
 <ol start="6" style="list-style-type: decimal">
-<li>Fortunately, this isn’t much of a problem. If you inspect <code>?all</code>, you can see that <code>all()</code> has a second argument called <code>na.rm = FALSE</code>. Using this argument, we can tell R to ignore <code>NA</code>’s. Currently, the default is set to <code>FALSE</code>, thus this feature is deactivated. To make use of it we must pass as a second argument <code>na.rm = T</code> on to <code>all()</code>. Try it. Are the data frames now equal?</li>
+<li>Fortunately, <code>NA</code>’s aren’t much of a problem. When you read <code>?all</code> (i.e., the help file), you can see that <code>all()</code> has a second argument called <code>na.rm = FALSE</code>. Using this argument, you can tell R to ignore <code>NA</code>’s. The default is set to <code>FALSE</code>, thus, this feature is deactivated. To activate it you must pass <code>na.rm = T</code> to <code>all()</code> (as the second argument). Try it. Are the data frames now equal?</li>
 </ol>
+<pre class="r"><code>all(df_csv == df_sas, na.rm = T)</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<pre class="r"><code>all(df_csv == df_sav, na.rm = T)</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<pre class="r"><code>all(df_sas == df_sav, na.rm = T)</code></pre>
+<pre><code>[1] TRUE</code></pre>
 </div>
 <div id="write-to-disk" class="section level3">
 <h3>Write to disk</h3>
-<p>Every read function in R has a corresponding write functions. In this section we will write data to the three formats we used so far plus R’s own <code>.RData</code> and <code>.RDS</code> data formats. Before we turn to writing we want to take care of an feature of older write functions, namely <code>rownames</code>.</p>
+<p>Every read function in R has a corresponding write function. In this section, you will write data to the three previous formats and R’s own <code>.RData</code> and <code>.RDS</code> formats. Before turning to writing, however, you want to take care of a aspect associated with older read and write functions: <code>rownames</code>.</p>
 <ol start="7" style="list-style-type: decimal">
-<li>As you can see, the first column in, e.g., <code>df_csv</code> contains row numbers. Older write functions in R would by default add a row number column to the data, when writing data to disk. Newer functions, however, do not show this behavior. Overall, <code>rownames</code> have come a bit out of fashion. Thus, we want to eliminate the first column from <code>df_csv</code> using another way to use indices, i.e., deletion by negative indices. Using negative rather than positive indices in accessing objects via <code>[]</code> or <code>[[]]</code> means <em>omit</em> rather than <em>select</em>. E.g., <code>c(1, 2, 3)[-2]</code> returns the vector without the second value. Try to apply this to <code>df_csv</code> while assigning it to <code>df_csv_no_rownames</code>. Should you use single <code>[]</code> or double <code>[[]]</code> brackets? Try both.</li>
+<li>As you can see, the first column in, e.g., <code>df_csv</code> contains row numbers. Older write functions by default add a row number column to the data, when it writes data to disk. Newer functions, however, do not exhibit this behavior. Overall, <code>rownames</code> have come a bit out of fashion. Thus, we want to eliminate the first column from <code>df_csv</code> using deletion by negative indices. Negative indices in subsetting functions such as <code>[]</code> or <code>[[]]</code> means <em>omit</em> rather than <em>select</em>. E.g., <code>c(1, 2, 3)[-2]</code> returns the vector without the second value. Try to apply this to <code>df_csv</code> and assign the result to <code>df_csv_no_rownames</code>. You are dealing with a data frame. Should you use single <code>[]</code> or double <code>[[]]</code> brackets? Try both.</li>
 </ol>
 <pre class="r"><code>df_csv_no_rownames = df_csv[-1]
 #df_csv_no_rownames = df_csv[[-1]]</code></pre>
 <ol start="8" style="list-style-type: decimal">
-<li><p>Then write the reduced data frame to disk using <code>write_csv()</code>. Try using the exact same file path. Does R gives you a warning?</p></li>
-<li><p>Now, let’s try some other formats using the other data set. First, read in <code>my_data.csv</code> (which you downloaded in the beginning of this practical) as assign to <code>my_data</code>. Then, write <code>my_data</code> to disk using <code>write_sas</code>, <code>write_sav</code>, and also <code>saveRDS</code>. Just as <code>write_csv</code>, each of these functions take the data frame as the first argument and the file path as the second. To obtain the latter adapt the file path by hand to make sure that the file path has the correct file ending, i.e., <code>.sas7bdat</code>, <code>.sav</code>, and <code>.RDS</code>, respectively. While you write the individual data sets pay attention to the speed of execution. Which one was fastest? If you didn’t make out a difference try again.</p></li>
+<li><p>Once you removed the first column, write the reduced data frame to disk using <code>write_csv()</code>. Try using the exact same file path. Does R give you a warning?</p></li>
+<li><p>Now, let’s try some other formats using the other data set. First, read in <code>my_data.csv</code> (which you downloaded in the beginning of this practical) as assign to <code>my_data</code>. Then, write <code>my_data</code> to disk using <code>write_sas</code>, <code>write_sav</code>, and also <code>saveRDS</code>. Just as <code>write_csv</code>, each of these functions take the data frame as the first argument and the file path as the second. To obtain the latter adapt the file path by hand to make sure that the file path has the correct file ending, i.e., <code>.sas7bdat</code>, <code>.sav</code>, and <code>.RDS</code>, respectively. While you write the individual data sets pay attention to the speed of execution. Which one was fastest? If you didn’t make out a difference, try again.</p></li>
 </ol>
 <pre class="r"><code>my_data = read_csv(&quot;data_files/my_data.csv&quot;)</code></pre>
 <pre><code>Parsed with column specification:
@@ -430,42 +421,42 @@ cols(
 write_sav(my_data,&quot;data_files/my_data.sav&quot;)
 saveRDS(my_data,&quot;data_files/my_data.RDS&quot;)</code></pre>
 <ol start="10" style="list-style-type: decimal">
-<li>You may have noticed that the <code>saveRDS</code> function was the slowest. This is because <code>.RDS</code> results in the highest degree of compression, i.e., the smallest file sizes. To verify this use the <code>file.info()</code> function on each of the four files, that is, using their file paths. Look out for the <code>size</code> element, which gives the size in <code>bytes</code>.</li>
+<li>You may have noticed that the <code>saveRDS</code> function was the slowest. This is because <code>.RDS</code> results compresses the data much more heavily and, thus, also resulrs in the smallest file sizes. To verify this use the <code>file.info()</code>-function on each of the four files, that is, on their file paths. Look out for the <code>size</code> element, which gives the size in <code>bytes</code>.</li>
 </ol>
 <pre class="r"><code>file.info(&quot;data_files/my_data.csv&quot;)</code></pre>
 <pre><code>                           size isdir mode               mtime
-data_files/my_data.csv 86932096 FALSE  644 2017-09-09 02:55:14
+data_files/my_data.csv 86932096 FALSE  644 2018-04-04 18:14:22
                                      ctime               atime uid gid
-data_files/my_data.csv 2018-01-19 20:11:54 2018-01-20 16:40:42 502  20
+data_files/my_data.csv 2018-04-04 18:14:30 2018-04-12 14:11:46 502  20
                         uname grname
 data_files/my_data.csv dwulff  staff</code></pre>
 <pre class="r"><code>file.info(&quot;data_files/my_data.sas7bdat&quot;)</code></pre>
 <pre><code>                                size isdir mode               mtime
-data_files/my_data.sas7bdat 40559616 FALSE  644 2018-01-20 16:40:39
+data_files/my_data.sas7bdat 40559616 FALSE  644 2018-04-12 14:11:42
                                           ctime               atime uid
-data_files/my_data.sas7bdat 2018-01-20 16:40:39 2018-01-20 16:40:41 502
+data_files/my_data.sas7bdat 2018-04-12 14:11:42 2018-04-12 14:11:44 502
                             gid  uname grname
 data_files/my_data.sas7bdat  20 dwulff  staff</code></pre>
 <pre class="r"><code>file.info(&quot;data_files/my_data.sav&quot;)</code></pre>
 <pre><code>                           size isdir mode               mtime
-data_files/my_data.sav 48000465 FALSE  644 2018-01-20 16:40:40
+data_files/my_data.sav 48000465 FALSE  644 2018-04-12 14:11:43
                                      ctime               atime uid gid
-data_files/my_data.sav 2018-01-20 16:40:40 2018-01-20 16:40:42 502  20
+data_files/my_data.sav 2018-04-12 14:11:43 2018-04-12 14:11:45 502  20
                         uname grname
 data_files/my_data.sav dwulff  staff</code></pre>
 <pre class="r"><code>file.info(&quot;data_files/my_data.RDS&quot;)</code></pre>
 <pre><code>                           size isdir mode               mtime
-data_files/my_data.RDS 37462133 FALSE  644 2018-01-20 16:40:42
+data_files/my_data.RDS 37462136 FALSE  644 2018-04-12 14:11:46
                                      ctime               atime uid gid
-data_files/my_data.RDS 2018-01-20 16:40:42 2018-01-20 16:40:41 502  20
+data_files/my_data.RDS 2018-04-12 14:11:46 2018-04-12 14:11:46 502  20
                         uname grname
 data_files/my_data.RDS dwulff  staff</code></pre>
 </div>
 <div id="read-from-url" class="section level3">
 <h3>Read from url</h3>
-<p>Most read functions are not limited to reading from the hard drive. Often you can also directly read from url.</p>
+<p>Most read functions are not limited to reading from the hard drive. Often you can, for instance, also directly read from url.</p>
 <ol start="11" style="list-style-type: decimal">
-<li>Try reading the the <em>titanic</em> data set using this link *<a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.csv*" class="uri">https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.csv*</a> and <code>read_csv</code>.</li>
+<li>Read the the <em>titanic</em> data set from this link *<a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.csv*" class="uri">https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.csv*</a> using <code>read_csv()</code>.</li>
 </ol>
 <pre class="r"><code>my_data = read_csv(&quot;https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/titanic.csv&quot;)</code></pre>
 <pre><code>Warning: Missing column names filled in: 'X1' [1]</code></pre>
@@ -484,18 +475,18 @@ cols(
 <h3>File connections</h3>
 <p>The most basic way to handle files is via file connections. In this more advanced section we take a look at how this works.</p>
 <ol start="12" style="list-style-type: decimal">
-<li>The first step of working with file connections is to establish a file connections using <code>file()</code>. The main arguments to <code>file</code> are a location (a file path, URL, etc.) and a mode indicator, e.g., <code>r</code> for <code>Open for reading in text mode</code>. Try opening a connection to the <code>titanic.csv</code> data set. To do this, you must assign the output of <code>file()</code> to an object, which then is the connection, e.g., <code>con = file(&quot;my_path&quot;,&quot;r&quot;)</code>. If you want to use the URL (see previous section) you have to use <code>url()</code> instead of <code>file()</code>.</li>
+<li>The first step of working with file connections is to establish a connections using <code>file()</code>. The main arguments to <code>file()</code> are a location (a file path, URL, etc.) and a mode indicator, e.g., <code>r</code> for <code>Open for reading in text mode</code>. Try opening a connection to the <code>titanic.csv</code> data set. To do this, you must assign the output of <code>file()</code> to an object, which then becomes the connection (e.g., <code>con = file(&quot;my_path&quot;,&quot;r&quot;)</code>). If you want to use the URL from above use <code>url()</code> instead of <code>file()</code>.</li>
 </ol>
 <pre class="r"><code>con = file('data_files/titanic.csv', 'r')</code></pre>
 <ol start="13" style="list-style-type: decimal">
-<li>Now that the connection is open, you can read the file using <code>readLines</code>. <code>readLines</code> iterates through the file line by line and returns each line as a character string. Try reading the file and store the output in an object. When done close the connection using <code>close(my_con)</code> and inspect the data.</li>
+<li>Now that the connection has been established, you can read the file using <code>readLines()</code>. <code>readLines()</code> iterates through the file line by line and returns each line as a character string. Try reading the file using <code>readLines()</code> and store the output in an object. When done close the connection using <code>close(my_con)</code> and inspect the data.</li>
 </ol>
 <pre class="r"><code>lin = readLines(con)</code></pre>
 <pre><code>Warning in readLines(con): incomplete final line found on 'data_files/
 titanic.csv'</code></pre>
 <pre class="r"><code>close(con)</code></pre>
 <ol start="14" style="list-style-type: decimal">
-<li>As you can see the read-in data looks much messier than with using <code>read_csv()</code>. This is because <code>read_csv()</code> really does a lot of editing and interpreting for you. If you’re up for the challenge you can try to process the raw data. One approach is to first split each line using the <code>stri_split_fixed</code> function using the comma <code>,</code> as a separator. To do this first install and load the <code>stringi</code> package. Applying <code>stri_split_fixed</code> will return a <code>list</code> of <code>vector</code>s, where each vector is one row of the data frame. Next step is to bind the rows to a matrix using <code>do.call(rbind, my_list)</code>. The only thing left then is coerce the matrix to a data frame (using <code>as.data.frame</code> or, better, <code>as.tibble</code>) and to take care of column types and names.</li>
+<li>As you can see the read-in data looks much messier than when using <code>read_csv()</code>. This is because <code>read_csv()</code> really does a lot of editing and interpreting for you. If you’re up for the challenge you can try to process the raw data. One approach is to first split each line using the <code>str_split</code> (package <code>stringr</code> from the <code>tidyverse</code>) function using the comma <code>,</code> as the <code>pattern</code> argument. Applying <code>str_split</code> will return a <code>list</code> of <code>vector</code>s, where each vector represents one row of the future data frame. Next, bind the rows to a matrix using <code>do.call(rbind, my_list)</code>. The only thing then left for you to do is transform the matrix to a data frame (using <code>as_data_frame</code> or, better, <code>as_tibble</code>) and to take care of column types and names.</li>
 </ol>
 <pre class="r"><code>require(stringi)</code></pre>
 <pre><code>Loading required package: stringi</code></pre>
@@ -509,17 +500,20 @@ is not a multiple of vector length (arg 1)</code></pre>
 <div id="scraping-the-internet" class="section level3">
 <h3>Scraping the internet</h3>
 <ol start="15" style="list-style-type: decimal">
-<li>Finally on to something completely new. As mentioned, connections can also be established to data located outside one’s own disk, such as, for instance, the world wide web. Specifically, using <code>url()</code> we can establish a connection to a webpage, which we then can use to retrieve information on the webpage. One package that conveniently streamlines extracting information from webpages based is the very <code>rvest</code> package. To illustrate how easy it can be to scrape (aka extract) information from the internet using R and <code>rvest</code>, consider the following code. It downloads and parses the Milestones table of R’s Wikipedia page.</li>
+<li>Finally on to something completely new. As mentioned, connections can also be established to data located outside one’s own hard drive, such as, for instance, the world wide web. Specifically, using <code>url()</code> you can establish a connection to a webpage, which you then can use to retrieve information from the webpage. One package that conveniently streamlines extracting information from webpages based is the <code>rvest</code> package. To illustrate how easy it can be to scrape (aka extract) information from an webpage using R and <code>rvest</code>, run the following code. It downloads and parses the Milestones table from R’s Wikipedia page.</li>
 </ol>
 <pre class="r"><code># load package
 install.packages('rvest', repos = &quot;https://stat.ethz.ch/CRAN/&quot;)</code></pre>
 <pre><code>
 The downloaded binary packages are in
-    /var/folders/4j/gkx0z2kn1b5djq50kwgl2wdc0000gp/T//RtmpKvSFYN/downloaded_packages</code></pre>
+    /var/folders/4j/gkx0z2kn1b5djq50kwgl2wdc0000gp/T//Rtmpzm1XKN/downloaded_packages</code></pre>
 <pre class="r"><code>library(rvest)</code></pre>
 <pre><code>Loading required package: xml2</code></pre>
 <pre><code>
 Attaching package: 'rvest'</code></pre>
+<pre><code>The following object is masked from 'package:purrr':
+
+    pluck</code></pre>
 <pre><code>The following object is masked from 'package:readr':
 
     guess_encoding</code></pre>
@@ -544,22 +538,21 @@ table = page %&gt;% html_node(xpath = '//*[@id=&quot;mw-content-text&quot;]/div/
 # create tibble
 as.tibble(table)</code></pre>
 <pre><code># A tibble: 13 x 3
-   Release       Date
-     &lt;chr&gt;      &lt;chr&gt;
- 1    0.16           
- 2    0.49 1997-04-23
- 3    0.60 1997-12-05
- 4  0.65.1 1999-10-07
- 5     1.0 2000-02-29
- 6     1.4 2001-12-19
- 7     2.0 2004-10-04
- 8     2.1 2005-04-18
- 9    2.11 2010-04-22
-10    2.13 2011-04-14
-11    2.14 2011-10-31
-12    2.15 2012-03-30
-13     3.0 2013-04-03
-# ... with 1 more variables: Description &lt;chr&gt;</code></pre>
+   Release Date       Description                                         
+   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;                                               
+ 1 0.16    &quot;&quot;         &quot;This is the last alpha version developed primarily…
+ 2 0.49    1997-04-23 This is the oldest source release which is currentl…
+ 3 0.60    1997-12-05 R becomes an official part of the GNU Project. The …
+ 4 0.65.1  1999-10-07 First versions of update.packages and install.packa…
+ 5 1.0     2000-02-29 Considered by its developers stable enough for prod…
+ 6 1.4     2001-12-19 S4 methods are introduced and the first version for…
+ 7 2.0     2004-10-04 Introduced lazy loading, which enables fast loading…
+ 8 2.1     2005-04-18 Support for UTF-8 encoding, and the beginnings of i…
+ 9 2.11    2010-04-22 Support for Windows 64 bit systems.                 
+10 2.13    2011-04-14 Adding a new compiler function that allows speeding…
+11 2.14    2011-10-31 Added mandatory namespaces for packages. Added a ne…
+12 2.15    2012-03-30 New load balancing functions. Improved serializatio…
+13 3.0     2013-04-03 Support for numeric index values 231 and larger on …</code></pre>
 </div>
 </div>
 <div id="additional-reading" class="section level1">

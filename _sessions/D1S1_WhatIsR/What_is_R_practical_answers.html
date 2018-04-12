@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="BaselRBootcamp January 2018" />
+<meta name="author" content="BaselRBootcamp April 2018" />
 
 
 <title>Practical: What is R</title>
@@ -117,14 +117,14 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Practical: What is R</h1>
-<h4 class="author"><em>BaselRBootcamp January 2018</em></h4>
+<h4 class="author"><em>BaselRBootcamp April 2018</em></h4>
 
 </div>
 
 
 <div id="slides" class="section level3">
 <h3>Slides</h3>
-<p>Here is a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/_sessions/D1S1_WhatIsR/What_is_R.html"><b>LINK</b></a></p>
+<p>Here is a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D1S1_WhatIsR/What_is_R.html"><b>LINK</b></a></p>
 </div>
 <div id="overview" class="section level3">
 <h3>Overview</h3>
@@ -138,15 +138,16 @@ $(document).ready(function () {
 <div id="tasks" class="section level2">
 <h2>Tasks</h2>
 <p>For this practical you will go through an existing analysis script chunk by chunk to experience how programming and analyzing in R works. The idea is that you go through the code, copy the code chunks to the script editor, send the code to the console, and evaluate what happens.</p>
-<p>While at it try to practice two very useful shortcuts: (1) <code>cmd + enter (MAC)</code> or <code>cntrl + enter (Windows)</code> for running the current line in the console. (2) <code>cmd + shift + p (MAC)</code> or <code>cntrl + shift + p (Windows)</code> for running the same block of code again in the console. The latter is really helpful because you can rerun the a chunk of code after you have made changes to it.</p>
+<p>While at it, try to practice two very useful shortcuts: (1) <code>cmd + enter (MAC)</code> or <code>cntrl + enter (Windows)</code> for running the current line in the console. (2) <code>cmd + shift + p (MAC)</code> or <code>cntrl + shift + p (Windows)</code> for running the same block of code again in the console. The latter is really helpful because you can rerun the a chunk of code after you have made changes to it.</p>
+<p>Also, try to take a look at the help-files of a functions used in the code below using <code>?function</code>, e.g., <code>?mean</code> to inspect the help-file of the <code>mean()</code>-function and try to understand why they work. You may also already try to evaluate the type of the various objects using <code>typeof(object)</code>, e.g., <code>typeof(pirates)</code> or <code>typeof(mean)</code>, to learn about the different types (of objects) in R.</p>
 <p>All of the code used in this tutorial is based on <strong>base-R functions</strong>. While they are already powerful, we will later in the course introduce you to more modern, better options for most of the steps.</p>
 <div id="install-and-load-the-yarrr-package" class="section level3">
 <h3>Install and load the yarrr package</h3>
 <ol style="list-style-type: decimal">
-<li>First we’ll install and load the yarrr package. The yarrr package contains many data sets and functions (created by Nathaniel Phillips).</li>
+<li>First we’ll install and load the yarrr package. The yarrr package contains many data sets and functions.</li>
 </ol>
 <pre class="r"><code># Install and load the yarrr package
-# install.packages('yarrr')
+# 1install.packages('yarrr')
 library(yarrr)</code></pre>
 <pre><code>Loading required package: jpeg</code></pre>
 <pre><code>Loading required package: BayesFactor</code></pre>
@@ -166,7 +167,7 @@ Type BFManual() to open the manual.
 <ol start="2" style="list-style-type: decimal">
 <li>The pirates data set contains data from a survey of 1,000 pirates. Inspect it one-by-one using the following functions.</li>
 </ol>
-<pre class="r"><code># Get help for pirates data
+<pre class="r"><code># Get help for pirates data - included in package yarrr
 ?pirates
 
 # Print the first few rows of the dataset
@@ -232,27 +233,24 @@ female   male  other
 <li>Descriptive statistics as a function of another categorical variable.</li>
 </ol>
 <pre class="r"><code># What was the mean age for each sex?
-aggregate(formula = age ~ sex + headband, 
+aggregate(formula = age ~ sex, 
+          data = pirates,
+          FUN = mean)</code></pre>
+<pre><code>     sex      age
+1 female 29.92241
+2   male 24.96735
+3  other 27.00000</code></pre>
+<pre class="r"><code># What is the median number of tattoos of pirates for each combination of sex and headband?
+aggregate(formula = tattoos ~ sex + headband, 
           data = pirates,
           FUN = median)</code></pre>
-<pre><code>     sex headband age
-1 female       no  31
-2   male       no  25
-3  other       no  25
-4 female      yes  30
-5   male      yes  25
-6  other      yes  27</code></pre>
-<pre class="r"><code># What is the median age of pirates for each combination of sex and headband?
-aggregate(formula = age ~ sex + headband, 
-          data = pirates,
-          FUN = median)</code></pre>
-<pre><code>     sex headband age
-1 female       no  31
-2   male       no  25
-3  other       no  25
-4 female      yes  30
-5   male      yes  25
-6  other      yes  27</code></pre>
+<pre><code>     sex headband tattoos
+1 female       no       5
+2   male       no       4
+3  other       no       5
+4 female      yes      10
+5   male      yes      10
+6  other      yes      10</code></pre>
 </div>
 <div id="base-plotting" class="section level3">
 <h3>Base plotting</h3>
