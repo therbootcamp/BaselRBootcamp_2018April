@@ -46,13 +46,13 @@ Iteration
 .pull-right45[
 
 ```{r eval = FALSE}
-x <- 1:5
+my_var <- 1:5
 
 # Conditional statement
-if (length(x) >= 5){
-  x[5]
+if (length(my_var) < 6){
+  my_var[5]
 } else {
-  print("x is shorter than 5")
+  print("'my_var' is too short.")
 }
 
 # Define own function
@@ -243,19 +243,16 @@ Benefits of writing code in functions:
 .pull-right45[
 
 ```{r}
-clean_ws <- function(objs = NULL,
-                     all = FALSE){
+softmax <- function(dat, theta = 1){
   
-  if (!is.null(objs)){
-    # remove objects
-    rm(objs)
+  # check precondition and
+  # return 0 if it's not met
+  if (length(dat) == 0){
+    return(0)
   }
   
-  if (isTRUE(all)){
-    # clear whole workspace
-    rm(list = ls())
-    gc()
-  }
+  exp(dat * theta) / sum(exp(dat * theta))
+  
 }
 
 
@@ -279,15 +276,15 @@ The last object in a function code is returned to the global environment. If a f
 .pull-right45[
 
 ```{r}
-softmax <- function(x, theta){
+softmax <- function(dat, theta = 1){
   
   # check precondition and
   # return 0 if it's not met
-  if (length(x) == 0){
+  if (length(dat) == 0){
     return(0)
   }
   
-  exp(x * theta) / sum(exp(x * theta))
+  exp(dat * theta) / sum(exp(dat * theta))
   
 }
 
@@ -297,6 +294,43 @@ softmax <- function(x, theta){
 
 ]
 
+
+---
+
+# Functions - Arguments
+
+.pull-left45[
+
+Functions can take any object as input to arguments. Since functions themselves are also objects, this means that also functions can be passed as arguments.
+
+The `...` argument let's you input a variety of unspecified arguments to a function, that are then passed to another function.
+
+When calling a function you can use objects or expressions as input to an argument.
+
+
+]
+
+.pull-right45[
+
+```{r}
+# function definition
+call_fun <- function(dat, fn, ...){
+  fn(dat, ...)
+}
+
+# input a function and additional statements
+call_fun(dat = pirates$parrots,
+         fn = mean, na.rm = TRUE)
+
+# input expression as argument
+call_fun(pirates$weight / (pirates$height / 100) ** 2,
+         fn = median, na.rm = TRUE)
+
+
+
+```
+
+]
 ---
 
 # Functions - Lexical Scoping
@@ -358,19 +392,20 @@ Possible functions are `stop()`, `message()`, `warning()`, and `stopifnot()`.
 ```{r}
 # with stop you test whether stopping
 # condition is met
-divide_x <- function(x, y){
-  if (y == 0){
+divide <- function(dividend,
+                   divisor){
+  if (divisor == 0){
     stop("Cannot divide by 0.
-         Enter another value for y.")
+         Enter another value for divisor.")
   }
   
-  x / y
+  dividend / divisor
 }
 
 # with stopifnot you test an
 # assertion and throws a generic
 # error message
-divide_x <- function(x, y){
+divide <- function(x, y){
   
   stopifnot(y != 0, !is.null(x),
             !is.null(y),
@@ -403,20 +438,20 @@ A `for` loop has three components:
 .pull-right45[
 
 ```{r}
-df <- tibble(x = rnorm(50),
-             y = rnorm(50),
-             z = rnorm(50))
+for (i in seq_len(4)) print(i)
 
+pir_sub <- pirates %>%
+  select(age, height, weight)
 
 output <- vector(
-  length = ncol(df)) #  output
+  length = ncol(pir_sub)) #  output
 
-for (i in seq_along(df)) { # sequence
-  output[i] <- mean(df[[i]]) # body
+for (i in seq_along(pir_sub)) { # sequence
+  output[i] <- mean(pir_sub[[i]]) # body
 }
 output
 
-for (i in seq_len(4)) print(i)
+
 
 ```
 
@@ -450,6 +485,7 @@ while(any(trunc_norm) < 0){
 
 # Potentially problematic:
 # get normal dist trucated at 0
+# but with a much larger sample
 while(any(trunc_norm) < 0){
   trunc_norm <- rnorm(500)
 }
@@ -470,11 +506,11 @@ They are very handy, but not always consitently programmed, i.e., for example th
 
 These are available `apply` functions:
 
-- `apply()`
-- `lapply()`
-- `sapply()`
-- `tapply()`
-- *`vapply()`*
+- `apply`
+- `lapply`
+- `sapply`
+- `tapply`
+- `vapply`
 
 
 ]
@@ -484,11 +520,11 @@ These are available `apply` functions:
 
 ```{r}
 # apply for rows or colums
-apply(df[1:3,], 1, mean) # rows
-apply(df, 2, mean) # columns
+apply(pir_sub[1:3,], 1, mean) # rows
+apply(pir_sub, 2, mean) # columns
 
 # sapply: simplest apply version
-sapply(df, mean) # columns
+sapply(pir_sub, mean) # columns
 
 ```
 
@@ -508,11 +544,11 @@ They are very handy, but not always consitently programmed, i.e., for example th
 
 These are available `apply` functions:
 
-- `apply()`
-- `lapply()`
-- `sapply()`
-- `tapply()`
-- *`vapply()`*
+- `apply`
+- `lapply`
+- `sapply`
+- `tapply`
+- `vapply`
 
 
 ]
@@ -523,11 +559,11 @@ These are available `apply` functions:
 ```{r}
 
 # tapply: sapply with grouping variables
-tapply(mtcars$mpg, mtcars$cyl, mean)
+tapply(pirates$tattoos, pirates$sex, mean)
 
 # vapply: safe apply version: must return
 # a numeric vector of length 1
-vapply(df, mean, 1) 
+vapply(pir_sub, mean, 1) 
 
 ```
 
@@ -552,17 +588,21 @@ An anonymous function exists only temporarily when the `apply` function is calle
 .pull-right45[
 
 
-```{r}
-# define weights for weighted mean
-weight <- sample(1:5,
-                 nrow(df),
-                 replace = TRUE)
+```{r, eval = FALSE}
 
-# anonymous function for 
-# weighted mean
-sapply(df, function(x, w){
-  sum(x * w) / sum(w)
-}, w = weight)
+# rescale age, height, and sex
+# from the pirates subset to be
+# between 0 and 1
+lapply(pir_sub, function(x, na_act){
+  
+  # first get the range
+  rng <- range(x, na.rm = na_act)
+  
+  # then rescale
+  (x - rng[1]) / (rng[2] - rng[1])
+  
+}, na_act = TRUE)
+
 
 ```
 
@@ -589,9 +629,9 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ```{r}
 
-map(df, mean)
+map(pir_sub, mean)
 
-map_dbl(df, mean)
+map_dbl(pir_sub, mean)
 
 
 ```
@@ -667,7 +707,6 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 
 ```{r}
-
 mus <- c(4, 5)
 sds <- c(2, 3)
 
@@ -678,8 +717,6 @@ ns <- c(2, 3)
 pmap(list(mean = mus,
           sd = sds,
           n = ns), rnorm)
-
-
 ```
 
 ]
@@ -727,7 +764,7 @@ invoke_map(functs, argumnts, n = 3)
 
 ---
 
-# Summary- What We've Learned
+# Summary - What We've Learned
 
 
 - How to use conditional statements
@@ -742,4 +779,5 @@ This is very helpful to not having to type the same code many times and to keep 
 
 # Programming in R Practical
 
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R_practical.html">Link to practical</a>
 

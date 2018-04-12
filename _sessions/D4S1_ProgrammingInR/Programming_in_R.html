@@ -27,9 +27,9 @@ class: center, middle, inverse, title-slide
 .pull-left45[
 Conditional Statements
 - `if`, `else`
-- `ifelse()`
-- `switch()`
-- *`case_when()`*
+- `ifelse`
+- `switch`
+- *`case_when`*
 
 Functions
 - Program your own functions
@@ -45,13 +45,13 @@ Iteration
 
 
 ```r
-x &lt;- 1:5
+my_var &lt;- 1:5
 
 # Conditional statement
-if (length(x) &gt;= 5){
-  x[5]
+if (length(my_var) &lt; 6){
+  my_var[5]
 } else {
-  print("x is shorter than 5")
+  print("'my_var' is too short.")
 }
 
 # Define own function
@@ -151,43 +151,6 @@ ifelse(test = tib &gt; 3, yes = "y", no = 0)
 
 ]
 
-
----
-
-# Conditional Statements
-
-Allow you to conditionally execute code blocks.
-
-.pull-left45[
-
-*`switch()`*
-
-Long chains of `if`-`else` statements can become confusing and require a lot of space. This is where the `switch()` function can come in handy.
-
-]
-
-.pull-right45[
-
-
-```r
-x &lt;- rnorm(10)
-
-type &lt;- "mean"
-
-# requires fewer checks than
-# if-else statements
-switch(type,
-       mean = mean(x),
-       median = median(x),
-       trimmed = mean(x, trim = .1))
-```
-
-```
-## [1] -0.2671
-```
-
-]
-
 ---
 
 # A Note on Checks
@@ -201,7 +164,8 @@ The conditional statements often require you to specify checks (logical expressi
 
 
 ```r
-(x &lt;- c(1:5))
+x &lt;- c(1:5)
+x
 ```
 
 ```
@@ -209,7 +173,8 @@ The conditional statements often require you to specify checks (logical expressi
 ```
 
 ```r
-(y &lt;- c(9:5))
+y &lt;- c(9:5)
+y
 ```
 
 ```
@@ -334,19 +299,16 @@ Benefits of writing code in functions:
 
 
 ```r
-clean_ws &lt;- function(objs = NULL,
-                     all = FALSE){
+softmax &lt;- function(dat, theta = 1){
   
-  if (!is.null(objs)){
-    # remove objects
-    rm(objs)
+  # check precondition and
+  # return 0 if it's not met
+  if (length(dat) == 0){
+    return(0)
   }
   
-  if (isTRUE(all)){
-    # clear whole workspace
-    rm(list = ls())
-    gc()
-  }
+  exp(dat * theta) / sum(exp(dat * theta))
+  
 }
 ```
 
@@ -368,21 +330,66 @@ The last object in a function code is returned to the global environment. If a f
 
 
 ```r
-softmax &lt;- function(x, theta){
+softmax &lt;- function(dat, theta = 1){
   
   # check precondition and
   # return 0 if it's not met
-  if (length(x) == 0){
+  if (length(dat) == 0){
     return(0)
   }
   
-  exp(x * theta) / sum(exp(x * theta))
+  exp(dat * theta) / sum(exp(dat * theta))
   
 }
 ```
 
 ]
 
+
+---
+
+# Functions - Arguments
+
+.pull-left45[
+
+Functions can take any object as input to arguments. Since functions themselves are also objects, this means that also functions can be passed as arguments.
+
+The `...` argument let's you input a variety of unspecified arguments to a function, that are then passed to another function.
+
+When calling a function you can use objects or expressions as input to an argument.
+
+
+]
+
+.pull-right45[
+
+
+```r
+# function definition
+call_fun &lt;- function(dat, fn, ...){
+  fn(dat, ...)
+}
+
+# input a function and additional statements
+call_fun(dat = pirates$parrots,
+         fn = mean, na.rm = TRUE)
+```
+
+```
+## [1] 2.819
+```
+
+```r
+# input expression as argument
+call_fun(pirates$weight / (pirates$height / 100) ** 2,
+         fn = median, na.rm = TRUE)
+```
+
+```
+## [1] 23.93
+```
+
+]
 ---
 
 # Functions - Lexical Scoping
@@ -409,7 +416,8 @@ add &lt;- function(x){
   z
 }
 
-x &lt;- 1; y &lt;- 2
+x &lt;- 1
+y &lt;- 2
 
 add(x)
 ```
@@ -450,23 +458,24 @@ Possible functions are `stop()`, `message()`, `warning()`, and `stopifnot()`.
 ```r
 # with stop you test whether stopping
 # condition is met
-divide_x &lt;- function(x, y){
-  if (y == 0){
+divide &lt;- function(dividend,
+                   divisor){
+  if (divisor == 0){
     stop("Cannot divide by 0.
-         Enter another value for y.")
+         Enter another value for divisor.")
   }
   
-  x / y
+  dividend / divisor
 }
 
 # with stopifnot you test an
 # assertion and throws a generic
 # error message
-divide_x &lt;- function(x, y){
+divide &lt;- function(x, y){
   
   stopifnot(y != 0, !is.null(x),
             !is.null(y),
-            all(!is.na(c(x,y))))
+            all(!is.na(c(x, y))))
   
   x / y
 }
@@ -495,25 +504,6 @@ A `for` loop has three components:
 
 
 ```r
-df &lt;- tibble(x = rnorm(50),
-             y = rnorm(50),
-             z = rnorm(50))
-
-
-output &lt;- vector(
-  length = ncol(df)) #  output
-
-for (i in seq_along(df)) { # sequence
-  output[i] &lt;- mean(df[[i]]) # body
-}
-output
-```
-
-```
-## [1]  0.3119804 -0.0004959 -0.0713462
-```
-
-```r
 for (i in seq_len(4)) print(i)
 ```
 
@@ -524,57 +514,21 @@ for (i in seq_len(4)) print(i)
 ## [1] 4
 ```
 
-]
-
----
-
-# Iteration - `for` Loops
-
-Remember to define the output prior to entering the loop and creating it in the desired length.
-
-.pull-left45[
-
-**Good:**
-
-
 ```r
-# Creates the desired object
-# and fills it subsequently
+pir_sub &lt;- pirates %&gt;%
+  select(age, height, weight)
+
 output &lt;- vector(
-  length = ncol(df)) #  output
+  length = ncol(pir_sub)) #  output
 
-for (i in seq_along(df)) { # sequence
-  output[i] &lt;- mean(df[[i]]) # body
+for (i in seq_along(pir_sub)) { # sequence
+  output[i] &lt;- mean(pir_sub[[i]]) # body
 }
 output
 ```
 
 ```
-## [1]  0.3119804 -0.0004959 -0.0713462
-```
-
-
-]
-
-.pull-right45[
-
-**Bad:**
-
-
-```r
-# Creates a copy at each iteration
-# and is thus slower
-output &lt;- NULL #  output
-
-for (i in seq_along(df)) { # sequence
-  output &lt;- c(output,
-              mean(df[[i]])) # body
-}
-output
-```
-
-```
-## [1]  0.3119804 -0.0004959 -0.0713462
+## [1]  27.36 170.23  69.74
 ```
 
 ]
@@ -599,25 +553,18 @@ This can be handy, but also "dangerous" because if the condition is never met, i
 
 
 ```r
-# get similar subset of samples
-while(dist &gt; 1){
-  ind &lt;- sample(nrow(df))
-  x1 &lt;- df$x[ind[1:(length(ind) / 2)]]
-  x2 &lt;- df$x[ind[(length(ind) / 2) + 1:
-                   length(ind)]]
-  
-  dist &lt;- abs(mean(x1) - mean(x2))
+trunc_norm &lt;- rnorm(30)
+
+# get normal dist trucated at 0
+while(any(trunc_norm) &lt; 0){
+  trunc_norm &lt;- rnorm(30)
 }
 
 # Potentially problematic:
-# get VERY similar subset of samples
-while(dist &gt; .0001){ # very small dist
-  ind &lt;- sample(nrow(df))
-  x1 &lt;- df$x[ind[1:(length(ind) / 2)]]
-  x2 &lt;- df$x[ind[(length(ind) / 2) + 1:
-                   length(ind)]]
-  
-  dist &lt;- abs(mean(x1) - mean(x2))
+# get normal dist trucated at 0
+# but with a much larger sample
+while(any(trunc_norm) &lt; 0){
+  trunc_norm &lt;- rnorm(500)
 }
 ```
 
@@ -636,11 +583,11 @@ They are very handy, but not always consitently programmed, i.e., for example th
 
 These are available `apply` functions:
 
-- `apply()`
-- `lapply()`
-- `sapply()`
-- `tapply()`
-- *`vapply()`*
+- `apply`
+- `lapply`
+- `sapply`
+- `tapply`
+- `vapply`
 
 
 ]
@@ -651,30 +598,31 @@ These are available `apply` functions:
 
 ```r
 # apply for rows or colums
-apply(df[1:3,], 1, mean) # rows
+apply(pir_sub[1:3,], 1, mean) # rows
 ```
 
 ```
-## [1] -0.1505 -0.8377 -0.5630
+##      1      2      3 
+##  90.54 115.28  91.02
 ```
 
 ```r
-apply(df, 2, mean) # columns
+apply(pir_sub, 2, mean) # columns
 ```
 
 ```
-##          x          y          z 
-##  0.3119804 -0.0004959 -0.0713462
+##    age height weight 
+##  27.36 170.23  69.74
 ```
 
 ```r
 # sapply: simplest apply version
-sapply(df, mean) # columns
+sapply(pir_sub, mean) # columns
 ```
 
 ```
-##          x          y          z 
-##  0.3119804 -0.0004959 -0.0713462
+##    age height weight 
+##  27.36 170.23  69.74
 ```
 
 ]
@@ -693,11 +641,11 @@ They are very handy, but not always consitently programmed, i.e., for example th
 
 These are available `apply` functions:
 
-- `apply()`
-- `lapply()`
-- `sapply()`
-- `tapply()`
-- *`vapply()`*
+- `apply`
+- `lapply`
+- `sapply`
+- `tapply`
+- `vapply`
 
 
 ]
@@ -708,23 +656,23 @@ These are available `apply` functions:
 
 ```r
 # tapply: sapply with grouping variables
-tapply(mtcars$mpg, mtcars$cyl, mean)
+tapply(pirates$tattoos, pirates$sex, mean)
 ```
 
 ```
-##     4     6     8 
-## 26.66 19.74 15.10
+## female   male  other 
+##  9.431  9.435  9.348
 ```
 
 ```r
 # vapply: safe apply version: must return
 # a numeric vector of length 1
-vapply(df, mean, 1) 
+vapply(pir_sub, mean, 1) 
 ```
 
 ```
-##          x          y          z 
-##  0.3119804 -0.0004959 -0.0713462
+##    age height weight 
+##  27.36 170.23  69.74
 ```
 
 ]
@@ -750,21 +698,18 @@ An anonymous function exists only temporarily when the `apply` function is calle
 
 
 ```r
-# define weights for weighted mean
-weight &lt;- sample(1:5,
-                 nrow(df),
-                 replace = TRUE)
-
-# anonymous function for 
-# weighted mean
-sapply(df, function(x, w){
-  sum(x * w) / sum(w)
-}, w = weight)
-```
-
-```
-##        x        y        z 
-##  0.38543  0.06265 -0.05959
+# rescale age, height, and sex
+# from the pirates subset to be
+# between 0 and 1
+lapply(pir_sub, function(x, na_act){
+  
+  # first get the range
+  rng &lt;- range(x, na.rm = na_act)
+  
+  # then rescale
+  (x - rng[1]) / (rng[2] - rng[1])
+  
+}, na_act = TRUE)
 ```
 
 ]
@@ -788,27 +733,27 @@ The `map` functions are the purrr equivalent of the `apply` functions.
 
 
 ```r
-map(df, mean)
+map(pir_sub, mean)
 ```
 
 ```
-## $x
-## [1] 0.312
+## $age
+## [1] 27.36
 ## 
-## $y
-## [1] -0.0004959
+## $height
+## [1] 170.2
 ## 
-## $z
-## [1] -0.07135
+## $weight
+## [1] 69.74
 ```
 
 ```r
-map_dbl(df, mean)
+map_dbl(pir_sub, mean)
 ```
 
 ```
-##          x          y          z 
-##  0.3119804 -0.0004959 -0.0713462
+##    age height weight 
+##  27.36 170.23  69.74
 ```
 
 ]
@@ -854,20 +799,6 @@ pirates %&gt;%
 ##       27.360        9.429       10.384
 ```
 
-```r
-# shorter way to write it
-pirates %&gt;%
-  select(age,
-         tattoos,
-         beard.length)  %&gt;%
-  map_dbl(~sum(.) / length(.))
-```
-
-```
-##          age      tattoos beard.length 
-##       27.360        9.429       10.384
-```
-
 ]
 
 
@@ -904,10 +835,10 @@ map2(mus, sds, rnorm, n = 3)
 
 ```
 ## [[1]]
-## [1]  4.7814  2.9067 -0.1929
+## [1] 3.271 3.071 5.488
 ## 
 ## [[2]]
-## [1] 3.719 5.048 5.324
+## [1] 8.915 3.960 6.758
 ```
 
 ```r
@@ -920,10 +851,10 @@ pmap(list(mean = mus,
 
 ```
 ## [[1]]
-## [1] 5.583 6.065
+## [1] 6.291 6.639
 ## 
 ## [[2]]
-## [1]  1.374 10.184  7.780
+## [1] 7.412 4.225 9.339
 ```
 
 ]
@@ -965,10 +896,10 @@ invoke_map(functs, argumnts, n = 3)
 
 ```
 ## [[1]]
-## [1] 3.921 4.905 4.816
+## [1] 1.791 2.066 1.998
 ## 
 ## [[2]]
-## [1] 0.1276 0.3669 0.2586
+## [1] 0.6833 0.5768 0.5830
 ```
 
 ]
@@ -976,7 +907,7 @@ invoke_map(functs, argumnts, n = 3)
 
 ---
 
-# Summary- What We've Learned
+# Summary - What We've Learned
 
 
 - How to use conditional statements
@@ -990,6 +921,8 @@ This is very helpful to not having to type the same code many times and to keep 
 ---
 
 # Programming in R Practical
+
+&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R_practical.html"&gt;Link to practical&lt;/a&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
