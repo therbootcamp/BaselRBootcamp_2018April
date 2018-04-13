@@ -4,7 +4,7 @@
     <title>Dynamic Reports</title>
     <meta charset="utf-8">
     <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
-    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
   <body>
@@ -14,7 +14,7 @@ class: center, middle, inverse, title-slide
 # Dynamic Reports
 ## With RMarkdown
 ### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
-### January 2018
+### April 2018
 
 ---
 
@@ -478,8 +478,15 @@ Read Wickham's [book "R Packages"](http://r-pkgs.had.co.nz/) (available free at 
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
