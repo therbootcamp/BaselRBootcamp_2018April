@@ -1,6 +1,6 @@
 ---
 title: "Machine Learning II"
-author: "BaselRBootcamp January 2018"
+author: "BaselRBootcamp April 2018"
 output: html_document
 ---
 
