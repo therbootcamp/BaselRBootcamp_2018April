@@ -2,7 +2,7 @@
 title: "Plotting"
 subtitle: "With ggplot2"
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -1477,7 +1477,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ## Plotting Pratical
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D3S2_PlottingI/PlottingI_practical.html">Link to Plotting practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S2_PlottingI/PlottingI_practical.html">Link to Plotting practical</a>
 
 
 ---

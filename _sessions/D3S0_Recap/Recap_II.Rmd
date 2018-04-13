@@ -2,7 +2,7 @@
 title: "Recap II"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -562,4 +562,4 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ---
 # Today
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/schedule_18Jan">Schedule</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/schedule">Schedule</a>
