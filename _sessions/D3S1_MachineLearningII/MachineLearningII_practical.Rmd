@@ -72,7 +72,6 @@ iris_train <- iris[]
 # Part A:
 # Load libraries
 # -----------------------
-
 library(caret)          # for randomForest()
 library(mlr)        # for FFTrees and the heartdisease data
 library(mlbench)      # for dplyr and ggplot2
@@ -175,38 +174,33 @@ caret.cv <- train(survived ~ .,
 ```
 
 
-### Datasets in the mlbench package
+### Datasets
 
-We will explore 5 different datasets from the `mlbench` package. This package contains many different datasets that are used throughout the machine learning commmunity to evaluate and compare machine learning models.
+We will use two main datasets in this practical, `boston` and `breastcancer`. The Boston dastaset looks like this:
 
-```{r, eval = TRUE}
-library(mlbench)
-
-data(BostonHousing)
-data(DNA)
-data(BreastCancer)
-data(Soybean)
-data(LetterRecognition)
-```
-
-```{r datadescriptions, echo = FALSE}
-tibble(dataset = "BostonHousing", rows = nrow(BostonHousing), columns = ncol(BostonHousing)) %>%
-  add_row(dataset = "DNA", rows = nrow(DNA), columns = ncol(DNA)) %>%
-  add_row(dataset = "BreastCancer", rows = nrow(BreastCancer), columns = ncol(BreastCancer)) %>%
-  add_row(dataset = "Soybean", rows = nrow(Soybean), columns = ncol(Soybean)) %>%
-    add_row(dataset = "LetterRecognition", rows = nrow(LetterRecognition), columns = ncol(LetterRecognition)) %>%
-  knitr::kable()
+```{r}
+DT::datatable(BostonHousing)
 ```
 
 
-For each of the three datasets, go through the following tasks.
-
-
-
+crim	per capita crime rate by town
+zn	proportion of residential land zoned for lots over 25,000 sq.ft
+indus	proportion of non-retail business acres per town
+chas	Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
+nox	nitric oxides concentration (parts per 10 million)
+rm	average number of rooms per dwelling
+age	proportion of owner-occupied units built prior to 1940
+dis	weighted distances to five Boston employment centres
+rad	index of accessibility to radial highways
+tax	full-value property-tax rate per USD 10,000
+ptratio	pupil-teacher ratio by town
+b	1000(B - 0.63)^2 where B is the proportion of blacks by town
+lstat	percentage of lower status of the population
+medv	median value of owner-occupied homes in USD 1000's
 
 ## (E)xplore
 
-1. Load the training data into R as a new object with the name `XX_train` using `read_csv()`.
+1. Load the training data into R as a new object with the name `boston_train` using `read_csv()`.
 
 ```{r, eval = FALSE}
 boston_train <- read_csv("data/boston_train.csv")
@@ -242,7 +236,7 @@ rep10_control <- caret::trainControl(method = "repeatedcv",
 
 8. We're almost ready to train models! To do so, we'll use the almighty `train()` function. Look at the help menu for the `train()` function to see all of its lovely arguments and examples
 
-9. Now it's time to actually train a model We'll start with simple linear regression. Create an object called `X_regression_train`  where you predict the criterion. In order to conduct linear regresion, include the arguments `method = 'lm'` and `trControl = rep10_control`
+9. Now it's time to actually train a model We'll start with simple linear regression. Create an object called `boston_lm_train`  where you predict the criterion. In order to conduct linear regresion, include the arguments `method = 'lm'` and `trControl = rep10_control`
 
 ```{r}
 boston_regression_train <- caret::train(form = crim ~ ., 
@@ -251,7 +245,7 @@ boston_regression_train <- caret::train(form = crim ~ .,
                                         trControl = rep10_control)
 ```
 
-10. Explor your `boston_regression_train` argument using the generic functions `names()`, `summary()`, and `plot()`. What is stored in this object?
+10. Explor your `boston_lm_train` argument using the generic functions `names()`, `summary()`, and `plot()`. What is stored in this object?
 
 11. Using the `varImp()` function, look at the variable importance of each predictor. Which predictors seem to be the most important? After you've run the function, try plotting the object with `plot()` to visualise the results!
 
@@ -259,16 +253,18 @@ boston_regression_train <- caret::train(form = crim ~ .,
 caret::varImp(boston_regression_train)
 ```
 
-12. Now it's time to make predictions form your model! Using `predict()`, predict the criterion values for the test dataset `X_test`. Save the results as the vector `X_regression_predictions`
+12. Load the test dataset as a new object called `boston_test` into R using `read_csv()`
+
+13. Now it's time to make predictions form your model! Using `predict()`, predict the criterion values for the test dataset `boston_test`. In the `object` argument, use your `boston_lm_train` model, in the `newdata` argument, use your `boston_test` test data. Save the results as the vector `boston_lm_predictions`
 
 ```{r}
-boston_regression_predictions <- predict(boston_regression_train, 
-                                    newdata = boston_test)
+boston_lm_predictions <- predict(boston_lm_train, 
+                                 newdata = boston_test)
 ```
 
 ### (E)valuating model performance
 
-13. How well did your model do in predicting the true data? To start, plot the relationship between your model predictions and the true criterion using the following template
+14. How well did your model do in predicting the true data? To start, plot the relationship between your model predictions and the true criterion using the following template
 
 ```{r, eval = FALSE}
 # Combine predictions and criterion in one tibble
@@ -284,24 +280,26 @@ ggplot(data = performance_data,
        subtitle = "Blue line is perfect prediction!")
 ```
 
-14. Now it's time to quantify how well your model did. To do this, we'll evaluate its performance with `postResample()`. Start by looking at the help menu for the `postResample()` function to see its arguments.
+15. Now it's time to quantify how well your model did. To do this, we'll evaluate its performance with `postResample()`. Start by looking at the help menu for the `postResample()` function to see its arguments.
 
-15. Now evaluate the model's predictions using `postResample()`. You should only specify the `pred` and `obs` arguments as `pred = boston_regression_predictions` and `obs = boston_test$crim`. 
+16. Now evaluate the model's predictions using `postResample()`. You should only specify the `pred` and `obs` arguments as `pred = boston_regression_predictions` and `obs = boston_test$crim`. 
 
 ```{r}
 postResample(pred = X_regression_predictions, 
              obs = boston_test$crim)
 ```
 
-16. How well did your model do? What was the overall level of accuracy? If you don't understand the results, look at the details in the help menu for help!
+17. How well did your model do? What was the overall level of accuracy? If you don't understand the results, look at the details in the help menu for help!
 
-## Selecting different models.
+## Selecting different models
 
-17. Now let's try a new model! Instead of using simple linear regression with `method = 'lm'`, we'll use so--called 'ridge regression'. Ridge regression is a variation of 'standard' linear regression that tries to avoid overfitting and thus make better predictions. How can you use ridge regression in caret? Try to answer yourself by looking at the list of all available models on the caret help site: [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html). Search for 'ridge' and find the `method` value.
+18. Now let's try a new model! Instead of using simple linear regression with `method = 'lm'`, we'll use so--called 'ridge regression'. Ridge regression is a variation of 'standard' linear regression that tries to avoid overfitting and thus make better predictions. How can you use ridge regression in caret? Try to answer yourself by looking at the list of all available models on the caret help site: [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html). Search for 'ridge' and find the `method` value.
 
-18. Repeat steps 9 through 16 to create a *new* set of objects using ridge regression instead of standard linear regression.  When creating your objects, you mauy want to use the name `_ridge_` instead of `_regression_` so you know which object is which!. As you are creating your new objects, make sure to stop and explore them (i.e.; with `summary()`, `plot()`, `print()` to see how they look different from the previous objects. 
+19. Repeat steps 9 through 16 to create a *new* set of objects using ridge regression instead of standard linear regression.  When creating your objects, you mauy want to use the name `_ridge_` instead of `_regression_` so you know which object is which!. As you are creating your new objects, make sure to stop and explore them (i.e.; with `summary()`, `plot()`, `print()` to see how they look different from the previous objects. 
 
+20. Which model predicted the data better? Standard regression or ridge regression? Was using ridge regression able to improve your predictions?
 
+21. Now you're getting the hang of it! Instead of regression, let's try a totally different model....random forests! Repeat all of your steps to see how well random forests do in predicting the `boston_test` data.
 
 
 
