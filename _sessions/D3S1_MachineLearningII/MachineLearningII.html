@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Machine Learning II</title>
+    <meta charset="utf-8">
+    <meta name="author" content="The R Bootcamp Twitter: @therbootcamp" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Machine Learning II
+## caret
+### The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'><span class="citation">@therbootcamp</span></a>
+### April 2018
+
+---
+
+
+
+
+
+
+# What is machine learning?
+
+.pull-left6[
+
+
+### Algorithms autonomously learning from data.
+
+Given data, an algorithm tunes its *parameters* to match the data, understand how it works, and make predictions for what will occur in the future.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mldiagram_A.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right4[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearningcartoon.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+# What is the basic machine learning process?
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/MLdiagram.png" width="95%" /&gt;
+
+
+
+---
+## Two types of prediction tasks
+
+.pull-left45[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/classification_task.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+.pull-right45[
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/regression_task.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+
+---
+# Training models
+
+.pull-left55[
+
+
+- Almost all machine learning models have *parameters* that need to be *fit* to the data.
+
+    - Regression has *beta weights*, decision trees have *nodes and splits*
+
+- The process of fitting parameters is called *training* a model
+
+- One of the most common ways to train a model and find good parameters is with *10-Fold Cross Validation*
+
+]
+
+
+.pull-right4[
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Linear_regression.svg/1200px-Linear_regression.svg.png" width="60%" style="display: block; margin: auto;" /&gt;&lt;img src="http://www.milbo.org/rpart-plot/rpart.plot-example1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+---
+# 10 Fold Cross Validation
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg" alt="Source: Wikipedia" width="85%" /&gt;
+&lt;p class="caption"&gt;Source: Wikipedia&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# 10 Fold Cross Validation
+
+.pull-left5[
+
+
+### Why use 10 fold cross validation?
+
+- Allows you to simultaneously *estimate* model *prediction* performance from training data
+
+- Can show parameter *stability* across different subsets of data.
+
+- Given a dataset, the majority of machine learning models are evaluated based on 10-Fold cross validation.
+
+
+]
+
+.pull-right45[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg" alt="Source: Wikipedia" width="100%" /&gt;
+&lt;p class="caption"&gt;Source: Wikipedia&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+
+
+---
+# 10 Fold Cross Validation
+
+.pull-left5[
+
+### How do you conduct 10 fold cross validation?
+
+- You could program your own 10 fold cross validation code by hand. But it would be very long (and probably have many errors!).
+
+- You would have to cusomise the code to apply to many different types of models (regression, random forests, decision trees, etc...)
+
+- It would be a nightmare...
+
+
+### Thankfully, there is a solution...
+
+
+&lt;img src="https://vignette.wikia.nocookie.net/joke-battles/images/2/21/Bugs-Bunny-4.png/revision/latest?cb=20151231234917" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+.pull-right45[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg" alt="Source: Wikipedia" width="100%" /&gt;
+&lt;p class="caption"&gt;Source: Wikipedia&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+
+---
+
+&lt;br&gt;&lt;br&gt;
+.pull-left4[
+
+# Caret
+
+
+- Caret stands for Classification And REgression Training.
+
+- Caret is data scientist's dream toolbox for conducting machine learning.
+
+- Caret has functions that allow you to do most machine learning tasks with a few lines of code.
+
+- No need to learn different functions or syntax for different models.
+
+]
+
+.pull-right55[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2014/09/Caret-package-in-R.png" alt="The almighty Caret!" width="80%" /&gt;
+&lt;p class="caption"&gt;The almighty Caret!&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/MLdiagram.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+.pull-left5[
+
+# Caret
+
+
+As always, you can install `caret` from CRAN
+
+
+```r
+# Install caret
+install.packages("caret")
+
+# Load the caret package
+library("caret")
+```
+
+Once you've installed `caret`, look at the vignette for a nice overview of the package
+
+
+```r
+# Open the main package vignette
+vignette("caret")
+```
+
+
+Today we will go over the main functions in the package
+
+
+]
+
+.pull-right45[
+
+### Caret Vignette
+
+&lt;img src="caret_vignette.jpg" width="90%" /&gt;
+
+
+]
+
+
+---
+
+.pull-left5[
+# Caret
+
+
+Here are the main functions in the `caret` package
+
+| Function| Purpose|
+|--------|----------|
+| `trainControl()` | Determine how training (in general) will be done|
+| `train()` | Specify a model and find *best* parameters |
+| `varImp()` | Determine variable importance |
+
+]
+
+
+.pull-right45[
+
+### Caret Vignette
+
+&lt;img src="caret_vignette.jpg" width="90%" /&gt;
+
+]
+
+
+
+---
+
+# Caret
+
+### trainControl()
+
+- Use `trainControl()` to define a general fitting process.
+
+
+
+```r
+# Get ready for 10 fold cross validation!
+
+mycontrol &lt;- trainControl(method = "repeatedcv", # Do repeated cross validation
+                          number = 10,           # 10 folds
+                          repeats = 50)         # Repeat 50 times (!)
+```
+
+
+- Can specify cross validation with `method = "repeatedcv"`
+    - Many other methods are available too!
+    
+- Can *repeat* cross validation many times with `repeats`
+
+
+
+
+---
+
+.pull-left6[
+
+# Caret
+
+### train()
+
+- Use `train()` to fit a model and get best parameters
+
+
+```r
+train(form = price ~ .,      # Criterion
+      data = data_train,     # Training data
+      method = "lm",         # Specify a model
+      trControl = mycontrol) # Use mycontrol parameters
+```
+
+- Specify the criterion to be predicted as a formula with `form`
+
+- Specify training data with `data`
+
+- Choose a model with `method`
+    - `method = 'lm'` = Linear regression
+    - `method = 'rf` = Random forest
+
+]
+
+.pull-right35[
+
+See all models at [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html)
+
+&lt;img src="caret_models.jpg" width="1699" /&gt;
+
+
+]
+
+---
+
+.pull-left5[
+
+# Caret
+
+### varImp()
+
+- Use `varImp()` to extract **variable importance** from a model
+
+
+```r
+# Look at variable importance with varImp
+varImp(diamonds_lm_train)
+```
+
+- Result will be a vector showing how important each variable was in predicting the criterion.
+
+- Specific outputs depend on the model
+    - Regression: Regression weights
+    - Decision trees: Mean *gini* index.
+    
+]
+
+
+.pull-right45[
+
+&lt;img src="varimp_ss.jpg" width="912" /&gt;
+
+
+]
+
+
+---
+
+
+&lt;br&gt;&lt;br&gt;
+.pull-left5[
+
+# Caret
+
+
+- There are *many* other great features of caret we haven't touched
+   - Splitting data with `createDataPartition()`
+   - Imputing (replacing) missing values with `preProcess()`
+   - Transforming predictors with `preProcess()`
+   - Add your own custom model
+   
+
+- Be sure to check out the **excellent** documentation site to learn all the details
+
+### http://topepo.github.io/caret/index.html
+
+]
+
+.pull-right45[
+
+&lt;img src="caret_package_md.jpg" width="2251" /&gt;
+
+
+]
+
+
+
+---
+
+## Machine Learning II Live Demo &amp; Practical
+
+&lt;p&gt;&lt;font size=6&gt;&lt;b&gt;&lt;a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S1_MachineLearningII/MachineLearningII_practical.html"&gt;Link to Machine Learning II practical&lt;/a&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

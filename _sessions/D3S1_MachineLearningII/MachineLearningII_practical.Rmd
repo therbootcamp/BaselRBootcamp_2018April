@@ -89,14 +89,14 @@ ggpairs(diamonds_train)
 
 # Set up control values
 rep10_control <- trainControl(method = "repeatedcv",
-                              number = 10,
-                              search = "grid")          # Find optimal parameters
+                              number = 10, # 10 folds
+                              repeats = 5) # Repeat 5 times
 
 # Predict price with linear regression
-diamonds_lm_train <- caret::train(form = price ~ ., 
-                                data = diamonds_train,
-                                method = "lm",
-                                trControl = rep10_control)
+diamonds_lm_train <- train(form = price ~ ., 
+                           data = diamonds_train,
+                           method = "lm",
+                           trControl = rep10_control)
 
 # Explore the train object
 class(diamonds_lm_train)
@@ -104,7 +104,7 @@ diamonds_lm_train
 names(diamonds_lm_train)
 summary(diamonds_lm_train)
 
-# Look at variable importance with vartImp
+# Look at variable importance with varImp
 varImp(diamonds_lm_train)
 
 # Save final predictions
