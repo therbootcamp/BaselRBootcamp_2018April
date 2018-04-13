@@ -4,205 +4,164 @@ author: "BaselRBootcamp January 2018"
 output: html_document
 ---
 
-```{r, echo = FALSE, fig.align = 'center', out.width = "50%", fig.cap = "Source: https://www.toptal.com/machine-learning/machine-learning-theory-an-introductory-primer"}
-knitr::include_graphics("https://uploads.toptal.io/blog/image/443/toptal-blog-image-1407508081138.png")
+```{r, echo = FALSE, fig.align = 'center', out.width = "50%", fig.cap = "The almighty Caret!"}
+knitr::include_graphics("https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2014/09/Caret-package-in-R.png")
 ```
 
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE, fig.align = 'center')
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval = FALSE, fig.align = 'center')
 ```
 
 
 ### Slides
 
-- [Here are the introduction slides for this practical on machine learning!](https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning.html)
+- [Here are the introduction slides for this practical on machine learning!](https://therbootcamp.github.io/_sessions/D3S1_MachineLearningII/MachineLearningII.html)
 
 
 ### Overview
 
 In this practical you'll use the `caret` (**C**lassification **A**nd **RE**gression **T**raining) package to automate many aspects of the machine learning process. By the end of this practical you will know:
 
-1. Which aspects of the machine learning process the `caret` package can automate
-2. Select different 'learners' available in the `caret` package
-3. Fit parameters of a learner to a dataset
-4. Explore learners to understand how they work
-5. Use cross validation techniques to estimate the accuracy of a learner
-6. Make a prediction for a real dataset!
-
-### Glossary and packages
-
-Here are the main functions and packages you'll be using. For more information about the specific models, click on the link in *Additional Details*.
-
-| Algorithm| Function| Package | Additional Details |
-|:------|:--------|:----|:----|
-|     Regression|    `glm()`| Base R| https://bookdown.org/ndphillips/YaRrr/regression.html#the-linear-model|
-|     Fast-and-Frugal decision trees|    `FFTrees()`| FFTrees| https://cran.r-project.org/web/packages/FFTrees/vignettes/guide.html|
-|     Decision Trees|    `rpart()`| `rpart` | https://statweb.stanford.edu/~lpekelis/talks/13_datafest_cart_talk.pdf|
-| Random Forests | `randomForest()` | `randomForest` | http://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/|
-
-### Packages
-
-For this practical, you will need the following packages:
-
-```{r, eval = FALSE}
-# Install all of the packages necessary for this practical
-install.packages(c("caret", "e1071", "doSNOW", "ipred", "xgboost", "mlbench", "rpart", "mlr"))
-```
-
-
-
-```{r, echo = FALSE, eval = FALSE}
-library(caret)
-
-
-iris_train_s <- createDataPartition(iris$Species, times = 1, p = .5)
-
-iris_train <- iris[]
-
-```
-
-
-### Examples
-
-- The following examples will take you through all steps of the machine learning process, from creating training and test data, to fitting models, to making predictions. Follow along and try to see how piece of code works!
-
-```{r, eval = FALSE, echo = TRUE}
-# -----------------------
-# Part A:
-# Load libraries
-# -----------------------
-library(caret)          # for randomForest()
-library(mlr)        # for FFTrees and the heartdisease data
-library(mlbench)      # for dplyr and ggplot2
-library(GGally)   # For ggpairs
-
-# -----------------------
-# Part B: Load training dataset
-# Look at https://www.kaggle.com/c/titanic/data for a full description
-# -----------------------
-
-titanic_full <- read_csv("https://raw.githubusercontent.com/pcsanwald/kaggle-titanic/master/train.csv")
-
-# Create training and test data
-
-train_cases <- createDataPartition(y = titanic_full$survived,
-                                   times = 1)
-
-titani_train <- titanic_full %>%
-  slice(train_cases$Resample1)
-
-
-#=================================================================
-# Impute Missing Ages
-#=================================================================
-
-# Explore columns statistics with mlr::summarizeColumns
-titanic_full %>%
-  mlr::summarizeColumns()
-
-
-
-
-
-
-
-# Caret supports a number of mechanism for imputing (i.e., 
-# predicting) missing values. Leverage bagged decision trees
-# to impute missing values for the Age feature.
-
-# First, transform all feature to dummy variables.
-dummy_vars <- dummyVars(~ ., data = train %>% select(-survived))
-train_dummy <- predict(dummy_vars, newdata = train %>% select(-survived))
-
-# 
-train_bagImpute_model <- preProcess(train_dummy, method = "bagImpute")
-train_inputed <- as_tibble(predict(train_bagImpute_model, newdata = train_dummy))
-
-#=================================================================
-# Split Data
-#=================================================================
-
-# Use caret to create a 70/30% split of the training data,
-# keeping the proportions of the Survived class label the
-# same across splits.
-set.seed(100)
-
-train_indices <- createDataPartition(train_inputed$survived,
-                                     times = 3,
-                                     p = 0.7,
-                                     list = FALSE)
-
-titanic_train <- train_inputed %>% 
-  slice(train_indices[,1])
-
-titanic_test <- train_inputed %>% 
-  slice(-train_indices[,1])
-
-
-# Examine the proportions of the Survived class lable across
-# the datasets.
-prop.table(table(train$survived))
-prop.table(table(titanic_train$survived))
-prop.table(table(titanic_test$survived))
-
-str(train)
-
-
-#=================================================================
-# Train Model
-#=================================================================
-
-# Set up caret to perform 10-fold cross validation repeated 3 
-# times and to use a grid search for optimal model hyperparamter
-# values.
-train.control <- trainControl(method = "repeatedcv",
-                              number = 10,              # 10-fold 
-                              repeats = 3,              # Do it 3 times
-                              search = "grid")          # Find optimal parameters
-
-caret.cv <- train(survived ~ ., 
-                  data = titanic_train,
-                  method = "xgbTree",
-                  trControl = train.control)
-
-
-
-
-
-
-```
-
+1. Select different 'learners' available in the `caret` package
+2. Fit parameters of a learner to a dataset
+3. Explore learners to understand how they work
+4. Use cross validation techniques to estimate the accuracy of a learner and find best fitting parameters
+5  Make predictions and evalute the performance of learners!
 
 ### Datasets
 
-We will use two main datasets in this practical, `boston` and `breastcancer`. The Boston dastaset looks like this:
+You'll use four datasets in this practical:  `boston_train_csv` and `boston_test.csv`, `heartdisease_train.csv` and `heartdisease_test.csv`. They available in the `data_BaselRBootcamp_Day3.zip` file available through the main course page. If you haven't already, download the `data_BaselRBootcamp_Day3.zip` folder and unzip it to get the files. We also recommend saving them in a folder called `data` in your working directory!
 
-```{r}
-DT::datatable(BostonHousing)
+### Packages
+
+For this practical, you will need the following packages. If you don't have any installed, you'll need to install them with `install.packages()`
+
+```{r, echo = TRUE}
+# Packages you'll need for this practical
+library(caret)
+library(mlr)        
+library(GGally)
+library(mlbench)
+library(tidyverse)
+```
+
+### Examples
+
+The following set of example code will take you through the basic steps of machine learning using the amazing `caret` package.
+
+```{r, echo = TRUE, eval = FALSE, results = 'hide', message = FALSE}
+# Load packages
+library(caret)
+library(mlr)        
+library(GGally)
+library(mlbench)
+library(tidyverse)
+
+# ---------------
+# Setup
+# ---------------
+
+# Split diamonds data into separate training and test datasets
+diamonds <- diamonds %>%
+  sample_frac(1)                  # Randomly sort
+
+# Create separate training and test data
+diamonds_train <- diamonds %>%
+  slice(1:500)
+
+diamonds_test <- diamonds %>%
+  slice(501:2000)
+
+# ---------------
+# Explore
+# ---------------
+
+# Explore columns with summarizeColumns
+summarizeColumns(diamonds_train)
+
+# Visualise relationships with ggpairs
+ggpairs(diamonds_train)
+
+# ---------------
+# Train
+# ---------------
+
+# Set up control values
+rep10_control <- trainControl(method = "repeatedcv",
+                              number = 10,
+                              search = "grid")          # Find optimal parameters
+
+# Predict price with linear regression
+diamonds_lm_train <- caret::train(form = price ~ ., 
+                                data = diamonds_train,
+                                method = "lm",
+                                trControl = rep10_control)
+
+# Explore the train object
+class(diamonds_lm_train)
+diamonds_lm_train
+names(diamonds_lm_train)
+summary(diamonds_lm_train)
+
+# Look at variable importance with vartImp
+varImp(diamonds_lm_train)
+
+# Save final predictions
+diamonds_lm_predictions <- predict(diamonds_lm_train, 
+                                   newdata = diamonds_test)
+
+# ---------------
+# Evaluate
+# ---------------
+
+# Plot relationship between predictions and truth
+performance_data <- tibble(predictions = diamonds_lm_predictions,
+                          criterion = diamonds_test$price)
+
+ggplot(data = performance_data,
+       aes(x = predictions, y = criterion)) +
+  geom_point() +   # Add points
+  geom_abline(slope = 1, intercept = 0, col = "blue", size = 2) +
+  labs(title = "Regression prediction accuracy",
+       subtitle = "Blue line is perfect prediction!")
+
+# Look at final prediction performance!
+postResample(pred = diamonds_lm_predictions, 
+             obs = diamonds_test$price)
+
 ```
 
 
-crim	per capita crime rate by town
-zn	proportion of residential land zoned for lots over 25,000 sq.ft
-indus	proportion of non-retail business acres per town
-chas	Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
-nox	nitric oxides concentration (parts per 10 million)
-rm	average number of rooms per dwelling
-age	proportion of owner-occupied units built prior to 1940
-dis	weighted distances to five Boston employment centres
-rad	index of accessibility to radial highways
-tax	full-value property-tax rate per USD 10,000
-ptratio	pupil-teacher ratio by town
-b	1000(B - 0.63)^2 where B is the proportion of blacks by town
-lstat	percentage of lower status of the population
-medv	median value of owner-occupied homes in USD 1000's
 
-## (E)xplore
+#### boston -- predicting median home value (medv)
 
-1. Load the training data into R as a new object with the name `boston_train` using `read_csv()`.
+The `boston` dataset contains housing data for 506 census tracts of Boston from the 1970 census. 
 
-```{r, eval = FALSE}
+Here is a description of each of the variables in the dataset
+
+| Column | Description|
+|-----|-----------------------------------------|
+|crim	|per capita crime rate by town|
+|zn	|proportion of residential land zoned for lots over 25,000 sq.ft|
+|indus	|proportion of non-retail business acres per town|
+|chas	|Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)|
+|nox	|nitric oxides concentration (parts per 10 million)|
+|rm	|average number of rooms per dwelling|
+|age	|proportion of owner-occupied units built prior to 1940|
+|dis|	weighted distances to five Boston employment centres|
+|rad|	index of accessibility to radial highways|
+|tax|	full-value property-tax rate per USD 10,000|
+|ptratio	|pupil-teacher ratio by town|
+|b	|1000(B - 0.63)^2 where B is the proportion of blacks by town|
+|lstat|	percentage of lower status of the population|
+|medv|	median value of owner-occupied homes in USD 1000's|
+
+### (E)xplore
+
+1. Load the training data `boston_train.csv` into R as a new object with the name `boston_train` using `read_csv()`.
+
+```{r, eval = FALSE, echo = FALSE}
 boston_train <- read_csv("data/boston_train.csv")
 ```
 
@@ -216,7 +175,7 @@ mlr::summarizeColumns(boston_train)
 
 4. Can you think of a reason why you should remove any of the columns? If so, remove them using `select()`! There's no need to include unnecesary data in a machine learning algorithm :)
 
-5. Visualise the data using the `ggpairs()` function from the `GGally` package. If your criterion is categorical, consider including coloring the results by the criterion by including the argument `aes(col = y)` (where y is the name of the criterion). Do you notice any interesting patterns?
+5. Visualise the data using the `ggpairs()` function from the `GGally` package. Do you notice any interesting patterns?
 
 ```{r}
 ggpairs(boston_train)
@@ -224,7 +183,7 @@ ggpairs(boston_train)
 
 ### (T)rain
 
-6. We will use 10-fold cross validation to train the models. To set up the fitting process, we'll need to use the `trainControl` function. Look at the help menu for this function and look through the examples.
+6. We will use 10-fold cross validation to train the models. To set up the fitting process, we'll need to use the `trainControl` function. Look at the help menu for this function and look through the examples to see how it works.
 
 7. Using the `trainControl()` function, create an object called `rep10_control` that will conduct 10-fold cross validation.
 
@@ -234,14 +193,14 @@ rep10_control <- caret::trainControl(method = "repeatedcv",
                                     search = "grid")          # Find optimal parameters
 ```
 
-8. We're almost ready to train models! To do so, we'll use the almighty `train()` function. Look at the help menu for the `train()` function to see all of its lovely arguments and examples
+8. We're almost ready to train models! To do so, we'll use the almighty `train()` function. Look at the help menu for the `train()` function to see all of its lovely arguments and examples.
 
-9. Now it's time to actually train a model We'll start with simple linear regression. Create an object called `boston_lm_train`  where you predict the criterion. In order to conduct linear regresion, include the arguments `method = 'lm'` and `trControl = rep10_control`
+9. Now it's time to actually train a model. We'll start with simple linear regression. Create an object called `boston_lm_train` where you predict a town's median home value `medv` based on all other variables. In order to conduct linear regresion, include the arguments `method = 'lm'` and `trControl = rep10_control`
 
 ```{r}
-boston_regression_train <- caret::train(form = crim ~ ., 
+boston_lm_train <- caret::train(form = medv ~ ., 
                                         data = boston_train,
-                                        method = "ridge",
+                                        method = "lm",
                                         trControl = rep10_control)
 ```
 
@@ -250,7 +209,7 @@ boston_regression_train <- caret::train(form = crim ~ .,
 11. Using the `varImp()` function, look at the variable importance of each predictor. Which predictors seem to be the most important? After you've run the function, try plotting the object with `plot()` to visualise the results!
 
 ```{r}
-caret::varImp(boston_regression_train)
+caret::varImp(boston_lm_train)
 ```
 
 12. Load the test dataset as a new object called `boston_test` into R using `read_csv()`
@@ -262,14 +221,14 @@ boston_lm_predictions <- predict(boston_lm_train,
                                  newdata = boston_test)
 ```
 
-### (E)valuating model performance
+### (E)valuate model performance
 
 14. How well did your model do in predicting the true data? To start, plot the relationship between your model predictions and the true criterion using the following template
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, echo = TRUE}
 # Combine predictions and criterion in one tibble
-performance_data <- tibble(predictions = boston_regression_predictions,
-                          criterion = boston_test$crim)
+performance_data <- tibble(predictions = boston_lm_predictions,
+                          criterion = boston_test$medv)
 
 # Plot results
 ggplot(data = performance_data,
@@ -282,16 +241,16 @@ ggplot(data = performance_data,
 
 15. Now it's time to quantify how well your model did. To do this, we'll evaluate its performance with `postResample()`. Start by looking at the help menu for the `postResample()` function to see its arguments.
 
-16. Now evaluate the model's predictions using `postResample()`. You should only specify the `pred` and `obs` arguments as `pred = boston_regression_predictions` and `obs = boston_test$crim`. 
+16. Now evaluate the model's predictions using `postResample()`. You should only specify the `pred` and `obs` arguments as `pred = boston_lm_predictions` and `obs = boston_test$medv`. 
 
 ```{r}
-postResample(pred = X_regression_predictions, 
+postResample(pred = boston_lm_predictions, 
              obs = boston_test$crim)
 ```
 
 17. How well did your model do? What was the overall level of accuracy? If you don't understand the results, look at the details in the help menu for help!
 
-## Selecting different models
+## Ridge regression
 
 18. Now let's try a new model! Instead of using simple linear regression with `method = 'lm'`, we'll use so--called 'ridge regression'. Ridge regression is a variation of 'standard' linear regression that tries to avoid overfitting and thus make better predictions. How can you use ridge regression in caret? Try to answer yourself by looking at the list of all available models on the caret help site: [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html). Search for 'ridge' and find the `method` value.
 
@@ -299,70 +258,98 @@ postResample(pred = X_regression_predictions,
 
 20. Which model predicted the data better? Standard regression or ridge regression? Was using ridge regression able to improve your predictions?
 
+## Random forests
+
 21. Now you're getting the hang of it! Instead of regression, let's try a totally different model....random forests! Repeat all of your steps to see how well random forests do in predicting the `boston_test` data.
 
+# heartdisease - Predicting heartdisease status
 
+Now it's time to try a classification problem. We'll do this with the `heartdisease` data. The `heartdisease` dataset contains data from 303 patients suspected of having heart disease The objective is to predict the `diagnosis` column indicating whether a patient has heartdisease or not
 
+Here is a description of each of the variables in the dataset
 
+| Column | Description|
+|-----|-----------------------------------------|
+|age | Age |
+|sex|Sex, 1 = male, 0 = female|
+|cp| Chest pain type: ta = typical angina, aa = atypical angina, np = non-anginal pain, a = asymptomatic|
+|trestbps| Resting blood pressure (in mm Hg on admission to the hospital)|
+|chol |Serum cholestoral in mg/dl |
+|fbs |Fasting blood sugar > 120 mg/dl: 1 = true, 0 = false|
+|restecg |Resting electrocardiographic results. "normal" = normal, "abnormal" = having ST-T wave abnormality (T wave inversions and/or ST elevation or depression of > 0.05 mV), "hypertrophy" = showing probable or definite left ventricular hypertrophy by Estes' criteria.|
+|thalach| Maximum heart rate achieved|
+|exang| Exercise induced angina: 1 = yes, 0 = no|
+|oldpeak |ST depression induced by exercise relative to rest|
+|slope |The slope of the peak exercise ST segment.|
+|ca| Number of major vessels (0-3) colored by flourosopy|
+|thal| "normal" = normal, "fd" = fixed defect, "rd" = reversable defect|
+|diagnosis| 1 = Heart disease, 0 = No Heart disease|
 
-
-
-
-
-
- 
-
-
-
-
-
-### BostonHousing
-
-1. Look at the help menu for your dataset to understand the differnt columns ("features") in the dataset. Make a mental note of which column is the criterion! Is the criterion numeric, binary, or factor?
-
-2. Visually explore the dataset using `summary()`, `str()` and `View()`
-
-3. Using `createPartition`, split the original dataset into a 70\% training set, and a 30\% test set. Make sure to stratify the data according to the criterion.
-
-4. Using `map_dfc`, look for missing data in the training data. Do you find any?
+22. Load the training data `heartdisease_train.csv` into R as a new object with the name `heartdisease_train` using `read_csv()`.
 
 ```{r, eval = FALSE}
-# Look for missing data in each column of data_train
-
-data_train %>%
-  map_dfc(~ sum(is.na(.)))
+heartdisease_train <- read_csv("data/heartdisease_train.csv")
 ```
 
-5. If you found mising data, create a model of the missing values using `preProcess`. Then create a new training dataset containing no missing values using `predict()`
+23. Before you do anything else, convert the `diagnosis` column to a factor. This will be necessary for some machine learning models to work!
 
-6. Create a set of control parameters to setup a 10 fold cross validation.
+```{r, eval = FALSE, echo = TRUE}
+# Convert diagnosis to a factor
+#   This is important for some machine learning models to do
+#   classification analyses
 
-7. Using `train`, train 3 different models on your data: 
-  - Decision tree,
-  - Regression (or logistic regression for a binary predictor)
-  - Support vector machines
+heartdisease_train <- heartdisease_train %>%
+  mutate(diagnosis = factor(diagnosis))      # Convert diagnosis to a factor
 
-8. Look at the results of the object you just created. Use `names()`, `str()` and `summary()` to see what's in the objects. See if you can access each of the 10 models for each fold of the cross validation.
-
-9. Using XXX, look at the accuracy results, what were the 10 different prediction accuracy levels you got in the 10 fold cross validation? Based on these results, which model do you think will do the best in predicting the true test data?
-
-10. Use XXX to visualise the prediction results for each model.
-
-11. Now, using XX predict the criterion for the *real* test data.
-
-12. Using XX, evaluate the true test accuracy of the model. How did it compare to what you expected from your 10 fold cross validation simulation?
-
-13. Using XX, visualise the final prediction results wi
-
-### Additional options
-
-12. Instead of creating a 70 / 30 training / test split, where 70% of the data were used for training and 30% were used for testing, try repeating your anlyses with a 95 / 5 split. Do your results from before hold?
-
-### Advanced
-
-### Optimising parameters with cross validation.
-
-13. Using XX, use cross validation to optimize the parameters of your moedls
+```
 
 
+23. Follow tasks 2 - 5 to explore the data. Remember our goal is to predict `diagnosis`!
 
+24. Now it's time to train a model on the data. For this data, we can't use linear regression because the criterion is a nominal class. Instead, we'll start with a type of decision tree called CART. Look at [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html) to find the correct method for using CART.
+
+```{r}
+heartdisease_rpart_train <- caret::train(form = diagnosis ~ ., 
+                                        data = heartdisease_train,
+                                        method = "rpart",
+                                        trControl = rep10_control)
+
+heartdisease_rpart_predictions <- predict(heartdisease_rpart_train, newdata = heartdisease_test)
+```
+
+
+25. Follow tasks 6 - 17 to fit your model, and evaluate its performance. 
+    - When you read in the `heartdisease_test` data, make sure to convert the `diagnosis` column to a factor like you did for the `heartdisease_train` data.
+    - In task 14, where you try to visualise the performance of the model, you'll need to tweak the plotting code a bit. To help, try using the following code template:
+
+```{r, eval = FALSE, echo = TRUE}
+# -----------------------------------------------------------
+# Visualise the relationship between two nominal variables
+# -----------------------------------------------------------
+
+# Combine predictions and criterion in one tibble
+performance_data <- tibble(predictions = heartdisease_rpart_predictions,
+                          criterion = heartdisease_test$diagnosis)
+
+# Plot results
+ggplot(data = performance_data, 
+       aes(x = predictions, ..count..)) + 
+  geom_bar(aes(fill = criterion), position = "dodge") +
+  labs(title = "CART prediction accuracy")
+```
+
+```{r}
+postResample(pred = heartdisease_rpart_predictions, 
+             obs = factor(heartdisease_test$diagnosis))
+```
+
+26. Now that you've fit CART, try using random forests! How well do random forests compare to plain old decision trees with CART?
+
+27. If you've gotten this far, then you've really gotten the hang of the pacakge! Try exploring the list of all models available in `caret` (again check out [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html) to see them all). Look for the craziest looking models you can find, and see how well they do on the two datasets in this pratical. Can you find one that does much better than regression, random forests, or decision trees?
+
+### Further Reading
+
+- Max Kuhn, the author of `caret` has a fantastic overview of the package at [http://topepo.github.io/caret/index.html](http://topepo.github.io/caret/index.html). If you like the `caret` package as much as we do, be sure to go through this page in detail.
+
+- Max Kuhn is also the co-author of a fantastic book on machine learning called [Applied predictive modelling - http://appliedpredictivemodeling.com/](http://appliedpredictivemodeling.com/).
+ 

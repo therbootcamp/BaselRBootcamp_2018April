@@ -58,7 +58,6 @@ Id,Cl.thickness,Cell.size,Cell.shape,Marg.adhesion,Epith.c.size,Bare.nuclei,Bl.c
 1258556,5,3,6,1,2,1,1,1,1,benign
 1331405,4,1,1,1,2,1,3,2,1,benign
 1217717,5,1,1,6,3,1,1,1,1,benign
-169356,3,1,1,1,2,NA,3,1,1,benign
 1299924,3,2,2,2,2,1,4,2,1,benign
 760001,8,10,3,2,6,4,3,10,1,malignant
 1257608,6,1,1,1,1,1,1,1,1,benign
@@ -84,7 +83,6 @@ Id,Cl.thickness,Cell.size,Cell.shape,Marg.adhesion,Epith.c.size,Bare.nuclei,Bl.c
 1143978,5,2,1,1,2,1,3,1,1,benign
 1334659,5,2,4,1,1,1,1,1,1,benign
 1083817,3,1,1,1,2,1,2,1,1,benign
-1184840,1,1,3,1,2,NA,2,1,1,benign
 654244,1,1,1,1,1,1,2,1,1,benign
 1259008,8,8,9,6,6,3,10,10,1,malignant
 1268275,9,8,8,9,6,3,4,1,1,malignant
@@ -199,3 +197,5 @@ Id,Cl.thickness,Cell.size,Cell.shape,Marg.adhesion,Epith.c.size,Bare.nuclei,Bl.c
 1365075,4,1,4,1,2,1,1,1,1,benign
 1241559,10,8,8,2,8,10,4,8,10,malignant
 1217264,1,1,1,1,2,1,3,1,1,benign
+1286943,8,10,10,10,7,5,4,8,7,malignant
+76389,10,4,7,2,2,8,6,1,1,malignant
