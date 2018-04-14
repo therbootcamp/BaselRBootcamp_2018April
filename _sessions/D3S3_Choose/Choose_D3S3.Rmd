@@ -46,7 +46,7 @@ Learn...
 
 .pull-right45[
 
-<u>Advanced track</u><br>
+<u>Natural Language Processing</u><br>
 
 <font size="6"><b>Machine Learning</b></font><br>
 
