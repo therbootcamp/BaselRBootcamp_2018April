@@ -1,0 +1,65 @@
+---
+title: "Choose your adventure - Day3 II"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "April 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+# Choose your adventure!
+
+.pull-left45[
+
+<u>Base track</u><br>
+
+<font size="6"><b>Plotting 2.0</b></font><br>
+
+
+Learn... 
+
+...how to make dynamic websites with shiny.
+
+...allow others to flexibly explore your data.  
+
+]
+
+.pull-right45[
+
+<u>Advanced track</u><br>
+
+<font size="6"><b>Machine Learning</b></font><br>
+
+Learn... 
+
+...the basics of natural language processing.
+
+...how to build and work with term-document representations.  
+
+...do sentiment analysis. 
+
+]
+
+
+
+

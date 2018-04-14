@@ -1,6 +1,7 @@
 ---
 title: "Plotting: ggplot2"
 author: "TheRBootcamp, http://therbootcamp.github.io"
+date: "April 2018"
 output: html_document
 ---
 
@@ -15,7 +16,6 @@ knitr::include_graphics("https://d21ii91i3y6o6h.cloudfront.net/gallery_images/fr
 ### Slides
 
 [Here are the introduction slides for this practical on Plotting 1.0: ggplot!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S2_PlottingI/PlottingI.html#1)
-
 
 ### Overview
 

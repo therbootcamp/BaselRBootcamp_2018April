@@ -269,6 +269,7 @@ etc.
 Traditionally assigns
 
 
+
 ---
 
 # Packages
@@ -301,7 +302,7 @@ Traditionally assigns
 
 | Package   | Use                   |
 |:---------------------|:-------------------------------------------------|
-|`stringr`  | regular expressions |
+|`stringr`  | regular expressions and basic text manipulation |
 |`hunspell`    | spelling correction |
 |`SnowballC`    | word stemming |
 
@@ -320,6 +321,10 @@ Traditionally assigns
 
 
 ---
+
+# Practical
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D3S3_NaturalLanguageProcessing/NaturalLanguageProcessing.html">Link to practical</a>
 
 
 
