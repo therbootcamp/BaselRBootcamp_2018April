@@ -562,14 +562,14 @@ Anytime you want to transform, organize, or aggregate data, use `dplyr`
 
 ```r
 data %&gt;%    # Start with data, AND THEN...
-  VERB1 %&gt;% # Do VERB1, AND THEN...
-  VERB2 %&gt;% # Do VERB2, AND THEN...
-  VERB3 %&gt;% # Do VERB3, AND THEN...
+  FUN1 %&gt;% # Do FUN1, AND THEN...
+  FUN2 %&gt;% # Do FUN2, AND THEN...
+  FUN3 %&gt;% # Do FUN3, AND THEN...
   group_by(x, y) %&gt;%  # Group by variables x, y
     summarise(
-      VAR_A_New = fun(X),
-      VAR_B_New = fun(Y),
-      VAR_C_New = fun(Z),
+      VAR_A_New = FUN4(X),
+      VAR_B_New = FUN5(Y),
+      VAR_C_New = FUN6(Z),
     )
   )
 ```
@@ -640,7 +640,7 @@ trial_X
 
 
 ```r
-TEST(formula = Y ~ X1 + X2 + ...
+TEST(formula = Y ~ X1 + X2 + ...,
      data = DATA,
      subset = SUBSET,
      ...)
@@ -653,13 +653,13 @@ TEST(formula = Y ~ X1 + X2 + ...
 ```r
 # T-test
 # DV = y_primary, IV = arm
-t.test(formula = y_primary ~ arm
+t.test(formula = y_primary ~ arm,
        data = trial_X)
 
 # Regression
 # DV = y_secondary, IV = arm, sex, age
 # Subset = only id &gt; 50
-glm(formula = y_secondary ~ arm + sex + age
+glm(formula = y_secondary ~ arm + sex + age,
     data = trial_X,
     subset = id &gt; 50)
 ```

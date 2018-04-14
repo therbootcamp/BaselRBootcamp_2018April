@@ -1,6 +1,7 @@
 ---
 title: "Practical: Tidying"
-author: "BaselRBootcamp April 2018"
+author: "BaselRBootcamp"
+date: "April 2018"
 output: html_document
 ---
 
