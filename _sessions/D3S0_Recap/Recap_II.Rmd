@@ -100,9 +100,6 @@ R's most **basic (and most simple) data format** - even single values (aka **sca
 # creating a vector (incl. names)
 my_vec <- c(t_1 = 1.343, t_2 = 5.232)
 
-# vectors are always flat
-my_vec <- c(1.343, c(5.232, 2.762))
-
 # naming vectors
 my_vec <- c(t_1 = 1.343, t_2 = 5.232)
 names(my_vec) <- c("new_1","new_2")
@@ -124,18 +121,18 @@ typeof(my_vec)
 
 # Types
 
-A vector contains elements of one of four **basic types**: `integer`, `double`, `numeric`, and `character`. You can **test** the type using `typeof()` or the type-specific `is.*()`, e.g., `is.integer()`.
+Vectors contains elements of only one type. Most often one of the four **basic types**: `integer`, `double`, `numeric`, and `character`. You can **test** the type using `typeof()` or the type-specific `is.*()`, e.g., `is.integer()`.
 
 
 .pull-left45[
 ```{r}
 # numeric vectors
 my_vec <- c(1.343, 5.232)
-typeof(my_vec) ; is.integer(my_vec)
+typeof(my_vec)
 
-# integer vectors (overruled by R)
-my_vec <- c(1, 7, 2)
-typeof(my_vec) ; is.integer(my_vec)
+# integer vectors (L avoids coercion)
+my_vec <- c(1L, 7L, 2L)
+typeof(my_vec)
 
 ```
 ]
@@ -144,19 +141,20 @@ typeof(my_vec) ; is.integer(my_vec)
 ```{r}
 # logical vectors
 my_vec <- c(TRUE, FALSE)
-typeof(my_vec) ; is.logical(my_vec)
+typeof(my_vec)
 ```
 
 ```{r}
 # character vectors
 my_vec <- c('a', 'hello', 'world')
-typeof(my_vec) ; is.character(my_vec)
+typeof(my_vec)
 ```
 ]
 
+
 ---
 
-# `data.frame`s
+# `data_frame`s
 
 .pull-left45[
 
@@ -168,14 +166,12 @@ typeof(my_vec) ; is.character(my_vec)
 
   + The lengths of the vectors must be equal (or multiples of another).  
 
-* Use `data.frame()` and `as.data.frame` to create or to coerce to data frame.
+* Use `data_frame()` and `as_data_frame` to create or to coerce to data frame, to `tibble` to be exact.
 ]
 
 .pull-right45[
 <p align="center"><img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/data.frame.png" width="409px" height="266px"></p>
 ]
-
-
 
 
 ---
@@ -184,58 +180,168 @@ typeof(my_vec) ; is.character(my_vec)
 
 Data frames (and lists) are best accessed using **names** and the `$`-operator. This, of course, implies that you followed good practice and named the individual elements in the data object. 
 
+```{r, echo = F}
+data_frame = tibble::data_frame
+```
+
+```{r}
+# define data frame
+my_df <- data_frame('v_1' = c('A', 'B'), 'v_2' = c(1, 2))
+```
+
 .pull-left45[
 ```{r}
-# retrieve elements using brackets
-my_df <- data.frame('v_1'=c('A', 'B', 'C'), 
-                    'v_2'=c(1, 2, 3))
+# One bad, two correct ways to subset
 my_df[1] ; my_df[[1]] ; my_df[['v_1']]
 ```
 ]
 
 .pull-right45[
 ```{r}
-# retrieve elements using the $-operator
+# Best use $-operator to access
 my_df$v_1
-my_df$v_1 <- c('X', 'Y', 'Z')
-my_df
+
+# and change
+my_df$v_1 <- c('Y', 'Z')
+my_df$v_1
 
 ```
 ]
 
----
 
-# Calls, assignments, and expressions
-
-In R every action is a function call. Specifically, R programs advance by **passing on arguments to functions**, **calling the function**, and **receiving and storing its output**. And this goes deep, many operations are functions in disguise.
+<!---
 
 .pull-left45[
 ```{r}
-# defining a function - arithm. mean
-my_fun <- function(x, b){ x * b }
+# retrieve element 'a' from vector
+my_vec <- c(a = 1, b = 4, c = 5)
+my_vec['a'] 
 
-# define some data
-my_data <- c(1, 5, 7, 3) 
+# change the element 
+my_vec['c'] <- 'D' 
+  
+# change beyond length(my_vec) 
+my_vec['d'] <- 1 ; my_vec
 
-# pass on arguments and call function
-my_fun(my_data, 5) 
-
-# store output by assignment
-my_out <- my_fun(my_data, 5)
 ```
 
 ]
 
 .pull-right45[
 ```{r}
-# a basic expression
-2 + 2
+# create matrix
+my_mat <- matrix(c(1:6), nrow=2)
+colnames(my_mat) <- c('v_1','v_2','v_3')
+rownames(my_mat) <- c('c_1','c_2')
 
-# is also a function
-'+'(2,2)
+# retrieve second row from matrix
+my_mat['c_1', ] ; my_mat['c_1', 'v_2']
 
 ```
 ]
+
+
+
+# Accessing & changing **complex** objects pt. 1
+
+In accessing and changing complex objects the additional `list`-layer needs to be taken into account. Single brackets `[` will select elements within the list, not the object behind those elements. To select the object behind the element use **double brackets** '[['. Additionaly, complex objects can be conveniently accessed using the **dollor operator `$`**. In order to further descend into the `list`'s structur append **multiple select operators**, e.g., `my_list[[1]][[2]]`. 
+
+.pull-left45[
+```{r}
+# retrieve elements from list
+my_list <- list('A'=c('A','B'), 
+                'B'=list(c(1,2,3),
+                         c(TRUE,FALSE,TRUE)))
+my_list[1] ; my_list[[1]] ; my_list[['A']]
+```
+
+]
+
+.pull-right45[
+```{r}
+# retrieve deep elements in list
+my_list <- list('A'=c('A','B'), 
+                'B'=list(c(1,2,3),
+                         c(TRUE,FALSE,TRUE)))
+my_list[[2]][1] ; my_list[[2]][[1]] # etc
+```
+]
+
+
+# Accessing & changing **complex** objects pt. 2
+
+Data frames can be accessed **exactly like lists**. In addition, data frames allow for a matrix-like access using **single bracket** `[`. Note however that selecting rows using single bracket returns a data frame, whereas for selecting columns returns a vector.
+
+.pull-left45[
+```{r}
+# retrieve elements from list
+my_df <- data.frame('v_1'=c('A','B','C'), 
+                    'v_2'=c(1,2,3))
+my_df[1] ; my_df[[1]] ; my_df[['v_1']]
+```
+]
+
+.pull-right45[
+```{r}
+# retrieve elements from list
+my_df <- data.frame('v_1'=c('A','B','C'), 
+                    'v_2'=c(1,2,3))
+my_df[1,] ; my_df[,1] ; my_df[1,2]
+```
+]
+
+--->
+
+---
+
+# Example
+
+```{r, eval = F}
+c(22, 45, 32, 18, 19, 24)
+age <- c(22, 45, 32, 18, 19, 24)
+
+as.character(age)
+age <- as.character(age)
+
+mean(age)
+
+```
+
+
+---
+
+# Functions
+
+Functions are objects that conduct operations on objects using objects. Functions have 3 elements:
++ **Name**: Used to call (execute) the function.
++ **Argument(s)**: Objects that the function needs to do its job. May have *default arguments*.
++ **Expression**: R code that does the job.
+    
+.pull-left5[
+```{r}
+# Defining a function that computes 
+# the mean or median
+my_stat <- function(x, method = 'mean'){
+  
+  # detect and run method
+  if(method == "mean") return(mean(x))
+  if(method == "median") return(median(x))
+}
+
+# Define object
+my_vec <- c(1, 4, 6, 3, 7, 5, 12, 9)
+```
+]
+
+.pull-right45[
+```{r}
+# Runnning our functions
+mean(x = my_vec)
+my_stat(x = my_vec, method = 'mean')
+my_stat(x = my_vec, method = 'median')
+```
+]
+
 
 
 ---
@@ -244,21 +350,22 @@ my_out <- my_fun(my_data, 5)
 
 .pull-left5[
 
-R provides extremely helpful **help files** and **vignettes**. 
->**Help files** are required documentations for every R function and package published on [**CRAN**](https://cran.r-project.org/).<br>
->**Vignettes** are long tutorials sometimes provided by the authors of a package.     
+**help files** (and **vignettes**) are very useful. 
+
+Pay attention to...
+
+- `Usage` - shows function's use, its arguments and their defaults.
+- `Arguments` - explains arguments, and their `type`/`class`
+- `Value` - explains what the function returns
+- `Examples` - 
 
 ```{r, eval = F}
 # To access help files
-help("name_of_function")
 ?name_of_function
 
-# find help files
+# search help files
 ??name_of_function
 
-# To list and access vignettes
-vignette(package = "name_of_package")
-vignette(package = "name_of_vignette")
 ```
 
 ]
