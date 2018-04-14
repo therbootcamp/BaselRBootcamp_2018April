@@ -269,7 +269,7 @@ etc.
 
 .pull-left45[
 
-Traditionally assigns
+Traditionally, uses 
 
 ]
 
