@@ -10,7 +10,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval =
 
 ### Slides
 
-Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S3_DataIO/NaturalLanguageProcessing.html"><b>LINK</b></a>
+Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S3_NaturalLanguageProcessing/NaturalLanguageProcessing.html"><b>LINK</b></a>
 
 ### Overview
 
