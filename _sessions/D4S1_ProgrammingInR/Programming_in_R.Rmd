@@ -30,7 +30,6 @@ library(yarrr)
 Conditional Statements
 - `if`, `else`
 - `ifelse`
-- `switch`
 - *`case_when`*
 
 Functions
@@ -39,7 +38,7 @@ Functions
 Iteration
 - `for` loops
 - `while` loops
-- *`apply` functions*
+- `apply` functions
 - `map` functions
 ]
 
@@ -323,7 +322,8 @@ call_fun(dat = pirates$parrots,
          fn = mean, na.rm = TRUE)
 
 # input expression as argument
-call_fun(pirates$weight / (pirates$height / 100) ** 2,
+call_fun(pirates$weight /
+           (pirates$height / 100) ** 2,
          fn = median, na.rm = TRUE)
 
 

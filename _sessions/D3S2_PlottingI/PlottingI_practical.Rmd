@@ -14,7 +14,7 @@ knitr::include_graphics("https://d21ii91i3y6o6h.cloudfront.net/gallery_images/fr
 
 ### Slides
 
-[Here are the introduction slides for this practical on Plotting 1.0: ggplot!](https://therbootcamp.github.io/_sessions/D3S2_PlottingI/PlottingI.html)
+[Here are the introduction slides for this practical on Plotting 1.0: ggplot!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S2_PlottingI/PlottingI.html#1)
 
 
 ### Overview
@@ -179,7 +179,7 @@ ggplot(data = diamonds,
   geom_point(alpha = .05)
 ```
 
-7. Using the `color` aesthetic maping, color the points by their cut.
+7. Using the `color` aesthetic mapping, color the points by their cut.
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 6, fig.height = 4}
 ggplot(data = diamonds, 
@@ -196,7 +196,7 @@ ggplot(data = diamonds,
   facet_wrap(~ cut, nrow = 1)
 ```
 
-9. Using the `geom_smooth()` funciton, add a black, smoothed mean line to each plot (You can also try turning the line into a regression line using the `method` argument)
+9. Using the `geom_smooth()` function, add a black, smoothed mean line to each plot (You can also try turning the line into a regression line using the `method` argument)
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 8, fig.height = 2}
 ggplot(data = diamonds, 
@@ -480,7 +480,10 @@ ggplot(data = midwest,
 
 ```{r, echo = TRUE, eval = FALSE}
 # Read in nba data
-nba_long <- read.csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/nba_long.csv")
+nba_long <- read_csv("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/nba_long.csv")
+
+# Look at the data
+nba_long
 
 ggplot(XX, 
        mapping = aes(x = XX, y = XX, fill = XX)) + 
@@ -561,7 +564,7 @@ ggplot(data = ACTG175,
 ```
 
 
-30. Create the following lolipop chart from the Midwest data.
+30. Create the following lollipop chart from the Midwest data.
 
 ```{r, eval = FALSE, echo = TRUE}
 midwest_IL <- midwest %>% 
@@ -658,4 +661,4 @@ ggplot(mpg_agg,
 
 - The main `ggplot2` webpage at [http://ggplot2.tidyverse.org/](http://ggplot2.tidyverse.org/) has great tutorials and examples.
 
-- `ggplot2` is also great for making maps. For exmaples, check out Eric Anderson's page at [http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html](http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html)
+- `ggplot2` is also great for making maps. For examples, check out Eric Anderson's page at [http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html](http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html)

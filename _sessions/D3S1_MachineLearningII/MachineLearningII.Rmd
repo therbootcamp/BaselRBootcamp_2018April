@@ -1,8 +1,8 @@
 ---
-title: "Machine Learning"
-subtitle: ""
+title: "Machine Learning II"
+subtitle: "caret"
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -24,6 +24,7 @@ options(htmltools.dir.version = FALSE)
 # https://github.com/gnab/remark/wiki/Markdown
 options(width=110)
 options(digits = 4)
+library(tidyverse)
 ```
 
 
@@ -52,132 +53,11 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ]
 
 ---
-# Everyone uses machine learning
-
-.pull-left6[
-
-### Everyone!
-
-- How does Google know what search results you want?
-
-- How does Amazon know what products to recommend?
-
-- How does Netflix decide what shows you'll want to watch next?
-
-- How do Tesla cars recognize objects and predict accidents?
-
-
-> Machine learning drives our algorithms for demand forecasting, product search ranking, product and deals recommendations, merchandising placements, fraud detection, translations, and much more. ~ Jeff Bezos, Amazon founder
-
-]
-
-
-.pull-right4[
-
-```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlexamples.png")
-```
-
-
-
-
-]
-
----
 # What is the basic machine learning process?
 
 ```{r, echo = FALSE, out.width = "95%"}
 knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/MLdiagram.png")
 ```
-
-
-
----
-# Why do we separate training from prediction?
-
-.pull-left4[
-
-Just because an algorithm can fit past (training) data well, does *not* necessarily mean that it will *predict* new data well.
-
-
-<br> 
-
-```{r, fig.cap = "Anyone can come up with a model of past stock performance. Predicting future performance is much more difficult.", echo = FALSE, out.width = "70%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stockpen.jpg")
-```
-
-
-
-]
-
-.pull-right6[
-
-
-> "Prediction is difficult, especially when it is about the future" ~ Niels Bohr
-
-```{r, fig.cap = "Niels Bohr, Nobel Laureate in Physics", echo = FALSE, out.width = "20%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/bohr.jpg")
-```
-
-> "An economist is an expert who will know tomorrow why the things he predicted yesterday didn't happen today." ~ Evan Esar
-
-<!-- > "A prediction about the direction of the stock market tells you nothing about where stocks are headed, but a whole lot about the person doing the predicting" ~ Warren Buffett -->
-
-]
-
-
----
-# Training (fitting) vs. Testing (prediction)
-```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_A.png")
-```
-
----
-# Training (fitting) vs. Testing (prediction)
-```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_B.png")
-```
-
----
-# Training (fitting) vs. Testing (prediction)
-```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_C.png")
-```
-
----
-# Training (fitting) vs. Testing (prediction)
-```{r, echo = FALSE, out.width = "70%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/fittingpredictiondarts_D.png")
-```
-
-
----
-## What machine learning algorithms are there?
-
-.pull-left6[
-
-- There are hundreds if not thousands of machine learning algorithms from many different fields.
-    - Computer vision, Natural language processing, reinforcement learning...
-
-Wikipedia lists 57 *Categories* of machine learning algorithms, each with dozens of examples
-
-```{r, echo = FALSE, eval = TRUE, out.width = "80%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wikipediaml.png")
-```
-
-]
-
-.pull-right4[
-<br><br>
-We will focus on 3 that apply to both classification and regression
-
-| Algorithm|Complexity|
-|:------|:----|
-|     Regression| Low / Medium | 
-|     Decision Trees| Low |
-|     Random Forests| High |
-
-]
 
 
 
@@ -201,175 +81,140 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 ```
 
 
-
 ]
-
 
 
 
 ---
+# Training models
 
-.pull-left6[
+.pull-left55[
 
-## How do you fit and evaluate models in R?
 
-<br>
+- Almost all machine learning models have *parameters* that need to be *fit* to the data.
 
-| Step|Description| Note / Example |
-|:------|:---|:------------|
-| 1| Install model packages| `rpart` or `FFTrees` for Decision Trees<br>`randomForest` for Random Forests|
-|     2| Get data |Use your own, or get free online datasets|
-|    3| Train model on data and generate insights|Always look at help menus and online tutorials!|
-|    4| Predict new data, possibly with cross-validation|Packages such as `mlr` and `caret` can really help|
+    - Regression has *beta weights*, decision trees have *nodes and splits*
+
+- The process of fitting parameters is called *training* a model
+
+- One of the most common ways to train a model and find good parameters is with *10-Fold Cross Validation*
 
 ]
 
-.pull-right35[
-<br>
-```{r, echo = FALSE, eval = TRUE, out.width = "90%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/machinelearning_r_ss.png")
+
+.pull-right4[
+
+```{r, echo = FALSE, out.width = "60%", fig.align = 'center'}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Linear_regression.svg/1200px-Linear_regression.svg.png")
+
+knitr::include_graphics("http://www.milbo.org/rpart-plot/rpart.plot-example1.png")
 ```
 
 
+
 ]
-
-
-
 
 ---
-# How do you fit and evaluate models in R?
+# 10 Fold Cross Validation
 
-.pull-left45[
-
-### Fitting a model
-
-
-```{r, eval = FALSE}
-A_model <- A_fun(formula = y ~.,
-                 data = data_train,
-                 ...)
+```{r, echo = FALSE, out.width = "85%", fig.align = 'center', fig.cap="Source: Wikipedia"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg")
 ```
-
-
-| Argument| Description| Note |
-|------:|:----|:---|
-|     formula|  Formula indicating variables to use|  `y ~ .` is often used as a catch-all |
-|     data|    The dataset for model training| |
-|     ...|  Optional other arguments| See the function help page for details|
-
-
-]
-
-.pull-right5[
-
-
-### Evaluating a model
-
-```{r, eval = FALSE}
-# Common ways to explore / use a model
-
-A_model           # Print generic information
-
-names(A_model)    # Show attributes
-
-summary(A_model)  # Print summary information
-
-predict(A_model,  # Predict test data
-        newdata = data_test)  
-
-plot(A_model)     # Visualize the model
-```
-
-]
-
-
-
-
 
 ---
-## Regression with `glm()`
+# 10 Fold Cross Validation
 
 .pull-left5[
 
-In regression, the criterion is modeled as the weighted sum of predictors times *weights* $\beta_{1}$, $\beta_{2}$
 
-### Loan Default:
+### Why use 10 fold cross validation?
 
-One could model the risk of defaulting on a loan as:
+- Allows you to simultaneously *estimate* model *prediction* performance from training data
 
-$$Risk = Age \times \beta_{age} + Income \times \beta_{income} + ...$$
+- Can show parameter *stability* across different subsets of data.
 
-Training a model means finding values of $\beta_{Age}$ and $\beta_{Income}$ that 'best' match the training data.
-
-```{r, echo = FALSE, eval = TRUE, out.width = "50%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/regression.png")
-```
+- If you *repeat* the process, you can try different parameter value and see which ones predict data best
 
 
 ]
 
+.pull-right45[
 
-.pull-right5[
-
-Create regressions using the `glm()` function (part of base-R)
-
-```{r, eval = FALSE}
-# glm() function for regression
-glm(formula = y ~.,     # Formula
-    data = data_train,  # Training data
-    family, ...)        # Optional arguments
-
-# Train glm model
-loan_glm_model <- glm(formula = risk ~ ., 
-                      data = data_train)
-
-# Predict new data with glm model
-loan_glm_pred <- predict(loan_glm_model,
-                         newdata = data_test)
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.cap="Source: Wikipedia"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg")
 ```
 
-
-
 ]
+
 
 
 ---
-## Decision Trees with `rpart::rpart()`
+# 10 Fold Cross Validation
 
 .pull-left5[
 
-In decision trees, the criterion is modeled as a sequence of logical Yes or No questions.
+### How do you conduct 10 fold cross validation?
 
-### Loan Default:
+- You could program your own 10 fold cross validation code by hand. But it would be very long (and probably have many errors!).
 
-```{r, echo = FALSE, eval = TRUE}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/defaulttree.png")
+- You would have to cusomise the code to apply to many different types of models (regression, random forests, decision trees, etc...)
+
+- It would be a nightmare...
+
+
+### Thankfully, there is a solution...
+
+
+```{r, echo = FALSE, fig.align = 'center'}
+knitr::include_graphics("https://vignette.wikia.nocookie.net/joke-battles/images/2/21/Bugs-Bunny-4.png/revision/latest?cb=20151231234917")
 ```
+
 
 
 ]
 
-.pull-right5[
+.pull-right45[
 
-Create decision trees using the `rpart` package
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.cap="Source: Wikipedia"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg")
+```
 
-```{r, eval = FALSE}
-# Load the rpart package
-library(rpart)
+]
 
-# Calculating a decision tree in R
-rpart(formula = y ~.,       # Formula 
-      data = data_train,    # Training data
-      method, parms, cost)  # Optional arguments
+---
 
-# Train rpart model
-loan_rpart_model <- rpart(formula = risk ~ ., 
-                          data = loan_data,
-                          method = "anova")
+.pull-left55[
 
-# Predict new data with rpart model
-loan_rpart_pred <- predict(loan_rpart_model,
-                          newdata = loan_test)
+# Caret
+
+
+```{r, echo = FALSE, fig.align = 'center', out.width = "35%"}
+knitr::include_graphics("https://vignette.wikia.nocookie.net/joke-battles/images/2/21/Bugs-Bunny-4.png/revision/latest?cb=20151231234917")
+```
+
+- Caret stands for Classification And REgression Training.
+
+- Caret is data scientist's dream for conducting machine learning.
+
+- No need to learn different functions or syntax for different models.
+
+    - `method = 'lm'` ...Regression!
+    - `method = 'rm'` ...Random forests!
+
+- Do very complex machine learning tasks with a few simple functions
+
+
+
+]
+
+.pull-right45[
+<br><br><br>
+```{r, echo = FALSE, fig.align = 'center', out.width = "90%", fig.cap = "The almighty Caret!"}
+knitr::include_graphics("https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2014/09/Caret-package-in-R.png")
+```
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center'}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/1/1c/K-fold_cross_validation_EN.jpg")
 ```
 
 
@@ -377,40 +222,41 @@ loan_rpart_pred <- predict(loan_rpart_model,
 
 
 ---
-## Random Forests with `randomForest::randomForest()`
-
 .pull-left5[
 
-A Random Forest is a collection of many (hundreds, thousands) of decision trees
+# Caret
 
 
-```{r, echo = FALSE, eval = TRUE, out.width = "90%"}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/randomforest_diagram.png")
+As always, you can install `caret` from CRAN
+
+```{r, eval = FALSE, echo = TRUE}
+
+# Install caret
+install.packages("caret")
+
+# Load the caret package
+library("caret")
 ```
 
-
-]
-
-.pull-right5[
-
-Create decision trees using the `randomForest` package
+Once you've installed `caret`, look at the vignette for a nice overview of the package
 
 ```{r, eval = FALSE}
-# Load the randomforest package
-library(randomForest)
+# Open the main package vignette
+vignette("caret")
+```
 
-# Calculating a randomForest in R
-randomForest(formula = y ~.,    # Formula 
-             data = data_train, # Training data
-             ntree, mtry)       # Optional
 
-# Train rpart model
-loan_rf_model <- randomForest(formula = risk ~ ., 
-                              data = loan_data)
+Today we will go over the main functions in the package
 
-# Predict new data with model
-loan_rf_pred <- predict(loan_rf_model,
-                        newdata = loan_test)
+
+]
+
+.pull-right45[
+
+### Caret Vignette
+
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("caret_vignette.jpg")
 ```
 
 
@@ -418,242 +264,170 @@ loan_rf_pred <- predict(loan_rf_model,
 
 
 ---
-# How do I do machine learning in R?
 
-.pull-left6[
+.pull-left5[
+# Caret
 
 
+Here are the main functions in the `caret` package
 
-In the practical, we will go through the basic steps "by hand" so you can see the process:
+| Function| Purpose|
+|--------|----------|
+| `trainControl()` | Determine how training (in general) will be done|
+| `train()` | Specify a model and find *best* parameters |
+| `varImp()` | Determine variable importance |
 
-```{r, eval = FALSE}
-# Create training and test data
-data_train <- ...
-data_test <- ...
+]
 
-# Train models on training data
-model_A <- A_fun(formula = y ~ ., 
-                 data = data_train)
 
-# Model A predictions
-pred_A <- predict(model_A, 
-                  newdata = data_test)
+.pull-right45[
 
-# Calculate Model A error
-pred_err_A <- mean(abs(pred_A - data_test$y))
+### Caret Vignette
 
-# Compare to Models B, C, D...
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("caret_vignette.jpg")
 ```
 
 ]
 
-.pull-right35[
-
-
-If you're really into machine learning, packages such as `mlr` and `caret` can automate much of the the machine learning process.
-
-```{r, echo = FALSE, eval = TRUE, out.width = "95%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/mlrcaret.png")
-```
-
-]
-
----
-
-## Machine Learning Live Demo & Practical
-
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D2S3_MachineLearning/MachineLearning_practical.html">Link to Machine Learning practical</a>
-
-
-<!-- --- -->
-<!-- # What is the history of machine learning? -->
-
-<!-- - 1805 - 1809: Legendre and Gauss discover least squares. Soon after Galton defines **Regression** in a biological context, followed by Pearson for purely statistical analyses. -->
-
-<!-- - 1952: Arthur Samuel creates first computer learning program for learning checkers and coins the term **Machine Learning** in 1959.  -->
-
-<!-- - 1957: Frank Rosenblatt creates first **Neural Network** to simulate the thought process of the human brain. -->
-
-<!-- - 1963: First algorithm for **Support Vector Machines** is developed by Vapnik & Chervonenkis. -->
-
-<!-- - 1967: **Nearest neighbor algorithm** is developed for classification -->
-
-<!-- - 1984: Breiman & Olshen publish the CART algorithm for **Decision Trees**, followed by Quinlan who publishes the ID3 algorithm followed by C4.5 -->
-
-<!-- - 1986: Rina Dechter introduces **Deep Learning**, with many subsequent updates in the 2000s. -->
-
-<!-- - 1995: Tin Kam Ho develops first algorithm for **Random Forests** -->
-
-<!-- Sources: Wikipedia, Bernard Marr, "A Short History of Machine Learning", Forbes. -->
-
 
 
 ---
-### Old
+
+# Caret
+
+### trainControl()
+
+- Use `trainControl()` to define a general fitting process.
 
 
+```{r, echo = TRUE, out.width = "90%", eval = FALSE}
 
+# Get ready for 10 fold cross validation!
 
----
-# Why do we separate training from prediction?
-
-- Data comes from two processes: *Signal* and *Noise* (aka Error).
-<br>
-
-```{r, echo = FALSE, fig.width = 7, fig.height = 3, dpi=200, out.width = "80%", fig.align = 'center'}
-
-set.seed(100)
-x <- seq(0, 5, length.out = 50)
-noise <- rnorm(50, mean = 0, sd = 2.5)
-
-model_fun <- function(x) {x ^ 3 - 4 * x ^ 2 + .5 * x + 5}
-
-y <- model_fun(x)
-y_obs <- model_fun(x) + noise
-
-par(mar = c(3, 4, 3, 1))
-
-par(mfrow = c(1, 3))
-
-plot(x, y_obs, main = "Data", xlab = "", ylab = "", col = "black")
-
-# segments(x, y, x, y_obs)
-
-# lines(y, y = y_obs)
-
-
-
-# Plot 1
-
-plot(x, y_obs, main = "Signal", xlab = "", ylab = "", col = "lightgray")
-curve(model_fun, from = 0, to = 5, add = TRUE, col = "green", lwd = 2)
-
-# segments(x, y, x, y_obs)
-
-# lines(y, y = y_obs)
-
-
-
-# Plot 2
-
-plot(x, y_obs, main = "Noise", xlab = "", ylab = "")
- curve(model_fun, from = 0, to = 5, add = TRUE, col = "darkgray", lwd = .5)
-
- segments(x, y, x, y_obs)
-
-# lines(y, y = y_obs)
-
-
-# 
-# # Plot 3
-# 
-# plot(x, y_obs, main = "A bad model tries to fit everything", xlab = "", ylab = "")
-# curve(model_fun, from = 0, to = 5, add = TRUE, col = "darkgray", lwd = .5)
-# 
-# text(.5, 20, "Hey I can draw a line through all points\nI don't have any error!", adj = 0)
-# 
-# 
-# lines(x, y_obs)
-# 
-# # Plot 4
-# 
-# plot(x, y_obs, main = "A good model will try to focus on the signal", xlab = "", ylab = "")
-# curve(model_fun, from = 0, to = 5, add = TRUE, col = "blue", lwd = 2)
-# 
-# text(.5, 20, "I won't try to fit all points because\nI think there is random error", adj = 0)
-
-
-# lines(x, y_obs)
-
-
+mycontrol <- trainControl(method = "repeatedcv", # Do repeated cross validation
+                          number = 10,           # 10 folds
+                          repeats = 50)         # Repeat 50 times (!)
 ```
 
 
-
-
----
-# Why do we separate training from prediction?
-
-- A good model is one that tries to capture the signal and ignore the noise
-- A bad model is one that captures too much unpredictable noise,
+- Can specify cross validation with `method = "repeatedcv"`
+    - Many other methods are available too!
     
-
-```{r, echo = FALSE, fig.width = 7, fig.height = 3, dpi=200, out.width = "80%", fig.align = 'center'}
-
-set.seed(100)
-x <- seq(0, 5, length.out = 50)
-noise <- rnorm(50, mean = 0, sd = 2.5)
-
-model_fun <- function(x) {x ^ 3 - 4 * x ^ 2 + .5 * x + 5}
-
-y <- model_fun(x)
-y_obs <- model_fun(x) + noise
-
-par(mar = c(3, 4, 3, 1))
-
-par(mfrow = c(1, 3))
-
-plot(x, y_obs, main = "Data", xlab = "", ylab = "", col = "black")
-
-# segments(x, y, x, y_obs)
-
-# lines(y, y = y_obs)
+- Can *repeat* cross validation many times with `repeats`
 
 
 
-# Plot 1
 
-plot(x, y_obs, main = "Good Model", xlab = "", ylab = "", col = "darkgray")
+---
 
-lines(x, y, col = "blue")
+.pull-left6[
 
-# curve(model_fun, from = 0, to = 5, add = TRUE, col = "green", lwd = 2)
+# Caret
 
-text(.5, 20, "Fitting error = Medium", adj = 0)
-text(.5, 15, "Prediction error = Low", adj = 0)
+### train()
 
+- Use `train()` to fit a model and get best parameters
 
-# segments(x, y, x, y_obs)
+```{r, echo = TRUE, out.width = "90%", eval = FALSE}
 
-# lines(y, y = y_obs)
-
-
-
-# Plot 2
-
-plot(x, y_obs, main = "Bad Model", xlab = "", ylab = "")
-
-text(.5, 20, "Fitting error = None", adj = 0)
-text(.5, 15, "Prediction error = High", adj = 0)
-
-
-lines(x, y_obs, col = "red")
-# lines(y, y = y_obs)
-
-
-# 
-# # Plot 3
-# 
-# plot(x, y_obs, main = "A bad model tries to fit everything", xlab = "", ylab = "")
-# curve(model_fun, from = 0, to = 5, add = TRUE, col = "darkgray", lwd = .5)
-# 
-# text(.5, 20, "Hey I can draw a line through all points\nI don't have any error!", adj = 0)
-# 
-# 
-# lines(x, y_obs)
-# 
-# # Plot 4
-# 
-# plot(x, y_obs, main = "A good model will try to focus on the signal", xlab = "", ylab = "")
-# curve(model_fun, from = 0, to = 5, add = TRUE, col = "blue", lwd = 2)
-# 
-# text(.5, 20, "I won't try to fit all points because\nI think there is random error", adj = 0)
-
-
-# lines(x, y_obs)
-
-
+train(form = price ~ .,      # Criterion
+      data = data_train,     # Training data
+      method = "lm",         # Specify a model
+      trControl = mycontrol) # Use mycontrol parameters
 ```
+
+- Specify the criterion to be predicted as a formula with `form`
+
+- Specify training data with `data`
+
+- Choose a model with `method`
+    - `method = 'lm'` = Linear regression
+    - `method = 'rf` = Random forest
+
+]
+
+.pull-right35[
+
+See all models at [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html)
+
+```{r, echo = FALSE}
+knitr::include_graphics("caret_models.jpg")
+```
+
+
+]
+
+---
+
+.pull-left5[
+
+# Caret
+
+### varImp()
+
+- Use `varImp()` to extract **variable importance** from a model
+
+```{r, echo = TRUE, out.width = "90%", eval = FALSE}
+
+# Look at variable importance with varImp
+varImp(diamonds_lm_train)
+```
+
+- Result will be a vector showing how important each variable was in predicting the criterion.
+
+- Specific outputs depend on the model
+    - Regression: Regression weights
+    - Decision trees: Mean *gini* index.
+    
+]
+
+
+.pull-right45[
+
+```{r, echo = FALSE}
+knitr::include_graphics("varimp_ss.jpg")
+```
+
+
+]
+
+
+---
+
+
+<br><br>
+.pull-left5[
+
+# Caret
+
+
+- There are *many* other great features of caret we haven't touched
+   - Splitting data with `createDataPartition()`
+   - Imputing (replacing) missing values with `preProcess()`
+   - Transforming predictors with `preProcess()`
+   - Add your own custom model
+   
+
+- Be sure to check out the **excellent** documentation site to learn all the details
+
+### http://topepo.github.io/caret/index.html
+
+]
+
+.pull-right45[
+
+```{r, echo = FALSE}
+knitr::include_graphics("caret_package_md.jpg")
+```
+
+]
+
+---
+
+## Machine Learning II Live Demo & Practical
+
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S1_MachineLearningII/MachineLearningII_practical.html">Link to Machine Learning II practical</a>
 
 
 
