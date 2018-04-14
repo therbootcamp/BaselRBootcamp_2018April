@@ -125,8 +125,8 @@ names = unlist(lapply(paths, function(x) {
 
 # create tibbles
 got = lapply(1:length(got), function(i){
-  season = floor(i / 10)
-  episode = i - (season * 10)
+  season = ceiling(i / 10)
+  episode = i - ((season-1) * 10)
   tibble(season, episode,  title = names[i], text = got[[i]])
   })
 
