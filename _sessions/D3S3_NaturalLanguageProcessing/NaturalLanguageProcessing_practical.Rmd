@@ -88,7 +88,7 @@ got <- lapply(files, read_file)
 str_sub(got[[1]], 1, 1000)
 
 # extract data
-got = str_extract_all(got, '(?<=\n|\n<i>-)[^[:digit:]|=|Original Air Date|(|<i>(|www|"Game|Transcript|\n][A-Za-z0-9 .?!;,]+')
+got = str_extract_all(got, '(?<=\n)[^(][<i>]*[:alpha:]+[:control:]*[:print:]+(?=\r*\n)')
 
 ```
 
