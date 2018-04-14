@@ -249,7 +249,8 @@ ggplot(data = XX,
             y = "XX", 
             title = "XX",
             subtitle = "XX",
-            caption = "XX")
+            caption = "XX") +
+  theme_XX()
 ```
 
 
@@ -261,7 +262,8 @@ ggplot(data = diamonds,
        y = "Count", 
        title = "Diamond Prices",
        subtitle = "Created with ggplot!",
-       caption = "Source: diamonds dataset")
+       caption = "Source: diamonds dataset") +
+  theme_minimal()
 ```
 
 ### Boxplot geom `geom_boxplot()`
