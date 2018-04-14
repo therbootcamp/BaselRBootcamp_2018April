@@ -1,5 +1,5 @@
 ---
-title: "Choose your adventure - Day3 I"
+title: "Choose your adventure - Day3 II"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
 date: "April 2018"
@@ -33,16 +33,14 @@ options(digits = 4)
 
 <u>Base track</u><br>
 
-<font size="6"><b>Practical - Case studies</b></font><br>
+<font size="6"><b>Plotting 2.0</b></font><br>
 
-Work on one or all of 3 case studies designed to repeat the central elements of **Data I/O**, **Data Wrangling**, and **Statistics**<br><br>
 
-<b>1 Clinical trial</b><br>
-Analyse a clinical trial comparing the effectiveness of drugs on reducing histamine.<br><br>
-<b>2 Finance</b><br>
-Study the development of key financial markets across the last 20 years<br><br>
-<b>3 Sales</b><br>
-Analyze sales from a real-world retailer across time and locations.<br><br>
+Learn... 
+
+... .
+
+... .  
 
 ]
 
@@ -54,10 +52,11 @@ Analyze sales from a real-world retailer across time and locations.<br><br>
 
 Learn... 
 
-...when machine learning algorithms like **Random forests**, **Decisions trees**, and **Regression** work and why.
+...the basics of natural language processing.
 
-...how they are **implemented in R** to improve prediction performance in a real world data set.  
+...how to build and work with term-document representations.  
 
+...do sentiment analysis. 
 ]
 
 
