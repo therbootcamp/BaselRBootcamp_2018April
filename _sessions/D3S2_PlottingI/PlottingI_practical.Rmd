@@ -323,7 +323,6 @@ stat_summary(fun.y = "mean",
              col = "black") +
   labs(y = "XX", 
        x = "XX", 
-       color = "XX", 
        title = "XX", 
        caption = "XX")
 ```
