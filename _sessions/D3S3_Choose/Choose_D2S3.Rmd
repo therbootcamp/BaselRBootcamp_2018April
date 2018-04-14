@@ -1,0 +1,65 @@
+---
+title: "Choose your adventure - Day3 I"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "April 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+# Choose your adventure!
+
+.pull-left45[
+
+<u>Base track</u><br>
+
+<font size="6"><b>Practical - Case studies</b></font><br>
+
+Work on one or all of 3 case studies designed to repeat the central elements of **Data I/O**, **Data Wrangling**, and **Statistics**<br><br>
+
+<b>1 Clinical trial</b><br>
+Analyse a clinical trial comparing the effectiveness of drugs on reducing histamine.<br><br>
+<b>2 Finance</b><br>
+Study the development of key financial markets across the last 20 years<br><br>
+<b>3 Sales</b><br>
+Analyze sales from a real-world retailer across time and locations.<br><br>
+
+]
+
+.pull-right45[
+
+<u>Advanced track</u><br>
+
+<font size="6"><b>Machine Learning</b></font><br>
+
+Learn... 
+
+...when machine learning algorithms like **Random forests**, **Decisions trees**, and **Regression** work and why.
+
+...how they are **implemented in R** to improve prediction performance in a real world data set.  
+
+]
+
+
+
+

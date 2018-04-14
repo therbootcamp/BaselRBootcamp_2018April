@@ -1,5 +1,5 @@
 ---
-title: "Tidying"
+title: "Tidy Projects"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
 date: "April 2018"
