@@ -1,6 +1,7 @@
 ---
 title: "Plotting: ggplot2"
 author: "TheRBootcamp, http://therbootcamp.github.io"
+date: "April 2018"
 output: html_document
 ---
 
