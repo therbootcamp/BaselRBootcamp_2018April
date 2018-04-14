@@ -38,9 +38,14 @@ options(digits = 4)
 Learn... 
 
 ...more about projects.
+
 ...clean code.
+
 ...error messages.
+
 ...handling missing data.
+
+]
 
 .pull-right45[
 
