@@ -1,0 +1,163 @@
+---
+title: "Practical: Data I/O"
+author: "BaselRBootcamp April 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE)
+```
+
+### Slides
+
+Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S3_DataIO/NaturalLanguageProcessing.html"><b>LINK</b></a>
+
+### Overview
+
+In this practical you'll learn how to do natural language processing in R. By the end of this practical you will know how to:
+
+1. Derive word frequencies.
+2. Determine a term-frequency matrix
+3. Do sentiment analysis.
+
+### Functions
+
+Here are some tools:
+
+| Function| Description|
+|:------|:--------|
+|  `paste()`, `paste0`| Base function for combining strings|
+|  `str_c()`| `stringr` function for combining strings|
+
+Here are the main read-in functions:
+
+| Function| Description|
+|:------|:--------|
+|  `read_file()`| Read flat csv file|
+|  `readRDS()`| Read from R's RDS format|
+| `file(...,'r'), readLines`| Read from file connection |
+
+Here are the main web-scraping functions:
+
+| Function| Description|
+|:------|:--------|
+|  `read_html()`| Read html from web |
+|  `read_nodes()`| accesses tagged elements within the html document using, e.g., `XPath` |
+| `html_table()`| Extracts a table from an html document |
+
+
+Here are the main regular expression (`stringr`) functions:
+
+| Function| Description|
+|:------|:--------|
+|     `write_csv()`| Write flat csv file|
+|     `write_sas()`| Write SAS file|
+|     `write_sav()`| Write SPSS file|
+| `saveRDS()`| Save RDS file |
+| `file(...,'w'), readLines`| Write to file connection |
+
+Here are the main `tidytext` functions:
+
+| Function| Description|
+|:------|:--------|
+|     `write_csv()`| Write flat csv file|
+|     `write_sas()`| Write SAS file|
+|     `write_sav()`| Write SPSS file|
+| `saveRDS()`| Save RDS file |
+| `file(...,'w'), readLines`| Write to file connection |
+
+
+## Tasks
+
+This tutorial begins with an optional task for users who feel confident with programming in R and want to deal with the often complicated but necessary step of bringing the raw text data into the right shape for your analysis tools. As this will involve programming elements that we have not covered yet, I generally recommend to jump to *Read in **processed** text data* and to return later to this section.   
+
+### Read in **raw** text files (Advanced)
+
+1. Read in the subtitles for each episode of Game of Thrones using `read_file()` from the `readr`-package. To do this, first extract the filenames of all of the files using `list.files(path, full.names = TRUE)`. One way to achieve this quickly is by first creating a vector containing the subtitle's folders using `paste()` and then by using the `lapply()`-function to iterate over the folders. The `lapply()`-function such as any other `apply()`-function (this will be covered in the Programming with R section) iterates the object provided as the first argument and applies a function provided as the second. Thus, you want to run a command similar to `files <- lapply(folder_paths, list.files, full.names = TRUE)`. Note that any third arguments will be passed on to the function specified in the second argument.   
+ 
+
+```{r, eval = T, echo = F, include = FALSE}
+# load readr
+require(readr)
+
+# load a package
+files <- unlist(lapply(paste0('data/season_',1:7), list.files, full.names = TRUE))
+
+# data
+data <- lapply(files, read_file)
+
+```
+
+2. Extract text lines from subtitles. Begin by inspecting the text. Use `szt_sub()` to print the first few hundred characters. Try to identify what characters preceed the the spoken lines and which succeed. Think about how to build a regular expression that captures the end and stop points of the spoken line that also handles the many lines including not speach but comments. Evaluate the code below (find more info [**here**](http://stringr.tidyverse.org/articles/regular-expressions.html)). Try to understand why the regular expression looks that way. Use it to extract the text   
+
+```{r, eval = F, echo = T, include = FALSE}
+
+# inspect
+str_sub(got[[1]], 1, 1000)
+
+# extract data
+got = str_extract_all(got, '(?<=\n)[^[:digit:]|<|=|Original Air Date|(|www|"Game|Transcript|\n][:print:]+(?=\r\n|\n)')
+
+```
+
+3. Extract episode names from Wikipedia using the code below. Try to understand what the code does.  
+
+```{r, eval = T, echo = F, include = FALSE}
+
+# define XPath locations of episode tables
+paths = paste0('//*[@id="mw-content-text"]/div/table[',2:8,']')
+
+# extract episode names
+names = unlist(lapply(paths, function(x) {
+  read_html('https://en.wikipedia.org/wiki/List_of_Game_of_Thrones_episodes') %>% 
+    html_nodes(xpath = x) %>% 
+    html_table() %>% 
+    `[[`(1) %>%  
+    `[[`(3) %>% 
+    str_replace_all('"','')
+  }))
+
+```
+
+4.Combine the extracted text, the episode names, their index in the season, and the season's index inside a single `tibble()`. 
+
+```{r, eval = T, echo = F, include = FALSE}
+
+# create tibble
+got = lapply(1:length(got), function(x){
+  ids = str_split(names(got)[x],'_')[[1]][c(2, 4, 5)]
+  tibble(season = as.numeric(ids[1]), episode = as.numeric(ids[2]), title_no = paste0(ids[1],'_',ids[2],'_',ids[3]), 
+         title = str_extract('?<=season_[:digit:]{1}'), text = got[[x]])
+})
+
+got = do.call(rbind, got)
+
+```
+
+### Read in **processed** text data
+
+5. Read in processed text data using `readRDS()`.
+
+```{r, eval = F, echo = F}
+
+got <- readRDS('data/game_of_thrones.RDS')
+
+```
+
+### Tokenize text
+
+5.
+
+```{r, eval = F, echo = F}
+
+```
+
+
+
+
+
+# Additional reading
+
+- [Book](https://www.tidytextmining.com) on text mining the tidy way .
+
+- [Overview](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) of text mining packages in R.

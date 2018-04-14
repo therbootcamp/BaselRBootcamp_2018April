@@ -2,7 +2,7 @@
 title: "Tidying"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
-date: "January 2018"
+date: "April 2018"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -419,7 +419,7 @@ my_df
 
 ---
 
-# Live Demo & Practical
+# Practical
 
 <p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D3S1_Tidying/Tidying_practical.html">Link to practical</a>
 
