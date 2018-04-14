@@ -473,7 +473,6 @@ ggplot(data = midwest,
   theme_bw()
 ```
 
-
 ### Heatplots with `geom_tile()`
 
 25. You can create heatplots using the `geom_tile()` function. Try creating the following heatplot of statistics of NBA players using the following template:
@@ -624,36 +623,6 @@ ggplot(midwest_IL, aes(x = county, y = popdensity_z)) +
 ```
 
 
-31. Create the following heat plot using `geom_tile()`. To do this, you'll first need to create the aggregated data `mpg_agg` (see code below).
-
-```{r, echo = TRUE, eval = FALSE}
-# Calculate mean highway miles per gallon for each combination of
-#  manufacturer and class
-
-mpg_agg <- mpg %>%
-  group_by(manufacturer, class) %>%
-  summarise(
-    hwy_mean = mean(hwy)
-  )
-```
-
-
-```{r, echo = FALSE, eval = TRUE, fig.width = 7, fig.height = 7}
-mpg_agg <- mpg %>%
-  group_by(manufacturer, class) %>%
-  summarise(
-    hwy_mean = mean(hwy)
-  )
-
-ggplot(mpg_agg, 
-       mapping = aes(x = class, y = manufacturer, fill = hwy_mean)) + 
-  geom_tile(colour = "white") + 
-  scale_fill_gradientn(colors = c("red", "white", "blue")) +
-  labs(title = "Mean Highway Miles per Gallon",
-       x = "Manufacturer",
-       y = "Class")
- 
-```
 
 ### References and Further Reading
 
