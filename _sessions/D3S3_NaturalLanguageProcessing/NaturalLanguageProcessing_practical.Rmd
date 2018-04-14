@@ -25,7 +25,7 @@ In this practical you'll learn how to do natural language processing in R. By th
 Here are some tools:
 
 | Function| Description|
-|:------|:--------|
+|:----------------|:------------------------------------------------|
 |  `paste()`, `paste0`| Base function for combining strings|
 |  `str_c()`| `stringr` function for combining strings|
 |  `str_extract_all()`| `stringr` function for extracting strings using regular expressions|
@@ -33,7 +33,7 @@ Here are some tools:
 Here are the main read-in functions:
 
 | Function| Description|
-|:------|:--------|
+|:----------------|:------------------------------------------------|
 |  `read_file()`| Read flat csv file|
 |  `readRDS()`| Read from R's RDS format|
 | `file(...,'r'), readLines`| Read from file connection |
@@ -41,7 +41,7 @@ Here are the main read-in functions:
 Here are the main web-scraping functions (package `rvest`):
 
 | Function| Description|
-|:------|:--------------------------------|
+|:----------------|:------------------------------------------------|
 |  `read_html()`| Read html from web |
 |  `read_nodes()`| Access tagged elements within the html document using, e.g., `XPath` |
 | `html_table()`| Extract a table from an html document |
@@ -49,7 +49,7 @@ Here are the main web-scraping functions (package `rvest`):
 Here are the main `tidytext` (& `dplyr`) functions:
 
 | Function| Description|
-|:------|:--------|
+|:----------------|:------------------------------------------------|
 |     `unnest_tokens()`| Split text into words (tokens) |
 |     `bind_tf_idf()`| Compute tf_idf weighting  |
 |     `get_sentiments`| Access sentiment data set|
@@ -82,7 +82,7 @@ got <- lapply(files, read_file)
 
 2. Extract text lines from subtitles. Begin by inspecting the text. Use `str_sub()` to print the first few hundred characters. Try to identify what characters precede the the spoken lines and which succeed. Think about how to build a regular expression that captures the end and stop points of the spoken line that also handles the many lines including not speech but comments. Evaluate the code below (find more info [**here**](http://stringr.tidyverse.org/articles/regular-expressions.html)). Try to understand why the regular expression looks that way. Use it to extract the text   
 
-```{r, eval = F, echo = T, include = FALSE}
+```{r, eval = F, echo = T}
 
 # inspect
 str_sub(got[[1]], 1, 1000)
@@ -94,7 +94,7 @@ got = str_extract_all(got, '(?<=\n)[^(][<i>]*[:alpha:]+[:control:]*[:print:]+(?=
 
 3. Extract episode names from Wikipedia using the code below. Try to understand what the code does.  
 
-```{r, eval = T, echo = F, include = FALSE}
+```{r, eval = F, echo = T}
 
 # define XPath locations of episode tables
 paths = paste0('//*[@id="mw-content-text"]/div/table[',2:8,']')
@@ -113,7 +113,7 @@ names = unlist(lapply(paths, function(x) {
 
 4.Combine the extracted text, the episode names, their index in the season, and the season's index inside a single `tibble()`. Use the code below. Try to understand what the code does.  
 
-```{r, eval = T, echo = F, include = FALSE}
+```{r, eval = F, echo = T}
 
 # create tibbles
 got = lapply(1:length(got), function(i){
