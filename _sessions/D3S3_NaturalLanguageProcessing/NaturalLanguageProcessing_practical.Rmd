@@ -84,7 +84,7 @@ require(readr)
 files <- unlist(lapply(paste0('data/season_',1:7), list.files, full.names = TRUE))
 
 # data
-data <- lapply(files, read_file)
+got <- lapply(files, read_file)
 
 ```
 
@@ -119,17 +119,18 @@ names = unlist(lapply(paths, function(x) {
 
 ```
 
-4.Combine the extracted text, the episode names, their index in the season, and the season's index inside a single `tibble()`. 
+4.Combine the extracted text, the episode names, their index in the season, and the season's index inside a single `tibble()`. Use the code below. Try to understand what the code does.  
 
 ```{r, eval = T, echo = F, include = FALSE}
 
-# create tibble
-got = lapply(1:length(got), function(x){
-  ids = str_split(names(got)[x],'_')[[1]][c(2, 4, 5)]
-  tibble(season = as.numeric(ids[1]), episode = as.numeric(ids[2]), title_no = paste0(ids[1],'_',ids[2],'_',ids[3]), 
-         title = str_extract('?<=season_[:digit:]{1}'), text = got[[x]])
-})
+# create tibbles
+got = lapply(1:length(got), function(i){
+  season = floor(i / 10)
+  episode = i - (season * 10)
+  tibble(season, episode,  title = names[i], text = got[[i]])
+  })
 
+# combine data frames
 got = do.call(rbind, got)
 
 ```
@@ -144,17 +145,157 @@ got <- readRDS('data/game_of_thrones.RDS')
 
 ```
 
-### Tokenize text
+### Segment and count words
 
-5.
+6. Extract the words from the subtitles using the amazingly fast and convenient `unnest_tokens()` from the `tidytext` package (install and load). Consider using the pipe `%>%`. Evaluate the effect on the object. How much bigger have its dimensions become?
 
 ```{r, eval = F, echo = F}
+# install
+# install.packages('tidytext')
+
+# load
+library(tidytext)
+
+# tokenize
+got_words <- got %>%
+  unnest_tokens(word, text) 
+
+# print
+got
+got_words
 
 ```
 
 
+7. Count words using the `count()`-function from the `dplyr`-package. Don't forget to `ungroup()`. 
+
+```{r, eval = F, echo = F}
+
+# count words
+got_cnts <- got_words %>%
+  count(season, episode, title, word) %>%
+  ungroup()
+
+```
+
+8. One of the most fundamental findings of Psycholinguistics is that there are few words that occur a lot in natural language and many that occur hardly. To be precise, it is commonly found that the relationship between the words rank in the frequency distribution (with 1 indicating the rank with the highest frequency) and the actual frequency follows a power law roughly proportional to $rank^{-alpha}$ where $alpha$ is some value around 1. This relationship is know as Zipf's law. Let's see if game of thrones also shows Zipf's law. Create a new variable that contains the rank of the frequency counts (remember rank 1 must be associated with the higheest frequency) using `rank()`. Then plot the relationship between the `log()` of the rank and the `log()` of the frequency. If the plot looks roughly linear then the relationship follows a power law (because we are plotting in a log-log space). 
 
 
+```{r, eval = F, echo = F}
+
+# count words
+got_cnts %>%
+  mutate(rank = rank(-n)) %>%
+  ggplot(aes(log(rank),log(n))) +
+  geom_point() + 
+  geom_smooth()
+
+```
+
+9. Another fundamental finding of Psycholinguistics related to information science is that frequent words should have fewer numbers of characters in order to maximize the efficiency of communication. Analyze this relationship by adding a variable containing the word's number of character symbols using `nchar()` and plotting its relationship to the words frequency. Does Game of Thrones communicate efficiently?
+
+```{r, eval = F, echo = F}
+
+# count words
+got_cnts %>%
+  mutate(nchar = nchar(word)) %>%
+  ggplot(aes(nchar,log(n))) +
+  geom_point() + 
+  geom_smooth()
+
+```
+
+
+### Term-document matrix
+
+In this subsection we will be looking at teh term document matrix. However, because of how tidyverse works we will actually not be required to transform our data into a matrix. If you nonetheless wanted to, you cast the table with counts to term-document or document-term matrices using `cast_tdm()` or `cast_dtm()`. This will create an object of class `TermDocumentMatrix` or `DocumentTermMatrix` and allow you to continue working with the tools of the `tm`-package.    
+
+10. Determine the 3 most important words for each episode based on raw word frequencies (using the `title` variable and `top_n()`).   
+
+```{r, eval = T, echo = F}
+
+# count words
+most_frequent <- got_cnts %>%
+  group_by(title, season, episode) %>%
+  top_n(3) %>%
+  ungroup()
+
+```
+
+
+```{r, eval = F, echo = F}
+
+# plot
+most_frequent %>% 
+  arrange(season, episode, desc(n)) %>%
+  mutate(word = as.factor(word),
+         title_no = paste0(season,'_',episode,'_',title)) %>%
+  ggplot(aes(word, n, fill = season)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title_no, ncol = 6, scales = "free") +
+  coord_flip()
+
+```
+
+11. Remove words without specific meaning, socalled stopwords. You will find a stopword list is already available through the `tidytext` package. The object is called `stop_words`. Remove them using `anti_join()`, determine again the top 3 most frequent and plot. 
+
+```{r, eval = F, echo = F}
+
+# count words
+most_frequent <- got_cnts %>%
+  anti_join(stop_words) %>%
+  group_by(title, season, episode) %>%
+  top_n(3, n) %>%
+  ungroup()
+
+
+# plot
+most_frequent %>% 
+  arrange(season, episode, desc(n)) %>%
+  mutate(word = as.factor(word),
+         title_no = paste0(season,'_',episode,'_',title)) %>%
+  ggplot(aes(word, n, fill = season)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title_no, ncol = 6, scales = "free") +
+  coord_flip()
+
+```
+
+12. Transform to tf-idf using `bind_tf_idf()`. Repeat the same analysis for the newly created `tf_idf` 
+
+```{r, eval = F, echo = F}
+
+# count words
+most_frequent <- got_cnts %>%
+  anti_join(stop_words) %>%
+  bind_tf_idf(word, title, n) %>%
+  group_by(title, season, episode) %>%
+  top_n(3, tf_idf) %>%
+  ungroup()
+
+
+# plot
+most_frequent %>% 
+  arrange(season, episode, desc(n)) %>%
+  mutate(word = as.factor(word),
+         title_no = paste0(season,'_',episode,'_',title)) %>%
+  ggplot(aes(word, n, fill = season)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title_no, ncol = 6, scales = "free") +
+  coord_flip()
+
+```
+
+### Sentiment
+
+
+
+
+
+### Segment and count words
 
 # Additional reading
 
