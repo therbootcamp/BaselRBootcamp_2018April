@@ -276,7 +276,7 @@ ggplot(data = XX,
   geom_boxplot()  + 
   labs(y = "XX", 
        x = "XX", 
-       color = "XX",
+       fill = "XX",
        title = "XX",
        subtitle = "XX") +
   scale_fill_brewer(palette = "XX")
