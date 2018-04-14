@@ -303,7 +303,7 @@ mycontrol &lt;- trainControl(method = "repeatedcv", # Do repeated cross validati
 
 ### train()
 
-- Use `train()` to fit a model and get best parameters
+- Use `train()` to fit **any** of over 200 models **and** get best parameters
 
 
 ```r
@@ -325,7 +325,7 @@ train(form = price ~ .,      # Criterion
 
 .pull-right35[
 
-See all models at [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html)
+See all &gt;280 models at [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html)
 
 &lt;img src="caret_models.jpg" width="1699" /&gt;
 
@@ -376,18 +376,19 @@ varImp(diamonds_lm_train)
 
 - There are *many* other great features of caret we haven't touched
    - Splitting data with `createDataPartition()`
-   - Imputing (replacing) missing values with `preProcess()`
-   - Transforming predictors with `preProcess()`
+   - Imputing (replacing) missing values and transforming predictors with `preProcess()`
    - Add your own custom model
    
 
 - Be sure to check out the **excellent** documentation site to learn all the details
 
-### http://topepo.github.io/caret/index.html
 
 ]
 
 .pull-right45[
+
+### http://topepo.github.io/caret/index.html
+
 
 &lt;img src="caret_package_md.jpg" width="2251" /&gt;
 
