@@ -19,7 +19,7 @@ In this practical you'll practice "Programming in R" with the base and `purrr`-p
 
 By the end of this practical you will know how to:
 
-1. Use conditional statements (`if`, `else`, `ifelse`, `switch`)
+1. Use conditional statements (`if`, `else if`, and `else`)
 2. Program your own functions
 3. Include checks and error messages in your functions to make them robust
 4. Iterate through objects and execute functions on subsets of data (`for`- and `while` loops, `apply` family, `map` family)
@@ -56,7 +56,7 @@ library(tidyverse)
 
 
 
-B. For this practical, we'll sometimes use the `pirates` data from the `yarrr` package. Load this dataset from your local data folder. We will also quite often use little datasets which you will create on the fly during the tasks. This should help making the examples very clear and give you some experience in how to create own data to test your code.
+B. For this practical, we'll sometimes use the `pirates` data from the `yarrr` package. Load this dataset from your local data folder. We will also quite often use little datasets which you will create on the fly during the tasks. This should help making the examples very clear, and give you some experience in how to create own data to test your code.
 
 ```{r, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
 # Load data from your local data file of your R project
@@ -109,7 +109,7 @@ if (coin_toss == "H"){
 }
 ```
 
-3. Now let's assume that very rarely (with the coin we are using in 1% of the cases), the coin doesn't fall on one of the two sides, but surprisingly, lands (and stays) on its edge. In this case you don't know how to interpret this and assign it the value `NULL`. To do this use:
+3. Now let's assume that very rarely (with the coin we are usingd this happens in 1% of the cases), the coin doesn't fall on one of the two sides, but surprisingly, lands (and stays) on its edge. In this case you don't know how to interpret this and assign it the value `NULL`. To do this use:
 
 ```{r, eval = TRUE, echo = TRUE}
 # Create coin toss, i.e. sample once from {H, T} without replacing
@@ -134,7 +134,7 @@ if (!is.null(coin_toss) && coin_toss == "H"){
 }
 ```
 
-4. Now you don't want to toss your coin only once but several (let's say ten) times (you'll have to tweak the `sample` function a bit. Check the help menue for help). Do this, and if *ALL* tosses came up heads, print "Wow, that's ten heads in a row!", if there is at least one head in there, print "The coin showed X times heads, and Y times tails", where X and Y are the respective numbers of heads and tails (use the `paste` function to print and the `sum` function to get the correct numbers, check the help menus if you don't know how to do this), and print "Wow, that's ten tails in a row!", if *ALL* tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.
+4. Now you no longer want to toss your coin only once but several (let's say ten) times (you'll have to tweak the `sample` function a bit. Check the help menue for help). Do this, and if *ALL* tosses came up heads, print "Wow, that's ten heads in a row!", if there is at least one head in there, print "The coin showed X times heads, and Y times tails", where X and Y are the respective numbers of heads and tails (use the `paste` function to print and the `sum` function to get the correct numbers, check the help menus if you don't know how to do this), and print "Wow, that's ten tails in a row!", if *ALL* tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.
 
 ```{r}
 coin_tosses <- sample(c("H", "T"), 10, replace = TRUE)
@@ -282,7 +282,7 @@ abs_diff(pirates$tattoos, pirates$sex, list("male", "female"), median)
 
 ```
 
-Passing functions as arguments can be very hancy, especially when you can combine this with `apply` or `map` function so you can enter a list of functions. We'll see an example of that later.
+Passing functions as arguments can be very handy, especially when you can combine this with `apply` or `map` function so you can enter a list of functions. We'll see an example of that later.
 
 9. There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called `...`. Now add the `...` as last argument to the `abs_diff` function from the previous task, and also add it to the `met()` function inside the `abs_diff` function. Now you can call functions with `abs_diff` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean. Compute the 20% trimmed mean.
 

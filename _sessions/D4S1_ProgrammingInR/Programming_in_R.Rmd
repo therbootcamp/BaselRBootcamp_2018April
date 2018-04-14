@@ -29,8 +29,7 @@ library(yarrr)
 .pull-left45[
 Conditional Statements
 - `if`, `else`
-- `ifelse`
-- *`case_when`*
+- `case_when`
 
 Functions
 - Program your own functions
@@ -107,44 +106,9 @@ if (this) {
 ]
 
 
-
 ---
 
-# Conditional Statements
-
-Allow you to conditionally execute code blocks.
-
-.pull-left45[
-
-*`ifelse()`*
-
-A function that lets you do checks on an object and returns an object of the same form (not necessarily class!) with the values specified in the `yes`, and `no` arguments.
-
-]
-
-.pull-right45[
-
-```{r}
-# returns a vector
-vec <- 1:10
-
-ifelse(test = vec > 3, yes = 1, no = 0)
-
-# returns a matrix
-tib <- tibble(x = 1:5,
-              y = 5:1)
-
-ifelse(test = tib > 3, yes = "y", no = 0)
-
-
-
-```
-
-]
-
----
-
-# A Note on Checks
+# A Note on Logical Expressions
 
 .pull-left45[
 
@@ -331,45 +295,6 @@ call_fun(pirates$weight /
 ```
 
 ]
----
-
-# Functions - Lexical Scoping
-
-.pull-left45[
-
-Functions have their own, separate environment, i.e. an object created in a function is not accessable outside the function.
-
-On the other hand variables outside the functions are also accessible within the functions, even when they are not passed as argument. Be careful with this!
-
-
-]
-
-.pull-right45[
-
-```{r}
-add <- function(x){
-  
-  # when R can't find y in the 
-  # function environment it will search
-  # the next level of the hierarchy
-  z <- x + y
-  z
-}
-
-x <- 1
-y <- 2
-
-add(x)
-```
-
-```{r, eval = FALSE}
-z
-# throws an error because
-# z was only accessible in
-# the function
-```
-
-]
 
 ---
 
@@ -479,14 +404,14 @@ This can be handy, but also "dangerous" because if the condition is never met, i
 trunc_norm <- rnorm(30)
 
 # get normal dist trucated at 0
-while(any(trunc_norm) < 0){
+while(any(trunc_norm < 0)){
   trunc_norm <- rnorm(30)
 }
 
 # Potentially problematic:
 # get normal dist trucated at 0
 # but with a much larger sample
-while(any(trunc_norm) < 0){
+while(any(trunc_norm < 0)){
   trunc_norm <- rnorm(500)
 }
 ```
@@ -571,7 +496,7 @@ vapply(pir_sub, mean, 1)
 
 ---
 
-# Iteration - `apply` Family
+# Iteration - `apply` Family - Anonymous Functions
 
 
 .pull-left45[
