@@ -49,9 +49,9 @@ Learn...
 
 .pull-right45[
 
-<u>Advanced Machine Learning</u><br>
+<u>Advanced track</u><br>
 
-<font size="6"><b>Machine Learning</b></font><br>
+<font size="6"><b>Advanced Machine Learning</b></font><br>
 
 Learn... 
 

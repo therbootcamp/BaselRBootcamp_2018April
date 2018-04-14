@@ -266,11 +266,19 @@ etc.
 
 # Sentiment analysis
 
-Traditionally assigns
+Trad
+.pull-left45[
+
+itionally assigns
 
 
 
----
+--]
+
+.pull-right45[
+
+
+]-
 
 # Packages
 
