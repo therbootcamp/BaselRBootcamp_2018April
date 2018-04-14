@@ -32,74 +32,310 @@ class: center, middle, inverse, title-slide
 
 ---
 
+
 # Sources
 
-&lt;img src"https://www.popsci.com/sites/popsci.com/files/images/2017/11/books.jpg" alt="test" width = 300&gt;
-
-&lt;img src"http://scidle.com/wp-content/uploads/2016/03/wikipedia.jpg" alt="test" width = 300&gt;
+&lt;img src="https://www.popsci.com/sites/popsci.com/files/images/2017/11/books.jpg" alt="test" height = 200&gt;
+&lt;img src="http://scidle.com/wp-content/uploads/2016/03/wikipedia.jpg" alt="test" height = 200&gt;
+&lt;img src="https://cdn.wccftech.com/wp-content/uploads/2018/02/Twitter.jpeg" alt="test" height = 200&gt;
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Facebook_New_Logo_%282015%29.svg/2000px-Facebook_New_Logo_%282015%29.svg.png" height = 200&gt;
+&lt;img src="https://blog.richmond.edu/richmondlawcdo/files/2017/02/Email.jpg" height = 200&gt;
+&lt;img src="http://www.vitecinc.com/wp-content/uploads/2016/04/voice-recognition-640x480.jpg" height = 200 width = 206&gt;
 
 ---
 
 # Use cases
 
 .pull-left5[
-# Basics
-[Tokenizing]()
 
+### Basics
+[**Tokenizing**](https://en.wikipedia.org/wiki/Word_segmentation)&lt;br&gt;
+[Stemming](https://en.wikipedia.org/wiki/Stemming)&lt;br&gt;
+[Part-of-speech tagging](https://en.wikipedia.org/wiki/Part-of-speech_tagging)&lt;br&gt;
+[Parsing](https://en.wikipedia.org/wiki/Parsing)&lt;br&gt;
+etc.
+
+### Semantics
+[Lexical semantics](https://en.wikipedia.org/wiki/Word_segmentation)&lt;br&gt;
+[Machine Translation](https://en.wikipedia.org/wiki/Machine_translation)&lt;br&gt;
+[Relationship extraction](https://en.wikipedia.org/wiki/Relationship_extraction)&lt;br&gt;
+[**Sentiment analysis**](https://en.wikipedia.org/wiki/Sentiment_analysis)&lt;br&gt;
+[**Topic analysis**](https://en.wikipedia.org/wiki/Topic_segmentation)&lt;br&gt;
+etc.
 
 ]
 
 .pull-right5[
 
+### Discourse
+[Automatic summarization](https://en.wikipedia.org/wiki/Automatic_summarization)&lt;br&gt;
+[Discourse analysis](https://en.wikipedia.org/wiki/Discourse_analysis)&lt;br&gt;
+etc.
+
+### Semantics
+[Speech recognition](https://en.wikipedia.org/wiki/Speech_recognition)&lt;br&gt;
+[Speech segmentation](https://en.wikipedia.org/wiki/Speech_segmentation)&lt;br&gt;
+[Relationship extraction](https://en.wikipedia.org/wiki/Relationship_extraction)&lt;br&gt;
+[Text-to-speech](https://en.wikipedia.org/wiki/Text-to-speech)&lt;br&gt;
+etc.
+
+]
+
+&lt;font size="2"&gt; from &lt;a href="https://en.wikipedia.org/wiki/Natural-language_processing"&gt;Wikipedia&lt;/a&gt;&lt;/font&gt;
+
+
+---
+
+# Encoding 
+
+.pull-left55[
+&lt;font size="5"&gt;1960: ASCII&lt;/font&gt;
+&lt;img src="https://www.asciitable.com/index/asciifull.gif"&gt;
+
+
+More info: [here](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/) &amp; [here](http://kunststube.net/encoding/)
+
+]
+
+.pull-right4[
+&lt;font size="5"&gt;1991: Unicode&lt;/font&gt;
+&lt;a href="http://unicode.org/"&gt;&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Unicode_logo.svg/512px-Unicode_logo.svg.png" width = 365&gt;&lt;/a&gt;
+
+]
+
+---
+&lt;br&gt;&lt;br&gt;
+
+| Character| Code Point | Encoding | Precision | Representation|
+|:------|:--------|:--------||:--------|
+|     `A`| `U+0041` | ASCII | fixed 7 bit | 1000001 |
+|     `A`| `U+0041` | UTF-8 | min 8 bit / 1 byte | 01000001 |
+|     `A`| `U+0041` | UTF-16 | min 16 bit / 2 byte | 00000000 01000001 |
+|     `A`| `U+0041` | UTF-32 | min 32 bit / 4 byte | 00000000 00000000 00000000 01000001 |
+|     `あ`| `U+3042` | ASCII | fixed 7 bit | - |
+|     `あ`| `U+3042` | UTF-8 | min 8 bit / 1 byte | 11100011 10000001 10000010 |
+|     `あ`| `U+3042` | UTF-16 | min 16 bit / 2 byte | 00110000 01000010 |
+|     `あ`| `U+3042` | UTF-32 | min 32 bit / 4 byte | 00000000 00000000 00110000 01000010 |
+| 😁 | `U+1F600` | ASCII | fixed 7 bit | - |
+| 😁 | `U+1F600` | UTF-8 | min 8 bit / 1 byte | 1111 0000 1001 1111 1001 1000 1000 0000 |
+| 😁 | `U+1F600` | UTF-16 | min 16 bit / 2 byte | 1101 1000 0011 1101 1101 1110 0000 0000 |
+| 😁 | `U+1F600` | UTF-32 | min 32 bit / 4 byte | - |
+
+---
+
+# Regular expressions 
+
+.pull-left45[
+
+According to [Wikipedia](https://en.wikipedia.org/wiki/Regular_expression):
+&gt;A regular expression, **regex or regexp** (sometimes called a rational expression) is, in theoretical computer science and formal language theory, **a sequence of characters that define a search pattern**. Usually this pattern is then used by **string searching algorithms** for **"find"** or **"find and replace"** operations on strings.
+
+]
+
+.pull-right45[
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/2/23/The_river_effect_in_justified_text.jpg"&gt;
+
+
+&lt;p align="center"&gt;`(?&lt;=\.) {2,}(?=[A-Z])`&lt;p&gt;
+
+]
+
+---
+
+# Regular expressions
+
+.pull-left45[
+
+
+
+```r
+str_*(string, pattern, ...)
+```
+
+&lt;br&gt;
+
+| Function suffix | Use |
+|:------|:--------------|
+|   `detect`  | Test if pattern is present. |
+|   `count`   | Count number of pattern matches. |
+|   `locate`  | Find location of pattern. |
+|   `extract` | Extractt strings matching pattern. |
+|   `replace` | Replace string matching pattern by other string. |
+|   `split`   | Split string around pattern. |
+
+]
+
+.pull-right25[
+
+&lt;img src="https://www.rstudio.com/wp-content/uploads/2014/04/stringr.png" height=200&gt;
+
+&lt;img src="http://www.unicode.org/announcements/ICU-logo.png" height=200&gt;
+
+]
+
+
+---
+
+# Regular expressions: Segmentation
+
+
+
+
+```r
+# text
+txt &lt;- "Happy families are all alike; every unhappy family is unhappy in its own way."
+
+# Tokenize
+str_extract_all(txt, "[A-Za-z]+")
+```
+
+```
+## [[1]]
+##  [1] "Happy"    "families" "are"      "all"      "alike"    "every"   
+##  [7] "unhappy"  "family"   "is"       "unhappy"  "in"       "its"     
+## [13] "own"      "way"
+```
+
+```r
+# Sentenize
+str_extract_all(txt, '[^[:space:]][^[.!?;]]*[.!?;]')
+```
+
+```
+## [[1]]
+## [1] "Happy families are all alike;"                  
+## [2] "every unhappy family is unhappy in its own way."
+```
+
+
+---
+
+# Term-document matrix
+
+Number of mention of stark family members across the first seven seasons of [Game of Thrones](https://de.wikipedia.org/wiki/Game_of_Thrones)
+
+&lt;br&gt;
+
+|        | Winter Is Coming| The Kingsroad| Lord Snow| Cripples, Bastards, and Broken Things| The Wolf and the Lion| A Golden Crown| You Win or You Die| The Pointy End| Baelor| Fire and Blood|
+|:-------|----------------:|-------------:|---------:|-------------------------------------:|---------------------:|--------------:|------------------:|--------------:|------:|--------------:|
+|jon     |                6|             3|         3|                                     6|                     5|              1|                  3|              3|      0|              0|
+|ned     |                5|             9|         8|                                     2|                     5|              0|                  6|              2|      0|              1|
+|robb    |                2|             1|         0|                                     1|                     0|              5|                  0|              5|      4|              5|
+|sansa   |                2|             3|         3|                                     4|                     0|              1|                  0|              5|      1|              0|
+|arya    |                1|            11|         1|                                     1|                     4|              0|                  0|              2|      0|              0|
+|bran    |                3|             4|         3|                                     3|                     2|              4|                  1|              1|      0|              4|
+|rickon  |                0|             1|         0|                                     0|                     0|              0|                  0|              0|      0|              1|
+|catelyn |                0|             1|         4|                                     1|                     1|              1|                  3|              2|      2|              0|
+
+---
+
+# Term-document matrix: Tf-idf 
+
+Accounts for (a) differences in the number of words per document and (b) the frequency of words across documents. 
+
+|        | Winter Is Coming| The Kingsroad| Lord Snow| Cripples, Bastards, and Broken Things| The Wolf and the Lion| A Golden Crown| You Win or You Die| The Pointy End| Baelor| Fire and Blood|
+|:-------|----------------:|-------------:|---------:|-------------------------------------:|---------------------:|--------------:|------------------:|--------------:|------:|--------------:|
+|jon     |             0.07|          0.02|      0.03|                                  0.07|                  0.07|           0.02|               0.05|           0.03|   0.00|           0.00|
+|ned     |             0.06|          0.06|      0.08|                                  0.02|                  0.07|           0.00|               0.10|           0.02|   0.00|           0.02|
+|robb    |             0.04|          0.01|      0.00|                                  0.02|                  0.00|           0.15|               0.00|           0.09|   0.20|           0.16|
+|sansa   |             0.04|          0.03|      0.05|                                  0.08|                  0.00|           0.03|               0.00|           0.09|   0.05|           0.00|
+|arya    |             0.03|          0.17|      0.02|                                  0.03|                  0.12|           0.00|               0.00|           0.05|   0.00|           0.00|
+|bran    |             0.02|          0.01|      0.01|                                  0.02|                  0.01|           0.04|               0.01|           0.01|   0.00|           0.04|
+|rickon  |             0.00|          0.05|      0.00|                                  0.00|                  0.00|           0.00|               0.00|           0.00|   0.00|           0.15|
+|catelyn |             0.00|          0.01|      0.04|                                  0.01|                  0.01|           0.02|               0.05|           0.02|   0.06|           0.00|
+
+
+---
+
+# Term-document matrix: Uses
+
+.pull-left5[
+
+Basis for all sorts of NLP applications...
+
+**Search** - identify most appropriate document for search queries
+
+**Topic modeling** - decompose matrix into topics
+
+**Spam detection** - use word as variables to train spam detection algorithms, e.g., Naive Bayes.
+
+**Semantic meaning** - use documents as variables to learn about relationships between words.
+
+etc.
+]
+
+.pull-right35[
+
+|        | Winter Is Coming| The Kingsroad| Lord Snow|
+|:-------|----------------:|-------------:|---------:|
+|jon     |             0.07|          0.02|      0.03|
+|ned     |             0.06|          0.06|      0.08|
+|robb    |             0.04|          0.01|      0.00|
+|sansa   |             0.04|          0.03|      0.05|
+|arya    |             0.03|          0.17|      0.02|
+|bran    |             0.02|          0.01|      0.01|
+|rickon  |             0.00|          0.05|      0.00|
+|catelyn |             0.00|          0.01|      0.04|
+
+]
+
+---
+
+# Sentiment analysis
+
+
+
+
+-Traditionally assignsTrad# Packages
+
+.pull-left45[
+
+#### Framworks
+
+| Package   | Use |
+|:------------|:----------------|
+| `tm`       | text mining framework for R. [Paper](http://www.jstatsoft.org/v25/i05/) |
+| `openNLP`  |R interface to [OpenNLP](http://opennlp.sourceforge.net/) |
+| `tidytext` | text mining using tidy tools. |
+
+
+
+#### Semantics
+
+| Package   | Use |
+|:----------|:----------------|
+| `topicmodels`  | Latent Dirichlet Allocation and Correlated Topics Models |
+| `text2vec`  | tools for text vectorization and word embeddings. |
+
+
+]
+
+.pull-right45[
+
+#### Tools
+
+| Package   | Use                   |
+|:---------------------|:-------------------------------------------------|
+|`stringr`  | regular expressions |
+|`hunspell`    | spelling correction |
+|`SnowballC`    | word stemming |
+
+#### Data
+
+| Package   | Use |
+|:----------|:----------------|
+|`gutenbergr`  |  allows downloading books from the Project Gutenberg collection|
+|`rvest`    | scrape the internet |
+|`twitteR`    | access Twitter data  |
+|`Rfacebook`    | access Facebook data  |
+
 ]
 
 
 
-https://www.tidytextmining.com
 
-https://cran.r-project.org/web/views/NaturalLanguageProcessing.html
-
-
-
-library(text2vec)
-
-
-text8_file = "~/text8"
-if (!file.exists(text8_file)) {
-  download.file("http://mattmahoney.net/dc/text8.zip", "~/text8.zip")
-  unzip ("~/text8.zip", files = "text8", exdir = "~/")
-}
-wiki = readLines(text8_file, warn = FALSE)
-nchar(wiki)
-
-# Create iterator over tokens
-tokens = space_tokenizer(wiki)
-# Create vocabulary. Terms will be unigrams (simple words).
-it = itoken(tokens, progressbar = FALSE)
-vocab = create_vocabulary(it)
-
-
-vocab = prune_vocabulary(vocab, term_count_min = 5L)
-
-# Use our filtered vocabulary
-vectorizer = vocab_vectorizer(vocab)
-# use window of 5 for context words
-tcm = create_tcm(it, vectorizer, skip_grams_window = 5L)
-
-glove = GlobalVectors$new(word_vectors_size = 50, vocabulary = vocab, x_max = 10)
-wv_main = glove$fit_transform(tcm, n_iter = 10, convergence_tol = 0.01)
-
-dim(wv_main)
-
-wv_context = glove$components
-
-word_vectors = wv_main + t(wv_context)
-
-berlin = word_vectors["paris", , drop = FALSE] - 
-  word_vectors["france", , drop = FALSE] + 
-  word_vectors["germany", , drop = FALSE]
-cos_sim = sim2(x = word_vectors, y = berlin, method = "cosine", norm = "l2")
-head(sort(cos_sim[,1], decreasing = TRUE), 5)
+---
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
