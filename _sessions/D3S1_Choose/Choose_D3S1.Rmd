@@ -39,11 +39,11 @@ Learn...
 
 ...more about projects.
 
-...clean code.
+...to clean code.
 
-...error messages.
+...about error messages.
 
-...handling missing data.
+...to handle missing data.
 
 ]
 
