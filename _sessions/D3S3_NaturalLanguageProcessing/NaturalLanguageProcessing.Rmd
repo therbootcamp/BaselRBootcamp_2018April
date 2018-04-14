@@ -264,20 +264,61 @@ etc.
 
 ---
 
+.pull-left35[
+
 # Sentiment analysis
 
+Aims to identify the sentiment, i.e., **affective value**, of natural language, based on...
 
-.pull-left45[
+- **Human judgment**
 
-Traditionally, uses 
+- **Heuristic rules**
+
+- **Machine learning**
+
+]
+
+.pull-right55[
+
+<br><br>
+
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/sentiment.png" width="550">
 
 ]
 
-.pull-right45[
 
-<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/sentiment.png" width="400">
+---
+
+# Sentiment analysis
+
+.pull-left25[
+
+|word   | score|
+|:--------|--------:|
+|i      |    NA|
+|could  |    NA|
+|kill   |    -3|
+|for    |    NA|
+|a      |    NA|
+|lovely |     3|
+|piece  |    NA|
+|of     |    NA|
+|yummy  |     3|
+|cake   |    NA|
 
 ]
+
+.pull_right65[
+
+<p align="center">
+
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/sentiment_got.png" width="550">
+
+</p>
+
+]
+
+
 
 ---
 
