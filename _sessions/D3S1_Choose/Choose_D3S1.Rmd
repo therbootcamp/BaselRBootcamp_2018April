@@ -1,5 +1,5 @@
 ---
-title: "Choose your adventure - Day3 II"
+title: "Choose your adventure - Day3 I"
 subtitle: ""
 author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
 date: "April 2018"
@@ -33,30 +33,27 @@ options(digits = 4)
 
 <u>Base track</u><br>
 
-<font size="6"><b>Plotting 2.0</b></font><br>
-
+<font size="6"><b>Tidy Projects</b></font><br>
 
 Learn... 
 
-... .
-
-... .  
-
-]
+...more about projects.
+...clean code.
+...error messages.
+...handling missing data.
 
 .pull-right45[
 
-<u>Advanced track</u><br>
+<u>Advanced Machine Learning</u><br>
 
 <font size="6"><b>Machine Learning</b></font><br>
 
 Learn... 
 
-...the basics of natural language processing.
+...how to easily evaluate any machine learning algorithm with one function.
 
-...how to build and work with term-document representations.  
+...how to do cross-validation to select model parameters.  
 
-...do sentiment analysis. 
 ]
 
 
