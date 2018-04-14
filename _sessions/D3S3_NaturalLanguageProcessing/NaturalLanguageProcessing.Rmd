@@ -266,19 +266,20 @@ etc.
 
 # Sentiment analysis
 
-Trad
+
 .pull-left45[
 
-itionally assigns
+Traditionally assigns
 
-
-
---]
+]
 
 .pull-right45[
 
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/sentiment.png" width="400">
 
-]-
+]
+
+---
 
 # Packages
 
