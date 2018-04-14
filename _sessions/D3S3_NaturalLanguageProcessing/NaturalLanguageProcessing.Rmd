@@ -266,9 +266,18 @@ etc.
 
 # Sentiment analysis
 
-Traditionally assigns
 
+.pull-left45[
 
+Traditionally, uses 
+
+]
+
+.pull-right45[
+
+<img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/sentiment.png" width="400">
+
+]
 
 ---
 
