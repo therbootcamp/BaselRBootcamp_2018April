@@ -44,7 +44,7 @@ knitr::include_graphics("../_image/newapp_a_ss.png")
 knitr::include_graphics("../_image/newapp_b_ss.png")
 ```
 
-- A new file called `geyser.app` should now be open. Click the "Run App" button to open the app.
+- A new file called `app.R` should now be open. Click the "Run App" button to open the app.
 
 ```{r, echo = FALSE, fig.align = 'center', eval = TRUE, out.width = "60%"}
 knitr::include_graphics("../_image/newapp_d_ss.png")
@@ -63,7 +63,7 @@ By the end of this practical, you'll try to create the following app:
 
 <iframe src="https://econpsychbasel.shinyapps.io/histogram_app/" width="800" height="600"></iframe>
 
-1. Start by following the example above so you have your own `geyser.app`
+1. Start by following the example above so you have your own `app.R`
 
 2. Explore the code in the app to see how it works. Where in the app is the user interface defined? Where is the server code? Where does the server code get access to the vector of geyser data? In what object is the geyser data stored?
 
