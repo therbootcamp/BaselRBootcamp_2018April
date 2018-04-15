@@ -154,7 +154,7 @@ identical(c(1L, 2L, 3L), c(1, 2, 3))
 
 ---
 
-# A Note on Checks
+# A Note on Logical Expressions
 
 .pull-left45[
 
