@@ -31,18 +31,19 @@ class: center, middle, inverse, title-slide
 1. Networks&lt;br&gt;
 2. Bayesian stats&lt;br&gt;
 3. Text analysis&lt;br&gt;
-4. Rcpp&lt;br&gt;
-5. Forms&lt;br&gt;
-6. Github&lt;br&gt;
-7. R on servers&lt;br&gt;
+4. Statistics&lt;br&gt;
+5. Rcpp&lt;br&gt;
+6. Forms&lt;br&gt;
+7. Github&lt;br&gt;
+8. R on servers&lt;br&gt;
 &lt;/font&gt;
 &lt;br&gt;
 
 &lt;font size = 4&gt;&lt;i&gt;How to continue&lt;/i&gt;&lt;br&gt;
 &lt;font size = 6&gt;
-7. Books&lt;br&gt;
-8. Websites R&lt;br&gt;
-9. Groups&lt;br&gt;
+8. Books&lt;br&gt;
+9. Websites R&lt;br&gt;
+10. Groups&lt;br&gt;
 &lt;/font&gt;
 ]
 
@@ -87,9 +88,10 @@ Another area were R has seen much development is **text analysis**. New packages
 
 | Package| Description| 
 |:------|:------------|
+| `tm`, `tidytext`  | General text analysis packages  |
 | `stringr`, `stringi`  | String operations and regular expressions. |
 | `rvest`, `XML`  | Scraping content of the internet|
-| `lsa`, `fast.svd` | Singular value decomposition and latent semantic analysis. |
+| `text2vec`| Create vector representation of words. |
 | `SentimentAnalysis`| Sentiment analysis.|
 | `twitteR`, `streamR`, `jsonlite`| Streaming and parsing tweets. |
 | `Rfacebook`| Accessing the Facebook API. |
@@ -119,7 +121,8 @@ Another area were R has seen much development is **text analysis**. New packages
 &lt;br2&gt;
 &lt;p align="center"&gt;&lt;a href="http://hedonometer.org/books/v1/"&gt;
   &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/harry_potter.png" width=900&gt;&lt;/a&gt;&lt;br&gt;
-  &lt;font size=3&gt;Link to &lt;a href="https://arxiv.org/pdf/1606.07772.pdf"&gt;Paper&lt;/a&gt;&lt;/font&gt;&lt;/p&gt;
+  &lt;font size=3&gt;Link to &lt;a href="https://arxiv.org/pdf/1606.07772.pdf"&gt;Paper&lt;/a&gt;&lt;/font&gt;&lt;br&gt;
+  &lt;font size=3&gt;View &lt;a href="https://www.youtube.com/watch?v=oP3c1h8v2ZQ"&gt;Vonnegut's Shape of Stories&lt;/a&gt;&lt;/font&gt;&lt;/p&gt;
 
 ---
 
@@ -140,6 +143,44 @@ Another area were R has seen much development is **text analysis**. New packages
 | `rjags`, `rstan`| Bayesian graphical models.|
 | `forecast`, `mgm`, `timeSeries`, etc.| Time series models.|
 | `cluster`, `fastcluster`, `cstab`, etc.| Cluster analysis.|
+
+---
+
+# Deep learning
+
+&lt;img src="https://cdn-images-1.medium.com/max/1600/1*R9Vd96dBUU2fJO9dnK0igA.png"&gt;
+
+---
+
+# Deep learning: Tensorflow
+
+.pull-left5[
+
+```r
+# Get Keras
+install.packages(keras)
+library(keras)
+install_keras()
+
+# Define model
+model &lt;- keras_model_sequential() 
+model %&gt;% 
+  layer_dense(units = 256,
+              activation = 'relu', 
+              input_shape = c(784)) %&gt;% 
+  layer_dropout(rate = 0.4) %&gt;% 
+  layer_dense(units = 128, 
+              activation = 'relu') %&gt;%
+  layer_dropout(rate = 0.3) %&gt;%
+  layer_dense(units = 10, 
+              activation = 'softmax')
+```
+]
+
+.pull-right45[
+&lt;a href="https://tensorflow.rstudio.com/"&gt;&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/TensorFlowLogo.svg/2000px-TensorFlowLogo.svg.png" height = 400&gt;&lt;/a&gt;
+]
+
 
 ---
 
@@ -174,13 +215,9 @@ ttestBF(x, y)
 
 
 ```
-## Warning: package 'Matrix' was built under R version 3.4.4
-```
-
-```
 ## Bayes factor analysis
 ## --------------
-## [1] Alt., r=0.707 : 965878 ±0%
+## [1] Alt., r=0.707 : 117913 ±0%
 ## 
 ## Against denominator:
 ##   Null, mu1-mu2 = 0 
@@ -230,7 +267,7 @@ ggmap(get_map(c(7.588576, 47.559601),zoom=16))
 
 .pull-right45[
 
-&lt;p align="center"&gt;&lt;br&gt;&lt;br&gt;&lt;iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfAGQRft3YGz-urIVyFQ1s2o5B_63C2J92V7bowa-RJsNfinQ/viewform?embedded=true" width="430" height="550"&gt;Wird geladen...&lt;/iframe&gt;&lt;/p&gt;
+&lt;p align="center"&gt;&lt;br&gt;&lt;br&gt;&lt;iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdYMfL36Dcs7IJ4DQh-XGUI0DYHsP0b8taF3jFahs2ZPilySQ/viewform?embedded=true" width="430" height="550"&gt;Wird geladen...&lt;/iframe&gt;&lt;/p&gt;
 
 ]
 
@@ -310,15 +347,17 @@ Here is a very incomplete series of good books. They are ordered by complexity, 
 
 
 &lt;table width="100%" style="cellspacing:0; cellpadding:0; border:none"&gt;
+
   &lt;tr&gt;    
+  
   &lt;td&gt;
   &lt;a href="https://bookdown.org/ndphillips/YaRrr/"&gt;&lt;img border="0" alt="W3Schools" src="https://bookdown.org/ndphillips/YaRrr/images/YaRrr_Cover.jpg" height="180"&gt;&lt;/a&gt;
   &lt;/td&gt;
- 
-  &lt;td&gt;
-  &lt;a href="http://static.lulu.com/browse/product_thumbnail.php?productId=22049492&amp;resolution=320"&gt;&lt;img border="0" alt="W3Schools" src="http://static.lulu.com/browse/product_thumbnail.php?productId=22049492&amp;resolution=320" height="180"&gt;&lt;/a&gt;
-  &lt;/td&gt;  
   
+&lt;td&gt;
+  &lt;a href="https://uk.sagepub.com/en-gb/eur/change-location/0"&gt;&lt;img border="0" alt="W3Schools" src="http://t3.gstatic.com/images?q=tbn:ANd9GcSbjn-7l52NdtNguTjP85sJ7QOTVTo5OegVC8bOrS34QSBucXCW" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+
   &lt;td&gt; 
   &lt;a href="http://r4ds.had.co.nz/"&gt;&lt;img border="0" alt="W3Schools" src="http://r4ds.had.co.nz/cover.png" height="180"&gt;&lt;/a&gt;
   &lt;/td&gt;
@@ -328,21 +367,65 @@ Here is a very incomplete series of good books. They are ordered by complexity, 
   &lt;/td&gt;
 
   &lt;td&gt;
-  &lt;a href="https://images-na.ssl-images-amazon.com/images/I/51l7gOx3Z-L._SX376_BO1,204,203,200_.jpg"&gt;&lt;img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/51l7gOx3Z-L._SX376_BO1,204,203,200_.jpg" height="180" &gt;&lt;/a&gt;
+  &lt;a href="http://ggplot2.org/book/"&gt;&lt;img border="0" alt="W3Schools" src="http://t1.gstatic.com/images?q=tbn:ANd9GcQNvhEpXp9OwvqVosEh-UecM3TNbhdb1eVZp3LywUcXGeVC3scQ" height="180"&gt;&lt;/a&gt;
+  &lt;/td&gt;  
+
+    &lt;td&gt;
+  &lt;a href="https://www.tidytextmining.com/"&gt;&lt;img border="0" alt="W3Schools" src="https://www.tidytextmining.com/images/cover.png" height="180" &gt;&lt;/a&gt;
   &lt;/td&gt;
+
+    &lt;td&gt;
+  &lt;a href="http://appliedpredictivemodeling.com/"&gt;&lt;img border="0" alt="W3Schools" src="http://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/51157487e4b0b8b2ffe16829/1509217882069/?format=1500w" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+  
+      &lt;td&gt;
+  &lt;a href="http://www-bcf.usc.edu/~gareth/ISL/ISLR%20First%20Printing.pdf"&gt;&lt;img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/41EaH4W9LVL._SX332_BO1,204,203,200_.jpg" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+  
+  &lt;/tr&gt;
+  
+
+  &lt;tr&gt;
+
+    &lt;td&gt;
+  &lt;a href="https://www.amazon.com/Doing-Bayesian-Data-Analysis-Second/dp/0124058884"&gt;&lt;img border="0" alt="W3Schools" src="http://t1.gstatic.com/images?q=tbn:ANd9GcTRRlqFPDLuz1b1FRqtL_bcVrILqPEJgh17piFhG-zwXYN_nCWm" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+  
+      &lt;td&gt;
+  &lt;a href="https://www.manning.com/books/deep-learning-with-r"&gt;&lt;img border="0" alt="W3Schools" src=" http://t2.gstatic.com/images?q=tbn:ANd9GcTfqjySUegtFHmrss1s042VPMfeotHpu1VZFSrOtGz0N-K3EsiB" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+
+        &lt;td&gt;
+  &lt;a href="https://csgillespie.github.io/efficientR/"&gt;&lt;img border="0" alt="W3Schools" src="https://csgillespie.github.io/efficientR/figures/f0_web.png" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+
+  &lt;td&gt;
+  &lt;a href="www.rcpp.org/"&gt;&lt;img border="0" alt="W3Schools" src="http://t3.gstatic.com/images?q=tbn:ANd9GcSO9T6JQYtpQgcaCXudbqMB-fnvTjGowsnmeh9-BQku3zveR4-J" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+
+        &lt;td&gt;
+  &lt;a href="https://www.wiley.com/en-us/The+R+Book%2C+2nd+Edition-p-9780470973929"&gt;&lt;img border="0" alt="W3Schools" src="https://media.wiley.com/product_data/coverImage300/27/04709739/0470973927.jpg" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+  
   
   &lt;td&gt;
-  &lt;a href="http://static.lulu.com/browse/product_thumbnail.php?productId=18809753&amp;resolution=320"&gt;&lt;img border="0" alt="W3Schools" src="http://static.lulu.com/browse/product_thumbnail.php?productId=18809753&amp;resolution=320" height="180" &gt;&lt;/a&gt;
+  &lt;a href="http://adv-r.had.co.nz/"&gt;&lt;img border="0" alt="W3Schools" src="https://images.tandf.co.uk/common/jackets/amazon/978146658/9781466586963.jpg" height="180" &gt;&lt;/a&gt;
+  &lt;/td&gt;
+
+      &lt;td&gt;
+  &lt;a href="http://r-pkgs.had.co.nz/"&gt;&lt;img border="0" alt="W3Schools" src="http://t3.gstatic.com/images?q=tbn:ANd9GcQdwOQxaWZnTc2s55ltS2NL8jpxbnD0sEC6QNPiHKPrIM-AHmAB" height="180" &gt;&lt;/a&gt;
   &lt;/td&gt;
   
-  &lt;td&gt;&lt;a href="http://adv-r.had.co.nz/"&gt;&lt;img border="0" alt="W3Schools" src="https://images.tandf.co.uk/common/jackets/amazon/978146658/9781466586963.jpg" height="180" &gt;&lt;/a&gt;
-  &lt;/td&gt;
 
   &lt;td&gt;
   &lt;a href="https://images-na.ssl-images-amazon.com/images/I/41eCbcQARTL._SX342_BO1,204,203,200_.jpg"&gt;&lt;img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/41eCbcQARTL._SX342_BO1,204,203,200_.jpg" height="180" &gt;&lt;/a&gt;
   &lt;/td&gt;
 
+
   &lt;/tr&gt;
+  
+
+
 &lt;/table&gt;
 &lt;br&gt;
 
@@ -400,35 +483,48 @@ Great place to meet other **R enthusiast** in and outside of industry and see in
 
 # Consulting
 
-**Feel free to contact us**. Being in the R community means helping each other out. And if it's about actually working on a job for you, we can figure something out. 
+Feel free to contact us.
 
-
-.pull-left5[
-&lt;p align="center"&gt;&lt;br&gt;
-    &lt;a href="www.dirkwulff.org"&gt;&lt;img border="0" alt="W3Schools" src="https://www.mpib-berlin.mpg.de/sites/default/files/imagecache/marginal/dirk_wulff2smallnarrow.jpg" height="240"&gt;&lt;/a&gt;&lt;br&gt;
+&lt;table class="tg"  style="cellspacing:0; cellpadding:0; border:none"&gt;
+  &lt;tr&gt;
+    &lt;th class="tg-yw4l"&gt;
+    
+  &lt;p align="center"&gt;&lt;br&gt;
+    &lt;a href="www.dirkwulff.org"&gt;&lt;img border="0" alt="W3Schools" src="https://www.mpib-berlin.mpg.de/sites/default/files/imagecache/marginal/dirk_wulff2smallnarrow.jpg" height="230"&gt;&lt;/a&gt;&lt;br&gt;
 
 &lt;p align="center"&gt;
-&lt;a href="www.dirkwulff.org"&gt;&lt;b&gt;website&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
-&lt;a href="https://github.com/dwulff"&gt;&lt;b&gt;GitHub&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;font size = 5&gt;Dr. Dirk Wulff&lt;/font&gt;&lt;br&gt;&lt;br&gt;
+&lt;a href="www.dirkwulff.org"&gt;&lt;b&gt;dirkwulff.org&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;a href="https://github.com/dwulff"&gt;&lt;b&gt;github.com/dwulff&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
 &lt;font size=4&gt;&lt;i&gt;packages: &lt;/i&gt;&lt;/font&gt; 
 &lt;a href="https://cran.r-project.org/web/packages/cstab/index.html"&gt;&lt;b&gt;cstab&lt;/b&gt;&lt;/a&gt;, &lt;br&gt;
 &lt;a href="https://cran.r-project.org/web/packages/mousetrap/index.html"&gt;&lt;b&gt;mousetrap&lt;/b&gt;&lt;/a&gt;, &lt;a href="https://github.com/dwulff/choicepp"&gt;&lt;b&gt;choicepp&lt;/b&gt;
-&lt;/p&gt;
-]
-
-.pull-right5[
-&lt;p align="center"&gt;&lt;br&gt;
-    &lt;a href="www.nathanieldphillips.com/"&gt;&lt;img border="0" alt="W3Schools" src="https://avatars3.githubusercontent.com/u/8480980?v=4&amp;s=460" height="240"&gt;&lt;/a&gt;&lt;br&gt;
+&lt;/p&gt;  
+  
+    &lt;/th&gt;
+    &lt;th class="tg-yw4l"&gt;&lt;p align="center"&gt;&lt;br&gt;
+    &lt;a href="www.nathanieldphillips.com/"&gt;&lt;img border="0" alt="W3Schools" src="https://avatars3.githubusercontent.com/u/8480980?v=4&amp;s=460" height="230"&gt;&lt;/a&gt;&lt;br&gt;
 
 &lt;p align="center"&gt;
-&lt;a href="www.nathanieldphillips.com/"&gt;&lt;b&gt;website&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
-&lt;a href="https://github.com/dwulff"&gt;&lt;b&gt;GitHub&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;font size = 5&gt;Dr. Nathaniel Phillips&lt;/font&gt;&lt;br&gt;&lt;br&gt;
+&lt;a href="www.nathanieldphillips.com/"&gt;&lt;b&gt;nathanieldphillips.com&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;a href="https://github.com/ndphillips"&gt;&lt;b&gt;github.com/ndphillips&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
 &lt;font size=4&gt;&lt;i&gt;packages: &lt;/i&gt;&lt;/font&gt; 
 &lt;a href="https://github.com/ndphillips/yarrr"&gt;&lt;b&gt;yarrr&lt;/b&gt;&lt;/a&gt;, &lt;br&gt;
-&lt;a href="https://github.com/ndphillips/FFTrees"&gt;&lt;b&gt;FFTrees&lt;/b&gt;&lt;/a&gt;, &lt;a href="https://github.com/ndphillips/ShinyPsych"&gt;&lt;b&gt;ShinyPsych&lt;/b&gt;
-&lt;/p&gt;
+&lt;a href="https://github.com/ndphillips/FFTrees"&gt;&lt;b&gt;FFTrees&lt;/b&gt;&lt;/a&gt;&lt;/th&gt;
 
-]
+ &lt;th class="tg-yw4l"&gt;&lt;p align="center"&gt;
+&lt;p align="center"&gt;&lt;br&gt;
+    &lt;a href="https://psychologie.unibas.ch/de/personen/markus-steiner/about-me/"&gt;&lt;img border="0" alt="W3Schools" src="https://avatars0.githubusercontent.com/u/26483702?s=400&amp;u=d2bfbcee6585b175144fbd2cb17d1bab9a2bac05&amp;v=4" height="230"&gt;&lt;/a&gt;&lt;br&gt;
+
+&lt;p align="center"&gt;
+&lt;font size = 5&gt;Markus Steiner&lt;/font&gt;&lt;br&gt;&lt;br&gt;
+&lt;a href="https://github.com/mdsteiner"&gt;&lt;b&gt;github.com/mdsteiner&lt;/b&gt;&lt;/a&gt;&lt;br&gt;
+&lt;font size=4&gt;&lt;i&gt;package: &lt;/i&gt;&lt;/font&gt; 
+&lt;a href="https://github.com/ndphillips/ShinyPsych"&gt;&lt;b&gt;ShinyPsych&lt;/b&gt; &lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
 
 ---
 
