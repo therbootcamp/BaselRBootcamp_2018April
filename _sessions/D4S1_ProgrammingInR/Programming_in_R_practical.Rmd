@@ -68,7 +68,7 @@ pirates <- read_csv("data/pirates.csv")
 
 C. The `pirates` dataset contains details about 1000 pirates, such as their age, sex, number of tattoos and beard length. For more information about the dataset just type the following code:
 
-```{r}
+```{r, echo = TRUE}
 # Look at documentation for pirates data (contained in the yarrr package)
 library(yarrr)
 ?pirates

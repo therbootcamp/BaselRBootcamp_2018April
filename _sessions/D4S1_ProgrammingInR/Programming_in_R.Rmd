@@ -363,7 +363,9 @@ A `for` loop has three components:
 .pull-right45[
 
 ```{r}
-for (i in seq_len(4)) print(i)
+for (i in seq_len(4)) {
+  print(i)
+}
 
 pir_sub <- pirates %>%
   select(age, height, weight)
