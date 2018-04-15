@@ -45,9 +45,6 @@ mpg # Look at the mpg data
 # Just a blank space without any aesthetic mappings
 ggplot(data = mpg)
 
-# Set the overall plotting theme
-theme_set(theme_bw())   # theme_bw(), theme_minimal(), theme_classic()
-
 # Now add a mapping where engine displacement (displ) and highway miles per gallon (hwy) are mapped to the x and y aesthetics
 ggplot(data = mpg, 
        mapping = aes(x = displ, y = hwy))   # Map displ to x-axis and hwy to y-axis
@@ -209,7 +206,7 @@ ggplot(data = diamonds,
 
 ### Playing with themes
 
-10. Look at the theme help menu with `?theme_bw()` to see a list of all of the standard ggplot themes. Then, using the `theme_set()` function, try setting your global theme to different themes. When you do, evaluate your previous plotting code again to see the new themes in action!
+10. Look at the theme help menu with `?theme_bw()` to see a list of all of the standard ggplot themes. Then, try adding one of these themes to your previous plots to see how they change.
 
 11. The `ggthemes` package contains many additional themes. If you don't have the package already, install it. Then, look at the `ggthemes()` vignette by running the following code:
 

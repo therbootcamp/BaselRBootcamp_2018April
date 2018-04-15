@@ -344,64 +344,6 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 
 ---
-## Managing working directories with RMarkdown
-
-.pull-left4[
-
-When you knit a \*.Rmd file, the working directory will be *temporarily changed to the location of that file*.
-
-```{r, echo = FALSE, out.width = "70%"}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wd_ss.png")
-```
-
-
-If your Markdown file is **not** in the root working directory of your project (is in a folder), then your code may no longer work.
-
-
-]
-
-.pull-right55[
-
-This code might work when you evaluate it directly in your RStudio session
-
-```{r, eval = FALSE}
-mydata <- read_csv(file = "data/mydata.csv")
-```
-
-But when you **knit** the document, you might see an error like this:
-
-```{r, echo = FALSE, out.width = "90%"}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/error_wd.png")
-```
-
-]
-
----
-## Managing working directories with RMarkdown
-
-
-```{r, echo = FALSE, out.width = "90%"}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_A.png")
-```
-
----
-## Managing working directories with RMarkdown
-
-
-```{r, echo = FALSE, out.width = "90%"}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_B.png")
-```
-
----
-## Managing working directories with RMarkdown
-
-
-```{r, echo = FALSE, out.width = "90%"}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_C.png")
-```
-
-
----
 ## Rendering output with `knitr`
 
 .pull-left45[
@@ -511,11 +453,66 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ## Dynamic Reports Pratical
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/_sessions/D4S2_DynamicReports/DynamicReports_practical.html">Link to Dynamic Reports practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S2_DynamicReports/DynamicReports_practical.html">Link to practical</a>
+
 
 
 ---
+## Managing working directories with RMarkdown
 
+.pull-left4[
+
+When you knit a \*.Rmd file, the working directory will be *temporarily changed to the location of that file*.
+
+```{r, echo = FALSE, out.width = "70%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wd_ss.png")
+```
+
+
+If your Markdown file is **not** in the root working directory of your project (is in a folder), then your code may no longer work.
+
+
+]
+
+.pull-right55[
+
+This code might work when you evaluate it directly in your RStudio session
+
+```{r, eval = FALSE}
+mydata <- read_csv(file = "data/mydata.csv")
+```
+
+But when you **knit** the document, you might see an error like this:
+
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/error_wd.png")
+```
+
+]
+
+---
+## Managing working directories with RMarkdown
+
+
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_A.png")
+```
+
+---
+## Managing working directories with RMarkdown
+
+
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_B.png")
+```
+
+---
+## Managing working directories with RMarkdown
+
+
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_C.png")
+```
 
 
 

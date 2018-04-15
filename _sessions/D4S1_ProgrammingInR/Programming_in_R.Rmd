@@ -154,7 +154,7 @@ identical(c(1L, 2L, 3L), c(1, 2, 3))
 
 ---
 
-# A Note on Checks
+# A Note on Logical Expressions
 
 .pull-left45[
 
@@ -427,7 +427,7 @@ while(any(trunc_norm < 0)){
 
 Functions of the `apply` family are another tool to iterate through objects and do the same operation on each subset.
 
-They are very handy, but not always consitently programmed, i.e., for example the argument structure is not always the same.
+They are very handy, but not always consistently programmed, i.e., for example the argument structure is not always the same.
 
 These are available `apply` functions:
 
@@ -465,7 +465,7 @@ sapply(pir_sub, mean) # columns
 
 Functions of the `apply` family are another tool to iterate through objects and do the same operation on each subset.
 
-They are very handy, but not always consitently programmed, i.e., for example the argument structure is not always the same.
+They are very handy, but not always consistently programmed, i.e., for example the argument structure is not always the same.
 
 These are available `apply` functions:
 

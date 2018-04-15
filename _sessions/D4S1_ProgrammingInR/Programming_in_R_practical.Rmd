@@ -1,6 +1,7 @@
 ---
 title: "Programming in R - Practical"
-author: "BaselRBootcamp April 2018"
+author: "BaselRBootcamp"
+date: "April 2018"
 output: html_document
 ---
 
@@ -10,7 +11,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval 
 
 ### Slides
 
-- [Here are the introduction slides for this practical on data wrangling!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R.html)
+- [Here are the introduction slides for this practical on Programming in R!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R.html)
 
 ### Overview
 
@@ -134,7 +135,7 @@ if (!is.null(coin_toss) && coin_toss == "H"){
 }
 ```
 
-4. Now you no longer want to toss your coin only once but several (let's say ten) times (you'll have to tweak the `sample` function a bit. Check the help menue for help). Do this, and if *ALL* tosses came up heads, print "Wow, that's ten heads in a row!", if there is at least one head in there, print "The coin showed X times heads, and Y times tails", where X and Y are the respective numbers of heads and tails (use the `paste` function to print and the `sum` function to get the correct numbers, check the help menus if you don't know how to do this), and print "Wow, that's ten tails in a row!", if *ALL* tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.
+4. Now you no longer want to toss your coin only once but several (let's say ten) times (you'll have to tweak the `sample` function a bit. Check the help menu for help). Do this, and if *ALL* tosses came up heads, print "Wow, that's ten heads in a row!", if there is at least one head in there, print "The coin showed X times heads, and Y times tails", where X and Y are the respective numbers of heads and tails (use the `paste` function to print and the `sum` function to get the correct numbers, check the help menus if you don't know how to do this), and print "Wow, that's ten tails in a row!", if *ALL* tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.
 
 ```{r}
 coin_tosses <- sample(c("H", "T"), 10, replace = TRUE)
@@ -268,7 +269,7 @@ abs_mean_diff(pirates$age, pirates$sex, list("male", "female"))
 abs_mean_diff(pirates$height, pirates$sex, list("male", "female"))
 ```
 
-8. One great thing about functions is that they can take other functions as arguments. Let's say you don't only want to be able to compute the abs mean difference, but also the median difference. Reprogram the `abs_mean_diff` function from task 7 by adding a fourth argument `met` (short for method), where you pass the function name as an argument *WITHOUT* quotationmarks. Set the default value to this argument to `mean`. Name the function `abs_diff`. Then compute the mean and the median absolute difference of tattoos for male and female pirates.
+8. One great thing about functions is that they can take other functions as arguments. Let's say you don't only want to be able to compute the abs mean difference, but also the median difference. Reprogram the `abs_mean_diff` function from task 7 by adding a fourth argument `met` (short for method), where you pass the function name as an argument *WITHOUT* quotation marks. Set the default value to this argument to `mean`. Name the function `abs_diff`. Then compute the mean and the median absolute difference of tattoos for male and female pirates.
 
 ```{r}
 abs_diff <- function(mean_vec, cat_vec, sep_list, met = mean){
@@ -283,7 +284,7 @@ abs_diff(pirates$tattoos, pirates$sex, list("male", "female"), median)
 
 Passing functions as arguments can be very handy, especially when you can combine this with `apply` or `map` function so you can enter a list of functions. We'll see an example of that later.
 
-9. There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called `...`. Now add the `...` as last argument to the `abs_diff` function from the previous task, and also add it to the `met()` function inside the `abs_diff` function. Now you can call functions with `abs_diff` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean. Compute the 20% trimmed mean.
+9. There is one argument you can use when programming a function, that let's you then enter an unlimited number of arguments to that function, without having to Pre-specify them. The argument is called `...`. Now add the `...` as last argument to the `abs_diff` function from the previous task, and also add it to the `met()` function inside the `abs_diff` function. Now you can call functions with `abs_diff` that take more than just the numeric vector as argument, for example you can compute a trimmed mean with `mean(x, trim = .2)` for the 20% trimmed mean. Compute the 20% trimmed mean.
 
 ```{r}
 abs_diff <- function(mean_vec, cat_vec, sep_list, met = mean, ...){
@@ -300,7 +301,7 @@ abs_diff(pirates$tattoos, pirates$sex, list("male", "female"), mean, trim = .2)
 
 Iteration is an extremely important feature in programming. It let's you execute a block of code for a large number of objects, with only having to write the block of code once. The iteration methods we will look at in the next few tasks are `for` and `while` loops. Later we will also look at `apply` and `map` functions.
 
-Remember that a `for` loop executes a block of code as many times as you specify, whereas a `while` loop does the same thing but as long until a prespecified condition is met. Here are a few examples:
+Remember that a `for` loop executes a block of code as many times as you specify, whereas a `while` loop does the same thing but as long until a Pre-specified condition is met. Here are a few examples:
 
 ```{r, eval = TRUE, echo = TRUE}
 ## for loops
@@ -370,7 +371,7 @@ for (v in vars){
 }
 ```
 
-12. You want to check whether the college a pirate went to, is related to the number of groggs a pirate drinks a day on average. To get rid of the potentially influential factors of age, sex, and weight, you want to match the two subsamples of 100 pirates each, such that you have a maximum difference in the number of females between the two groups of 12, a maximum mean age difference of 10 years, a maximum difference in the standard deviatio of age of 8 years, a maximum mean weight difference of 8 kilogramms, and a maximum difference in the standard deviation of weight of 7 kilogramms. Use a `while` loop where you take a subsample of 100 pirates from each college, and use the above parameters of this sample for the check. Note: don't bother about doing the analysis afterwards, the exercise is just about the looping part. Also the values for the check are arbitrary. If it takes too long for the loop to run just use larger values, for the exercise the precision doesn't have to be high.
+12. You want to check whether the college a pirate went to, is related to the number of groggs a pirate drinks a day on average. To get rid of the potentially influential factors of age, sex, and weight, you want to match the two subsamples of 100 pirates each, such that you have a maximum difference in the number of females between the two groups of 12, a maximum mean age difference of 10 years, a maximum difference in the standard deviation of age of 8 years, a maximum mean weight difference of 8 kilograms, and a maximum difference in the standard deviation of weight of 7 kilograms. Use a `while` loop where you take a subsample of 100 pirates from each college, and use the above parameters of this sample for the check. Note: don't bother about doing the analysis afterwards, the exercise is just about the looping part. Also the values for the check are arbitrary. If it takes too long for the loop to run just use larger values, for the exercise the precision doesn't have to be high.
 
 ```{r}
 
@@ -405,7 +406,7 @@ while (sex_diff > 12 || age_diff_mean > 10 || age_diff_sd > 8 ||
 # Here you would proceed with the analysis
 ```
 
-13. There are two statements you can use in `while` and `for` loops, that can be handy to know. One of them is `break`, which lets you exit the current loop. The other one is `next` which skips the following code for that iteration and directly goes to the next iteration. Program a while loop that samples two numbers from a normal distribution and divides the one by the other and stores the result in a vector. If the divisor (the number that divides the other number) is 0, skip to the next iteration. Use a counter and if more than 20 iterations are needed break the loop to ensure it's not taking too long. As condition for the `while` loop use a second counter that increases each time a successfull division is executed, and run the loop as long as this counter is 15 or less.
+13. There are two statements you can use in `while` and `for` loops, that can be handy to know. One of them is `break`, which lets you exit the current loop. The other one is `next` which skips the following code for that iteration and directly goes to the next iteration. Program a while loop that samples two numbers from a normal distribution and divides the one by the other and stores the result in a vector. If the divisor (the number that divides the other number) is 0, skip to the next iteration. Use a counter and if more than 20 iterations are needed break the loop to ensure it's not taking too long. As condition for the `while` loop use a second counter that increases each time a successful division is executed, and run the loop as long as this counter is 15 or less.
 
 ```{r}
 
@@ -520,7 +521,7 @@ map(smpls, plot, type = "b", ylab = "Random Sample")
 
 ```
 
-18. As you can see, besides the plots you've got `NULL` printed in your console each time you called `plot`. This is because map returns whatever the function called returns and in case of plot `NULL` is created as output. To take care of this problem, there is a special family of `purrr` functions called `walk`, that are used for functions like plot that create something on the fly and only have a console output as undesired sideproduct. Create the plots again using `walk`.
+18. As you can see, besides the plots you've got `NULL` printed in your console each time you called `plot`. This is because map returns whatever the function called returns and in case of plot `NULL` is created as output. To take care of this problem, there is a special family of `purrr` functions called `walk`, that are used for functions like plot that create something on the fly and only have a console output as undesired side product. Create the plots again using `walk`.
 
 ```{r}
 
@@ -529,7 +530,7 @@ walk(smpls, plot, type = "b", ylab = "Random Sample")
 
 ```
 
-19. Redo task 16 but this time don't draw 10 samples per distribution but draw 10, 15, and 20 samples, respectively. To iterate over an unlimited number of objects simultaneously, use the `pmap` function. Check the help menue if you're not sure how this works.
+19. Redo task 16 but this time don't draw 10 samples per distribution but draw 10, 15, and 20 samples, respectively. To iterate over an unlimited number of objects simultaneously, use the `pmap` function. Check the help menu if you're not sure how this works.
 
 ```{r}
 
