@@ -1,0 +1,68 @@
+---
+title: "Choose your adventure - Day4"
+subtitle: ""
+author: "The R Bootcamp<br/>Twitter: <a href='https://twitter.com/therbootcamp'>@therbootcamp</a>"
+date: "April 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+# Choose your adventure!
+
+.pull-left45[
+
+<u>Base track</u><br>
+
+<font size="6"><b>Programming in R</b></font><br>
+
+Learn... 
+
+...about control-statements.
+
+...about for-loops.
+
+...functional programming.
+
+]
+
+.pull-right45[
+
+<u>Advanced track</u><br>
+
+<font size="6"><b>Efficient Code</b></font><br>
+
+Learn about how to speed up R using... 
+
+...proper programming.
+
+...compiling.
+
+...parallel execution.
+
+...C++.
+
+]
+
+
+
+
