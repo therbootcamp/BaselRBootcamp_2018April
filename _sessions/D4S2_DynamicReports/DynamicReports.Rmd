@@ -456,10 +456,6 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 <p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S2_DynamicReports/DynamicReports_practical.html">Link to practical</a>
 
 
----
-
-
-
 
 ---
 ## Managing working directories with RMarkdown
