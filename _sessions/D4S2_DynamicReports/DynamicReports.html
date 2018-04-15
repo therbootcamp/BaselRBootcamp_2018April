@@ -306,55 +306,6 @@ knitr::opts_chunk$set(fig.width = 6,        # Figure width (in)
 
 
 ---
-## Managing working directories with RMarkdown
-
-.pull-left4[
-
-When you knit a \*.Rmd file, the working directory will be *temporarily changed to the location of that file*.
-
-&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wd_ss.png" width="70%" style="display: block; margin: auto;" /&gt;
-
-
-If your Markdown file is **not** in the root working directory of your project (is in a folder), then your code may no longer work.
-
-
-]
-
-.pull-right55[
-
-This code might work when you evaluate it directly in your RStudio session
-
-
-```r
-mydata &lt;- read_csv(file = "data/mydata.csv")
-```
-
-But when you **knit** the document, you might see an error like this:
-
-&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/error_wd.png" width="90%" style="display: block; margin: auto;" /&gt;
-
-]
-
----
-## Managing working directories with RMarkdown
-
-
-&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_A.png" width="90%" style="display: block; margin: auto;" /&gt;
-
----
-## Managing working directories with RMarkdown
-
-
-&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_B.png" width="90%" style="display: block; margin: auto;" /&gt;
-
----
-## Managing working directories with RMarkdown
-
-
-&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_C.png" width="90%" style="display: block; margin: auto;" /&gt;
-
-
----
 ## Rendering output with `knitr`
 
 .pull-left45[
@@ -470,6 +421,57 @@ Read Wickham's [book "R Packages"](http://r-pkgs.had.co.nz/) (available free at 
 
 
 ---
+
+
+
+
+---
+## Managing working directories with RMarkdown
+
+.pull-left4[
+
+When you knit a \*.Rmd file, the working directory will be *temporarily changed to the location of that file*.
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/wd_ss.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+If your Markdown file is **not** in the root working directory of your project (is in a folder), then your code may no longer work.
+
+
+]
+
+.pull-right55[
+
+This code might work when you evaluate it directly in your RStudio session
+
+
+```r
+mydata &lt;- read_csv(file = "data/mydata.csv")
+```
+
+But when you **knit** the document, you might see an error like this:
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/error_wd.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+## Managing working directories with RMarkdown
+
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_A.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+## Managing working directories with RMarkdown
+
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_B.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+## Managing working directories with RMarkdown
+
+
+&lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/markdown_wd_C.png" width="90%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
