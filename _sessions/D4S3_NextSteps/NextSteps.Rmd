@@ -78,7 +78,7 @@ A social graph of package Co-authors using `tidyverse` plus `ggraph`, an extensi
 
 ---
 
-# Semantic networks - [**www.swow.me**](www.swow.me)
+# Semantic networks - [**www.swow.me**](https://www.smallworldofwords.org/de)
 
 <p align="center"><a href="http://www.swow.me">
   <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/semantic_space.png" width=720></a></p>
