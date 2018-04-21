@@ -16,7 +16,6 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval =
 
 - [Here are the introduction slides for this practical on machine learning!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S3_MachineLearning/MachineLearning.html#1)
 
-
 ### Overview
 
 In this practical you'll conduct machine learning analyses on a dataset on heart disease. You will see how well many different machine learning models can predict new data. By the end of this practical you will know how to:
@@ -213,7 +212,7 @@ C. Make sure the `heartdisease.csv` file is in the `data` in your working direct
 
 D. Explore the `heartdisease` dataset using `summary()`, and `View()`
 
-E. There is a help menu for the `heartdisease` dataset in the `FFTrees` package. Look at the help menu for `heartedisease` by running `?heartdisease`
+E. There is a help menu for the `heartdisease` dataset in the `FFTrees` package. Look at the help menu for `heartdisease` by running `?heartdisease`
 
 #### Part B: Create training and test data
 
@@ -277,12 +276,6 @@ heart_test <- heart_test %>%
     random = sample(c(0, 1), size = nrow(.), replace = TRUE)
   )
 ```
-
-11. So far we've only looked at the `heartdisease` data. Try conducting a similar analysis on the `ACTG175` data. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren't present in the `heartdisease` data?
-
-    - To predict whether the number of days is greater than 1,000, you'll need to create a new column called `days_gt1000` that indicates this. You can do this with `ACTG175 <- ACTG175 %>% mutate(days_gt1000 = days > 1000)`
-    - You may wish to exclude the `pidnum` column from the data when fitting the models as the patient id is meaningless and should not be included in any models.
-
 
 # Additional reading
 
