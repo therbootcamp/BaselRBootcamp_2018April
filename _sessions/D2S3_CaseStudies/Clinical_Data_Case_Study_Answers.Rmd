@@ -5,7 +5,7 @@ output: html_document
 ---
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval = FALSE)
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE)
 ```
 
 
@@ -127,7 +127,7 @@ Table: Table3. "dimarta_biomarker.csv" variable description:
 
 2. Open a new R script and save it as a new file in your `R` folder called `dimarta_casestudy.R`. At the top of the script, using comments, write your name and the date. Then, load the `tidyverse` package. Here's how the top of your script should look:
 
-```{r, echo = TRUE}
+```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
 ## My Name
 ## The Date
 ## Dimarta - Case Study
@@ -137,7 +137,7 @@ library(tidyverse)
 
 3. Using `read_csv()`, load the `dimarta_trial.csv`, `dimarta_demographics.csv`, and `dimarta_biomarker.csv` datasets as *three* new objects called `trial_df`, `demographics_df`, and `biomarker_df`.
 
-```{r, echo = TRUE}
+```{r, eval = FALSE, echo = TRUE}
 trial_df <- read_csv(file = "data/dimarta_trial.csv")
 demographics_df <- read_csv(file = "data/dimarta_demographics.csv")
 biomarker_df <- read_csv(file = "data/dimarta_biomarker.csv")
@@ -184,7 +184,7 @@ demographics_df <- demographics_df %>%
 
 8. Now let's create a new object called `dimarta_df` that combines data from `trial_df` and `demographics_df`. To do this, use `left_join()` to combine the `trial_df` data with the `demographics_df` data. This will merge the two datasets so you can have the study results and demographic data in the same dataframe. Make sure to assign the result to a new object called `dimarta_df`
 
-```{r, echo = TRUE}
+```{r, eval = TRUE, echo = TRUE}
 # Create a new dataframe called dimarta_df that contains both trial_df and demographics_df
 dimarta_df <- trial_df %>%
   left_join(demographics_df)
