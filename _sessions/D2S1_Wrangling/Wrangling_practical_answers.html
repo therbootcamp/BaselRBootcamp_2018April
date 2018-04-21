@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="BaselRBootcamp January 2018" />
+<meta name="author" content="BaselRBootcamp April 2018" />
 
 
 <title>Data wrangling with dplyr</title>
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Data wrangling with dplyr</h1>
-<h4 class="author"><em>BaselRBootcamp January 2018</em></h4>
+<h4 class="author"><em>BaselRBootcamp April 2018</em></h4>
 
 </div>
 
@@ -128,7 +128,7 @@ $(document).ready(function () {
 <div id="slides" class="section level3">
 <h3>Slides</h3>
 <ul>
-<li><a href="https://therbootcamp.github.io/_sessions/D2S1_Wrangling/Wrangling.html">Here are the introduction slides for this practical on data wrangling!</a></li>
+<li><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S1_Wrangling/Wrangling.html#1">Here are the introduction slides for this practical on data wrangling!</a></li>
 </ul>
 </div>
 <div id="overview" class="section level3">
@@ -285,43 +285,51 @@ chick %&gt;%
 </div>
 <div id="tasks" class="section level2">
 <h2>Tasks</h2>
+<div id="datasets" class="section level3">
+<h3>Datasets</h3>
+<p>You’ll use one dataset in this practical: <code>ACTG175.csv</code>. It is available in the <code>data_BaselRBootcamp_Day2.zip</code> file available through the main course page. If you haven’t already, download the <code>data_BaselRBootcamp_Day2.zip</code> folder and unzip it to get the <code>ACTG175.csv</code> file.</p>
+</div>
 <div id="getting-setup" class="section level3">
 <h3>Getting setup</h3>
-<p>A. Open a new R script and save it as a new file called <code>datawrangling.R</code>. At the top of the script, using comments, write your name and the date. The, load the set of <code>tidyverse</code> and <code>speff2trial</code> packages with <code>library()</code>. Here’s how the top of your script should look:</p>
+<p>A. In RStudio, Create a new project called <code>BaselRBootcamp</code>. In the project root directory, create two folders <code>data</code> and <code>R</code>.</p>
+<pre class="r"><code># Done!</code></pre>
+<p>B. Outside of RStudio (on your computer), move the <code>ACTG175.csv</code> file you just downloaded in to the <code>data</code> folder you just created.</p>
+<pre class="r"><code># Done!</code></pre>
+<p>C. Open a new R script and save it as a new file called <code>wrangling_practical.R</code> in the <code>R</code> folder in your working directory. At the top of the script, using comments, write your name and the date. The, load the set of <code>tidyverse</code> and <code>speff2trial</code> packages with <code>library()</code>. Here’s how the top of your script should look:</p>
 <pre class="r"><code>## NAME
 ## DATE
 ## Wrangling Practical
 
 library(tidyverse)     # For tidyverse
 library(speff2trial)   # For the ACTG175 data documentation</code></pre>
-<p>B. For this practical, we’ll use the <code>ACTG175</code> data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. The data are stored at the following link: <a href="https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv" class="uri">https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv</a>. Using the following template, load the data into R and store it as a new object called <code>trial_act</code>.</p>
-<pre class="r"><code># Load data from weblink as a new tibble in R using read_csv
-# https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv
+<p>B. For this practical, we’ll use the <code>ACTG175</code> data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. Using the following template, load the data into R and store it as a new object called <code>trial_act</code>.</p>
+<pre class="r"><code># Load ACTG175.csv from the data folder 
+# The ACTG175.csv file MUST be in a folder called data in your working directory!!
 
-trial_act &lt;- read_csv(file = &quot;https://raw.githubusercontent.com/therbootcamp/BaselRBootcamp2017/master/tutorials/data/ACTG175.csv&quot;)</code></pre>
-<p>C. The <code>trial_act</code> data is comes from the <code>speff2trial</code> package where it was originally called <code>ACTG175</code>. Look at the help menu for the <code>ACTG175</code> data by running <code>?ACTG175</code>. (Note: If you become really interested in the data, you can also read an article discussing the trial here: <a href="http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article" class="uri">http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article</a>)</p>
+trial_act &lt;- read_csv(file = &quot;data/ACTG175.csv&quot;)</code></pre>
+<p>C. The <code>trial_act</code> data is actually a copy of a dataset from the <code>speff2trial</code> package called <code>ACTG175</code>. We can make Look at the help menu for the <code>ACTG175</code> data by running <code>?ACTG175</code> (If you become really interested in the data, you can also read an article discussing the trial here: <a href="http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article" class="uri">http://www.nejm.org/doi/full/10.1056/nejm199610103351501#t=article</a>)</p>
 <pre class="r"><code># Look at documentation for ACTG175 data (contained in the speff2trial package)
 ?ACTG175</code></pre>
 <p>D. First thing’s first, take a look at the first few rows of the data by printing the <code>trial_act</code> object. It should look like this:</p>
 <pre class="r"><code># Print trial_act object
 trial_act</code></pre>
 <pre><code># A tibble: 2,139 x 27
-   pidnum   age    wtkg  hemo  homo drugs karnof oprior   z30 zprior
-    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
- 1  10056    48 89.8128     0     0     0    100      0     0      1
- 2  10059    61 49.4424     0     0     0     90      0     1      1
- 3  10089    45 88.4520     0     1     1     90      0     1      1
- 4  10093    47 85.2768     0     1     0    100      0     1      1
- 5  10124    43 66.6792     0     1     0    100      0     1      1
- 6  10140    46 88.9056     0     1     1    100      0     1      1
- 7  10165    31 73.0296     0     1     0    100      0     1      1
- 8  10190    41 66.2256     0     1     1    100      0     1      1
- 9  10198    40 82.5552     0     1     0     90      0     1      1
-10  10229    35 78.0192     0     1     0    100      0     1      1
-# ... with 2,129 more rows, and 17 more variables: preanti &lt;int&gt;,
-#   race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;,
-#   treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;,
-#   r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
+   pidnum   age  wtkg  hemo  homo drugs karnof oprior   z30 zprior preanti
+    &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;
+ 1  10056    48  89.8     0     0     0    100      0     0      1       0
+ 2  10059    61  49.4     0     0     0     90      0     1      1     895
+ 3  10089    45  88.5     0     1     1     90      0     1      1     707
+ 4  10093    47  85.3     0     1     0    100      0     1      1    1399
+ 5  10124    43  66.7     0     1     0    100      0     1      1    1352
+ 6  10140    46  88.9     0     1     1    100      0     1      1    1181
+ 7  10165    31  73.0     0     1     0    100      0     1      1     930
+ 8  10190    41  66.2     0     1     1    100      0     1      1    1329
+ 9  10198    40  82.6     0     1     0     90      0     1      1    1074
+10  10229    35  78.0     0     1     0    100      0     1      1     964
+# ... with 2,129 more rows, and 16 more variables: race &lt;int&gt;,
+#   gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;,
+#   offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;,
+#   cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
 </div>
 <div id="rename" class="section level3">
 <h3><code>rename()</code></h3>
@@ -332,7 +340,7 @@ trial_act</code></pre>
   rename(weightkg = wtkg,
          age_years = age)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Oops, you just learned that your company’s data repository doesn’t allow underscores in column names. Change <code>age_years</code> to <code>agey</code></li>
+<li>Oops, someone in your company just told you that the name <code>age_years</code> conflicts with another table in their database. To fix this, change <code>age_years</code> to <code>agey</code>.</li>
 </ol>
 <pre class="r"><code>trial_act &lt;- trial_act %&gt;%
   rename(agey = age_years)</code></pre>
@@ -340,9 +348,10 @@ trial_act</code></pre>
 <div id="mutate" class="section level3">
 <h3><code>mutate()</code></h3>
 <ol start="3" style="list-style-type: decimal">
-<li>Add a new column to <code>trial_act</code> called <code>agem</code> that shows each patient’s age in months instead of years (Hint: do simple arithmetic!).</li>
+<li>Add a new column to <code>trial_act</code> called <code>agem</code> that shows each patient’s age in months instead of years (Hint: Just multiply <code>agey</code> by 12!).</li>
 </ol>
-<pre class="r"><code>trial_act &lt;- trial_act %&gt;% mutate(
+<pre class="r"><code>trial_act &lt;- trial_act %&gt;% 
+  mutate(
   agem = agey * 12
 )</code></pre>
 <ol start="4" style="list-style-type: decimal">
@@ -374,12 +383,52 @@ trial_act</code></pre>
 <li>Arrange the <code>trial_act</code> data in ascending order of agey (from lowest to highest). After, look the data to make sure it worked!</li>
 </ol>
 <pre class="r"><code>trial_act &lt;- trial_act %&gt;% 
- arrange(agey)</code></pre>
+ arrange(agey)
+
+trial_act</code></pre>
+<pre><code># A tibble: 2,139 x 30
+   pidnum  agey weightkg  hemo  homo drugs karnof oprior   z30 zprior
+    &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
+ 1 940533    12     41.4     1     0     0    100      0     0      1
+ 2 950037    12     53.1     1     0     0    100      0     1      1
+ 3 950056    12     31.0     1     0     0    100      0     1      1
+ 4 910034    13     32.7     1     0     0    100      0     1      1
+ 5 940534    13     62.9     1     0     0    100      0     0      1
+ 6 960014    13     48.5     1     0     0    100      0     0      1
+ 7 310767    14     65.0     1     0     0    100      0     1      1
+ 8 920050    14     54.2     1     0     0    100      0     1      1
+ 9 940544    14     41.1     1     0     0    100      0     0      1
+10 950061    14     64.3     1     0     0    100      0     1      1
+# ... with 2,129 more rows, and 20 more variables: preanti &lt;int&gt;,
+#   race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;,
+#   treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;,
+#   r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;,
+#   agem &lt;dbl&gt;, karnof_b &lt;dbl&gt;, sparrow &lt;dbl&gt;</code></pre>
 <ol start="8" style="list-style-type: decimal">
 <li>Now arrange the data in <em>descending</em> order of agey (from highest to lowest). After, look the data to make sure it worked.</li>
 </ol>
 <pre class="r"><code>trial_act &lt;- trial_act %&gt;% 
- arrange(desc(agey))</code></pre>
+ arrange(desc(agey))
+
+trial_act</code></pre>
+<pre><code># A tibble: 2,139 x 30
+   pidnum  agey weightkg  hemo  homo drugs karnof oprior   z30 zprior
+    &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
+ 1  11438    70     73.9     0     1     0    100      0     1      1
+ 2 211360    70     63.1     0     1     0     90      0     0      1
+ 3 211284    69     81.6     0     1     0    100      0     0      1
+ 4  50580    68     90.5     0     1     1    100      0     1      1
+ 5  81127    68     70.8     0     1     0     90      0     1      1
+ 6  10924    67     71.0     0     1     0    100      0     0      1
+ 7 241150    67     82.1     0     1     0     90      0     0      1
+ 8  50662    66     84.4     0     1     0    100      0     0      1
+ 9  11987    65     77.2     0     1     0     90      0     0      1
+10 140797    65     60.5     0     1     0     90      0     0      1
+# ... with 2,129 more rows, and 20 more variables: preanti &lt;int&gt;,
+#   race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;,
+#   treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;,
+#   r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;,
+#   agem &lt;dbl&gt;, karnof_b &lt;dbl&gt;, sparrow &lt;dbl&gt;</code></pre>
 <ul>
 <li>To arrange data in descending order, just include <code>desc()</code> around the variable. E.g.; <code>data %&gt;% arrrange(desc(height))</code></li>
 </ul>
@@ -387,7 +436,27 @@ trial_act</code></pre>
 <li>You can sort the rows of dataframes with multiple columns by including many arguments to <code>arrange()</code>. Now sort the data by <code>karnof</code> and then agey (<code>agey</code>), and then arms (<code>arms</code>)</li>
 </ol>
 <pre class="r"><code>trial_act &lt;- trial_act %&gt;% 
- arrange(karnof, agey, arms)</code></pre>
+ arrange(karnof, agey, arms)
+
+trial_act</code></pre>
+<pre><code># A tibble: 2,139 x 30
+   pidnum  agey weightkg  hemo  homo drugs karnof oprior   z30 zprior
+    &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
+ 1 610015    25     58.7     0     1     0     70      0     0      1
+ 2 990018    27     80.3     1     0     0     70      0     1      1
+ 3 150147    32     90.2     0     1     0     70      0     1      1
+ 4 230109    34     64.4     0     1     0     70      0     1      1
+ 5 640022    36     83.9     0     1     1     70      0     0      1
+ 6 280278    40     79.4     0     0     1     70      0     1      1
+ 7 220418    43     64.4     0     1     0     70      0     1      1
+ 8  50632    45     72.1     0     1     1     70      0     0      1
+ 9  11013    54     71.2     0     1     1     70      0     1      1
+10 230456    23     54.0     0     1     0     80      0     1      1
+# ... with 2,129 more rows, and 20 more variables: preanti &lt;int&gt;,
+#   race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;,
+#   treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;,
+#   r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;,
+#   agem &lt;dbl&gt;, karnof_b &lt;dbl&gt;, sparrow &lt;dbl&gt;</code></pre>
 </div>
 <div id="case_when" class="section level3">
 <h3><code>case_when()</code></h3>
@@ -419,7 +488,7 @@ trial_act</code></pre>
 </ol>
 <pre class="r"><code>trial_act &lt;- trial_act %&gt;%
   mutate(
-    gender.char = case_when(
+    gender_char = case_when(
     gender == 0 ~ &quot;female&quot;,
     gender == 1 ~ &quot;male&quot;),
   over50 = case_when(
@@ -445,15 +514,20 @@ trial_act</code></pre>
 <ol start="15" style="list-style-type: decimal">
 <li>You can use <code>left_join()</code> to combine multiple dataframes. At the following link <a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv" class="uri">https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv</a> I have some additional (fictional) demographic data about the patients, namely the number of days of exercise they get per week, and their highest level of education. Here’s how the first few rows of the data look:</li>
 </ol>
-<pre><code># A tibble: 6 x 3
-  pidnum exercise education
-   &lt;int&gt;    &lt;int&gt;     &lt;chr&gt;
-1 250091        1        HS
-2  70444        3        BA
-3 220425        4        HS
-4  50300        3       PHD
-5 630013        3       &lt;HS
-6  60972        1        MS</code></pre>
+<pre><code># A tibble: 2,139 x 3
+   pidnum exercise education
+    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    
+ 1 250091        1 HS       
+ 2  70444        3 BA       
+ 3 220425        4 HS       
+ 4  50300        3 PHD      
+ 5 630013        3 &lt;HS      
+ 6  60972        1 MS       
+ 7  81105        3 BA       
+ 8 211333        1 HS       
+ 9 170648        0 HS       
+10 220488        1 HS       
+# ... with 2,129 more rows</code></pre>
 <p>Using <code>left_join()</code> to add the demographic data to the <code>trial_act</code> data. To do this, first load the demographic data into R as a new dataframe called <code>trial_act_demo</code>. Then, use the following template to combine the data (Hint: Replace XXX with the correct values.)</p>
 <pre class="r"><code># Get trial_act_demo data
 
@@ -490,16 +564,16 @@ trial_act &lt;- trial_act %&gt;%
 <pre class="r"><code>trial_act %&gt;% 
   group_by(arms) %&gt;%
   summarise(
-    agey.mean = mean(agey),
-    karnof.median = median(karnof)
+    agey_mean = mean(agey),
+    karnof_median = median(karnof)
   )</code></pre>
 <pre><code># A tibble: 4 x 3
-   arms agey.mean karnof.median
+   arms agey_mean karnof_median
   &lt;int&gt;     &lt;dbl&gt;         &lt;dbl&gt;
-1     0  35.22556           100
-2     1  35.22989           100
-3     2  35.43130           100
-4     3  35.11586           100</code></pre>
+1     0      35.2          100.
+2     1      35.2          100.
+3     2      35.4          100.
+4     3      35.1          100.</code></pre>
 <ol start="19" style="list-style-type: decimal">
 <li>Group the data by <code>gender</code>. Then, separately for male and female patients, calculate the percent who have a history of intravenous drug use.</li>
 </ol>
@@ -509,44 +583,44 @@ trial_act &lt;- trial_act %&gt;%
 <pre class="r"><code>trial_act %&gt;%
   group_by(gender) %&gt;%
   summarise(
-    drug.percent = mean(drugs)
+    drug_percent = mean(drugs)
   )</code></pre>
 <pre><code># A tibble: 2 x 2
-  gender drug.percent
+  gender drug_percent
    &lt;int&gt;        &lt;dbl&gt;
-1      0    0.2364130
-2      1    0.1095426</code></pre>
+1      0        0.236
+2      1        0.110</code></pre>
 <ol start="20" style="list-style-type: decimal">
 <li>Group the data by <code>gender</code>. Then calculate the percent of male and female patients who have a history of intravenous drug use (<code>drugs</code>), and the mean number of days until a major negative event <code>days</code></li>
 </ol>
 <pre class="r"><code>trial_act %&gt;%
   group_by(gender) %&gt;%
   summarise(
-    drug.percent = mean(drugs),
-    homo.percent = mean(homo)
+    drug_percent = mean(drugs),
+    homo_percent = mean(homo)
   )</code></pre>
 <pre><code># A tibble: 2 x 3
-  gender drug.percent homo.percent
+  gender drug_percent homo_percent
    &lt;int&gt;        &lt;dbl&gt;        &lt;dbl&gt;
-1      0    0.2364130    0.0298913
-2      1    0.1095426    0.7922078</code></pre>
+1      0        0.236       0.0299
+2      1        0.110       0.792 </code></pre>
 <ol start="21" style="list-style-type: decimal">
 <li>Separately for all combinations of gender and race, calculate the mean age and mean CD4 T cell count at baseline (<code>cd40</code>) (Hint: group by <code>gender</code> and <code>race</code>)</li>
 </ol>
 <pre class="r"><code>trial_act %&gt;%
   group_by(gender, race) %&gt;%
   summarise(
-    agey.mean = mean(agey),
-    cd40.mean = mean(cd40)
+    agey_mean = mean(agey),
+    cd40_mean = mean(cd40)
   )</code></pre>
 <pre><code># A tibble: 4 x 4
 # Groups:   gender [?]
-  gender  race agey.mean cd40.mean
+  gender  race agey_mean cd40_mean
    &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-1      0     0  35.14194  355.9677
-2      0     1  33.71831  360.1925
-3      1     0  35.86320  349.9898
-4      1     1  34.01485  345.0248</code></pre>
+1      0     0      35.1      356.
+2      0     1      33.7      360.
+3      1     0      35.9      350.
+4      1     1      34.0      345.</code></pre>
 </div>
 <div id="challenges" class="section level3">
 <h3>Challenges</h3>
@@ -572,25 +646,25 @@ trial_act &lt;- trial_act %&gt;%
     N = n()
   )</code></pre>
 <pre><code># A tibble: 4 x 7
-   arms days_mean   cd4_bl   cd4_20   cd4_96 cd4_change     N
-  &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
-1     0  801.2368 353.2049 336.1391 287.6168 -77.498442   532
-2     1  916.2395 348.7241 403.1724 341.2523  -6.903904   522
-3     2  905.7519 352.7748 372.0382 354.8190  -4.356083   524
-4     3  893.4795 347.4670 374.3244 328.7920 -19.393162   561</code></pre>
+   arms days_mean cd4_bl cd4_20 cd4_96 cd4_change     N
+  &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+1     0      801.   353.   336.   288.     -77.5    532
+2     1      916.   349.   403.   341.      -6.90   522
+3     2      906.   353.   372.   355.      -4.36   524
+4     3      893.   347.   374.   329.     -19.4    561</code></pre>
 <ol start="23" style="list-style-type: decimal">
-<li>Repeat the previous analysis, but before you do the grouping and summary statistics, recode the values of <code>arms</code> to text that reflect what the values actually represent. For example, looking at the help file <code>?ACTG175</code>, I can see that the treatment arm of 0 is “zidovudine”. I might call this arm <code>&quot;Z&quot;</code>. Do this in the all in the same chunk of code.</li>
+<li>Repeat the previous analysis, but before you do the grouping and summary statistics, create a new variable called <code>arms_char</code> that shows the values of <code>arms</code> as characters that reflect what the values actually represent (hint: use <code>mutate()</code> and <code>case_when()</code>). For example, looking at the help file <code>?ACTG175</code>, I can see that the treatment arm of 0 is “zidovudine”. I might call this arm <code>&quot;Z&quot;</code>. Do this in the all in the same chunk of code.</li>
 </ol>
 <pre class="r"><code>trial_act %&gt;%
   mutate(
-    arms = case_when(
+    arms_char = case_when(
       arms == 0 ~ &quot;Z&quot;,
       arms == 1 ~ &quot;ZD&quot;,
       arms == 2 ~ &quot;ZZ&quot;,
       arms == 3 ~ &quot;D&quot;
     )
   ) %&gt;%
-  group_by(arms) %&gt;%
+  group_by(arms_char) %&gt;%
   summarise(
     days_mean = mean(days),
     cd4_bl = mean(cd40),
@@ -599,26 +673,26 @@ trial_act &lt;- trial_act %&gt;%
     cd4_change = mean(cd496 - cd40, na.rm = TRUE)
   )</code></pre>
 <pre><code># A tibble: 4 x 6
-   arms days_mean   cd4_bl   cd4_20   cd4_96 cd4_change
-  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
-1     D  893.4795 347.4670 374.3244 328.7920 -19.393162
-2     Z  801.2368 353.2049 336.1391 287.6168 -77.498442
-3    ZD  916.2395 348.7241 403.1724 341.2523  -6.903904
-4    ZZ  905.7519 352.7748 372.0382 354.8190  -4.356083</code></pre>
+  arms_char days_mean cd4_bl cd4_20 cd4_96 cd4_change
+  &lt;chr&gt;         &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+1 D              893.   347.   374.   329.     -19.4 
+2 Z              801.   353.   336.   288.     -77.5 
+3 ZD             916.   349.   403.   341.      -6.90
+4 ZZ             906.   353.   372.   355.      -4.36</code></pre>
 <ol start="24" style="list-style-type: decimal">
 <li>Repeat the previous analysis, but only include patients with a Karnofsky score equal to 100, and who did not use zidovudine in the 30 days prior to the treatment initiation (<code>z30</code>)</li>
 </ol>
 <pre class="r"><code>trial_act %&gt;%
   filter(karnof == 100 &amp; z30 == 0) %&gt;%
   mutate(
-    arms = case_when(
+    arms_char = case_when(
       arms == 0 ~ &quot;Z&quot;,
       arms == 1 ~ &quot;ZD&quot;,
       arms == 2 ~ &quot;ZZ&quot;,
       arms == 3 ~ &quot;D&quot;
     )
   ) %&gt;%
-  group_by(arms) %&gt;%
+  group_by(arms_char) %&gt;%
   summarise(
     days_mean = mean(days),
     cd4_bl = mean(cd40),
@@ -627,12 +701,12 @@ trial_act &lt;- trial_act %&gt;%
     cd4_change = mean(cd496 - cd40, na.rm = TRUE)
   )</code></pre>
 <pre><code># A tibble: 4 x 6
-   arms days_mean   cd4_bl   cd4_20   cd4_96 cd4_change
-  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
-1     D  883.3464 364.2288 408.6667 358.7549  -2.215686
-2     Z  821.9608 373.3595 374.7320 317.8936 -63.074468
-3    ZD  890.1438 359.4110 446.4452 381.1146  16.770833
-4    ZZ  909.9452 383.2671 416.0000 420.6044  41.186813</code></pre>
+  arms_char days_mean cd4_bl cd4_20 cd4_96 cd4_change
+  &lt;chr&gt;         &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+1 D              883.   364.   409.   359.      -2.22
+2 Z              822.   373.   375.   318.     -63.1 
+3 ZD             890.   359.   446.   381.      16.8 
+4 ZZ             910.   383.   416.   421.      41.2 </code></pre>
 <ol start="25" style="list-style-type: decimal">
 <li>In one block of code, complete the following tasks
 <ul>
@@ -641,35 +715,35 @@ trial_act &lt;- trial_act %&gt;%
 <li>Filter the data to only include male patients with id numbers greater than 10100</li>
 <li>Group the data by <code>drugs_char</code> and <code>arms</code></li>
 <li>For each group calculate the mean age, percentage of patients that are male, and mean number of days until a major negative event.</li>
-<li>Filter the grouped data to only include cases where mean age is greater than 30.</li>
 </ul></li>
 </ol>
 <pre class="r"><code>trial_act %&gt;%
-  rename(weight = weightkg) %&gt;%
-  mutate(
-    drugs_char = case_when(
-      drugs == 0 ~ &quot;No Drugs&quot;,
-      drugs == 1 ~ &quot;Yes Drugs&quot;)) %&gt;%
-filter(gender_char == &quot;male&quot; &amp; pidnum &gt; 10100) %&gt;%
+  rename(
+    weight = weightkg
+  ) %&gt;%
+  mutate(drugs_char = case_when(
+    drugs == 0 ~ &quot;No drug use&quot;,
+    drugs == 1 ~ &quot;Prior drug use&quot;
+  )) %&gt;%
+  filter(gender_char == &quot;male&quot; &amp; pidnum &gt; 10100) %&gt;%
   group_by(drugs_char, arms) %&gt;%
   summarise(
     age_mean = mean(agey),
-    male_p = mean(gender_char == &quot;male&quot;),
+    male = mean(gender_char == &quot;male&quot;),
     days_mean = mean(days)
-  ) %&gt;%
-      filter(age_mean &gt; 30)</code></pre>
+  )</code></pre>
 <pre><code># A tibble: 8 x 5
-# Groups:   drugs_char [2]
-  drugs_char  arms age_mean male_p days_mean
-       &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
-1   No Drugs     0 35.59542      1  803.2977
-2   No Drugs     1 35.10417      1  913.8203
-3   No Drugs     2 35.36198      1  909.5990
-4   No Drugs     3 34.71084      1  911.9831
-5  Yes Drugs     0 35.66667      1  741.4615
-6  Yes Drugs     1 39.16000      1  954.5600
-7  Yes Drugs     2 36.78431      1  904.5490
-8  Yes Drugs     3 37.67925      1  802.3774</code></pre>
+# Groups:   drugs_char [?]
+  drugs_char      arms age_mean  male days_mean
+  &lt;chr&gt;          &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 No drug use        0     35.6    1.      803.
+2 No drug use        1     35.1    1.      914.
+3 No drug use        2     35.4    1.      910.
+4 No drug use        3     34.7    1.      912.
+5 Prior drug use     0     35.7    1.      741.
+6 Prior drug use     1     39.2    1.      955.
+7 Prior drug use     2     36.8    1.      905.
+8 Prior drug use     3     37.7    1.      802.</code></pre>
 </div>
 </div>
 <div id="additional-reading" class="section level1">
@@ -677,7 +751,6 @@ filter(gender_char == &quot;male&quot; &amp; pidnum &gt; 10100) %&gt;%
 <ul>
 <li><p>For more details on data wrangling with R, check out the chapter in YaRrr! The Pirate’s Guide to R <a href="https://bookdown.org/ndphillips/YaRrr/advanceddataframe.html">YaRrr! Chapter Link</a></p></li>
 <li><p>Hadley Wickham, the author of dplyr, also has great examples in the dplyr vignette here: <a href="https://cran.r-project.org/web/packageys/dplyr/vignettes/dplyr.html">dplyr vignette link</a></p></li>
-<li><p>The <code>tidyr</code> package is a natural extension to <code>dplyr</code> that allows you to reshape your data into a format that is easier to manage. Check out the <a href="https://cran.r-project.org/web/packageys/tidyr/vignettes/tidy-data.html">tidyr vignette</a> for examples.</p></li>
 </ul>
 </div>
 
