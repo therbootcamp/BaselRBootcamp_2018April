@@ -143,7 +143,7 @@ The almighty Caret!
 <li>Select different ‘learners’ available in the <code>caret</code> package</li>
 <li>Fit parameters of a learner to a dataset</li>
 <li>Explore learners to understand how they work</li>
-<li>Use cross validation techniques to estimate the accuracy of a learner and find best fitting parameters 5 Make predictions and evalute the performance of learners!</li>
+<li>Use cross validation techniques to estimate the accuracy of a learner and find best fitting parameters 5 Make predictions and evaluate the performance of learners!</li>
 </ol>
 </div>
 <div id="datasets" class="section level3">
@@ -201,14 +201,14 @@ ggpairs(diamonds_train)
 
 # Set up control values
 rep10_control &lt;- trainControl(method = &quot;repeatedcv&quot;,
-                              number = 10,
-                              search = &quot;grid&quot;)          # Find optimal parameters
+                              number = 10, # 10 folds
+                              repeats = 5) # Repeat 5 times
 
 # Predict price with linear regression
-diamonds_lm_train &lt;- caret::train(form = price ~ ., 
-                                data = diamonds_train,
-                                method = &quot;lm&quot;,
-                                trControl = rep10_control)
+diamonds_lm_train &lt;- train(form = price ~ ., 
+                           data = diamonds_train,
+                           method = &quot;lm&quot;,
+                           trControl = rep10_control)
 
 # Explore the train object
 class(diamonds_lm_train)
@@ -216,7 +216,7 @@ diamonds_lm_train
 names(diamonds_lm_train)
 summary(diamonds_lm_train)
 
-# Look at variable importance with vartImp
+# Look at variable importance with varImp
 varImp(diamonds_lm_train)
 
 # Save final predictions
@@ -323,7 +323,7 @@ postResample(pred = diamonds_lm_predictions,
 <li><p>Load the training data <code>boston_train.csv</code> into R as a new object with the name <code>boston_train</code> using <code>read_csv()</code>.</p></li>
 <li><p>Explore the data using the standard functions <code>head()</code>, <code>View()</code>, <code>names()</code> and <code>summary()</code></p></li>
 <li><p>Use the <code>summarizeColumns()</code> function from the <code>mlr</code> package to create numerical summaries of each column. Do you notice any strange columns?</p></li>
-<li><p>Can you think of a reason why you should remove any of the columns? If so, remove them using <code>select()</code>! There’s no need to include unnecesary data in a machine learning algorithm :)</p></li>
+<li><p>Can you think of a reason why you should remove any of the columns? If so, remove them using <code>select()</code>! There’s no need to include unnecessary data in a machine learning algorithm :)</p></li>
 <li><p>Visualise the data using the <code>ggpairs()</code> function from the <code>GGally</code> package. Do you notice any interesting patterns?</p></li>
 </ol>
 </div>
@@ -333,8 +333,8 @@ postResample(pred = diamonds_lm_predictions,
 <li><p>We will use 10-fold cross validation to train the models. To set up the fitting process, we’ll need to use the <code>trainControl</code> function. Look at the help menu for this function and look through the examples to see how it works.</p></li>
 <li><p>Using the <code>trainControl()</code> function, create an object called <code>rep10_control</code> that will conduct 10-fold cross validation.</p></li>
 <li><p>We’re almost ready to train models! To do so, we’ll use the almighty <code>train()</code> function. Look at the help menu for the <code>train()</code> function to see all of its lovely arguments and examples.</p></li>
-<li><p>Now it’s time to actually train a model. We’ll start with simple linear regression. Create an object called <code>boston_lm_train</code> where you predict a town’s median home value <code>medv</code> based on all other variables. In order to conduct linear regresion, include the arguments <code>method = 'lm'</code> and <code>trControl = rep10_control</code></p></li>
-<li><p>Explor your <code>boston_lm_train</code> argument using the generic functions <code>names()</code>, <code>summary()</code>, and <code>plot()</code>. What is stored in this object?</p></li>
+<li><p>Now it’s time to actually train a model. We’ll start with simple linear regression. Create an object called <code>boston_lm_train</code> where you predict a town’s median home value <code>medv</code> based on all other variables. In order to conduct linear regression, include the arguments <code>method = 'lm'</code> and <code>trControl = rep10_control</code></p></li>
+<li><p>Explore your <code>boston_lm_train</code> argument using the generic functions <code>names()</code>, <code>summary()</code>, and <code>plot()</code>. What is stored in this object?</p></li>
 <li><p>Using the <code>varImp()</code> function, look at the variable importance of each predictor. Which predictors seem to be the most important? After you’ve run the function, try plotting the object with <code>plot()</code> to visualise the results!</p></li>
 <li><p>Load the test dataset as a new object called <code>boston_test</code> into R using <code>read_csv()</code></p></li>
 <li><p>Now it’s time to make predictions form your model! Using <code>predict()</code>, predict the criterion values for the test dataset <code>boston_test</code>. In the <code>object</code> argument, use your <code>boston_lm_train</code> model, in the <code>newdata</code> argument, use your <code>boston_test</code> test data. Save the results as the vector <code>boston_lm_predictions</code></p></li>
@@ -366,7 +366,7 @@ ggplot(data = performance_data,
 <h2>Ridge regression</h2>
 <ol start="18" style="list-style-type: decimal">
 <li><p>Now let’s try a new model! Instead of using simple linear regression with <code>method = 'lm'</code>, we’ll use so–called ‘ridge regression’. Ridge regression is a variation of ‘standard’ linear regression that tries to avoid overfitting and thus make better predictions. How can you use ridge regression in caret? Try to answer yourself by looking at the list of all available models on the caret help site: <a href="http://topepo.github.io/caret/available-models.html" class="uri">http://topepo.github.io/caret/available-models.html</a>. Search for ‘ridge’ and find the <code>method</code> value.</p></li>
-<li><p>Repeat steps 9 through 16 to create a <em>new</em> set of objects using ridge regression instead of standard linear regression. When creating your objects, you mauy want to use the name <code>_ridge_</code> instead of <code>_regression_</code> so you know which object is which!. As you are creating your new objects, make sure to stop and explore them (i.e.; with <code>summary()</code>, <code>plot()</code>, <code>print()</code> to see how they look different from the previous objects.</p></li>
+<li><p>Repeat steps 9 through 16 to create a <em>new</em> set of objects using ridge regression instead of standard linear regression. When creating your objects, you may want to use the name <code>_ridge_</code> instead of <code>_regression_</code> so you know which object is which!. As you are creating your new objects, make sure to stop and explore them (i.e.; with <code>summary()</code>, <code>plot()</code>, <code>print()</code> to see how they look different from the previous objects.</p></li>
 <li><p>Which model predicted the data better? Standard regression or ridge regression? Was using ridge regression able to improve your predictions?</p></li>
 </ol>
 </div>
@@ -442,7 +442,7 @@ ggplot(data = performance_data,
 </tr>
 <tr class="odd">
 <td>thal</td>
-<td>“normal” = normal, “fd” = fixed defect, “rd” = reversable defect</td>
+<td>“normal” = normal, “fd” = fixed defect, “rd” = reversible defect</td>
 </tr>
 <tr class="even">
 <td>diagnosis</td>
@@ -484,7 +484,7 @@ ggplot(data = performance_data,
   labs(title = &quot;CART prediction accuracy&quot;)</code></pre>
 <ol start="26" style="list-style-type: decimal">
 <li><p>Now that you’ve fit CART, try using random forests! How well do random forests compare to plain old decision trees with CART?</p></li>
-<li><p>If you’ve gotten this far, then you’ve really gotten the hang of the pacakge! Try exploring the list of all models available in <code>caret</code> (again check out <a href="http://topepo.github.io/caret/available-models.html" class="uri">http://topepo.github.io/caret/available-models.html</a> to see them all). Look for the craziest looking models you can find, and see how well they do on the two datasets in this pratical. Can you find one that does much better than regression, random forests, or decision trees?</p></li>
+<li><p>If you’ve gotten this far, then you’ve really gotten the hang of the package! Try exploring the list of all models available in <code>caret</code> (again check out <a href="http://topepo.github.io/caret/available-models.html" class="uri">http://topepo.github.io/caret/available-models.html</a> to see them all). Look for the craziest looking models you can find, and see how well they do on the two datasets in this practical. Can you find one that does much better than regression, random forests, or decision trees?</p></li>
 </ol>
 <div id="further-reading" class="section level3">
 <h3>Further Reading</h3>
