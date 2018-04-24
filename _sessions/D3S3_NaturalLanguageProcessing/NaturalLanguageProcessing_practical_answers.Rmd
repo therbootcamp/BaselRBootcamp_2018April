@@ -1,0 +1,359 @@
+---
+title: "Practical: Natural Language Processing"
+author: "BaselRBootcamp April 2018"
+output: html_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE)
+```
+
+### Slides
+
+Here a link to the lecture slides for this session: <a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S3_NaturalLanguageProcessing/NaturalLanguageProcessing.html"><b>LINK</b></a>
+
+### Overview
+
+In this practical you'll learn how to do natural language processing in R. By the end of this practical you will know how to:
+
+1. Derive word frequencies.
+2. Determine a term-frequency matrix
+3. Do sentiment analysis.
+
+### Functions
+
+Here are some tools:
+
+| Function| Description|
+|:----------------|:------------------------------------------------|
+|  `paste()`, `paste0`| Base function for combining strings|
+|  `str_c()`| `stringr` function for combining strings|
+|  `str_extract_all()`| `stringr` function for extracting strings using regular expressions|
+
+Here are the main read-in functions:
+
+| Function| Description|
+|:----------------|:------------------------------------------------|
+|  `read_file()`| Read flat csv file|
+|  `readRDS()`| Read from R's RDS format|
+| `file(...,'r'), readLines`| Read from file connection |
+
+Here are the main web-scraping functions (package `rvest`):
+
+| Function| Description|
+|:----------------|:------------------------------------------------|
+|  `read_html()`| Read html from web |
+|  `read_nodes()`| Access tagged elements within the html document using, e.g., `XPath` |
+| `html_table()`| Extract a table from an html document |
+
+Here are the main `tidytext` (& `dplyr`) functions:
+
+| Function| Description|
+|:----------------|:------------------------------------------------|
+|     `unnest_tokens()`| Split text into words (tokens) |
+|     `bind_tf_idf()`| Compute tf_idf weighting  |
+|     `get_sentiments`| Access sentiment data set|
+| `inner_join()`| Join words with, e.g., sentiments |
+| `anti_join()`| Eliminate words, e.g., `stop_words` |
+
+
+## Tasks
+
+This tutorial begins with an optional task for users who feel confident with programming in R and want to deal with the often complicated but necessary step of bringing the raw text data into the right shape for your analysis tools. As this will involve programming elements that we have not covered yet, I generally recommend to jump to *Read in **processed** text data* and to return to this section later if you have the time.   
+
+### Read in **raw** text files (Advanced)
+
+1. Read in the subtitles for each episode of Game of Thrones using `read_file()` from the `readr`-package. To do this, first extract the file names of all of the files using `list.files(path, full.names = TRUE)`. One way to achieve this quickly is by first creating a vector containing the subtitle's folders using `paste()` and then by using the `lapply()`-function to iterate over the folders. The `lapply()`-function such as any other `apply()`-function (this will be covered in the Programming with R session) iterates the object provided as the first argument and applies a function provided as the second. Thus, you want to run a command similar to `files <- lapply(folder_paths, list.files, full.names = TRUE)`. Note that any third arguments will be passed on to the function specified in the second argument.   
+ 
+
+```{r, eval = T, echo = F, include = FALSE}
+# load readr
+require(readr)
+require(tidyverse)
+require(rvest)
+
+# load a package
+files <- unlist(lapply(paste0('data/season_',1:7), list.files, full.names = TRUE))
+
+# data
+got <- lapply(files, read_file)
+
+```
+
+2. Extract text lines from subtitles. Begin by inspecting the text. Use `str_sub()` to print the first few hundred characters. Try to identify what characters precede the the spoken lines and which succeed. Think about how to build a regular expression that captures the end and stop points of the spoken line that also handles the many lines including not speech but comments. Evaluate the code below (find more info [**here**](http://stringr.tidyverse.org/articles/regular-expressions.html)). Try to understand why the regular expression looks that way. Use it to extract the text   
+
+```{r, eval = T, echo = T}
+
+# inspect
+str_sub(got[[1]], 1, 1000)
+
+# extract data
+got = str_extract_all(got, '(?<=\n)[^(][<i>]*[:alpha:]+[:control:]*[:print:]+(?=\r*\n)')
+
+```
+
+3. Extract episode names from Wikipedia using the code below. Try to understand what the code does.  
+
+```{r, eval = T, echo = T}
+
+# define XPath locations of episode tables
+paths = paste0('//*[@id="mw-content-text"]/div/table[',2:8,']')
+
+# extract episode names
+names = unlist(lapply(paths, function(x) {
+  read_html('https://en.wikipedia.org/wiki/List_of_Game_of_Thrones_episodes') %>% 
+    html_nodes(xpath = x) %>% 
+    html_table() %>% 
+    `[[`(1) %>%  
+    `[[`(3) %>% 
+    str_replace_all('"','')
+  }))
+
+```
+
+4.Combine the extracted text, the episode names, their index in the season, and the season's index inside a single `tibble()`. Use the code below. Try to understand what the code does.  
+
+```{r, eval = T, echo = T}
+
+# create tibbles
+got = lapply(1:length(got), function(i){
+  season = ceiling(i / 10)
+  episode = i - ((season-1) * 10)
+  tibble(season, episode,  title = names[i], text = got[[i]])
+  })
+
+# combine data frames
+got = do.call(rbind, got)
+
+```
+
+### Read in **processed** text data
+
+5. Read in the processed text data using `readRDS()` from today's data sets.
+
+```{r, eval = T, echo = T}
+
+got <- readRDS('data/game_of_thrones.RDS')
+
+```
+
+### Segment and count words
+
+6. Extract the words from the subtitles using the amazingly fast and convenient `unnest_tokens()` from the `tidytext` package (install and load). Try using the pipe `%>%`. Evaluate the effect on the object. How much bigger have its dimensions become?
+
+```{r, eval = T, echo = T}
+# install
+# install.packages('tidytext')
+
+# load
+library(tidytext)
+
+# tokenize
+got_words <- got %>%
+  unnest_tokens(word, text) 
+
+# print
+got
+got_words
+
+```
+
+
+7. Count words using the `count()`-function from the `dplyr`-package. Don't forget to `ungroup()`. 
+
+```{r, eval = T, echo = T}
+
+# count words
+got_cnts <- got_words %>%
+  count(season, episode, title, word) %>%
+  ungroup()
+
+```
+
+8. One of the most fundamental findings of Psycholinguistics is that there are few words that occur a lot and many that occur rarely. To be precise, the relationship between the words rank in the frequency distribution (with 1 indicating the rank with the highest frequency) and the actual frequency is commonly found to follow a power law roughly proportional to $rank^{-alpha}$ where $alpha$ is some value around 1. This relationship is know as Zipf's law. Let's see if *Game of Thrones* also shows Zipf's law. Create a new variable that contains the rank of the frequency counts (remember rank 1 must be associated with the highest frequency) using `rank()`. Then plot the relationship between the `log()` of the rank and the `log()` of the frequency. If the plot looks roughly linear then the relationship follows a power law (because we are plotting in a log-log space). 
+
+
+```{r, eval = T, echo = T}
+
+# count words
+got_cnts %>%
+  mutate(rank = rank(-n)) %>%
+  ggplot(aes(log(rank),log(n))) +
+  geom_point() + 
+  geom_smooth()
+
+```
+
+9. Another fundamental finding of Psycholinguistics related to information science is that frequent words should have fewer numbers of characters in order to maximize the efficiency of communication. Analyze this relationship by adding a variable containing the word's number of character symbols using `nchar()` and plotting its relationship to the words' frequencies. Does Game of Thrones communicate efficiently?
+
+```{r, eval = T, echo = T}
+
+# count words
+got_cnts %>%
+  mutate(nchar = nchar(word)) %>%
+  ggplot(aes(nchar,log(n))) +
+  geom_point() + 
+  geom_smooth()
+
+```
+
+
+### Term-document matrix
+
+In this subsection we will be looking at the term document matrix. To do this, we will actually not be required to transform our data into a matrix, because of the way how tidyverse works. However, if you wanted to, you cast the table with counts to term-document or document-term matrices using `cast_tdm()` or `cast_dtm()`. This will create an object of class `TermDocumentMatrix` or `DocumentTermMatrix` and allow you to continue working with the tools included in the `tm`-package.    
+
+10. Determine the 3 most important words for each episode based on raw word frequencies (using the `title` variable and `top_n()`).   
+
+```{r, eval = T, echo = T}
+
+# count words
+most_frequent <- got_cnts %>%
+  group_by(title, season, episode) %>%
+  top_n(3) %>%
+  ungroup()
+
+```
+
+
+```{r, eval = T, echo = T}
+
+# plot
+most_frequent %>% 
+  arrange(season, episode, desc(n)) %>%
+  mutate(word = as.factor(word),
+         title_no = paste0(season,'_',episode,'_',title)) %>%
+  ggplot(aes(word, n, fill = season)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title_no, ncol = 6, scales = "free") +
+  coord_flip()
+
+```
+
+11. Remove words without specific meaning, which are known as stopwords. You will find a stopword list already available through the `tidytext` package. The object is called `stop_words`. Remove them using `anti_join()`, determine again the top 3 most frequent and plot. 
+
+```{r, eval = T, echo = T}
+
+# count words
+most_frequent <- got_cnts %>%
+  anti_join(stop_words) %>%
+  group_by(title, season, episode) %>%
+  top_n(3, n) %>%
+  ungroup()
+
+
+# plot
+most_frequent %>% 
+  arrange(season, episode, desc(n)) %>%
+  mutate(word = as.factor(word),
+         title_no = paste0(season,'_',episode,'_',title)) %>%
+  ggplot(aes(word, n, fill = season)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title_no, ncol = 6, scales = "free") +
+  coord_flip()
+
+```
+
+12. Transform to tf-idf using `bind_tf_idf()`. Repeat the same analysis for the newly created `tf_idf` variable.
+
+```{r, eval = T, echo = T}
+
+# count words
+most_frequent <- got_cnts %>%
+  anti_join(stop_words) %>%
+  bind_tf_idf(word, title, n) %>%
+  group_by(title, season, episode) %>%
+  top_n(3, tf_idf) %>%
+  ungroup()
+
+
+# plot
+most_frequent %>% 
+  arrange(season, episode, desc(tf_idf)) %>%
+  mutate(word = as.factor(word),
+         title_no = paste0(season,'_',episode,'_',title)) %>%
+  ggplot(aes(word, tf_idf, fill = season)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title_no, ncol = 6, scales = "free") +
+  coord_flip()
+
+```
+
+13. Aggregate the tf-idf values on the level of the seasons by computing the sum of all tf-idf values of a word across all episodes of a season. What are the 10 most diagnostic words of each of season (i.e., what are the ten words with the highest aggregate tf-idf values). Adjust the plot from before to visualize the ten most diagnostic words per season and their tf-idf values.   
+
+```{r, eval = T, echo = T}
+
+# count words
+most_frequent <- got_cnts %>%
+  anti_join(stop_words) %>%
+  bind_tf_idf(word, title, n) %>%
+  group_by(season, word) %>%
+  summarize(tf_idf = sum(tf_idf)) %>%
+  group_by(season) %>%
+  top_n(10, tf_idf) %>%
+  ungroup()
+
+# plot
+most_frequent %>% 
+  arrange(season, desc(tf_idf)) %>%
+  mutate(word = as.factor(word)) %>%
+  ggplot(aes(word, tf_idf, fill = season)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~season, ncol = 4, scales = "free") +
+  coord_flip()
+
+```
+
+
+### Sentiment
+
+14. Load the *AFINN* sentiment data set using `get_sentiments("afinn")` and assign it to an object. 
+
+```{r, eval = T, echo = T}
+
+# define afinn
+afinn <- get_sentiments("afinn")
+
+```
+
+15. Read back in the processed data (see above), tokenize the sentences using `unnest_tokens()`, and join the data with the *AFINN* data set using `inner_join()`.
+
+```{r, eval = T, echo = T}
+
+# read processed data
+got <- readRDS('data/game_of_thrones.RDS')
+
+# join afinn
+got_afinn <- got %>%
+  unnest_tokens(word, text) %>%
+  inner_join(afinn)
+
+```
+
+16. Aggregate the sentiment score by episode and plot the result. 
+
+```{r, eval = T, echo = T}
+
+# aggregate and plot
+got_afinn %>%
+  group_by(episode) %>%
+  summarize(sentiment = mean(score)) %>%
+  ggplot(aes(x = episode, y = sentiment, col = sentiment)) + 
+  geom_point() + 
+  #facet_wrap(~season) + 
+  scale_colour_gradientn(colours = c('red','green')) + 
+  geom_smooth()
+
+```
+
+17. Play around with the other sentiment data sets, which can be accessed using `get_sentiments("bing")` and `get_sentiments("nrc")`.
+
+
+# Additional reading
+
+- [Book](https://www.tidytextmining.com) on text mining the tidy way .
+
+- [Overview](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) of text mining packages in R.

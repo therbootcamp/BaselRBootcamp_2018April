@@ -1,6 +1,7 @@
 ---
 title: "Practical: Tidying"
-author: "BaselRBootcamp 2017"
+author: "BaselRBootcamp"
+date: "April 2018"
 output: html_document
 ---
 
@@ -42,10 +43,10 @@ trial_id
 trial_1
 
 # Bad
-name_of_trial
-trialID
-tid
-t1
+nameOFtrial
+trial.object
+t
+ekfjw
 ```
 
 Place **spaces** around all operators, such as, `=`, `+`, `-`, `<-`, etc. Also applies for defining arguments in functions. Always put a space after, never before a comma.
@@ -68,7 +69,6 @@ list(
 )
 
 ```
-
 
 An opening **curly bracket** should never be on its own line. Always indent within curly brackets. To **indent** code use two spaces. Don't use tabs.
 
@@ -113,7 +113,7 @@ x = 24324
 R's error messages are not always very intuitive, but over time you will learn to understand them. In the beginning it helps to focus on the part after the colon. E.g., 
 
 ```{r, error = TRUE}
-sapply(1:10,'fefkl')
+sapply(1:10, 'fefkl')
 ```
 
 Here the key message is `'function' was not found`. I.e., R is interpreting `'fekl'` as a function but cannot find an instance of this function anywhere (because it doesn't exist).
@@ -128,7 +128,7 @@ According to an analysis of <a href="https://stackoverflow.com/">stackoverflow.c
 | `'cannot open()'`|read_csv('hjht.txt')| The file does not exist. Could be a typo or a missing filepath.|
 | `'no applicable method'`|predict('efwe')| A 'generic function' has not been defined for this type/class |
 | `'subsscript out of bounds'`|a <- matrix(c(1,2)); a[2,2]| R tried to access an element (or variable) that does not exist |
-| package errors|| Occur when R is unable to install, compile, or load a package. Often this means that some software background is missing. |
+| package errors|| Occur when R is unable to install, compile, or load a package. Often this means that some software in the background is missing. |
 
 For more information visit <a href="https://github.com/noamross/zero-dependency-problems/blob/master/misc/stack-overflow-common-r-errors.md">here</a>.<br>
 
@@ -142,7 +142,7 @@ library(readr)
 library(mice)
 
 # read and duplicate in titanic data
-data <- read_csv('http://tinyurl.com/titanic-dataset-web')
+data <- read_csv('https://tinyurl.com/y99aj5ed')
 data_mean <- data
 data_median <- data
 data_mice <- data
@@ -162,56 +162,35 @@ data_mice  <- complete(mice_model)
 
 ### Begin new project
 
-Begin a new project in a new folder. Within the folder, create two new folders called `1_data` and `2_code`. 
+If you haven't already, begin a new project in a new folder. Within the folder, create two new folders called `1_data` and `2_code`. 
 
 ### Clean code
 
-1. Go through the code below and clean it, according to the above principles (incl. commenting). Then download all of the data files referenced in the code, store them in `1_data`, and change the filepaths in the code to this location. When ready save the code in the `2_code` folder as `cleaned_code_2017Sep16.R`.
+1. Below you see some 'dirty' code. Go through it and clean it according to the above principles (incl. commenting). Then, write the data file that the code reads in and write it to your `1_data` folder using `write_csv()`. Finally, change in the code the URL its loading the data from to the new file path on your computer. When ready save the code in the `2_code` folder as `cleaned_code_2018Jan27.R`.
+
+Note: The code is using a data set by Sir Francis Galton on the heights of parents and their children, illustrating one of the most classic cases of [regression toward the mean](https://en.wikipedia.org/wiki/Regression_toward_the_mean).
 
 ```{r, eval = FALSE}
 library(readr   )
 library(      magrittr)
 library(  dplyr)
-  syc =   read_csv('https://tinyurl.com/y8gqcht3')
+  syc =   read_csv('https://tinyurl.com/galton-txt')
   syc = syc%>%mutate(fcm=father/2.54,mcm=mother/2.54)
     a   = syc$father
       b = syc[['mother']]
         t.test(a,b) 
 ```
 
-```{r, eval = TRUE, message=F, warning=F}
-# load packages
-library(readr)
-library(magrittr)
-library(dplyr)
-
-# read galton data
-galton_data <- read_csv('https://tinyurl.com/y8gqcht3')
-
-# transform to metric system
-galton_data = galton_data %>% 
-  mutate(father_cm = father / 2.54, mother_cm = mother / 2.54)
-
-#conduct t-test
-father <- galton_data$father
-mother <- galton_data$father
-t.test(father, mother) 
-```
-
-2. Start again with the 'dirty' code above in a new script. Save it in your `2_code` folder. Now install and load the `formatR` package and try to clean up the 'dirty code' using the `tidy_source()` function. What did it fix and what didn't it?
-
-```{r, eval = TRUE, message=F, warning=F}
-install.packages('formatR', repos = "https://stat.ethz.ch/CRAN/")
-```
+2. Now that you have done all the work, I can tell you that R actually has a function to tidy up code. Let's see what it does. Start again with the 'dirty' code and copied into a new script. Save it in your `2_code` folder. Now, install and load the `formatR` package (`install.packages("formatR")` and `library("formatR")`) and apply it to the file path of the 'dirty code' using the `tidy_source(file_path)` function. Did it do a good job? What did it miss?
 
 ### Correct code
 
-3. Go through the code below, clean it, and remove the errors. When ready save the code in the `2_code` folder as `corrected_code_2017Sep16.R`.
+3. OK, now you know how to deal with 'dirty' code. Let's move onto some broken code. Below you see some code that doesn't work (aside from being pretty 'dirty'). Do you best to remove the errors (and clean it by the way). When ready, save the code in the `2_code` folder as `corrected_code_2018Jan27.R`.
 
 ```{r, eval = FALSE}
-library(readr)
+library(readr   )
 library(magritt)
-syc =   read_csv('1data/galton')
+syc =   read_csv('https://tinyurl.com/galton-txt')
 syc %>% mutate(higher_ratio = height / fther)
 m=lm(height~father,data=syk)
 yhat=predict(M)
@@ -220,48 +199,19 @@ vs = syc %>% group_by(father) %>% summarize(a = meaen(height))
 points(vs,pch=16)
 ```
 
-```{r, eval = TRUE, message=F, warning=F}
-# load packages
-library(readr)
-library(magrittr)
-library(dplyr)
-
-# read galton data
-galton_data <- read_csv('http://tinyurl.com/galton-dataset')
-
-# create ration variable
-galton_data <- galton_data %>% 
-  mutate(child_father_ratio = height / father)
-
-# compute linear model
-model <- lm(child_father_ratio ~ father, data = galton_data)
-
-# retrieve predicted values
-predicted_ratio <- predict(model)
-
-# plot predicted values against predictor
-plot(galton_data$father, predicted_ratio)
-
-# compute means for every value of father
-father_means <- galton_data %>% 
-  group_by(father) %>% 
-  summarize(means = mean(child_father_ratio))
-
-# add father means to plot
-points(father_means, pch = 16)
-```
-
 ### Replace NAs
 
-4. Run 'A `mice` example' from above and evaluate the mean and variance (`var()`) of the variable `Age` as a function of mean and mice imputation, respectively. Are they different? Which imputation method produces the larger variance and why?
+On to different adventures. This section will be about missing values and how one could and should deal with them. Using the very powerful and user-friendly `mice`-package this will entail some machine learning. 
 
-```{r, eval = TRUE, echo = TRUE, message=F, warning=F}
+4. To start off with, run 'A `mice` example' from introductory part above (uses the titanic dataset). Then evaluate the mean and variance (`var()`) of the variable `Age` for the imputation by `mean` and the imputation by random forests (rf) through `mice`. Do mean and variance differ between the imputation methods? Which imputation method produces the larger variance and why? Remember what Nathaniel said about overfitting and model complexity?
+
+```{r, eval = T, echo = T}
 # Load packages
 library(readr)
 library(mice)
 
 # read and duplicate in titanic data
-data <- read_csv('http://tinyurl.com/titanic-dataset-web')
+data <- read_csv('https://tinyurl.com/y99aj5ed')
 data_mean <- data
 data_median <- data
 data_mice <- data
@@ -279,19 +229,19 @@ mean(data_mean$Age) ; mean(data_median$Age) ; mean(data_mice$Age)
 var(data_mean$Age) ; var(data_median$Age) ; var(data_mice$Age)
 ```
 
-5. Evaluate the performance of mean versus mice imputation. To do this, first load the galton data set, copy it, and remove 10% of the values in the variable `height` in the copy. Now create one new data frame for each method and apply to the mean and mice imputation. Finally, compare the mean squared error `mean((original - imputed)^2)` between the imputed and original values. Which method works better?  
+5. OK, to understand this a better, let's build our own sandbox. Let's load the Galton dataset again and use it to introduce our own `NAs`, so that we can evaluate the relative performance of `mean` versus `mice`. To do this, create a copy of the Galton dataset (i.e., assign to new object), and remove in the copy 10% of the values in the variable `height`. Any easy way to do this, is to use the `sample()`- function. Provided with the number of rows in the dataset and the number of samples, it will return a vector of indices that can be used to eliminated values (i.e., assign `NA`s to those indices). Now create additional copies of the Galton copy (with the `NA`s), one for each method (e.g., `Galton_mean` and `Galton_mice`) and impute within those the `NA`s using the respective methods. To evaluate then the performance of the two methods, we then only need to compare the `height` variable in the original data with those from the two data sets with imputed values. To summarize the differences use mean squared error `mean((original - imputed)^2)`. What do you expect, which method works better? And, did it?
 
-```{r, eval=T, echo=T, message=F, warning=F}
+```{r, eval = T, echo = T}
 # load packages
 library(readr)
 library(mice)
 
 # load and copy data
-galton_data <- read_csv('http://tinyurl.com/galton-dataset')
+galton_data <- read_csv('https://tinyurl.com/galton-txt')
 galton_copy <- galton_data
 
 # introduce NAs
-galton_copy$height[sample(ceiling(nrow(galton_copy)*.1))] <- NA
+galton_copy$height[sample(nrow(galton_copy), ceiling(nrow(galton_copy)*.1))] <- NA
 galton_mean <- galton_copy
 galton_mice <- galton_copy
 
@@ -303,20 +253,20 @@ mice_model  <- mice(galton_mice, method="rf")
 galton_mice <- complete(mice_model)
 
 # evaluate
-mean((galton_mean$height - galton_data$height)[is.na(galton_copy$height)] ** 2)
-mean((galton_mice$height - galton_data$height)[is.na(galton_copy$height)] ** 2)
+mean((galton_mean$height - galton_data$height)[is.na(galton_copy$height)]**2)
+mean((galton_mice$height - galton_data$height)[is.na(galton_copy$height)]**2)
 
 ```
 
-6. Repeat the analysis of the last exercise but this time introduce NAs systematically rather than randomly. That is use other variable or combination of other variables to determine the locations of NAs in the `height` variable. For instance, introduce NAs for `father > 70` and the `sex == 'M'`. Have the results changed? If yes, why?  
+6. OK, in the last exercise, we have introduced `NA`s randomly. Now, let's see what happens, when `NA`s are not missing at random. Repeat the analysis of the last exercise, but this time introduce `NA`s systematically. That is use other variable or combination of other variables to determine the locations of `NA`s in the `height` variable. For instance, introduce `NA`s for `father > 70` and the `sex == 'M'`. Have the results changed? If yes, why?  
 
-```{r, eval=T, echo=T, message=F, warning=F}
+```{r, eval = T, echo = T}
 # load packages
 library(readr)
 library(mice)
 
 # load and copy data
-galton_data <- read_csv('http://tinyurl.com/galton-dataset')
+galton_data <- read_csv('https://tinyurl.com/galton-txt')
 galton_copy <- galton_data
 
 # introduce NAs
@@ -333,8 +283,8 @@ mice_model  <- mice(galton_mice, method="rf")
 galton_mice <- complete(mice_model)
 
 # evaluate error - MSE
-mean((galton_mean$height - galton_data$height)[is.na(galton_copy$height)] ** 2)
-mean((galton_mice$height - galton_data$height)[is.na(galton_copy$height)] ** 2)
+mean((galton_mean$height - galton_data$height)[is.na(galton_copy$height)]**2)
+mean((galton_mice$height - galton_data$height)[is.na(galton_copy$height)]**2)
 
 ```
 
