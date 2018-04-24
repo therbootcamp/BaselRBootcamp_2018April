@@ -287,7 +287,7 @@ chick %&gt;%
 <h2>Tasks</h2>
 <div id="datasets" class="section level3">
 <h3>Datasets</h3>
-<p>You’ll use one dataset in this practical: <code>ACTG175.csv</code>. It is available in the <code>data_BaselRBootcamp_Day2.zip</code>.zip file at <a href="https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/_sessions/_data/data_BaselRBootcamp_Day2.zip?raw=true" class="uri">https://github.com/therbootcamp/BaselRBootcamp_2018April/blob/master/_sessions/_data/data_BaselRBootcamp_Day2.zip?raw=true</a>. If you haven’t already, open the link in a browser to install the <code>data_BaselRBootcamp_Day2.zip</code> folder. Unzip the folder (by double clicking it). When you do, you should seee the <code>ACTG175.csv</code> file in this folder!</p>
+<p>You’ll use one dataset in this practical: <code>ACTG175.csv</code>. It is available in the <code>data_BaselRBootcamp_Day2.zip</code> file available through the main course page. If you haven’t already, download the <code>data_BaselRBootcamp_Day2.zip</code> folder and unzip it to get the <code>ACTG175.csv</code> file.</p>
 </div>
 <div id="getting-setup" class="section level3">
 <h3>Getting setup</h3>
@@ -333,13 +333,13 @@ trial_act</code></pre>
 <h3><code>rename()</code></h3>
 <ol style="list-style-type: decimal">
 <li><p>Lets change some of the column names in <code>trial_act</code>. Using <code>rename()</code>, change <code>wtkg</code> to <code>weightkg</code> and <code>age</code> to <code>age_years</code> (to specify that age is in years)</p></li>
-<li><p>Oops, you just learned that your company’s data repository doesn’t allow underscores in column names. Change <code>age_years</code> to <code>agey</code></p></li>
+<li><p>Oops, someone in your company just told you that the name <code>age_years</code> conflicts with another table in their database. To fix this, change <code>age_years</code> to <code>agey</code>.</p></li>
 </ol>
 </div>
 <div id="mutate" class="section level3">
 <h3><code>mutate()</code></h3>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Add a new column to <code>trial_act</code> called <code>agem</code> that shows each patient’s age in months instead of years (Hint: do simple arithmetic!).</p></li>
+<li><p>Add a new column to <code>trial_act</code> called <code>agem</code> that shows each patient’s age in months instead of years (Hint: Just multiply <code>agey</code> by 12!).</p></li>
 <li><p>The column <code>karnof</code> shows each patient’s <a href="http://emedicine.medscape.com/article/2172510-overview">Karnofsky score</a> on a scale from 0 to 100, add a new column to <code>trial_act</code> called <code>karnof_b</code> that shows the score on a scale from 0 to 1 (hint: just divide the original column by 100)</p></li>
 <li><p>Now, do the previous two questions in one chunk of code. That is, using one call to <code>mutate()</code> add both <code>agem</code> and <code>karnof_b</code> columns to <code>trial_act</code></p></li>
 <li><p>A physician wants to see a new score called the <code>sparrow</code> which is equal to the Karnofsky score divided by a person’s age plus the person’s weight in kg. Add each participant’s sparrow score as a new column to <code>trial_act</code> called <code>sparrow</code> (Hint: Just take `karnof / agey + weightkg)</p></li>
@@ -383,23 +383,34 @@ trial_act</code></pre>
 <ol start="15" style="list-style-type: decimal">
 <li>You can use <code>left_join()</code> to combine multiple dataframes. At the following link <a href="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv" class="uri">https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv</a> I have some additional (fictional) demographic data about the patients, namely the number of days of exercise they get per week, and their highest level of education. Here’s how the first few rows of the data look:</li>
 </ol>
-<pre><code># A tibble: 6 x 3
-  pidnum exercise education
-   &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    
-1 250091        1 HS       
-2  70444        3 BA       
-3 220425        4 HS       
-4  50300        3 PHD      
-5 630013        3 &lt;HS      
-6  60972        1 MS       </code></pre>
+<pre><code># A tibble: 2,139 x 3
+   pidnum exercise education
+    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    
+ 1 250091        1 HS       
+ 2  70444        3 BA       
+ 3 220425        4 HS       
+ 4  50300        3 PHD      
+ 5 630013        3 &lt;HS      
+ 6  60972        1 MS       
+ 7  81105        3 BA       
+ 8 211333        1 HS       
+ 9 170648        0 HS       
+10 220488        1 HS       
+# ... with 2,129 more rows</code></pre>
 <p>Using <code>left_join()</code> to add the demographic data to the <code>trial_act</code> data. To do this, first load the demographic data into R as a new dataframe called <code>trial_act_demo</code>. Then, use the following template to combine the data (Hint: Replace XXX with the correct values.)</p>
 <pre class="r"><code># Get trial_act_demo data
 
-trial_act_demo &lt;- read_csv(&quot;https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv&quot;)
-
-# Combine trial_act and trial_act_demo data
+trial_act_demo &lt;- read_csv(&quot;https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_data/patient_demo.csv&quot;)</code></pre>
+<pre><code>Parsed with column specification:
+cols(
+  pidnum = col_integer(),
+  exercise = col_integer(),
+  education = col_character()
+)</code></pre>
+<pre class="r"><code># Combine trial_act and trial_act_demo data
 trial_act &lt;- trial_act %&gt;%
-  left_join(XXX)        # The new dataframe to combine with trial_act</code></pre>
+  left_join(trial_act_demo)        # The new dataframe to combine with trial_act</code></pre>
+<pre><code>Joining, by = &quot;pidnum&quot;</code></pre>
 <ol start="16" style="list-style-type: decimal">
 <li>Using your new <code>trial_act</code> tibble, which should contain the exercise and education data, calculate the mean number of days of exercise that patients reported.</li>
 </ol>
@@ -433,7 +444,7 @@ trial_act &lt;- trial_act %&gt;%
 <li>Number of patients (Hint: use <code>N = n()</code>)</li>
 </ul>
 <ol start="23" style="list-style-type: decimal">
-<li><p>Repeat the previous analysis, but before you do the grouping and summary statistics, recode the values of <code>arms</code> to text that reflect what the values actually represent. For example, looking at the help file <code>?ACTG175</code>, I can see that the treatment arm of 0 is “zidovudine”. I might call this arm <code>&quot;Z&quot;</code>. Do this in the all in the same chunk of code.</p></li>
+<li><p>Repeat the previous analysis, but before you do the grouping and summary statistics, create a new variable called <code>arms_char</code> that shows the values of <code>arms</code> as characters that reflect what the values actually represent (hint: use <code>mutate()</code> and <code>case_when()</code>). For example, looking at the help file <code>?ACTG175</code>, I can see that the treatment arm of 0 is “zidovudine”. I might call this arm <code>&quot;Z&quot;</code>. Do this in the all in the same chunk of code.</p></li>
 <li><p>Repeat the previous analysis, but only include patients with a Karnofsky score equal to 100, and who did not use zidovudine in the 30 days prior to the treatment initiation (<code>z30</code>)</p></li>
 <li>In one block of code, complete the following tasks
 <ul>
@@ -442,7 +453,6 @@ trial_act &lt;- trial_act %&gt;%
 <li>Filter the data to only include male patients with id numbers greater than 10100</li>
 <li>Group the data by <code>drugs_char</code> and <code>arms</code></li>
 <li>For each group calculate the mean age, percentage of patients that are male, and mean number of days until a major negative event.</li>
-<li>Filter the grouped data to only include cases where mean age is greater than 30.</li>
 </ul></li>
 </ol>
 </div>

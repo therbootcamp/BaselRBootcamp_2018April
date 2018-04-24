@@ -64,9 +64,9 @@ knitr::include_graphics("../_image/rmarkdown_ss_E.png")
 
 ### Tasks
 
-1. Create a new R project called `dynamicreports.Rproj`. Add four folders `data`, `code`, `materials`, `markdown`.
+1. Create a new R project called `dynamicreports.Rproj`. Add three folders `data`, `code`, `materials`
 
-2. Go through the Examples above to create a new R Markdown document. Save the document under the name `speffanalysis.Rmd` in the `markdown` folder.
+2. Go through the Examples above to create a new R Markdown document. Save the document under the name `speffanalysis.Rmd` in your main project working directory (next to the `dynamicreports.Rproj` file)
 
 3. At the top of the `speffanalysis.Rmd` document, add a new R chunk. You can do this by clicking the "Insert" button at the top of the console, or by using the "Option + Command + i" shortcut on Mac. 
 
@@ -75,8 +75,6 @@ knitr::include_graphics("../_image/rmarkdown_ss_E.png")
 5. Inside of the chunk include the following code in the following chunk: The `knitr::opts_knit$set(dir = "../")` code will move your working directory one folder up to the project root, while `knitr::opts_chunk$set()` will set your global chunk options. Finally, `options(digits = 2)` makes sure that all of your numeric output is rounded to two decimal places.
 
 ```{r, eval = FALSE, echo = TRUE}
-# Move working directory one folder up
-knitr::opts_knit$set(root.dir = "../")
 
 knitr::opts_chunk$set(fig.width = 6,        # Figure width (in)
                       fig.height = 6,       # Figure height (in)

@@ -1,11 +1,11 @@
 ---
 title: "Statistics"
-author: "BaselRBootcamp January 2018"
+author: "BaselRBootcamp April 2018"
 output: html_document
 ---
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE)
+knitr::opts_chunk$set(comment = NA, fig.width = 6, fig.height = 6, echo = TRUE, eval = TRUE)
 ```
 
 
@@ -16,7 +16,7 @@ knitr::include_graphics("https://github.com/therbootcamp/therbootcamp.github.io/
 
 ### Slides
 
-- [Here are the introduction slides for this practical on statistics!](https://therbootcamp.github.io/_sessions/D2S2_Statistics/Statistics.html)
+- [Here are the introduction slides for this practical on statistics!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S2_Statistics/Statistics.html#1)
 
 ### Overview
 
@@ -168,45 +168,54 @@ sd(samp_B)
 
 ```
 
-
 ## Tasks
+
+### Data
+
+You'll use one dataset in this practical: `ACTG175.csv`. It is available in the `data_BaselRBootcamp_Day2.zip` file available through the main course page. If you haven't already, download the `data_BaselRBootcamp_Day2.zip` folder and unzip it to get the `ACTG175.csv` file.
 
 ### Getting setup
 
-A. Open a new R script and save it in the `R` folder you just created as a new file called `datawrangling.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
+A. Open your `BaselRBootcamp` project. This project should have the folders `R` and `data` in the working directory. The `ACTG175.csv` file should already be in the `data` folder. (If it isn't, you'll need to get it from the  `data_BaselRBootcamp_Day2.zip` folder and move it to the `data` folder).
 
-```{r, eval = FALSE, echo = TRUE}
+```{r}
+# Done!
+```
+
+A. Open a new R script and save it in the `R` folder you just created as a new file called `statistics_practical.R`. At the top of the script, using comments, write your name and the date. The, load the set of `tidyverse` and `speff2trial` packages with `library()`. Here's how the top of your script should look:
+
+```{r, eval = TRUE, echo = TRUE, message = FALSE}
 ## NAME
 ## DATE
-## Wrangling Practical
+## Statistics Practical
 
 library(tidyverse)     # For tidyverse
 library(speff2trial)   # For the ACTG175 data documentation
 ```
 
 
-A. For this practical, we'll use the `ACTG175` dataframe from the `speff2trial` package, load the package with the `library()` function. Also load the `tidyverse` as always!
-
-```{r, message = FALSE, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE}
-# Load libraries
-
-library(tidyverse)     # Tidyverse as always!
-library(speff2trial)   # For ACTG175 data
+```{r, eval = TRUE, echo = FALSE}
+trial_act <- ACTG175
 ```
 
+B. For this practical, we'll use the `ACTG175` data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. Using the following template, load the data into R and store it as a new object called `trial_act`.
 
-B. Convert the data to a tibble called `trial_act` as follows. The reason we're changing the name is so that if we mess up the data, we can always get the original data back from the `ACTG175` object.
+```{r, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
+# Load ACTG175.csv from the data folder 
+# The ACTG175.csv file MUST be in a folder called data in your working directory!!
 
-```{r, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE}
-# Create trial_act, a tibble copy of ACTG175
-trial_act <- as_tibble(ACTG175)
+trial_act <- read_csv(file = "data/ACTG175.csv")
+```
+
+```{r, eval = TRUE}
+trial_act <- as_tibble(trial_act)
 ```
 
 C. First thing's first, take a look at the data by printing it. It should look like this
 
 ```{r, eval = TRUE, echo = TRUE}
 # Print trial_act
-trial_act
+head(trial_act)
 ```
 
 D. Before we can analyse the data, we need to make one important change. Specifically. we need to clarify that the `arms` column is a factor, *not* an integer. Run the following code to make this change.
@@ -235,21 +244,22 @@ E. (Optional): If you'd like to, try converting other columns such as `race` and
 ```{r}
 mean(trial_act$age)
 ```
-
+o
 2. What was the median weight (`wtkg`) of all patients?
 
 ```{r}
-median(trial_act$wtkg)
+mean(trial_act$wtkg)
 ```
 
 3. What was the mean CD4 T cell count at baseline (`cd40`) ? What was it at 20 weeks (`cd420`)?
 
 ```{r}
 mean(trial_act$cd40)
+
 mean(trial_act$cd420)
 ```
 
-4. How many patients have a history of intravenous drug use (`drug`) and how many do not? (Hint: use `table()`)
+4. How many patients have a history of intravenous drug use (`drugs`) and how many do not? (Hint: use `table()`)
 
 ```{r}
 table(trial_act$drugs)
@@ -260,7 +270,7 @@ table(trial_act$drugs)
 5. Conduct a one-sample t-test comparing the age (`age`) of the patients versus a null hypothesis of 40 years.
 
 ```{r}
-t.test(trial_act$age,
+t.test(x = trial_act$age, 
        mu = 40)
 ```
 
@@ -278,8 +288,8 @@ t.test(x = trial_act$age,
 
 ```{r}
 age_gender_ht <- t.test(formula = age ~ gender,
-                        data = trial_act,
-                        alternative = "two.sided")
+                           data = trial_act,
+                           alternative = "two.sided")
 
 age_gender_ht
 ```
@@ -291,11 +301,9 @@ t.test(formula = days ~ drugs,
        data = trial_act)
 ```
 
-
 ### Correlation test with cor.test()
 
 9. Do heavier people tend to have fewer days until a major negative event? Conduct a correlation test between weight (`wtkg`) and age (`days`). What is your conclusion?
-
 
 ```{r}
 cor.test(formula = ~ days + wtkg,
@@ -317,7 +325,7 @@ cor.test(formula = ~ cd40 + cd80,
          subset = gender == 0)
 ```
 
-12. Now, repeat the previous test, but only for women. Do you get the same or different results?
+12. Now, repeat the previous test, but only for women. How do the results compare?
 
 ```{r}
 cor.test(formula = ~ cd40 + cd80,
@@ -332,13 +340,15 @@ cor.test(formula = ~ cd40 + cd80,
   - Be sure to create a table of gender and race values with `table(trial_act$gender, trial_act$race)`
 
 ```{r}
-chisq.test(table(trial_act$gender, trial_act$race))
+chisq.test(table(trial_act$gender, 
+                 trial_act$race))
 ```
 
 14. Is there a relationship between a history of intravenous drug use (`drugs`) and hemophilia (`hemo`)? Answer this by conducting a chi-square test.
 
 ```{r}
-chisq.test(table(trial_act$hemo, trial_act$drugs))
+chisq.test(table(trial_act$hemo, 
+                 trial_act$drugs))
 ```
 
 ### Linear Regression with glm()
@@ -362,13 +372,11 @@ days_A_glm
 summary(days_A_glm)
 ```
 
-
 18. Using the `names()` function, look at what the named elements in the `days_A_glm` object are.
 
 ```{r}
 names(days_A_glm)
 ```
-
 
 19. Using the `days_A_glm$` notation, print a vector of the model coefficients.
 
@@ -379,8 +387,8 @@ days_A_glm$coefficients
 20. Look at the `$data`, `$fitted.values` and `$residuals` elements of the `days_A_glm` object. What do you think these are? (Bonus: can you calculate the mean squared residual?)
 
 ```{r}
-# Mean squared residuals
-mean(days_A_glm$residuals ^ 2)
+# Mean squared residual
+mean_squared_residual <- mean(days_A_glm$residuals ^ 2)
 ```
 
 
@@ -390,6 +398,7 @@ mean(days_A_glm$residuals ^ 2)
 days_B_glm <- glm(formula = days ~ arms,
                   data = trial_act)
 
+
 summary(days_B_glm)
 ```
 
@@ -398,7 +407,8 @@ summary(days_B_glm)
 ```{r}
 days_B_glm <- glm(formula = days ~ arms,
                   data = trial_act,
-                  subset = age > 30 & gender == 1)
+                  subset = age > 30)
+
 
 summary(days_B_glm)
 ```
@@ -408,6 +418,7 @@ summary(days_B_glm)
 ```{r}
 days_C_glm <- glm(formula = days ~ .,
                   data = trial_act)
+
 
 summary(days_C_glm)
 ```
@@ -431,9 +442,15 @@ trial_new
 # Predict days until a major negative event from the trial_new data
 #   using the days_C_glm object
 
-predict(object = days_C_glm, 
+predict(object = ___, 
+        newdata = ___)
+```
+
+```{r}
+predict(days_B_glm, 
         newdata = trial_new)
 ```
+
 
 ### Logistic regression
 
@@ -444,27 +461,34 @@ predict(object = days_C_glm,
 # Logistic regression predicting intraveneous drug use
 #  based on age, gender, and race
 
-drugs_glm <- glm(formula = drugs ~ age + gender + race,
+drugs_glm_binom <- glm(formula = ___,
+                       data = ___,
+                       family = "___")
+```
+
+```{r}
+# Logistic regression predicting intraveneous drug use
+#  based on age, gender, and race
+
+drugs_glm_binom <- glm(formula = drugs ~ age + gender + race,
                  data = trial_act,
                  family = "binomial")
 
-summary(drugs_glm)
+summary(drugs_glm_binom)
 ```
+
 
 27. A scientist wants to know whether there was an effect of treatment arm on the probability that patients had more than 1000 days before the first occurrence of a major negative event. Answer this question using a logistic regression. (Hint: To do this, you should first create a new column called `days_1000_bin` that is a binary variable indicating whether or not `days > 1000`. You can do this using `mutate()`)
 
+
 ```{r}
-trial_act <- trial_act %>%
-                 mutate(days_1000_bin = days > 1000)
+days_glm_binom <- glm(formula = days_1000_bin ~ arms,
+                       data = trial_act %>%
+                                mutate(days_1000_bin = days > 1000),
+                        family = "binomial")
 
-
-days_glm <- glm(formula = days_1000_bin ~ arms,
-                 data = trial_act,
-                 family = "binomial")
-
-summary(days_glm)
+summary(days_glm_binom)
 ```
-
 
 ### Generating random samples from distributions
 
@@ -473,19 +497,22 @@ summary(days_glm)
 29. Using `rnorm()`,create a new object `samp_10` which is 10 samples from a Normal distribution with mean 10 and standard deviation 5. Print the object to see what the elements look like. What should the mean and standard deviation of this sample? be? Test it by evaluating its mean and standard deviation directly using the appropriate functions. Then, do a one-sample t-test on this sample against the null hypothesis that the true mean is 12. What are the results? 
 
 ```{r}
+# Note that your results might be different due to random chance!
+
 samp_10 <- rnorm(n = 10, mean = 10, sd = 5)
+
+samp_10
 
 mean(samp_10)
 sd(samp_10)
 
-t.test(x = samp_10, 
-       mean = 12)
+t.test(x = samp_10, mu = 12)
 ```
 
 
 30. Look at the code below. Before you run it, what do you expect the value of the `coefficients` of the regression equation will be?  Test your prediction by running the code and exploring the `my_glm` object.
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, eval = FALSE}
 # Generate independent variables
 x1 <- rnorm(n = 100, mean = 10, sd = 1)
 x2 <- rnorm(n = 100, mean = 20, sd = 10)
@@ -505,14 +532,43 @@ my_glm <- glm(formula = y ~.,
               data = my_data)
 ```
 
-31. Adjust the code above so that the coefficients for the regression equation will be `(Intercept) = -50`, `x1 = -3`, `x2 = 10`, `x3 = 15`
 
-```{r}
+
+```{r, echo = TRUE, eval = TRUE}
+# Generate independent variables
+x1 <- rnorm(n = 100, mean = 10, sd = 1)
+x2 <- rnorm(n = 100, mean = 20, sd = 10)
+x3 <- rnorm(n = 100, mean = -5, sd = 5)
+
 # Generate noise
-noise <- rnorm(n = 100, mean = 0, sd = .001)
+noise <- rnorm(n = 100, mean = 0, sd = 1)
 
 # Create dependent variable
-y <- -3 * x1 + 10 * x2 - 15 * x3 -50 + noise
+y <- 3 * x1 + 2 * x2 - 5 * x3 + 100 + noise
+
+# Combine all into a tibble
+my_data <- tibble(x1, x2, x3, y)
+
+# Calculate glm
+my_glm <- glm(formula = y ~.,
+              data = my_data)
+
+summary(my_glm)
+```
+
+31. Adjust the code above so that the coefficients for the regression equation will be `(Intercept) = -50`, `x1 = -3`, `x2 = 10`, `x3 = 15`
+
+```{r, echo = TRUE, eval = TRUE}
+# Generate independent variables
+x1 <- rnorm(n = 100, mean = 10, sd = 1)
+x2 <- rnorm(n = 100, mean = 20, sd = 10)
+x3 <- rnorm(n = 100, mean = -5, sd = 5)
+
+# Generate noise
+noise <- rnorm(n = 100, mean = 0, sd = 1)
+
+# Create dependent variable
+y <- -3 * x1 + 10 * x2 - 15 * x3 + -50 + noise
 
 # Combine all into a tibble
 my_data <- tibble(x1, x2, x3, y)

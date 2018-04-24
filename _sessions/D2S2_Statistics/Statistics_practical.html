@@ -375,25 +375,19 @@ library(speff2trial)   # For the ACTG175 data documentation</code></pre>
 
 trial_act &lt;- read_csv(file = &quot;data/ACTG175.csv&quot;)</code></pre>
 <p>C. First thing’s first, take a look at the data by printing it. It should look like this</p>
-<pre class="r"><code># Print trial_act
-trial_act</code></pre>
-<pre><code># A tibble: 2,139 x 27
-   pidnum   age  wtkg  hemo  homo drugs karnof oprior   z30 zprior preanti
-    &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;
- 1  10056    48  89.8     0     0     0    100      0     0      1       0
- 2  10059    61  49.4     0     0     0     90      0     1      1     895
- 3  10089    45  88.5     0     1     1     90      0     1      1     707
- 4  10093    47  85.3     0     1     0    100      0     1      1    1399
- 5  10124    43  66.7     0     1     0    100      0     1      1    1352
- 6  10140    46  88.9     0     1     1    100      0     1      1    1181
- 7  10165    31  73.0     0     1     0    100      0     1      1     930
- 8  10190    41  66.2     0     1     1    100      0     1      1    1329
- 9  10198    40  82.6     0     1     0     90      0     1      1    1074
-10  10229    35  78.0     0     1     0    100      0     1      1     964
-# ... with 2,129 more rows, and 16 more variables: race &lt;int&gt;,
-#   gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;,
-#   offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;,
-#   cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
+<pre><code># A tibble: 6 x 27
+  pidnum   age  wtkg  hemo  homo drugs karnof oprior   z30 zprior preanti
+   &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;
+1  10056    48  89.8     0     0     0    100      0     0      1       0
+2  10059    61  49.4     0     0     0     90      0     1      1     895
+3  10089    45  88.5     0     1     1     90      0     1      1     707
+4  10093    47  85.3     0     1     0    100      0     1      1    1399
+5  10124    43  66.7     0     1     0    100      0     1      1    1352
+6  10140    46  88.9     0     1     1    100      0     1      1    1181
+# ... with 16 more variables: race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;,
+#   strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;,
+#   cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;,
+#   cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
 <p>D. Before we can analyse the data, we need to make one important change. Specifically. we need to clarify that the <code>arms</code> column is a factor, <em>not</em> an integer. Run the following code to make this change.</p>
 <pre class="r"><code># traial_act data cleaning
 
@@ -414,7 +408,7 @@ trial_act &lt;- trial_act %&gt;%
 <li><p>What was the mean age (<code>age</code>) of all patients?</p></li>
 <li><p>What was the median weight (<code>wtkg</code>) of all patients?</p></li>
 <li><p>What was the mean CD4 T cell count at baseline (<code>cd40</code>) ? What was it at 20 weeks (<code>cd420</code>)?</p></li>
-<li><p>How many patients have a history of intravenous drug use (<code>drug</code>) and how many do not? (Hint: use <code>table()</code>)</p></li>
+<li><p>How many patients have a history of intravenous drug use (<code>drugs</code>) and how many do not? (Hint: use <code>table()</code>)</p></li>
 </ol>
 </div>
 <div id="t-tests-with-t.test" class="section level3">
@@ -438,7 +432,7 @@ trial_act &lt;- trial_act %&gt;%
 <li><p>Do heavier people tend to have fewer days until a major negative event? Conduct a correlation test between weight (<code>wtkg</code>) and age (<code>days</code>). What is your conclusion?</p></li>
 <li><p>We would expect a correlation between CD4 T cell count at baseline (<code>cd40</code>) and at 20 weeks (<code>cd420</code>). But how strong is the correlation? Answer this question by conducting a correlation test between CD4 T cell count at baseline (<code>cd40</code>) and CD4 T cell count at 20 weeks (<code>cd420</code>).</p></li>
 <li><p>Only considering men, is there a correlation between CD4 T cell count at baseline (<code>cd40</code>)and CD8 T cell count at baseline (<code>cd80</code>)? (Hint: Include the argument <code>subset = gender == 0</code> to restrict the analysis to men)</p></li>
-<li><p>Now, repeat the previous test, but only for women. Do you get the same or different results?</p></li>
+<li><p>Now, repeat the previous test, but only for women. How do the results compare?</p></li>
 </ol>
 </div>
 <div id="chi-square-test-with-chisq.test" class="section level3">
@@ -460,7 +454,7 @@ trial_act &lt;- trial_act %&gt;%
 <li><p>Print the <code>days_A_glm</code> object to see the coefficients.</p></li>
 <li><p>Using the <code>summary()</code> function, explore the <code>days_A_glm</code> object to see which coefficients are significant.</p></li>
 <li><p>Using the <code>names()</code> function, look at what the named elements in the <code>days_A_glm</code> object are.</p></li>
-<li><p>Using the <code>days_A_glm$</code> notation, print a vector of the model coefficients (<code>$coefficients</code>).</p></li>
+<li><p>Using the <code>days_A_glm$</code> notation, print a vector of the model coefficients.</p></li>
 <li><p>Look at the <code>$data</code>, <code>$fitted.values</code> and <code>$residuals</code> elements of the <code>days_A_glm</code> object. What do you think these are? (Bonus: can you calculate the mean squared residual?)</p></li>
 <li><p>Now create a new regression object <code>days_B_glm</code> where you model <code>days</code> as a function of the treatment arm (<code>arms</code>). Explore the object. Do you find that there was an effect of the treatment arm on <code>days</code>?</p></li>
 <li><p>Does the effect of treatment arm on days hold if you only consider men (<code>gender == 1</code>) above the age of 30 (<code>age &gt; 30</code>)? To answer this, repeat your previous regression, but include the appropriate arguments to <code>subset</code></p></li>
@@ -471,7 +465,9 @@ trial_act &lt;- trial_act %&gt;%
 #  and store as trial_new
 
 trial_new &lt;- trial_act %&gt;%
-  sample_n(10)</code></pre>
+  sample_n(10)
+
+trial_new</code></pre>
 <ol start="25" style="list-style-type: decimal">
 <li>Now, using <code>days_C_glm</code>, predict the number of days until a major negative event for these 10 randomly selected patients using the following template:</li>
 </ol>
@@ -489,11 +485,11 @@ predict(object = ___,
 <pre class="r"><code># Logistic regression predicting intraveneous drug use
 #  based on age, gender, and race
 
-drugs_glm &lt;- glm(formula = ___,
-                 data = ___,
-                 family = &quot;___&quot;)</code></pre>
+drugs_glm_binom &lt;- glm(formula = ___,
+                       data = ___,
+                       family = &quot;___&quot;)</code></pre>
 <ol start="27" style="list-style-type: decimal">
-<li>A scientist wants to know whether there was an effect of treatment arm on the probability that patients had more than 1000 days before the first occurrence of a major negative event. Answer this question using a logistic regression. (Hint: To do this, you should first create a new column called <code>drugs_1000_bin</code> that is a binary variable indicating whether or not <code>days &gt; 1000</code>. You can do this using <code>mutate()</code>)</li>
+<li>A scientist wants to know whether there was an effect of treatment arm on the probability that patients had more than 1000 days before the first occurrence of a major negative event. Answer this question using a logistic regression. (Hint: To do this, you should first create a new column called <code>days_1000_bin</code> that is a binary variable indicating whether or not <code>days &gt; 1000</code>. You can do this using <code>mutate()</code>)</li>
 </ol>
 </div>
 <div id="generating-random-samples-from-distributions" class="section level3">
@@ -523,6 +519,49 @@ my_glm &lt;- glm(formula = y ~.,
 <ol start="31" style="list-style-type: decimal">
 <li>Adjust the code above so that the coefficients for the regression equation will be <code>(Intercept) = -50</code>, <code>x1 = -3</code>, <code>x2 = 10</code>, <code>x3 = 15</code></li>
 </ol>
+<pre class="r"><code># Generate independent variables
+x1 &lt;- rnorm(n = 100, mean = 10, sd = 1)
+x2 &lt;- rnorm(n = 100, mean = 20, sd = 10)
+x3 &lt;- rnorm(n = 100, mean = -5, sd = 5)
+
+# Generate noise
+noise &lt;- rnorm(n = 100, mean = 0, sd = 1)
+
+# Create dependent variable
+y &lt;- -3 * x1 + 10 * x2 - 15 * x3 + -50 + noise
+
+# Combine all into a tibble
+my_data &lt;- tibble(x1, x2, x3, y)
+
+# Calculate glm
+my_glm &lt;- glm(formula = y ~.,
+              data = my_data)
+
+summary(my_glm)</code></pre>
+<pre><code>
+Call:
+glm(formula = y ~ ., data = my_data)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-1.66213  -0.55951  -0.01822   0.68138   1.99547  
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -49.92642    1.08431  -46.05   &lt;2e-16 ***
+x1           -2.99908    0.10342  -29.00   &lt;2e-16 ***
+x2            9.98863    0.00848 1177.93   &lt;2e-16 ***
+x3          -15.02720    0.01808 -831.04   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 0.7824771)
+
+    Null deviance: 2.0680e+06  on 99  degrees of freedom
+Residual deviance: 7.5118e+01  on 96  degrees of freedom
+AIC: 265.18
+
+Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
 <div id="additional-reading" class="section level1">

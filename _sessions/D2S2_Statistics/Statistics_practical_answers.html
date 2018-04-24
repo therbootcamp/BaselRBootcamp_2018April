@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="BaselRBootcamp January 2018" />
+<meta name="author" content="BaselRBootcamp April 2018" />
 
 
 <title>Statistics</title>
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Statistics</h1>
-<h4 class="author"><em>BaselRBootcamp January 2018</em></h4>
+<h4 class="author"><em>BaselRBootcamp April 2018</em></h4>
 
 </div>
 
@@ -133,7 +133,7 @@ Source: <a href="https://cdn.lynda.com/course/495322/495322-636154038826424503-1
 <div id="slides" class="section level3">
 <h3>Slides</h3>
 <ul>
-<li><a href="https://therbootcamp.github.io/_sessions/D2S2_Statistics/Statistics.html">Here are the introduction slides for this practical on statistics!</a></li>
+<li><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D2S2_Statistics/Statistics.html#1">Here are the introduction slides for this practical on statistics!</a></li>
 </ul>
 </div>
 <div id="overview" class="section level3">
@@ -355,43 +355,43 @@ sd(samp_B)</code></pre>
 </div>
 <div id="tasks" class="section level2">
 <h2>Tasks</h2>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>You’ll use one dataset in this practical: <code>ACTG175.csv</code>. It is available in the <code>data_BaselRBootcamp_Day2.zip</code> file available through the main course page. If you haven’t already, download the <code>data_BaselRBootcamp_Day2.zip</code> folder and unzip it to get the <code>ACTG175.csv</code> file.</p>
+</div>
 <div id="getting-setup" class="section level3">
 <h3>Getting setup</h3>
-<p>A. Open a new R script and save it in the <code>R</code> folder you just created as a new file called <code>datawrangling.R</code>. At the top of the script, using comments, write your name and the date. The, load the set of <code>tidyverse</code> and <code>speff2trial</code> packages with <code>library()</code>. Here’s how the top of your script should look:</p>
+<p>A. Open your <code>BaselRBootcamp</code> project. This project should have the folders <code>R</code> and <code>data</code> in the working directory. The <code>ACTG175.csv</code> file should already be in the <code>data</code> folder. (If it isn’t, you’ll need to get it from the <code>data_BaselRBootcamp_Day2.zip</code> folder and move it to the <code>data</code> folder).</p>
+<pre class="r"><code># Done!</code></pre>
+<p>A. Open a new R script and save it in the <code>R</code> folder you just created as a new file called <code>statistics_practical.R</code>. At the top of the script, using comments, write your name and the date. The, load the set of <code>tidyverse</code> and <code>speff2trial</code> packages with <code>library()</code>. Here’s how the top of your script should look:</p>
 <pre class="r"><code>## NAME
 ## DATE
-## Wrangling Practical
+## Statistics Practical
 
 library(tidyverse)     # For tidyverse
 library(speff2trial)   # For the ACTG175 data documentation</code></pre>
-<p>A. For this practical, we’ll use the <code>ACTG175</code> dataframe from the <code>speff2trial</code> package, load the package with the <code>library()</code> function. Also load the <code>tidyverse</code> as always!</p>
-<pre class="r"><code># Load libraries
+<p>B. For this practical, we’ll use the <code>ACTG175</code> data, this is the result of a randomized clinical trial comparing the effects of different medications on adults infected with the human immunodeficiency virus. Using the following template, load the data into R and store it as a new object called <code>trial_act</code>.</p>
+<pre class="r"><code># Load ACTG175.csv from the data folder 
+# The ACTG175.csv file MUST be in a folder called data in your working directory!!
 
-library(tidyverse)     # Tidyverse as always!
-library(speff2trial)   # For ACTG175 data</code></pre>
-<p>B. Convert the data to a tibble called <code>trial_act</code> as follows. The reason we’re changing the name is so that if we mess up the data, we can always get the original data back from the <code>ACTG175</code> object.</p>
-<pre class="r"><code># Create trial_act, a tibble copy of ACTG175
-trial_act &lt;- as_tibble(ACTG175)</code></pre>
+trial_act &lt;- read_csv(file = &quot;data/ACTG175.csv&quot;)</code></pre>
+<pre class="r"><code>trial_act &lt;- as_tibble(trial_act)</code></pre>
 <p>C. First thing’s first, take a look at the data by printing it. It should look like this</p>
 <pre class="r"><code># Print trial_act
-trial_act</code></pre>
-<pre><code># A tibble: 2,139 x 27
-   pidnum   age    wtkg  hemo  homo drugs karnof oprior   z30 zprior
-    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
- 1  10056    48 89.8128     0     0     0    100      0     0      1
- 2  10059    61 49.4424     0     0     0     90      0     1      1
- 3  10089    45 88.4520     0     1     1     90      0     1      1
- 4  10093    47 85.2768     0     1     0    100      0     1      1
- 5  10124    43 66.6792     0     1     0    100      0     1      1
- 6  10140    46 88.9056     0     1     1    100      0     1      1
- 7  10165    31 73.0296     0     1     0    100      0     1      1
- 8  10190    41 66.2256     0     1     1    100      0     1      1
- 9  10198    40 82.5552     0     1     0     90      0     1      1
-10  10229    35 78.0192     0     1     0    100      0     1      1
-# ... with 2,129 more rows, and 17 more variables: preanti &lt;int&gt;,
-#   race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;,
-#   treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;,
-#   r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
+head(trial_act)</code></pre>
+<pre><code># A tibble: 6 x 27
+  pidnum   age  wtkg  hemo  homo drugs karnof oprior   z30 zprior preanti
+   &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;
+1  10056    48  89.8     0     0     0    100      0     0      1       0
+2  10059    61  49.4     0     0     0     90      0     1      1     895
+3  10089    45  88.5     0     1     1     90      0     1      1     707
+4  10093    47  85.3     0     1     0    100      0     1      1    1399
+5  10124    43  66.7     0     1     0    100      0     1      1    1352
+6  10140    46  88.9     0     1     1    100      0     1      1    1181
+# ... with 16 more variables: race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;,
+#   strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;,
+#   cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;,
+#   cens &lt;int&gt;, days &lt;int&gt;, arms &lt;int&gt;</code></pre>
 <p>D. Before we can analyse the data, we need to make one important change. Specifically. we need to clarify that the <code>arms</code> column is a factor, <em>not</em> an integer. Run the following code to make this change.</p>
 <pre class="r"><code># traial_act data cleaning
 
@@ -404,6 +404,7 @@ trial_act &lt;- trial_act %&gt;%
                   levels = c(0, 1, 2, 3),
                   labels = c(&quot;zid&quot;, &quot;zid_did&quot;, &quot;zid_zal&quot;, &quot;did&quot;))
   )</code></pre>
+<pre><code>Warning: package 'bindrcpp' was built under R version 3.4.4</code></pre>
 <p>E. (Optional): If you’d like to, try converting other columns such as <code>race</code> and <code>gender</code> to factors with appropriate labels. Look at the help menu for the <code>ACTG175</code> by running <code>?ACTG175</code> to see how these columns are coded.</p>
 </div>
 <div id="descriptive-statistics" class="section level3">
@@ -413,11 +414,9 @@ trial_act &lt;- trial_act %&gt;%
 </ol>
 <pre class="r"><code>mean(trial_act$age)</code></pre>
 <pre><code>[1] 35.24825</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>What was the median weight (<code>wtkg</code>) of all patients?</li>
-</ol>
-<pre class="r"><code>median(trial_act$wtkg)</code></pre>
-<pre><code>[1] 74.3904</code></pre>
+<p>o 2. What was the median weight (<code>wtkg</code>) of all patients?</p>
+<pre class="r"><code>mean(trial_act$wtkg)</code></pre>
+<pre><code>[1] 75.12531</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>What was the mean CD4 T cell count at baseline (<code>cd40</code>) ? What was it at 20 weeks (<code>cd420</code>)?</li>
 </ol>
@@ -426,7 +425,7 @@ trial_act &lt;- trial_act %&gt;%
 <pre class="r"><code>mean(trial_act$cd420)</code></pre>
 <pre><code>[1] 371.3072</code></pre>
 <ol start="4" style="list-style-type: decimal">
-<li>How many patients have a history of intravenous drug use (<code>drug</code>) and how many do not? (Hint: use <code>table()</code>)</li>
+<li>How many patients have a history of intravenous drug use (<code>drugs</code>) and how many do not? (Hint: use <code>table()</code>)</li>
 </ol>
 <pre class="r"><code>table(trial_act$drugs)</code></pre>
 <pre><code>
@@ -438,7 +437,7 @@ trial_act &lt;- trial_act %&gt;%
 <ol start="5" style="list-style-type: decimal">
 <li>Conduct a one-sample t-test comparing the age (<code>age</code>) of the patients versus a null hypothesis of 40 years.</li>
 </ol>
-<pre class="r"><code>t.test(trial_act$age,
+<pre class="r"><code>t.test(x = trial_act$age, 
        mu = 40)</code></pre>
 <pre><code>
     One Sample t-test
@@ -475,8 +474,8 @@ mean of x
 <li>Be sure to use the formula notation <code>formula = age ~ gender</code></li>
 </ul>
 <pre class="r"><code>age_gender_ht &lt;- t.test(formula = age ~ gender,
-                        data = trial_act,
-                        alternative = &quot;two.sided&quot;)
+                           data = trial_act,
+                           alternative = &quot;two.sided&quot;)
 
 age_gender_ht</code></pre>
 <pre><code>
@@ -559,7 +558,7 @@ sample estimates:
       cor 
 0.2694002 </code></pre>
 <ol start="12" style="list-style-type: decimal">
-<li>Now, repeat the previous test, but only for women. Do you get the same or different results?</li>
+<li>Now, repeat the previous test, but only for women. How do the results compare?</li>
 </ol>
 <pre class="r"><code>cor.test(formula = ~ cd40 + cd80,
          data = trial_act,
@@ -584,7 +583,8 @@ sample estimates:
 <ul>
 <li>Be sure to create a table of gender and race values with <code>table(trial_act$gender, trial_act$race)</code></li>
 </ul>
-<pre class="r"><code>chisq.test(table(trial_act$gender, trial_act$race))</code></pre>
+<pre class="r"><code>chisq.test(table(trial_act$gender, 
+                 trial_act$race))</code></pre>
 <pre><code>
     Pearson's Chi-squared test with Yates' continuity correction
 
@@ -593,7 +593,8 @@ X-squared = 180.86, df = 1, p-value &lt; 2.2e-16</code></pre>
 <ol start="14" style="list-style-type: decimal">
 <li>Is there a relationship between a history of intravenous drug use (<code>drugs</code>) and hemophilia (<code>hemo</code>)? Answer this by conducting a chi-square test.</li>
 </ol>
-<pre class="r"><code>chisq.test(table(trial_act$hemo, trial_act$drugs))</code></pre>
+<pre class="r"><code>chisq.test(table(trial_act$hemo, 
+                 trial_act$drugs))</code></pre>
 <pre><code>
     Pearson's Chi-squared test with Yates' continuity correction
 
@@ -673,14 +674,14 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <ol start="20" style="list-style-type: decimal">
 <li>Look at the <code>$data</code>, <code>$fitted.values</code> and <code>$residuals</code> elements of the <code>days_A_glm</code> object. What do you think these are? (Bonus: can you calculate the mean squared residual?)</li>
 </ol>
-<pre class="r"><code># Mean squared residuals
-mean(days_A_glm$residuals ^ 2)</code></pre>
-<pre><code>[1] 85117.05</code></pre>
+<pre class="r"><code># Mean squared residual
+mean_squared_residual &lt;- mean(days_A_glm$residuals ^ 2)</code></pre>
 <ol start="21" style="list-style-type: decimal">
 <li>Now create a new regression object <code>days_B_glm</code> where you model <code>days</code> as a function of the treatment arm (<code>arms</code>). Explore the object. Do you find that there was an effect of the treatment arm on <code>days</code>?</li>
 </ol>
 <pre class="r"><code>days_B_glm &lt;- glm(formula = days ~ arms,
                   data = trial_act)
+
 
 summary(days_B_glm)</code></pre>
 <pre><code>
@@ -712,32 +713,32 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </ol>
 <pre class="r"><code>days_B_glm &lt;- glm(formula = days ~ arms,
                   data = trial_act,
-                  subset = age &gt; 30 &amp; gender == 1)
+                  subset = age &gt; 30)
+
 
 summary(days_B_glm)</code></pre>
 <pre><code>
 Call:
-glm(formula = days ~ arms, data = trial_act, subset = age &gt; 30 &amp; 
-    gender == 1)
+glm(formula = days ~ arms, data = trial_act, subset = age &gt; 30)
 
 Deviance Residuals: 
    Min      1Q  Median      3Q     Max  
--882.0  -110.3   101.7   195.5   420.9  
+-877.0  -111.9   101.4   195.0   422.4  
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   810.08      16.40  49.400  &lt; 2e-16 ***
-armszid_did   120.19      23.21   5.178 2.62e-07 ***
-armszid_zal   116.87      23.33   5.010 6.24e-07 ***
-armsdid        94.43      22.95   4.114 4.15e-05 ***
+(Intercept)   808.56      14.97  54.030  &lt; 2e-16 ***
+armszid_did   122.66      21.28   5.764 1.00e-08 ***
+armszid_zal   113.40      21.25   5.336 1.10e-07 ***
+armsdid        88.33      20.91   4.223 2.56e-05 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-(Dispersion parameter for gaussian family taken to be 82015.97)
+(Dispersion parameter for gaussian family taken to be 81967.46)
 
-    Null deviance: 103046332  on 1224  degrees of freedom
-Residual deviance: 100141503  on 1221  degrees of freedom
-AIC: 17343
+    Null deviance: 123421566  on 1467  degrees of freedom
+Residual deviance: 120000363  on 1464  degrees of freedom
+AIC: 20781
 
 Number of Fisher Scoring iterations: 2</code></pre>
 <ol start="23" style="list-style-type: decimal">
@@ -745,6 +746,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </ol>
 <pre class="r"><code>days_C_glm &lt;- glm(formula = days ~ .,
                   data = trial_act)
+
 
 summary(days_C_glm)</code></pre>
 <pre><code>
@@ -808,30 +810,36 @@ trial_new &lt;- trial_act %&gt;%
 
 trial_new</code></pre>
 <pre><code># A tibble: 10 x 27
-   pidnum   age     wtkg  hemo  homo drugs karnof oprior   z30 zprior
-    &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
- 1 120927    51  60.3288     0     1     0     90      0     0      1
- 2 620053    31  45.0000     0     0     0    100      0     0      1
- 3  70645    17  92.7000     1     0     0     90      0     1      1
- 4 270892    29 100.0188     0     0     0    100      0     0      1
- 5 150166    37  93.5000     0     1     0     90      0     1      1
- 6 950062    30  73.0296     1     0     0    100      0     1      1
- 7 190529    41  61.2360     1     0     0    100      0     0      1
- 8  60975    28  70.7616     0     1     0     90      0     0      1
- 9 211065    29  65.5000     0     1     0    100      0     1      1
-10  11965    30  69.1000     0     1     0    100      0     1      1
-# ... with 17 more variables: preanti &lt;int&gt;, race &lt;int&gt;, gender &lt;int&gt;,
-#   str2 &lt;int&gt;, strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;, offtrt &lt;int&gt;,
-#   cd40 &lt;int&gt;, cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;, cd80 &lt;int&gt;,
-#   cd820 &lt;int&gt;, cens &lt;int&gt;, days &lt;int&gt;, arms &lt;fctr&gt;</code></pre>
+   pidnum   age  wtkg  hemo  homo drugs karnof oprior   z30 zprior preanti
+    &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;
+ 1 250464    47  88.0     0     1     0     80      0     1      1     322
+ 2 231071    34 101.      0     1     0    100      0     0      1       0
+ 3  50236    31  83.0     0     1     0    100      0     0      1       0
+ 4 110581    37  47.8     1     0     0    100      1     0      1     391
+ 5  90109    45  54.0     0     0     0     90      0     1      1     479
+ 6 320391    31  56.3     0     1     1     90      0     1      1     510
+ 7 220492    37  78.5     0     1     0    100      0     0      1       0
+ 8 540021    43  79.8     0     0     1     90      0     0      1       0
+ 9 110697    31  90.4     0     1     0    100      0     1      1     976
+10 300507    43  97.5     0     0     0    100      0     0      1       0
+# ... with 16 more variables: race &lt;int&gt;, gender &lt;int&gt;, str2 &lt;int&gt;,
+#   strat &lt;int&gt;, symptom &lt;int&gt;, treat &lt;int&gt;, offtrt &lt;int&gt;, cd40 &lt;int&gt;,
+#   cd420 &lt;int&gt;, cd496 &lt;int&gt;, r &lt;int&gt;, cd80 &lt;int&gt;, cd820 &lt;int&gt;,
+#   cens &lt;int&gt;, days &lt;int&gt;, arms &lt;fct&gt;</code></pre>
 <ol start="25" style="list-style-type: decimal">
 <li>Now, using <code>days_C_glm</code>, predict the number of days until a major negative event for these 10 randomly selected patients using the following template:</li>
 </ol>
 <pre class="r"><code># Predict days until a major negative event from the trial_new data
 #   using the days_C_glm object
 
-predict(object = days_C_glm, 
+predict(object = ___, 
+        newdata = ___)</code></pre>
+<pre class="r"><code>predict(days_B_glm, 
         newdata = trial_new)</code></pre>
+<pre><code>       1        2        3        4        5        6        7        8 
+931.2235 896.8880 921.9583 808.5601 896.8880 896.8880 808.5601 931.2235 
+       9       10 
+808.5601 808.5601 </code></pre>
 </div>
 <div id="logistic-regression" class="section level3">
 <h3>Logistic regression</h3>
@@ -841,26 +849,55 @@ predict(object = days_C_glm,
 <pre class="r"><code># Logistic regression predicting intraveneous drug use
 #  based on age, gender, and race
 
-drugs_glm &lt;- glm(formula = drugs ~ age + gender + race,
+drugs_glm_binom &lt;- glm(formula = ___,
+                       data = ___,
+                       family = &quot;___&quot;)</code></pre>
+<pre class="r"><code># Logistic regression predicting intraveneous drug use
+#  based on age, gender, and race
+
+drugs_glm_binom &lt;- glm(formula = drugs ~ age + gender + race,
                  data = trial_act,
                  family = &quot;binomial&quot;)
 
-summary(drugs_glm)</code></pre>
+summary(drugs_glm_binom)</code></pre>
+<pre><code>
+Call:
+glm(formula = drugs ~ age + gender + race, family = &quot;binomial&quot;, 
+    data = trial_act)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.0597  -0.5323  -0.4677  -0.4113   2.3384  
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -2.41495    0.30425  -7.937 2.07e-15 ***
+age          0.02994    0.00721   4.152 3.29e-05 ***
+gender      -0.85074    0.15387  -5.529 3.22e-08 ***
+race         0.33542    0.14367   2.335   0.0196 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1664.1  on 2138  degrees of freedom
+Residual deviance: 1605.9  on 2135  degrees of freedom
+AIC: 1613.9
+
+Number of Fisher Scoring iterations: 4</code></pre>
 <ol start="27" style="list-style-type: decimal">
 <li>A scientist wants to know whether there was an effect of treatment arm on the probability that patients had more than 1000 days before the first occurrence of a major negative event. Answer this question using a logistic regression. (Hint: To do this, you should first create a new column called <code>days_1000_bin</code> that is a binary variable indicating whether or not <code>days &gt; 1000</code>. You can do this using <code>mutate()</code>)</li>
 </ol>
-<pre class="r"><code>trial_act &lt;- trial_act %&gt;%
-                 mutate(days_1000_bin = days &gt; 1000)
+<pre class="r"><code>days_glm_binom &lt;- glm(formula = days_1000_bin ~ arms,
+                       data = trial_act %&gt;%
+                                mutate(days_1000_bin = days &gt; 1000),
+                        family = &quot;binomial&quot;)
 
-
-days_glm &lt;- glm(formula = days_1000_bin ~ arms,
-                 data = trial_act,
-                 family = &quot;binomial&quot;)
-
-summary(days_glm)</code></pre>
+summary(days_glm_binom)</code></pre>
 <pre><code>
 Call:
-glm(formula = days_1000_bin ~ arms, family = &quot;binomial&quot;, data = trial_act)
+glm(formula = days_1000_bin ~ arms, family = &quot;binomial&quot;, data = trial_act %&gt;% 
+    mutate(days_1000_bin = days &gt; 1000))
 
 Deviance Residuals: 
    Min      1Q  Median      3Q     Max  
@@ -889,25 +926,29 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <li><p>You can easily generate random samples from statistical distributions in R. To see all of them, run <code>?distributions</code>. For example, to generate samples from the well known Normal distribution, you can use <code>rnorm()</code>. Look at the help menu for <code>rnorm()</code> to see its arguments.</p></li>
 <li><p>Using <code>rnorm()</code>,create a new object <code>samp_10</code> which is 10 samples from a Normal distribution with mean 10 and standard deviation 5. Print the object to see what the elements look like. What should the mean and standard deviation of this sample? be? Test it by evaluating its mean and standard deviation directly using the appropriate functions. Then, do a one-sample t-test on this sample against the null hypothesis that the true mean is 12. What are the results?</p></li>
 </ol>
-<pre class="r"><code>samp_10 &lt;- rnorm(n = 10, mean = 10, sd = 5)
+<pre class="r"><code># Note that your results might be different due to random chance!
 
-mean(samp_10)</code></pre>
-<pre><code>[1] 9.871098</code></pre>
+samp_10 &lt;- rnorm(n = 10, mean = 10, sd = 5)
+
+samp_10</code></pre>
+<pre><code> [1]  6.452053 14.623421 16.391728 11.752879  4.435956  7.402795  8.280792
+ [8] 23.155857  6.655332  5.163521</code></pre>
+<pre class="r"><code>mean(samp_10)</code></pre>
+<pre><code>[1] 10.43143</code></pre>
 <pre class="r"><code>sd(samp_10)</code></pre>
-<pre><code>[1] 4.068902</code></pre>
-<pre class="r"><code>t.test(x = samp_10, 
-       mean = 12)</code></pre>
+<pre><code>[1] 6.003185</code></pre>
+<pre class="r"><code>t.test(x = samp_10, mu = 12)</code></pre>
 <pre><code>
     One Sample t-test
 
 data:  samp_10
-t = 7.6716, df = 9, p-value = 3.089e-05
-alternative hypothesis: true mean is not equal to 0
+t = -0.82627, df = 9, p-value = 0.43
+alternative hypothesis: true mean is not equal to 12
 95 percent confidence interval:
-  6.96038 12.78182
+  6.137014 14.725853
 sample estimates:
 mean of x 
- 9.871098 </code></pre>
+ 10.43143 </code></pre>
 <ol start="30" style="list-style-type: decimal">
 <li>Look at the code below. Before you run it, what do you expect the value of the <code>coefficients</code> of the regression equation will be? Test your prediction by running the code and exploring the <code>my_glm</code> object.</li>
 </ol>
@@ -928,14 +969,16 @@ my_data &lt;- tibble(x1, x2, x3, y)
 # Calculate glm
 my_glm &lt;- glm(formula = y ~.,
               data = my_data)</code></pre>
-<ol start="31" style="list-style-type: decimal">
-<li>Adjust the code above so that the coefficients for the regression equation will be <code>(Intercept) = -50</code>, <code>x1 = -3</code>, <code>x2 = 10</code>, <code>x3 = 15</code></li>
-</ol>
-<pre class="r"><code># Generate noise
-noise &lt;- rnorm(n = 100, mean = 0, sd = .001)
+<pre class="r"><code># Generate independent variables
+x1 &lt;- rnorm(n = 100, mean = 10, sd = 1)
+x2 &lt;- rnorm(n = 100, mean = 20, sd = 10)
+x3 &lt;- rnorm(n = 100, mean = -5, sd = 5)
+
+# Generate noise
+noise &lt;- rnorm(n = 100, mean = 0, sd = 1)
 
 # Create dependent variable
-y &lt;- -3 * x1 + 10 * x2 - 15 * x3 -50 + noise
+y &lt;- 3 * x1 + 2 * x2 - 5 * x3 + 100 + noise
 
 # Combine all into a tibble
 my_data &lt;- tibble(x1, x2, x3, y)
@@ -950,23 +993,69 @@ Call:
 glm(formula = y ~ ., data = my_data)
 
 Deviance Residuals: 
-       Min          1Q      Median          3Q         Max  
--2.927e-03  -6.902e-04  -5.607e-05   7.927e-04   2.002e-03  
+     Min        1Q    Median        3Q       Max  
+-2.42475  -0.77862  -0.07247   0.69691   2.35518  
 
 Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -5.000e+01  1.075e-03  -46490   &lt;2e-16 ***
-x1          -3.000e+00  1.068e-04  -28083   &lt;2e-16 ***
-x2           1.000e+01  9.999e-06 1000086   &lt;2e-16 ***
-x3          -1.500e+01  2.078e-05 -721921   &lt;2e-16 ***
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 99.46598    1.15244   86.31   &lt;2e-16 ***
+x1           3.05026    0.11391   26.78   &lt;2e-16 ***
+x2           1.99367    0.01071  186.18   &lt;2e-16 ***
+x3          -5.03939    0.02343 -215.09   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-(Dispersion parameter for gaussian family taken to be 9.782316e-07)
+(Dispersion parameter for gaussian family taken to be 1.187054)
 
-    Null deviance: 1.4198e+06  on 99  degrees of freedom
-Residual deviance: 9.3910e-05  on 96  degrees of freedom
-AIC: -1094
+    Null deviance: 84864.07  on 99  degrees of freedom
+Residual deviance:   113.96  on 96  degrees of freedom
+AIC: 306.85
+
+Number of Fisher Scoring iterations: 2</code></pre>
+<ol start="31" style="list-style-type: decimal">
+<li>Adjust the code above so that the coefficients for the regression equation will be <code>(Intercept) = -50</code>, <code>x1 = -3</code>, <code>x2 = 10</code>, <code>x3 = 15</code></li>
+</ol>
+<pre class="r"><code># Generate independent variables
+x1 &lt;- rnorm(n = 100, mean = 10, sd = 1)
+x2 &lt;- rnorm(n = 100, mean = 20, sd = 10)
+x3 &lt;- rnorm(n = 100, mean = -5, sd = 5)
+
+# Generate noise
+noise &lt;- rnorm(n = 100, mean = 0, sd = 1)
+
+# Create dependent variable
+y &lt;- -3 * x1 + 10 * x2 - 15 * x3 + -50 + noise
+
+# Combine all into a tibble
+my_data &lt;- tibble(x1, x2, x3, y)
+
+# Calculate glm
+my_glm &lt;- glm(formula = y ~.,
+              data = my_data)
+
+summary(my_glm)</code></pre>
+<pre><code>
+Call:
+glm(formula = y ~ ., data = my_data)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-2.55143  -0.73330   0.04009   0.69817   3.02294  
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -49.44544    1.20587  -41.00   &lt;2e-16 ***
+x1           -3.09004    0.11184  -27.63   &lt;2e-16 ***
+x2           10.00571    0.01206  829.64   &lt;2e-16 ***
+x3          -15.03252    0.02289 -656.80   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 1.250026)
+
+    Null deviance: 1255498  on 99  degrees of freedom
+Residual deviance:     120  on 96  degrees of freedom
+AIC: 312.02
 
 Number of Fisher Scoring iterations: 2</code></pre>
 </div>

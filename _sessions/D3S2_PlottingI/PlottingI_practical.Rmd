@@ -621,7 +621,6 @@ ggplot(midwest_IL, aes(x = county, y = popdensity_z)) +
 ```
 
 
-
 ### References and Further Reading
 
 - Many of the plots in this practical were taken from Selva Prabhakaran's website [http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)

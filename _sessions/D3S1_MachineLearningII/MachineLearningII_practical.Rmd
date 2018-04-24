@@ -16,7 +16,7 @@ knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = FALSE, eval 
 
 ### Slides
 
-- [Here are the introduction slides for this practical on machine learning!](https://therbootcamp.github.io/_sessions/D3S1_MachineLearningII/MachineLearningII.html)
+- [Here are the introduction slides for this practical on machine learning II!](https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D3S1_MachineLearningII/MachineLearningII.html)
 
 
 ### Overview
@@ -27,7 +27,7 @@ In this practical you'll use the `caret` (**C**lassification **A**nd **RE**gress
 2. Fit parameters of a learner to a dataset
 3. Explore learners to understand how they work
 4. Use cross validation techniques to estimate the accuracy of a learner and find best fitting parameters
-5  Make predictions and evalute the performance of learners!
+5  Make predictions and evaluate the performance of learners!
 
 ### Datasets
 
@@ -173,7 +173,7 @@ boston_train <- read_csv("data/boston_train.csv")
 mlr::summarizeColumns(boston_train)
 ```
 
-4. Can you think of a reason why you should remove any of the columns? If so, remove them using `select()`! There's no need to include unnecesary data in a machine learning algorithm :)
+4. Can you think of a reason why you should remove any of the columns? If so, remove them using `select()`! There's no need to include unnecessary data in a machine learning algorithm :)
 
 5. Visualise the data using the `ggpairs()` function from the `GGally` package. Do you notice any interesting patterns?
 
@@ -195,7 +195,7 @@ rep10_control <- caret::trainControl(method = "repeatedcv",
 
 8. We're almost ready to train models! To do so, we'll use the almighty `train()` function. Look at the help menu for the `train()` function to see all of its lovely arguments and examples.
 
-9. Now it's time to actually train a model. We'll start with simple linear regression. Create an object called `boston_lm_train` where you predict a town's median home value `medv` based on all other variables. In order to conduct linear regresion, include the arguments `method = 'lm'` and `trControl = rep10_control`
+9. Now it's time to actually train a model. We'll start with simple linear regression. Create an object called `boston_lm_train` where you predict a town's median home value `medv` based on all other variables. In order to conduct linear regression, include the arguments `method = 'lm'` and `trControl = rep10_control`
 
 ```{r}
 boston_lm_train <- caret::train(form = medv ~ ., 
@@ -204,7 +204,7 @@ boston_lm_train <- caret::train(form = medv ~ .,
                                         trControl = rep10_control)
 ```
 
-10. Explor your `boston_lm_train` argument using the generic functions `names()`, `summary()`, and `plot()`. What is stored in this object?
+10. Explore your `boston_lm_train` argument using the generic functions `names()`, `summary()`, and `plot()`. What is stored in this object?
 
 11. Using the `varImp()` function, look at the variable importance of each predictor. Which predictors seem to be the most important? After you've run the function, try plotting the object with `plot()` to visualise the results!
 
@@ -254,7 +254,7 @@ postResample(pred = boston_lm_predictions,
 
 18. Now let's try a new model! Instead of using simple linear regression with `method = 'lm'`, we'll use so--called 'ridge regression'. Ridge regression is a variation of 'standard' linear regression that tries to avoid overfitting and thus make better predictions. How can you use ridge regression in caret? Try to answer yourself by looking at the list of all available models on the caret help site: [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html). Search for 'ridge' and find the `method` value.
 
-19. Repeat steps 9 through 16 to create a *new* set of objects using ridge regression instead of standard linear regression.  When creating your objects, you mauy want to use the name `_ridge_` instead of `_regression_` so you know which object is which!. As you are creating your new objects, make sure to stop and explore them (i.e.; with `summary()`, `plot()`, `print()` to see how they look different from the previous objects. 
+19. Repeat steps 9 through 16 to create a *new* set of objects using ridge regression instead of standard linear regression.  When creating your objects, you may want to use the name `_ridge_` instead of `_regression_` so you know which object is which!. As you are creating your new objects, make sure to stop and explore them (i.e.; with `summary()`, `plot()`, `print()` to see how they look different from the previous objects. 
 
 20. Which model predicted the data better? Standard regression or ridge regression? Was using ridge regression able to improve your predictions?
 
@@ -282,7 +282,7 @@ Here is a description of each of the variables in the dataset
 |oldpeak |ST depression induced by exercise relative to rest|
 |slope |The slope of the peak exercise ST segment.|
 |ca| Number of major vessels (0-3) colored by flourosopy|
-|thal| "normal" = normal, "fd" = fixed defect, "rd" = reversable defect|
+|thal| "normal" = normal, "fd" = fixed defect, "rd" = reversible defect|
 |diagnosis| 1 = Heart disease, 0 = No Heart disease|
 
 22. Load the training data `heartdisease_train.csv` into R as a new object with the name `heartdisease_train` using `read_csv()`.
@@ -345,7 +345,7 @@ postResample(pred = heartdisease_rpart_predictions,
 
 26. Now that you've fit CART, try using random forests! How well do random forests compare to plain old decision trees with CART?
 
-27. If you've gotten this far, then you've really gotten the hang of the pacakge! Try exploring the list of all models available in `caret` (again check out [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html) to see them all). Look for the craziest looking models you can find, and see how well they do on the two datasets in this pratical. Can you find one that does much better than regression, random forests, or decision trees?
+27. If you've gotten this far, then you've really gotten the hang of the package! Try exploring the list of all models available in `caret` (again check out [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.html) to see them all). Look for the craziest looking models you can find, and see how well they do on the two datasets in this practical. Can you find one that does much better than regression, random forests, or decision trees?
 
 ### Further Reading
 

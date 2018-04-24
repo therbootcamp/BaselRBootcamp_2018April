@@ -356,7 +356,7 @@ library(randomForest)   # for randomForest()
 library(FFTrees)        # for FFTrees and the heartdisease data</code></pre>
 <p>C. Make sure the <code>heartdisease.csv</code> file is in the <code>data</code> in your working directory. Then, using <code>read_csv()</code>, read the <code>heartdisease.csv</code> data and assign it to a new object in R called <code>heartdisease</code>.</p>
 <p>D. Explore the <code>heartdisease</code> dataset using <code>summary()</code>, and <code>View()</code></p>
-<p>E. There is a help menu for the <code>heartdisease</code> dataset in the <code>FFTrees</code> package. Look at the help menu for <code>heartedisease</code> by running <code>?heartdisease</code></p>
+<p>E. There is a help menu for the <code>heartdisease</code> dataset in the <code>FFTrees</code> package. Look at the help menu for <code>heartdisease</code> by running <code>?heartdisease</code></p>
 </div>
 <div id="part-b-create-training-and-test-data" class="section level4">
 <h4>Part B: Create training and test data</h4>
@@ -419,13 +419,6 @@ heart_test &lt;- heart_test %&gt;%
   mutate(
     random = sample(c(0, 1), size = nrow(.), replace = TRUE)
   )</code></pre>
-<ol start="11" style="list-style-type: decimal">
-<li><p>So far we’ve only looked at the <code>heartdisease</code> data. Try conducting a similar analysis on the <code>ACTG175</code> data. Specifically, try creating models predicting whether or not the number of days until the first occurence of a major negative event is less than 1,000 days. Which of the different machine learning algorithms performs the best in predicting new data from this dataset? Do you discover any challenges in working with dataset that weren’t present in the <code>heartdisease</code> data?</p>
-<ul>
-<li>To predict whether the number of days is greater than 1,000, you’ll need to create a new column called <code>days_gt1000</code> that indicates this. You can do this with <code>ACTG175 &lt;- ACTG175 %&gt;% mutate(days_gt1000 = days &gt; 1000)</code></li>
-<li>You may wish to exclude the <code>pidnum</code> column from the data when fitting the models as the patient id is meaningless and should not be included in any models.</li>
-</ul></li>
-</ol>
 </div>
 </div>
 <div id="additional-reading" class="section level1">

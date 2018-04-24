@@ -1,7 +1,5 @@
 ---
 title: "speffanalysis"
-author: "The R Bootcamp"
-date: "10/8/2017"
 output: html_document
 ---
 

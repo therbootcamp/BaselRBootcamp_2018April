@@ -152,7 +152,7 @@ $(document).ready(function () {
 </tr>
 <tr class="even">
 <td align="left">arm</td>
-<td align="left">Treatment arm, either I = placebo, II = adiclax (the standard of treatment), or III = dimarta (the target drug)</td>
+<td align="left">Treatment arm, either 1 = placebo, 2 = adiclax (the standard of treatment), or 3 = dimarta (the target drug)</td>
 </tr>
 <tr class="odd">
 <td align="left">histamine_start</td>
@@ -241,15 +241,20 @@ $(document).ready(function () {
 
 library(tidyverse)</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Using <code>read_csv()</code>, load the <code>dimarta_trial.csv</code>, <code>dimarta_demographics.csv</code>, and <code>dimarta_biomarker.csv</code> datasets as <em>three</em> new objects called <code>trial_df</code>, <code>demographics_df</code>, and <code>biomarker_df</code>.</p></li>
-<li><p>Get a first impression of the objects you just created by exploring them with the <code>View()</code>, <code>head()</code>, <code>names()</code>, and <code>str()</code> functions. Were they all loaded correctly?</p></li>
+<li>Using <code>read_csv()</code>, load the <code>dimarta_trial.csv</code>, <code>dimarta_demographics.csv</code>, and <code>dimarta_biomarker.csv</code> datasets as <em>three</em> new objects called <code>trial_df</code>, <code>demographics_df</code>, and <code>biomarker_df</code>.</li>
+</ol>
+<pre class="r"><code>trial_df &lt;- read_csv(file = &quot;data/dimarta_trial.csv&quot;)
+demographics_df &lt;- read_csv(file = &quot;data/dimarta_demographics.csv&quot;)
+biomarker_df &lt;- read_csv(file = &quot;data/dimarta_biomarker.csv&quot;)</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Get a first impression of the objects you just created by exploring them with a mixture of the <code>View()</code>, <code>head()</code>, <code>names()</code>, and <code>str()</code> functions. Were they all loaded correctly?</li>
 </ol>
 </div>
 <div id="data-wrangling" class="section level3">
 <h3>Data Wrangling</h3>
 <ol start="5" style="list-style-type: decimal">
 <li><p>Using <code>rename()</code>, change the name of the column <code>arm</code> in the <code>trial_df</code> data to <code>StudyArm</code>.</p></li>
-<li><p>Using the <code>table()</code> function, look at the values of the <code>arm</code> column in <code>trial_df</code>. You’ll notice the values are I, II, and III. Using <code>mutate()</code> and <code>case_when()</code> change these values to the appropriate names of the study arms (look at the variable descriptions to see which is which!)</p></li>
+<li><p>Using the <code>table()</code> function, look at the values of the <code>StudyArm</code> column in <code>trial_df</code>. You’ll notice the values are 1, 2, and 3. Using <code>mutate()</code> and <code>case_when()</code> change these values to the appropriate names of the study arms (look at the variable descriptions to see which is which!)</p></li>
 <li><p>In the <code>demographics_df</code> data, you’ll see that gender is coded as 0 and 1. Using <code>mutate()</code> create a <em>new</em> column in <code>demographics_df</code> called <code>gender_c</code> that shows gender as a string, where 0 = “male”, and 1 = “female”.</p></li>
 <li><p>Now let’s create a new object called <code>dimarta_df</code> that combines data from <code>trial_df</code> and <code>demographics_df</code>. To do this, use <code>left_join()</code> to combine the <code>trial_df</code> data with the <code>demographics_df</code> data. This will merge the two datasets so you can have the study results and demographic data in the same dataframe. Make sure to assign the result to a new object called <code>dimarta_df</code></p></li>
 </ol>
@@ -257,15 +262,17 @@ library(tidyverse)</code></pre>
 dimarta_df &lt;- trial_df %&gt;%
   left_join(demographics_df)</code></pre>
 <ol start="9" style="list-style-type: decimal">
-<li>You’ll notice that the <code>biomarker_df</code> dataframe is in the ‘long’ format, where each row is a patient’s biomarker result. Using the code below, making use of the <code>spread()</code> function, create a new dataframe called <code>biomarker_wide_df</code> where each row is a patient, and the results from different biomarkers are in different columns. When you finish, look at <code>biomarker_long_df</code> to see how it looks!</li>
+<li>You’ll notice that the <code>biomarker_df</code> dataframe is in the ‘long’ format, where each row is a patient’s biomarker result. Using the code below, making use of the <code>spread()</code> function, create a new dataframe called <code>biomarker_wide_df</code> where each row is a patient, and the results from different biomarkers are in different columns. When you finish, look at <code>biomarker_wide_df</code> to see how it looks!</li>
 </ol>
-<pre class="r"><code># Convert biomarker_df to a long format using spread()
-biomarker_long_df &lt;- biomarker_df %&gt;%
-  spread(Biomarker, BiomarkerStatus)</code></pre>
+<pre class="r"><code># Convert biomarker_df to a wide format using spread()
+biomarker_wide_df &lt;- biomarker_df %&gt;%
+  spread(Biomarker, BiomarkerStatus)
+
+biomarker_wide_df</code></pre>
 <ol start="10" style="list-style-type: decimal">
-<li><p>Now, using the <code>left_join</code> function, add the biomarker results to the <code>dimarta_df</code> data! Now you should hve all of the data in a single dataframe called <code>dimarta_df</code></p></li>
-<li><p>View <code>dimarta_df</code> to make sure the data look correct.</p></li>
-<li><p>Using <code>write_csv()</code>, save <code>dimarta_df</code> in a new <code>.csv</code> file on your computer called <code>dimarta.csv</code></p></li>
+<li><p>Now, using the <code>left_join</code> function, add the <code>biomarker_wide_df</code> data to the <code>dimarta_df</code> data! Now you should hve all of the data in a single dataframe called <code>dimarta_df</code></p></li>
+<li><p>View <code>dimarta_df</code> to make sure the data look correct! The data should have one row for each patient, and 13 separate columns, including <code>dw</code>, <code>ms</code>, and <code>np</code></p></li>
+<li><p>Using <code>write_csv()</code>, save <code>dimarta_df</code> in a new <code>.csv</code> file in your <code>data</code> folder called <code>dimarta.csv</code></p></li>
 <li><p>Using the <code>mean()</code> function, calculate the mean age of all patients.</p></li>
 <li><p>Using the following template, find out how many male and female patients were in the trial.</p></li>
 </ol>
@@ -290,19 +297,20 @@ dimarta_df %&gt;%
     np_percent = mean(XXX)
   )</code></pre>
 <ol start="20" style="list-style-type: decimal">
-<li>Calculate the mean change in histamine results separately for men and women using the following template</li>
-</ol>
-<pre class="r"><code># Calculate the mean and standard deviation of age for each study site
-dimarta_df %&gt;%
-  group_by(XX) %&gt;%
-  summarise(
-    histamine_change_mean = mean(XXX)
-  )</code></pre>
-<ol start="21" style="list-style-type: decimal">
 <li><p>Were there different distributions of age in the different trial sites? To answer this, separately calculate the mean and standard deviations of patient ages in each site. (Hint: group the data by <code>site</code>, then calculate two separate summary statistics: <code>age_mean = mean(age)</code>, and <code>age_sd = sd(age)</code>.</p></li>
+<li><p>Calculate the mean change in histamine results separately for each study site</p></li>
 <li><p>Calculate the mean change in histamine results (<code>histamine_change</code>) for each study arm. Which study arm had a largest decrease in histamine?</p></li>
 <li><p>Calculate the mean change in quality of life (<code>qol_change</code>) for each study arm. Do the results match what you found with the histamine results?</p></li>
 </ol>
+</div>
+<div id="plotting" class="section level3">
+<h3>Plotting</h3>
+<ol start="24" style="list-style-type: decimal">
+<li>Run the following code block to visualise the relationship between study arm and histamine change. What do you find?</li>
+</ol>
+<pre class="r"><code>ggplot(data = dimarta_df,
+       mapping = aes(x = StudyArm, y = histamine_change)) +
+  geom_boxplot()</code></pre>
 </div>
 <div id="statistics" class="section level3">
 <h3>Statistics</h3>
@@ -316,7 +324,7 @@ t.test(formula = XX ~ XX,
               filter(XXX %in% c(XXX, XXX)))  # Only include placebo and dimarta</code></pre>
 <ol start="25" style="list-style-type: decimal">
 <li><p>Using <code>t.test()</code> conduct a t-test comparing the change in histamine results between the adiclax (the standard of care) and dimarta. Did dimarta improve over the standard of care?</p></li>
-<li><p>Using <code>glm()</code> conduct a regression analysis predicting <code>histamine_change</code> as a function of 4 variables: treatment arm, test results at the start of the trial, age, and quality of life at the start of the trial. Save the result as an object called <code>histamine_change_glm</code>. Once you do, apply the <code>summary()</code> function to the <code>histamine_change_glm</code> object to explore the results. Which variables reliably predict changes in test results?</p></li>
+<li><p>Using <code>glm()</code> conduct a regression analysis predicting <code>histamine_change</code> as a function of 4 variables: treatment arm, histamine test results at the start of the trial, age, and quality of life at the start of the trial. Save the result as an object called <code>histamine_change_glm</code>. Once you do, apply the <code>summary()</code> function to the <code>histamine_change_glm</code> object to explore the results. Which variables reliably predict changes in test results?</p></li>
 <li><p>Repeat your previous regression analysis, but now predict change in quality of life. Do you get different results compared to your previous analysis?</p></li>
 <li><p>Now it’s time to see if the patient’s biomarkers were related to treatment success. For the <code>dw</code> biomarker, calculate the mean change in test results (<code>histamine_change</code>) separately for patients with different outcomes on the <code>dw</code> biomarker (hint: just group the data by <code>dw</code> and use <code>summarise()</code> to calculate the mean <code>histamine_change</code>).</p></li>
 <li><p>Do the same analysis for the other two biomarkers <code>ms</code> and <code>np</code>. Do either of these biomarkers seem to predict changes in test results?</p></li>

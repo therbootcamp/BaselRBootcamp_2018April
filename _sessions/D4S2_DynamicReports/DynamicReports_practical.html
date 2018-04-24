@@ -175,16 +175,13 @@ Source: <a href="https://www.rstudio.com/" class="uri">https://www.rstudio.com/<
 <div id="tasks" class="section level3">
 <h3>Tasks</h3>
 <ol style="list-style-type: decimal">
-<li><p>Create a new R project called <code>dynamicreports.Rproj</code>. Add four folders <code>data</code>, <code>code</code>, <code>materials</code>, <code>markdown</code>.</p></li>
-<li><p>Go through the Examples above to create a new R Markdown document. Save the document under the name <code>speffanalysis.Rmd</code> in the <code>markdown</code> folder.</p></li>
+<li><p>Create a new R project called <code>dynamicreports.Rproj</code>. Add three folders <code>data</code>, <code>code</code>, <code>materials</code></p></li>
+<li><p>Go through the Examples above to create a new R Markdown document. Save the document under the name <code>speffanalysis.Rmd</code> in your main project working directory (next to the <code>dynamicreports.Rproj</code> file)</p></li>
 <li><p>At the top of the <code>speffanalysis.Rmd</code> document, add a new R chunk. You can do this by clicking the “Insert” button at the top of the console, or by using the “Option + Command + i” shortcut on Mac.</p></li>
 <li><p>In the chunk options, include <code>echo = FALSE, message = FALSE, warning = FALSE</code>.</p></li>
 <li><p>Inside of the chunk include the following code in the following chunk: The <code>knitr::opts_knit$set(dir = &quot;../&quot;)</code> code will move your working directory one folder up to the project root, while <code>knitr::opts_chunk$set()</code> will set your global chunk options. Finally, <code>options(digits = 2)</code> makes sure that all of your numeric output is rounded to two decimal places.</p></li>
 </ol>
-<pre class="r"><code># Move working directory one folder up
-knitr::opts_knit$set(root.dir = &quot;../&quot;)
-
-knitr::opts_chunk$set(fig.width = 6,        # Figure width (in)
+<pre class="r"><code>knitr::opts_chunk$set(fig.width = 6,        # Figure width (in)
                       fig.height = 6,       # Figure height (in)
                       echo = TRUE,          # Repeat code
                       eval = TRUE,          # Evaluate chunks
