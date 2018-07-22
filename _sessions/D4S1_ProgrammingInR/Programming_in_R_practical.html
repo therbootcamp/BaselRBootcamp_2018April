@@ -128,7 +128,7 @@ $(document).ready(function () {
 <div id="slides" class="section level3">
 <h3>Slides</h3>
 <ul>
-<li><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R.html">Here are the introduction slides for this practical on Programming in R!</a></li>
+<li><a href="https://therbootcamp.github.io/BaselRBootcamp_2018July/_sessions/D4S1_ProgrammingInR/Programming_in_R.html">Here are the introduction slides for this practical on R programming!</a></li>
 </ul>
 </div>
 <div id="overview" class="section level3">
@@ -163,37 +163,28 @@ library(tidyverse)     # For tidyverse
 library(yarrr)         # For yarrr
 library(sendmailR)     # For sendmailR</code></pre>
 <p>B. For this practical, we’ll sometimes use the <code>pirates</code> data from the <code>yarrr</code> package. Load this dataset from your local data folder. We will also quite often use little datasets which you will create on the fly during the tasks. This should help making the examples very clear, and give you some experience in how to create own data to test your code.</p>
+<pre class="r"><code># Load data from your local data file of your R project
+
+pirates &lt;- read_csv(&quot;data/pirates.csv&quot;)</code></pre>
 <p>C. The <code>pirates</code> dataset contains details about 1000 pirates, such as their age, sex, number of tattoos and beard length. For more information about the dataset just type the following code:</p>
 <pre class="r"><code># Look at documentation for pirates data (contained in the yarrr package)
 library(yarrr)
 ?pirates</code></pre>
 <p>D. First look at the first few rows of the data (Tip: use <code>head</code>).</p>
+<pre class="r"><code># Check first rows of the pirates data frame
+head(pirates)</code></pre>
 </div>
 <div id="conditional-statements" class="section level3">
 <h3>Conditional Statements</h3>
 <p>You have already used conditional statements, mostly in the form of the <code>case_when()</code> function. Now let’s look at other functions. Note that for now the example may seem a little arbitrary. That is because usually conditional statements are used in loops or functions. We’ll bring everything together towards the end of this practical.</p>
 <ol style="list-style-type: decimal">
-<li><p>Draw one sample from a normal distribution with <code>mean = 0</code> and <code>sd = 1</code> (there are handy functions that let you draw samples from various distributions. For a normal distribution, use <code>rnorm()</code>). Then check whether the drawn number was 0. If so print a message called “Can’t divide by 0”. Otherwise divide the number by 2.</p></li>
 <li><p>Let’s simulate coin tosses. Use the <code>sample</code> function to draw one sample from {H, T} (i.e. a set, or in R a vector, containing “H” for head, and “T” for tail). If “H” comes up, print “Head”, if “T” comes up, print “Tail”.</p></li>
-<li><p>Now let’s assume that very rarely (with the coin we are using this happens in 1% of the cases), the coin doesn’t fall on one of the two sides, but surprisingly, lands (and stays) on its edge. In this case you don’t know how to interpret this and assign it the value <code>NULL</code>. To do this use:</p></li>
-</ol>
-<pre class="r"><code># Create coin toss, i.e. sample once from {H, T} without replacing
-coin_toss &lt;- sample(c(&quot;H&quot;, &quot;T&quot;), 1)
-
-# In 1 % of the cases insert NULL
-if (runif(1, 0, 1) &lt;= .01){ # You can use expressions / function calls 
-                            # in an if statement
-  coin_toss &lt;- NULL
-}</code></pre>
-<p>Now you have to add a check for whether coin_toss is <code>NULL</code> in your previous code, to print “Head” in case of “H”, or “Tail” in case of “T”. Note: There is a function called <code>is.null()</code> to check this. Remember that you can reverse any check by adding a <code>!</code> in front of it. Also remember that <code>&amp;</code> and <code>&amp;&amp;</code> are not identical and that only <code>&amp;&amp;</code> is short circuiting. If the coin landed on its edge, print “Crazy, that coin just landed on its edge!”.</p>
-<ol start="4" style="list-style-type: decimal">
-<li><p>Now you no longer want to toss your coin only once but several (let’s say ten) times (you’ll have to tweak the <code>sample</code> function a bit. Check the help menu for help). Do this, and if <em>ALL</em> tosses came up heads, print “Wow, that’s ten heads in a row!”, if there is at least one head in there, print “The coin showed X times heads, and Y times tails”, where X and Y are the respective numbers of heads and tails (use the <code>paste</code> function to print and the <code>sum</code> function to get the correct numbers, check the help menus if you don’t know how to do this), and print “Wow, that’s ten tails in a row!”, if <em>ALL</em> tosses came up tails. This coin has a very thin edge, so you can ignore the possibility of it landing and staying on the edge.</p></li>
-<li><p>Now sample two separate sequences of coin tosses (each of length five), and if they are exactly the same, i.e. the same number of heads and tails and in the same order, print “They are identical”. Remember that <code>==</code> is vectorized and won’t work (Try it if you want to see what message it yields). So you have to use <code>all()</code> or <code>identical()</code>.</p></li>
+<li><p>Now you no longer want to toss your coin only once but several (let’s say ten) times (you’ll have to tweak the <code>sample</code> function a bit. Check the help menue if you don’t know how to do this). Do this, and if <em>ALL</em> tosses came up heads, print “Wow, that’s ten heads in a row!”, if there is at least one head in there, print “The coin showed X times heads, and Y times tails”, where X and Y are the respective numbers of heads and tails (use the <code>paste</code> function to print and the <code>sum</code> function to get the correct numbers, check the help menus if you don’t know how to do this), and print “Wow, that’s ten tails in a row!”, if <em>ALL</em> tosses came up tails.</p></li>
 </ol>
 </div>
 <div id="functions" class="section level3">
 <h3>Functions</h3>
-<p>Most of the time, conditional statements are either used in combination with functions or loops. We’ll start with looking at functions. Remember that a function has two parts, one in which you specify the arguments, and one in which you then write the code that is executed. The last line that is executed determines what the function returns. You can make this explicit with a <code>return()</code> statement, but it is good practice to only use this if you want to exit the function before all code is executed.</p>
+<p>Most of the time, conditional statements are either used in combination with functions or loops. We’ll start by looking at functions. Remember that a function has two parts, one in which you specify the arguments, and one in which you then write the code that is executed. The last line that is executed determines what the function returns. You can make this explicit with a <code>return()</code> statement, but it is good practice to only use this if you want to exit the function early, i.e. before all code is executed. Here is an example:</p>
 <pre class="r"><code>## Create a function
 
 # First arguments are specified
@@ -219,8 +210,9 @@ weighted_mean &lt;- function(vls,   # has no default. This means it MUST be
   # last line is returned
   sum(values * weights) / sum(weights)
 }</code></pre>
-<ol start="6" style="list-style-type: decimal">
-<li><p>Write your own function <code>check_logical</code> that tests whether a given logical object is <code>TRUE</code> or <code>FALSE</code>, and returns “Argument is TRUE”, and “Argument is FALSE”, respectively.</p></li>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Write your own function named <code>check_logical</code> that tests whether a given logical object is <code>TRUE</code> or <code>FALSE</code>, and returns “Argument is TRUE”, and “Argument is FALSE”, respectively.</p></li>
+<li><p>Use your <code>check_logical</code> function to see whether <em>ALL</em> pirates are larger than 1.6 meters.</p></li>
 <li><p>One important principle when programming is the <em>Don’t Repeat Yourself</em> (DRY) principle. That is, if you have written a block of code several times, with only slight changes in it, it is time to write a function for this. For example:</p></li>
 </ol>
 <pre class="r"><code># Compute the absolute difference between means of a variable
@@ -237,51 +229,49 @@ abs(mean(pirates$age[pirates$sex == &quot;male&quot;]) -
 # for height
 abs(mean(pirates$height[pirates$sex == &quot;male&quot;]) - 
     mean(pirates$height[pirates$sex == &quot;female&quot;]))</code></pre>
-<p>Each time you copy the code and change a small part, there is a small chance of making a mistake, for example by forgetting to change the name of one variable. Also imagine having coded the above example for 10 variables and then you realize that you should have taken the <code>male</code> and <code>other</code> group together to see the mean difference between these two and <code>females</code>. Then you would have to go to each line again to manipulate it.</p>
-<p>Now write a function called <code>abs_mean_diff</code>, that computes the absolute mean difference, that takes a vector <code>mean_vec</code> with data to compute the mean on, a vector <code>cat_vec</code> with data to separate the first, and a list <code>sep_list</code> with two vectors of categories to separate for. Then use the same function to compute the same mean differences as in the code above.</p>
-<ol start="8" style="list-style-type: decimal">
-<li>One great thing about functions is that they can take other functions as arguments. Let’s say you don’t only want to be able to compute the abs mean difference, but also the median difference. Reprogram the <code>abs_mean_diff</code> function from task 7 by adding a fourth argument <code>met</code> (short for method), where you pass the function name as an argument <em>WITHOUT</em> quotation marks. Set the default value to this argument to <code>mean</code>. Name the function <code>abs_diff</code>. Then compute the mean and the median absolute difference of tattoos for male and female pirates.</li>
+<p>Each time you copy the code and change a small part, there is a small chance of making a mistake, for example by forgetting to change the name of one variable. Also imagine having coded the above example for 10 variables and then you realize that you should have taken the <code>male</code> and <code>other</code> group together to see the mean difference between this joint group and <code>females</code>. Then you would have to go through each line again to manipulate it.</p>
+<p>Now write a function called <code>abs_mean_diff</code>, that computes the absolute mean difference between two groups. It should take a vector <code>mean_vec</code> with data to compute the mean on, a vector <code>cat_vec</code> with data to separate the first, and a list <code>sep_list</code> with two vectors of categories to separate for (note that when you want to check whether a number of values also occurs in another vector, you may want to use <code>%in%</code> instead of <code>==</code> for this check). Then use this function to compute the same mean differences as in the code above.</p>
+<ol start="6" style="list-style-type: decimal">
+<li>One great thing about functions is that they can take other functions as arguments. Let’s say you don’t only want to be able to compute the abs mean difference, but also the median difference. Reprogram the <code>abs_mean_diff</code> function from task 5 by adding a fourth argument <code>met</code> (short for method), where you pass the function name as an argument <em>WITHOUT</em> quotationmarks. Set the default value to this argument to <code>mean</code>. Name the function <code>abs_diff</code>. Then compute the mean and the median absolute difference of tattoos for male and female pirates.</li>
 </ol>
-<p>Passing functions as arguments can be very handy, especially when you can combine this with <code>apply</code> or <code>map</code> function so you can enter a list of functions. We’ll see an example of that later.</p>
-<ol start="9" style="list-style-type: decimal">
-<li>There is one argument you can use when programming a function, that let’s you then enter an unlimited number of arguments to that function, without having to Pre-specify them. The argument is called <code>...</code>. Now add the <code>...</code> as last argument to the <code>abs_diff</code> function from the previous task, and also add it to the <code>met()</code> function inside the <code>abs_diff</code> function. Now you can call functions with <code>abs_diff</code> that take more than just the numeric vector as argument, for example you can compute a trimmed mean with <code>mean(x, trim = .2)</code> for the 20% trimmed mean. Compute the 20% trimmed mean.</li>
+<p>Passing functions as arguments can be very handy, especially when you can combine this with <code>apply</code> or <code>map</code> function so you can enter a list of functions.</p>
+<ol start="7" style="list-style-type: decimal">
+<li>There is one argument you can use when programming a function, that let’s you then enter an unlimited number of arguments to that function, without having to prespecify them. The argument is called <code>...</code>. Now add the <code>...</code> as last argument in the <code>abs_diff</code> function definition from the previous task, and also add it to the <code>met()</code> function inside the <code>abs_diff</code> function. Now you can call functions with <code>abs_diff</code> that take more than just the numeric vector as argument, for example you can compute a trimmed mean with <code>mean(x, trim = .2)</code> for the 20% trimmed mean. Compute the differences of the 20% trimmed mean with the modified <code>abs_diff()</code> function (i.e. the outer 20% of data on each side are discarded, which avoids outliers).</li>
 </ol>
 </div>
 <div id="iteration" class="section level3">
 <h3>Iteration</h3>
-<p>Iteration is an extremely important feature in programming. It let’s you execute a block of code for a large number of objects, with only having to write the block of code once. The iteration methods we will look at in the next few tasks are <code>for</code> and <code>while</code> loops. Later we will also look at <code>apply</code> and <code>map</code> functions.</p>
-<p>Remember that a <code>for</code> loop executes a block of code as many times as you specify, whereas a <code>while</code> loop does the same thing but as long until a Pre-specified condition is met. Here are a few examples:</p>
+<p>Iteration is an extremely important feature in programming. It let’s you execute a code block for a large number of objects, with only having to write the code block once. The iteration methods we will look at in the next few tasks are <code>for</code> and <code>while</code> loops. Later we will also look at <code>apply</code> and <code>map</code> functions.</p>
+<p>Remember that a <code>for</code> loop executes a block of code as many times as you specify, whereas a <code>while</code> loop does the same thing but does not stop until a prespecified condition is met. Here are a few examples which you can copy and paste to see how they work:</p>
 <pre class="r"><code>## for loops
 
 # example 1:
+# the following three loops do exactly the same. You may encounter all three
+# ways of specifying the loops, but the latter two are more likely.
+for (i in c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)){
+  print(i) # note that within loops print statements have to be used explicitly
+}
+
+for (i in 1:10){
+  print(i) # note that within loops print statements have to be used explicitly
+}
+
+
 for (i in seq_len(10)){
-  print(i)
-}</code></pre>
-<pre><code>[1] 1
-[1] 2
-[1] 3
-[1] 4
-[1] 5
-[1] 6
-[1] 7
-[1] 8
-[1] 9
-[1] 10</code></pre>
-<pre class="r"><code># By the way, here's the difference between seq_len, and seq_along:
-seq_len(5) # creates a vector from 1 to the number specified</code></pre>
-<pre><code>[1] 1 2 3 4 5</code></pre>
-<pre class="r"><code>seq_along(letters[1:5]) # creates a numeric sequence of the positions of the specified</code></pre>
-<pre><code>[1] 1 2 3 4 5</code></pre>
-<pre class="r"><code>                        # vector
+  print(i) # note that within loops print statements have to be used explicitly
+}
+
+# By the way, here's the difference between seq_len, and seq_along:
+seq_len(5) # creates a vector from 1 to the number specified
+seq_along(letters[1:5]) # creates a numeric sequence of the positions of the specified
+                        # vector
 
 # you could also use 1:5, instead of seq_len(5), but note that while 
 x &lt;- vector(&quot;double&quot;, length = 0)
-1:length(x)</code></pre>
-<pre><code>[1] 1 0</code></pre>
-<pre class="r"><code># yields probably not the behavior you'd want in a loop, while
-seq_along(x)</code></pre>
-<pre><code>integer(0)</code></pre>
-<pre class="r"><code># will lead to the desired behavior
+1:length(x)
+# yields probably not the behavior you'd want in a loop, while
+seq_along(x)
+# will lead to the desired behavior
 
 # example 2:
 x &lt;- vector(&quot;double&quot;, length = 10) # Output part
@@ -290,9 +280,10 @@ for (i in seq_along(x)){           # Sequence part
   x[i] &lt;- i                        # Body part
 }
 
-x</code></pre>
-<pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
-<pre class="r"><code>## while loops
+x
+
+# example 3:
+## while loops
 i &lt;- 1
 while(i &lt; 5){
   
@@ -300,15 +291,10 @@ while(i &lt; 5){
   
   i &lt;- i + 1
 }</code></pre>
-<pre><code>[1] 1
-[1] 2
-[1] 3
-[1] 4</code></pre>
-<ol start="10" style="list-style-type: decimal">
-<li><p>In for loops you cannot only loop over sequences, but also over values of a vector, that are then used in the loop. To do this you simply write <code>for (val in vector){}</code>, instead of using either <code>1: length(vector)</code>, or <code>seq_along(vector)</code> (did you see that we used <code>val</code> instead of <code>i</code> when defining the sequence in the loop. You can enter any name you want there, just make sure to refer to this name in the body of the loop). Loop over the following vector containing variable names of the pirates dataset (<code>c(&quot;age&quot;, &quot;height&quot;, &quot;tattoos&quot;, &quot;beard.length&quot;)</code>), and compute the mean of each variable and store the value in named vector (i.e. each value should be named to identify it, to do this use <code>names</code>) called <code>pirate_means</code>.</p></li>
+<ol start="8" style="list-style-type: decimal">
+<li><p>In for loops you cannot only loop over sequences of numbers, but over any values of a vector, that are then used in the loop. To do this you simply write <code>for (val in vector){}</code>, instead of using either <code>1: length(vector)</code>, or <code>seq_along(vector)</code> (did you see that we used <code>val</code> instead of <code>i</code> when defining the sequence in the loop. You can enter any name you want there, just make sure to refer to this name in the body of the loop). Loop over the following vector containing variable names of the pirates dataset <code>c(&quot;age&quot;, &quot;height&quot;, &quot;tattoos&quot;, &quot;beard.length&quot;)</code>, and compute the mean of each variable and store the value in a named vector (i.e. each value should be named to identify it, to do this use <code>names</code>) called <code>pirate_means</code>.</p></li>
 <li><p>Use a loop to rewrite the code where you called <code>abs_diff</code> multiple times in task 7. Remember that in a loop you have to use <code>print</code> explicitly.</p></li>
-<li><p>You want to check whether the college a pirate went to, is related to the number of groggs a pirate drinks a day on average. To get rid of the potentially influential factors of age, sex, and weight, you want to match the two subsamples of 100 pirates each, such that you have a maximum difference in the number of females between the two groups of 12, a maximum mean age difference of 10 years, a maximum difference in the standard deviation of age of 8 years, a maximum mean weight difference of 8 kilograms, and a maximum difference in the standard deviation of weight of 7 kilograms. Use a <code>while</code> loop where you take a subsample of 100 pirates from each college, and use the above parameters of this sample for the check. Note: don’t bother about doing the analysis afterwards, the exercise is just about the looping part. Also the values for the check are arbitrary. If it takes too long for the loop to run just use larger values, for the exercise the precision doesn’t have to be high.</p></li>
-<li><p>There are two statements you can use in <code>while</code> and <code>for</code> loops, that can be handy to know. One of them is <code>break</code>, which lets you exit the current loop. The other one is <code>next</code> which skips the following code for that iteration and directly goes to the next iteration. Program a while loop that samples two numbers from a normal distribution and divides the one by the other and stores the result in a vector. If the divisor (the number that divides the other number) is 0, skip to the next iteration. Use a counter and if more than 20 iterations are needed break the loop to ensure it’s not taking too long. As condition for the <code>while</code> loop use a second counter that increases each time a successful division is executed, and run the loop as long as this counter is 15 or less.</p></li>
+<li><p>You want to check whether the college a pirate went to, is related to the number of groggs a pirate drinks a day on average. To get rid of the potentially influential factors of age, sex, and weight, you want to match the two subsamples of 100 pirates each, such that you have a maximum difference in the number of females between the two groups of 12, a maximum mean age difference of 10 years, a maximum difference in the standard deviatio of age of 8 years, a maximum mean weight difference of 8 kilogramms, and a maximum difference in the standard deviation of weight of 7 kilogramms. Use a <code>while</code> loop where you take a subsample of 100 pirates from each college, and use the above parameters of this sample for the check. Note: don’t bother about doing the analysis afterwards, the exercise is just about the looping part. Also the difference values for the check are arbitrary. If it takes too long for the loop to run just use larger values, for the exercise the precision doesn’t have to be high.</p></li>
 </ol>
 </div>
 <div id="apply-and-map-functions" class="section level3">
@@ -323,38 +309,34 @@ vars &lt;- c(&quot;age&quot;, &quot;height&quot;, &quot;weight&quot;, &quot;tatt
 
 # compute the mean of these variables. Note that the second argument specifies,
 # whether the mean should be taken over columns (2), or rows (1)
-apply(pirates[, vars], 2, mean)</code></pre>
-<pre><code>     age   height   weight  tattoos  parrots    grogg 
- 27.3600 170.2264  69.7446   9.4290   2.8190  10.1450 </code></pre>
-<pre class="r"><code># you can also use a simpler apply version called sapply, where it automatically
+apply(pirates[, vars], 2, mean)
+
+# you can also use a simpler apply version called sapply, where it automatically
 # computes the mean column wise
-sapply(pirates[, vars], mean)</code></pre>
-<pre><code>     age   height   weight  tattoos  parrots    grogg 
- 27.3600 170.2264  69.7446   9.4290   2.8190  10.1450 </code></pre>
-<pre class="r"><code>## map
+sapply(pirates[, vars], mean)
+
+## map
 
 # the map equivalent is
-map_dbl(pirates[, vars], mean)</code></pre>
-<pre><code>     age   height   weight  tattoos  parrots    grogg 
- 27.3600 170.2264  69.7446   9.4290   2.8190  10.1450 </code></pre>
-<pre class="r"><code># remember that in the map functions the suffix (in this case _dbl) stands for the
+map_dbl(pirates[, vars], mean)
+# remember that in the map functions the suffix (in this case _dbl) stands for the
 # type of vector that should be returned. If this doesn't match, e.g. if a character
 # vector is created in map_dbl, it will throw an error. map without suffix will
 # return a list.</code></pre>
-<ol start="14" style="list-style-type: decimal">
-<li><p>Remember the <code>for</code> loop you’ve used in task 11, to run the <code>abs_diff</code> function several times? Rewrite this and replace the <code>for</code> loop once with <code>sapply</code> and a <code>map</code> function (figure out which <code>map</code> function would fit best here).</p></li>
-<li><p>Now there would be a more elegant way of programming the <code>abs_diff</code> function such that you don’t have to use loops or <code>apply</code>/ <code>map</code> functions outside of it. Redefine the <code>abs_diff</code> function and use <code>map_dbl</code>, such that you can enter multiple columns to the <code>mean_vec</code> argument, instead of only one. For this you will have to use an anonymous function in <code>map_dbl</code>. This means that the function is only defined inside the <code>map_dbl</code> call and does not exist outside of it. The syntax for a self programmed anonymous <code>mean</code> function would be <code>map_dbl(data, function(x){sum(x) / length(x)})</code>. That is instead of passing a function name to <code>map_dbl</code>, you pass a function definition <code>function(argument){do something}</code>. Remember that you can pass functions as arguments.</p></li>
-<li><p>There is another <code>map</code> function called <code>map2</code> (again with the suffixes for the different types of vectors returned), that let’s you iterate over two objects simultaneously. Use the appropriate <code>map2</code> function and to draw 10 samples from three normal distributions with means 5, 9, 12, and sds, 4, 2, 7, and save them as an object.</p></li>
-<li><p>Now use <code>map</code> to plot each of the samples drawn. Note: use <code>par(mfrow = c(1, 3))</code> to draw three plots in a line the same canvas (i.e., the 1 determines the number of rows of plots and the 3 determines the number of columns of plots. This way you can create multiple-plot panels).</p></li>
-<li><p>As you can see, besides the plots you’ve got <code>NULL</code> printed in your console each time you called <code>plot</code>. This is because map returns whatever the function called returns and in case of plot <code>NULL</code> is created as output. To take care of this problem, there is a special family of <code>purrr</code> functions called <code>walk</code>, that are used for functions like plot that create something on the fly and only have a console output as undesired side product. Create the plots again using <code>walk</code>.</p></li>
-<li><p>Redo task 16 but this time don’t draw 10 samples per distribution but draw 10, 15, and 20 samples, respectively. To iterate over an unlimited number of objects simultaneously, use the <code>pmap</code> function. Check the help menu if you’re not sure how this works.</p></li>
+<ol start="11" style="list-style-type: decimal">
+<li><p>Remember the <code>for</code> loop you’ve used in task 9, to run the <code>abs_diff</code> function several times? Rewrite this by replacing the <code>for</code> loop once with <code>sapply</code> and once with a <code>map</code> function (figure out which <code>map</code> function would fit best here).</p></li>
+<li><p><em>Challenge.</em> Now there would be a more elegant way of programming the <code>abs_diff</code> function such that you don’t have to use loops or <code>apply</code>/ <code>map</code> functions outside of it. Redefine the <code>abs_diff</code> function and use <code>map_dbl</code>, such that you can enter multiple columns to the <code>mean_vec</code> argument, instead of only one. For this you can use an anonymous function in <code>map_dbl</code>. This means that the function is only defined inside the <code>map_dbl</code> call and does not exist outside of it. The syntax for a self programmed anonymous <code>mean</code> function would be <code>map_dbl(data, function(x){sum(x) / length(x)})</code>. That is instead of passing a function name to <code>map_dbl</code>, you pass a function definition <code>function(argument){do something}</code>. Remember that you can pass functions as arguments.</p></li>
+<li><p>There is another <code>map</code> function called <code>map2</code> (again with the suffixes for the different types of vectors returned), that let’s you iterate over two objects simultaneously. Use the appropriate <code>map2</code> function and to draw 10 samples from three normal distributions with means 5, 9, 12, and sds, 4, 2, 7, and save them as an object (note: the function to draw samples from a normal distribution is <code>rnorm(n, mean, sd)</code>).</p></li>
+<li><p>Now use <code>map</code> to plot each of the samples drawn. Note: use <code>par(mfrow = c(1, 3))</code> to draw three plots in a line in the same canvas (i.e., the 1 determines the number of rows of plots and the 3 determines the number of columns of plots. This way you can create multiple-plot panels).</p></li>
+<li><p>As you can see, besides the plots you’ve got <code>NULL</code> printed in your console each time you called <code>plot</code>. This is because map returns whatever the function called returns and in case of plot <code>NULL</code> is created as output (besides the actual plot that is drawn). To take care of this problem, there is a special family of <code>purrr</code> functions called <code>walk</code>, that are used for functions like plot that create something on the fly and only have a console output as undesired sideproduct. Create the plots again using <code>walk()</code> instead of <code>map()</code>.</p></li>
+<li><p>Redo task 13 but this time don’t draw 10 samples per distribution but draw 10, 15, and 20 samples, respectively. To iterate over an unlimited number of objects simultaneously, use the <code>pmap</code> function. Check the help menue if you’re not sure how this works.</p></li>
 </ol>
 </div>
-<div id="bringing-it-all-together" class="section level3">
-<h3>Bringing it all together</h3>
+<div id="bringing-it-all-together---challenge" class="section level3">
+<h3>Bringing it all together - Challenge</h3>
 <p>The next two tasks contain elements of all parts we’ve covered in this lesson. You will write a function to do a short simulation. Briefly some background: In statistics, we often accept a hypothesis if the p-value, i.e. the probability of the found-, or more extreme data under the H0 hypothesis that assumes that there is no difference between two distributions, is smaller or equal to 5%. This is tested with statistical tests, of which we will use the t-test (r function <code>t.test(group1, group2)</code>). We will draw two random samples <em>from the same distribution</em> and run a t.test to check whether they are significantly different. If they are not, we will resample from the distribution and run the check once more. We will then see how strong the inflation of the alpha error is, with one resample of size x.</p>
 <p>We will also encounter a new cool thing: you can send mails from R. For example, if you are running a simulation that takes a lot of time and you don’t want to check again and again whether it’s completed. So you can tell R to send you a mail when it’s done, and if you like, even attach the data or some core output. The package to do this is <code>sendmailR</code>, with the function <code>sendmail</code>.</p>
-<ol start="20" style="list-style-type: decimal">
+<ol start="17" style="list-style-type: decimal">
 <li>Program a function called <code>sim_false_positive</code>, that takes the following arguments: n (the number of samples initially drawn per distribution), m (the mean of the distribution from which samples are drawn), sd (the standard deviation of the distribution from which samples are drawn), resample (the sample size of the resample), iter (number of iterations, i.e. number of times the whole procedure is repeated. The higher the number, the more precise the estimate), mail (a mail address from which to which you want to send your result), mail_subject (the subject of the mail). The start of your function should look like this (we’ve also included the code for the mail function to make it a little easier):</li>
 </ol>
 <pre class="r"><code>## sim_false_positive functoin
@@ -399,7 +381,7 @@ sim_false_positive &lt;- function(n = 30,
   
 }</code></pre>
 <p>Now program the middle part to do the sampling and iteration.</p>
-<ol start="21" style="list-style-type: decimal">
+<ol start="18" style="list-style-type: decimal">
 <li>Now that you’ve created your function, use one of the <code>map</code> functions to execute the function several times with different sample sizes and resample sizes. Note that if you only change resample, you will have to create an anonymous function, because otherwise the resample size will be passed to the first argument of <code>sim_false_positive</code>, which is <code>n</code>.</li>
 </ol>
 </div>

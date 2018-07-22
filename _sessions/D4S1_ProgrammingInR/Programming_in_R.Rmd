@@ -21,6 +21,7 @@ options(width=110)
 options(digits = 4)
 library(tidyverse)
 library(yarrr)
+library(baselers)
 ```
 ---
 
@@ -36,7 +37,6 @@ Functions
 
 Iteration
 - `for` loops
-- `while` loops
 - `apply` functions
 - `map` functions
 ]
@@ -44,23 +44,27 @@ Iteration
 .pull-right45[
 
 ```{r eval = FALSE}
-my_var <- 1:5
+index <- sample(1:nrow(baselers), 1)
 
 # Conditional statement
-if (length(my_var) < 6){
-  my_var[5]
+if (baselers$sex[index] == "male"){
+  print(paste("Person with id",
+              baselers$id[index],
+              "is a man"))
 } else {
-  print("'my_var' is too short.")
+  print(paste("Person with id",
+              baselers$id[index],
+              "is a woman"))
 }
 
 # Define own function
-compute_circle_area <- function(radius){
-  radius ** 2 * pi
+my_mean <- function(x){
+  sum(x) / length(x)
 }
 
 # A for loop
-for(i in seq_len(5)){
-  mean(1:i)
+for(i in c(1, 2, 3, 4, 5)){
+  print(i)
 }
 
 
@@ -115,83 +119,37 @@ if (this) {
 The conditional statements often require you to specify checks (logical expressions) which have to evaluate to `TRUE` to execute the following block of code. Note that:
 
 - `>`, `<`, `==`, `>=`, and `<=` are vectorized
-- to prevent errors due to the vectorization use `any`, `all`, and `identical`
+- to prevent errors and warnings due to the vectorization use `any` and `all`
 
-```{r}
-x <- c(1:5)
-x
-
-y <- c(9:5)
-y
-```
 
 ]
 
 .pull-right45[
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 
-# uses only the first element of the
-# check
-if (x == y) print("x is equal to y")
-# gives warning that only first element
-# will be used
+# since == is vectorized
+# this yields several logicals
+head(baselers$sex) == "male"
 
-```
+# any and all summarize these logicals
+any(head(baselers$sex) == "male")
 
-```{r}
-# works because any only gives one
-# statement back
-if (any(x == y)) print("x is equal to y")
-
-# all vs identical
-all(c(1L, 2L, 3L) == c(1, 2, 3))
-identical(c(1L, 2L, 3L), c(1, 2, 3))
-
-```
-
-]
-
----
-
-# A Note on Logical Expressions
-
-.pull-left45[
-
-For multiple logical expressions you have to cue logical ands (`&`) or ors (`|`). Note that:
-
-- `&` and `|` are vectorized
-- `&&` and `||` are not vectorized and short-circuiting operations
-
-]
-
-.pull-right45[
-
-```{r}
-# checks the whole sequence
-x <= y & x == y
-
-# checks only the first element
-x <= y && x == y
-
-x <- NULL
-
-!is.null(x) & x > 2
-
-# && is short circuiting
-!is.null(x) && x > 2
-
+all(head(baselers$sex) == "male")
 
 
 ```
 
+
+
 ]
+
 
 ---
 
 # Functions - General Structure
 
-.pull-left45[
+.pull-left4[
 
 You can define your own functions. This can save a lot of time and space, because by writing your own function you only have to write the whole block of code once.
 
@@ -199,22 +157,18 @@ Benefits of writing code in functions:
 - less typing
 - fewer errors
 - can be more general
-- can be faster
 
 ]
 
-.pull-right45[
+.pull-right5[
 
 ```{r}
-softmax <- function(dat, theta = 1){
+function_name <- function(arg1,
+                          arg2 = "default"){
   
-  # check precondition and
-  # return 0 if it's not met
-  if (length(dat) == 0){
-    return(0)
-  }
+  # function body
   
-  exp(dat * theta) / sum(exp(dat * theta))
+  result <- do_stuff(arg1, arg2)
   
 }
 
@@ -239,19 +193,17 @@ The last object in a function code is returned to the global environment. If a f
 .pull-right45[
 
 ```{r}
-softmax <- function(dat, theta = 1){
+my_mean <- function(x){
   
   # check precondition and
-  # return 0 if it's not met
-  if (length(dat) == 0){
-    return(0)
+  # if it's not met return NA
+  if (any(is.na(NA) | !is.numeric(x))){
+    return(NA)
   }
   
-  exp(dat * theta) / sum(exp(dat * theta))
+  sum(x) / length(x)
   
 }
-
-
 
 ```
 
@@ -266,8 +218,6 @@ softmax <- function(dat, theta = 1){
 
 Functions can take any object as input to arguments. Since functions themselves are also objects, this means that also functions can be passed as arguments.
 
-The `...` argument let's you input a variety of unspecified arguments to a function, that are then passed to another function.
-
 When calling a function you can use objects or expressions as input to an argument.
 
 
@@ -277,18 +227,19 @@ When calling a function you can use objects or expressions as input to an argume
 
 ```{r}
 # function definition
-call_fun <- function(dat, fn, ...){
-  fn(dat, ...)
+call_fun <- function(dat, fn, cont_nas){
+  fn(dat, na.rm = cont_nas)
 }
 
-# input a function and additional statements
-call_fun(dat = pirates$parrots,
-         fn = mean, na.rm = TRUE)
+# input a function and additional
+# statements
+call_fun(dat = baselers$tattoos,
+         fn = mean, cont_nas = TRUE)
 
 # input expression as argument
-call_fun(pirates$weight /
-           (pirates$height / 100) ** 2,
-         fn = median, na.rm = TRUE)
+call_fun(dat = baselers$weight /
+           (baselers$height / 100) ^2,
+         fn = median, cont_nas = TRUE)
 
 
 
@@ -304,9 +255,8 @@ call_fun(pirates$weight /
 
 When writing functions you can add checks and if they are not met provide your own error messages.
 
-Possible functions are `stop()`, `message()`, `warning()`, and `stopifnot()`.
+Possible functions are `stop()`, `message()`, `warning()`.
 
-- `stopifnot()` takes an unlimited number of assertions as input.
 - With `stop()`, `message()`, and `warning()` you have to use separate `if` statements to test each potential violation. 
 
 
@@ -317,27 +267,24 @@ Possible functions are `stop()`, `message()`, `warning()`, and `stopifnot()`.
 ```{r}
 # with stop you test whether stopping
 # condition is met
-divide <- function(dividend,
-                   divisor){
-  if (divisor == 0){
-    stop("Cannot divide by 0.
-         Enter another value for divisor.")
+my_mean <- function(x){
+  
+  if (!is.numeric(x)){
+    
+    stop("Can only compute mean from
+          numeric variable. Your data
+          was of class",
+         class(x))
+    
+  } else if (any(is.na(x))){
+    
+    warning("Return NA because data
+             contains NAs.")
   }
   
-  dividend / divisor
+  sum(x) / length(x)
 }
 
-# with stopifnot you test an
-# assertion and throws a generic
-# error message
-divide <- function(x, y){
-  
-  stopifnot(y != 0, !is.null(x),
-            !is.null(y),
-            all(!is.na(c(x, y))))
-  
-  x / y
-}
 
 ```
 
@@ -347,7 +294,7 @@ divide <- function(x, y){
 
 # Iteration - `for` Loops
 
-.pull-left45[
+.pull-left35[
 
 A for loop lets you repeat the execution of a block of code as many times as you wish. It also allows you to loop through positions.
 
@@ -360,25 +307,22 @@ A `for` loop has three components:
 
 ]
 
-.pull-right45[
+.pull-right6[
 
-```{r}
-for (i in seq_len(4)) {
-  print(i)
+```{r, eval=FALSE}
+# output:
+mean_vec <- vector("double", length = 3)
+mean_names <- c("age", "weight", "height")
+
+for (ind in c(1, 2, 3)) { # sequence
+  mean_vec[ind] <- mean(baselers[[mean_names[ind]]],
+                        na.rm = TRUE) # body
 }
 
-pir_sub <- pirates %>%
-  select(age, height, weight)
-
-output <- vector(
-  length = ncol(pir_sub)) #  output
-
-for (i in seq_along(pir_sub)) { # sequence
-  output[i] <- mean(pir_sub[[i]]) # body
-}
-output
-
-
+# The code to do the same without a loop is
+mean(baselers[["age"]], na.rm = TRUE)
+mean(baselers[["weight"]], na.rm = TRUE)
+mean(baselers[["height"]], na.rm = TRUE)
 
 ```
 
@@ -403,18 +347,18 @@ This can be handy, but also "dangerous" because if the condition is never met, i
 
 
 ```{r, eval = FALSE}
-trunc_norm <- rnorm(30)
+subs_age <- sample(baselers$age, 30)
 
-# get normal dist trucated at 0
-while(any(trunc_norm < 0)){
-  trunc_norm <- rnorm(30)
+# get only baselers over 40
+while(any(subs_age <= 40)){
+  subs_age <- sample(baselers$age, 30)
 }
 
 # Potentially problematic:
-# get normal dist trucated at 0
+# get only baselers over 40
 # but with a much larger sample
-while(any(trunc_norm < 0)){
-  trunc_norm <- rnorm(500)
+while(any(subs_age <= 40)){
+  subs_age <- sample(baselers$age, 30000)
 }
 ```
 
@@ -442,55 +386,20 @@ These are available `apply` functions:
 
 ]
 
-.pull-right45[
+.pull-right5[
 
 
 ```{r}
-# apply for rows or colums
-apply(pir_sub[1:3,], 1, mean) # rows
-apply(pir_sub, 2, mean) # columns
+# structure: data, function, arguments
 
-# sapply: simplest apply version
-sapply(pir_sub, mean) # columns
+# lapply: simplest apply version
+lapply(baselers[, c("age", "weight")], 
+       mean, na.rm = TRUE)
 
-```
-
-]
-
-
----
-
-# Iteration - `apply` Family
-
-
-.pull-left45[
-
-Functions of the `apply` family are another tool to iterate through objects and do the same operation on each subset.
-
-They are very handy, but not always consistently programmed, i.e., for example the argument structure is not always the same.
-
-These are available `apply` functions:
-
-- `apply`
-- `lapply`
-- `sapply`
-- `tapply`
-- `vapply`
-
-
-]
-
-.pull-right45[
-
-
-```{r}
-
-# tapply: sapply with grouping variables
-tapply(pirates$tattoos, pirates$sex, mean)
-
-# vapply: safe apply version: must return
-# a numeric vector of length 1
-vapply(pir_sub, mean, 1) 
+# sapply: apply version that
+# simplifies lapply output
+sapply(baselers[, c("age", "weight", "height")],
+       mean, na.rm = TRUE)
 
 ```
 
@@ -512,23 +421,21 @@ An anonymous function exists only temporarily when the `apply` function is calle
 
 ]
 
-.pull-right45[
+.pull-right5[
 
 
 ```{r, eval = FALSE}
 
-# rescale age, height, and sex
-# from the pirates subset to be
-# between 0 and 1
-lapply(pir_sub, function(x, na_act){
+# calculate the mean of
+# age, weight, and height
+lapply(baselers[, c("age", "weight", "height")],
+       function(x, na_rm){
+  if (isTRUE(na_rm)){
+    x <- x[-is.na(x)]
+  }
+  sum(x) / length(x)
   
-  # first get the range
-  rng <- range(x, na.rm = na_act)
-  
-  # then rescale
-  (x - rng[1]) / (rng[2] - rng[1])
-  
-}, na_act = TRUE)
+}, na_rm = TRUE)
 
 
 ```
@@ -551,14 +458,13 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ]
 
-.pull-right45[
+.pull-right5[
 
 
 ```{r}
 
-map(pir_sub, mean)
-
-map_dbl(pir_sub, mean)
+map(baselers[, c("age", "weight", "height")],
+    mean)
 
 
 ```
@@ -594,10 +500,10 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 ```{r}
 
-pirates %>%
+baselers %>%
   select(age,
-         tattoos,
-         beard.length)  %>%
+         weight,
+         height)  %>%
   map_dbl(function(x){
     sum(x) / length(x)
   })
@@ -634,56 +540,16 @@ knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therboot
 
 
 ```{r}
-mus <- c(4, 5)
-sds <- c(2, 3)
+x <- baselers[, c("age", "weight")]
+trim <- c(0, 0.2)
 
-map2(mus, sds, rnorm, n = 3)
+map2(x, trim, mean)
 
-ns <- c(2, 3)
+na.rm <- c(FALSE, TRUE)
 
-pmap(list(mean = mus,
-          sd = sds,
-          n = ns), rnorm)
-```
-
-]
-
-
-
----
-
-# Iteration - `map` Family
-
-
-.pull-left45[
-
-
-The `map` functions are the purrr equivalent of the `apply` functions.
-
-You can not only iterate through objects to use as arguments but also through functions. This is done with `invoke_map`.
-
-```{r, echo = FALSE, out.width = "20%", fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/purrr_hex.png")
-```
-
-]
-
-.pull-right45[
-
-
-```{r}
-# list with the arguments
-argumnts <- list(
-  list(mean = 4, sd = 2),
-  list(shape1 = 2, shape2 = 3)
-)
-
-# vector of functions
-functs <- c("rnorm", "rbeta")
-
-invoke_map(functs, argumnts, n = 3)
-
-
+pmap(list(x = x,
+          trim = trim,
+          na.rm = na.rm), mean)
 ```
 
 ]
@@ -704,7 +570,13 @@ This is very helpful to not having to type the same code many times and to keep 
 
 ---
 
+# Interactive session
+
+Let's go through some examples together
+
+---
+
 # Programming in R Practical
 
-<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018April/_sessions/D4S1_ProgrammingInR/Programming_in_R_practical.html">Link to practical</a>
+<p><font size=6><b><a href="https://therbootcamp.github.io/BaselRBootcamp_2018July/_sessions/D4S1_ProgrammingInR/Programming_in_R_practical.html">Link to practical</a>
 
